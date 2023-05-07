@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'GetxController/CounterController.dart';
+import 'Getx/CounterController.dart';
 
 void main() {
   runApp(const GetMaterialApp(home: Home()));

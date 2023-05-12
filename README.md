@@ -2,7 +2,7 @@
 
 변수명, 메소드 → 카멜 케이스  ex) thisIsMethod
 Class → 파스칼 케이스 ex) ThisIsClass
-파일명 → 스네이크 케이스 ex) this_is_snake
+파일명 → 스네이크 케이스 ex) This_Is_Snake
 전역 상수 → 대문자 + 스네이크 ex) const GLOBAL_CONST 
 
 ## flutter 컨벤션

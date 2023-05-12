@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/pdf_edit/pdf_test.dart';
+import 'package:front_end/Controller/pdf_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front_end/getX/getX_test.dart';
+import 'package:front_end/Controller/getX_test.dart';
 
 void main() {
   runApp(const MyApp());

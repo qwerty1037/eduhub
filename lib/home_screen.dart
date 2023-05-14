@@ -12,15 +12,21 @@ class HomeScreen extends StatelessWidget {
           color: DEFAULT_DARK_COLOR,
           width: MediaQuery.of(context).size.width,
           height: 60,
-          child: Row(
-            children: const [
+          child: const Row(
+            children: [
               Expanded(
                 flex: 2,
-                child: Text('프로필자리'),
+                child: Icon(
+                  FluentIcons.questionnaire,
+                  color: DEFAULT_LIGHT_COLOR,
+                ),
               ),
               Expanded(
                 flex: 9,
-                child: Text('검색창자리'),
+                child: Icon(
+                  FluentIcons.questionnaire,
+                  color: DEFAULT_LIGHT_COLOR,
+                ),
               ),
               Expanded(
                 flex: 1,
@@ -32,9 +38,9 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
+        const Expanded(
             child: Row(
-          children: const [],
+          children: [],
         )),
       ],
     );

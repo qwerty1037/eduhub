@@ -8,6 +8,7 @@ class FileDragAndDropController extends GetxController {
   Color uploadingColor = Colors.blue[100]!;
   RxString showFileName = "".obs;
   RxBool dragging = false.obs;
+
   void fileUpload() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,

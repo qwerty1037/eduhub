@@ -60,3 +60,10 @@ merge를 코드 리뷰할 때 끝내기 + monday.com에 할 리스트 다 작성
 
 ## Screen : UI Screen, 전체 코드가 합쳐지는 부분
     - main.dart : run 또는 디버깅할 시 가장 먼저 실행되는 파일.
+
+
+
+## 이동규 이번주 내용
+기존 모바일 디자인 표본은 flutter/material을 사용하지만 윈도우 앱은 fluent_ui 라이브러리를 사용한다고 함
+
+

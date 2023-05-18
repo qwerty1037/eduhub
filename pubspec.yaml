@@ -39,6 +39,8 @@ dependencies:
   flutter_bloc: ^8.1.2
   get: ^4.6.5
   desktop_drop: ^0.4.1
+  syncfusion_flutter_pdfviewer: ^21.2.5
+  flutter_pdfview: ^1.2.7
 
 dev_dependencies:
   flutter_test:

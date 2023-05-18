@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/Screen/pdf_test.dart';
+import 'package:front_end/Screen/screen_file_drag_and_drop.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front_end/Test/getX_test.dart';
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: FileDragAndDrop(),
+      home: FileDragAndDropScreen(),
     );
   }
 }

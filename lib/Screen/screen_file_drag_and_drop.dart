@@ -1,17 +1,18 @@
+///Screen: File_Drag_and_Drop.
+
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:get/get.dart';
-import '../Controller/FileDragAndDropController.dart';
+import '../Controller/Controller_FileDragAndDrop.dart';
 
-class FileDragAndDrop extends StatefulWidget {
-  const FileDragAndDrop({super.key});
+class FileDragAndDropScreen extends StatefulWidget {
+  const FileDragAndDropScreen({super.key});
 
   @override
-  State<FileDragAndDrop> createState() => _FileDragAndDropState();
+  State<FileDragAndDropScreen> createState() => _FileDragAndDropScreenState();
 }
 
-class _FileDragAndDropState extends State<FileDragAndDrop> {
+class _FileDragAndDropScreenState extends State<FileDragAndDropScreen> {
   @override
   Widget build(BuildContext context) {
     Get.put(FileDragAndDropController());
@@ -19,9 +20,10 @@ class _FileDragAndDropState extends State<FileDragAndDrop> {
       body: Center(
         child: GetX<FileDragAndDropController>(
           builder: (controller) {
+            ///desktop_drop library
             return DropTarget(
               onDragDone: (detail) async {
-                controller.onDragZone(detail);
+                controller.onDragDone(detail, context);
               },
               onDragEntered: (detail) {
                 controller.onDragEntered(detail);

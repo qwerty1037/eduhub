@@ -6,7 +6,7 @@ class TabController extends GetxController {
   RxInt currentIndex = 0.obs;
   RxList<Tab> tabs = <Tab>[].obs;
 
-  Tab generateTab(String title) {
+  Tab generateTab(String title, Widget body) {
     late Tab tab;
     tab = Tab(
       text: Text(title),
@@ -15,6 +15,7 @@ class TabController extends GetxController {
       ),
       body: Container(
         color: DEFAULT_TAB_COLOR,
+        child: const Text('Test'),
       ),
       onClosed: () {
         tabs.remove(tab);

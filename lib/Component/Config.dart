@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 const DEFAULT_DARK_COLOR = Color(0xFF000000);
-const DEFAULT_TAB_COLOR = Color(0xFF363943);
+const DEFAULT_TAB_COLOR = Colors.grey;
+// Color(0xFF363943);
 
 const DEFAULT_LIGHT_COLOR = Color(0xFFFFFFFF);
 

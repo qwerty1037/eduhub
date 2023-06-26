@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: bloc
-      sha256: "658a5ae59edcf1e58aac98b000a71c762ad8f46f1394c34a52050cafb3e11a80"
+      sha256: "3820f15f502372d979121de1f6b97bfcf1630ebff8fe1d52fb2b0bfa49be5b49"
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.1"
+    version: "8.1.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -141,10 +141,10 @@ packages:
     dependency: "direct main"
     description:
       name: fluent_ui
-      sha256: "88d6720cfded16f53ff83f0b6de3063d40664ee21696994fffc5efc5667b4fc5"
+      sha256: "456c66be2d1e5eab4c0f81dac1c55e023e65d31e81488ed4463741ce10928417"
       url: "https://pub.dev"
     source: hosted
-    version: "4.6.0"
+    version: "4.6.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -154,10 +154,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_bloc
-      sha256: "434951eea948dbe87f737b674281465f610b8259c16c097b8163ce138749a775"
+      sha256: e74efb89ee6945bcbce74a5b3a5a3376b088e5f21f55c263fc38cbdc6237faae
       url: "https://pub.dev"
     source: hosted
-    version: "8.1.2"
+    version: "8.1.3"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -175,10 +175,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-      sha256: "96af49aa6b57c10a312106ad6f71deed5a754029c24789bbf620ba784f0bd0b0"
+      sha256: "950e77c2bbe1692bc0874fc7fb491b96a4dc340457f4ea1641443d0a6c1ea360"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.14"
+    version: "2.0.15"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -217,10 +217,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
+      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.1"
   matcher:
     dependency: transitive
     description:
@@ -371,5 +371,5 @@ packages:
     source: hosted
     version: "3.1.4"
 sdks:
-  dart: ">=3.0.0-0 <=3.0.0"
+  dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.10.0"

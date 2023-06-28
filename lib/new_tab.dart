@@ -10,14 +10,12 @@ class NewTabScreen extends StatefulWidget {
 class _NewTabScreenState extends State<NewTabScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-      child: const Column(
-        children: [
-          Center(
-            child: Text("New tab test"),
-          ),
-        ],
+    return NavigationView(
+      appBar: const NavigationAppBar(
+        title: Text(
+          'new tab app bar',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

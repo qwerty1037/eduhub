@@ -9,7 +9,8 @@ class TabViewScreen extends StatefulWidget {
 }
 
 class _TabViewScreenState extends State<TabViewScreen> {
-  int currentIndex = 1;
+  int currentTabIndex = 1;
+  int selectedProjectIndex = 0;
   List<Tab> tabs = [
     Tab(
       text: const Text("test"),
@@ -33,8 +34,8 @@ class _TabViewScreenState extends State<TabViewScreen> {
       onClosed: () {
         setState(() {
           tabs.remove(newTab);
-          if (currentIndex > 0) {
-            currentIndex--;
+          if (currentTabIndex > 0) {
+            currentTabIndex--;
           }
         });
       },
@@ -44,26 +45,27 @@ class _TabViewScreenState extends State<TabViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 600,
-      child: TabView(
-        currentIndex: currentIndex,
-        tabs: tabs,
-        tabWidthBehavior: TabWidthBehavior.sizeToContent,
-        closeButtonVisibility: CloseButtonVisibilityMode.onHover,
-        showScrollButtons: true,
-        onChanged: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        onNewPressed: () {
-          setState(() {
-            final newTab = generateTab(const NewTabScreen());
-            tabs.add(newTab);
-            currentIndex = tabs.length;
-          });
-        },
+    return NavigationView(
+      content: Center(
+        child: TabView(
+          currentIndex: currentTabIndex,
+          tabs: tabs,
+          tabWidthBehavior: TabWidthBehavior.sizeToContent,
+          closeButtonVisibility: CloseButtonVisibilityMode.onHover,
+          showScrollButtons: true,
+          onChanged: (index) {
+            setState(() {
+              currentTabIndex = index;
+            });
+          },
+          onNewPressed: () {
+            setState(() {
+              final newTab = generateTab(const NewTabScreen());
+              tabs.add(newTab);
+              currentTabIndex = tabs.length;
+            });
+          },
+        ),
       ),
     );
   }

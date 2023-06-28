@@ -22,7 +22,21 @@ class PDFViewerPageState extends State<PDFViewerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("PDF Viewer")),
-      body: SfPdfViewer.file(File(widget.file.path)),
+      body: Row(
+        children: [
+          Container(
+            child: SfPdfViewer.file(File(widget.file.path)),
+            width: MediaQuery.of(context).size.width / 2 - 5,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+            child: SfPdfViewer.file(File(widget.file.path)),
+            width: MediaQuery.of(context).size.width / 2 - 5,
+          ),
+        ],
+      ),
       floatingActionButton: ElevatedButton(
         onPressed: () async {
           CapturedData? capturedData = await screenCapturer.capture(

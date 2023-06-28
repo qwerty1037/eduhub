@@ -8,26 +8,47 @@ import 'dart:io';
 
 import '../Screen/screen_pdf_web_view.dart';
 
+enum PdfFileType {
+  problem,
+  answer,
+}
+
 ///GetxController of pdf_test
 class FileDragAndDropController extends GetxController {
   Color defaultColor = Colors.grey[400]!;
   Color uploadingColor = Colors.blue[100]!;
-  File? pickedFile;
+  bool pdfInputedProblem = false;
+  bool pdfInputedAnswer = false;
+
+  File? pickedFileProblem;
+  File? pickedFileAnswer;
   RxString showFileName = "".obs;
   RxBool dragging = false.obs;
 
   ///Upload file into Application using FIlePicker.
   ///
   ///insert uploaded file's name into member variable showFileName.
-  void fileUpload() async {
+  void fileUpload(PdfFileType pdffiletype, context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
     if (result != null && result.files.isNotEmpty) {
-      String fileName = result.files.first.name;
-      debugPrint(fileName);
-      showFileName.value = 'Now File Name: $fileName';
+      if (pdffiletype == PdfFileType.problem) {
+        pickedFileProblem = File(result.files.first.path!);
+        String fileName = result.files.first.name;
+        debugPrint(fileName);
+        pdfInputedProblem = true;
+
+        // openPDF(context, pickedFileProblem!);
+      }
+      if (pdffiletype == PdfFileType.answer) {
+        pickedFileAnswer = File(result.files.first.path!);
+        String fileName = result.files.first.name;
+        debugPrint(fileName);
+        pdfInputedAnswer = true;
+        // openPDF(context, pickedFileAnswer!);
+      }
     }
   }
 
@@ -41,14 +62,22 @@ class FileDragAndDropController extends GetxController {
   ///See Also:
   ///
   /// * [openPDF]
-  void onDragDone(detail, context) {
+  void onDragDone(detail, context, PdfFileType pdffiletype) {
     debugPrint('onDragDone:');
     if (detail != null && detail.files.isNotEmpty) {
       String fileName = detail.files.first.name;
       debugPrint(fileName);
       showFileName.value = "Now File Name: $fileName";
       debugPrint(detail.files.first.path);
-      openPDF(context, File(detail.files.first.path));
+      if (pdffiletype == PdfFileType.problem) {
+        pickedFileProblem = File(detail.files.first.path);
+        pdfInputedProblem = true;
+      }
+      if (pdffiletype == PdfFileType.answer) {
+        pickedFileAnswer = File(detail.files.first.path);
+        pdfInputedAnswer = true;
+      }
+      // openPDF(context, File(detail.files.first.path));
     }
   }
 

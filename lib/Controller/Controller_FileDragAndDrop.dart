@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:front_end/Screen/screen_pdf_viewer.dart';
 import 'dart:io';
 
+import '../Screen/screen_pdf_web_view.dart';
+
 ///GetxController of pdf_test
 class FileDragAndDropController extends GetxController {
   Color defaultColor = Colors.grey[400]!;
@@ -45,6 +47,7 @@ class FileDragAndDropController extends GetxController {
       String fileName = detail.files.first.name;
       debugPrint(fileName);
       showFileName.value = "Now File Name: $fileName";
+      debugPrint(detail.files.first.path);
       openPDF(context, File(detail.files.first.path));
     }
   }

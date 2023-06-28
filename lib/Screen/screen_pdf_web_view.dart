@@ -2,119 +2,113 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:pdf_render/pdf_render.dart';
 import 'package:pdf_render/pdf_render_widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screenshot/screenshot.dart';
+import 'dart:io';
 
-class PartialCapturePDFScreen extends StatefulWidget {
+class PartialCaptureScreen extends StatefulWidget {
   @override
-  _PartialCapturePDFScreenState createState() =>
-      _PartialCapturePDFScreenState();
+  _PartialCaptureScreenState createState() => _PartialCaptureScreenState();
 }
 
-class _PartialCapturePDFScreenState extends State<PartialCapturePDFScreen> {
+class _PartialCaptureScreenState extends State<PartialCaptureScreen> {
   ScreenshotController _screenshotController = ScreenshotController();
-  late final PdfDocument _pdfDocument;
-  int _currentPageIndex = 0;
   Rect? _captureRect;
 
   @override
-  void initState() {
-    super.initState();
-    loadPDF();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Partial Capture'),
+      ),
+      body: GestureDetector(
+        onDoubleTap: () async {
+          CapturedData? capturedData = await screenCapturer.capture(
+            mode: CaptureMode.region, // screen, window
+            imagePath: '<path>',
+            copyToClipboard: true,
+          );
+          // setState(() {q
+          //   _captureRect =
+          //       Rect.fromPoints(details.localPosition, details.localPosition);
+          // });
+        },
+        // onPanUpdate: (details) {
+        //   setState(() {
+        //     _captureRect =
+        //         Rect.fromPoints(_captureRect!.topLeft, details.localPosition);
+        //   });
+        // },
+        // onPanEnd: (details) async {
+        //   final imageBytes = await _screenshotController.capture(
+        //     pixelRatio: 2.0, // 캡처할 영역의 해상도를 설정합니다.
+        //   );
+        //   setState(() {
+        //     _captureRect = null;
+        //   });
+        //   if (imageBytes != null) {}
+        // },
+        child: Stack(
+          children: [
+            Screenshot(
+              controller: _screenshotController,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.white,
+              ),
+            ),
+            CustomPaint(
+              painter: SelectionPainter(rect: _captureRect),
+              size: Size.infinite,
+            ),
+          ],
+        ),
+      ),
+    );
   }
+}
 
-  Future<void> loadPDF() async {
-    _pdfDocument = await PdfDocument.openAsset('assets/sample.pdf');
-    setState(() {});
+class Capture {
+  CapturedData? capturedData;
+
+  Future? captureRegion() async {
+    capturedData = await screenCapturer.capture(
+      mode: CaptureMode.region, // screen, window
+      imagePath: '<path>',
+      copyToClipboard: true,
+    );
+    return capturedData;
   }
+}
 
-  Future<Uint8List?> capturePDFRegion() async {
-    if (_pdfDocument != null && _captureRect != null) {
-      final pdfPage = await _pdfDocument.getPage(_currentPageIndex);
-      final pdfPageImage = await pdfPage.render(
-        x: _captureRect!.left.toInt(),
-        y: _captureRect!.top.toInt(),
-        width: _captureRect!.width.toInt(),
-        height: _captureRect!.height.toInt(),
+class SelectionPainter extends CustomPainter {
+  final Rect? rect;
+
+  SelectionPainter({this.rect});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (rect != null) {
+      canvas.drawRect(
+        rect!,
+        Paint()
+          ..color = Colors.blue.withOpacity(0.3)
+          ..style = PaintingStyle.fill,
       );
-      final Uint8List imageBytes = await pdfPageImage.pixels;
-      return imageBytes;
+      canvas.drawRect(
+        rect!,
+        Paint()
+          ..color = Colors.blue
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.0,
+      );
     }
-    return null;
   }
 
   @override
-  Widget build(BuildContext context) {
-    final controller = PdfViewerController();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Partial Capture PDF'),
-      ),
-      body: _pdfDocument != null
-          ? GestureDetector(
-              onPanStart: (details) {
-                setState(() {
-                  _captureRect = Rect.fromPoints(
-                      details.globalPosition, details.globalPosition);
-                });
-              },
-              onPanUpdate: (details) {
-                setState(() {
-                  _captureRect = Rect.fromLTRB(
-                    _captureRect!.left,
-                    _captureRect!.top,
-                    details.globalPosition.dx,
-                    details.globalPosition.dy,
-                  );
-                });
-              },
-              onPanEnd: (details) {
-                setState(() {
-                  _captureRect = null;
-                });
-              },
-              child: Stack(
-                children: [
-                  Screenshot(
-                    controller: _screenshotController,
-                    child: PdfViewer.openAsset(
-                      'assets/hello.pdf',
-                      viewerController: controller,
-                      onError: (err) => print(err),
-                      params: const PdfViewerParams(
-                        padding: 10,
-                        minScale: 1.0,
-                        // scrollDirection: Axis.horizontal,
-                      ),
-                    ),
-                  ),
-                  _captureRect != null
-                      ? Positioned(
-                          left: _captureRect!.left,
-                          top: _captureRect!.top,
-                          width: _captureRect!.width,
-                          height: _captureRect!.height,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.red),
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
-                ],
-              ),
-            )
-          : Center(
-              child: CircularProgressIndicator(),
-            ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final imageBytes = await capturePDFRegion();
-          if (imageBytes != null) {
-            //TODO:저장
-          }
-        },
-        child: Icon(Icons.camera),
-      ),
-    );
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

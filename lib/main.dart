@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PartialCapturePDFScreen(),
-      // home: FileDragAndDropScreen(),
+      // home: PartialCaptureScreen(),
+      home: FileDragAndDropScreen(),
     );
   }
 }

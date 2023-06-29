@@ -45,7 +45,8 @@ class _TabViewScreenState extends State<TabViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationView(
+    return ScaffoldPage(
+      header: const Text("header 자리"),
       content: Center(
         child: TabView(
           currentIndex: currentTabIndex,

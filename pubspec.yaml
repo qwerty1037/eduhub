@@ -36,12 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   file_picker: ^5.2.10
-  flutter_bloc: ^8.1.2
+  
   get: ^4.6.5
   desktop_drop: ^0.4.1
   win32: ^3.0.0
   bitsdojo_window: ^0.1.5  
-  fluent_ui: ^4.6.0
+  fluent_ui: ^4.6.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

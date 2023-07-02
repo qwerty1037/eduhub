@@ -20,78 +20,47 @@ class PdfFile {}
 class PdfScreenController extends GetxController {
   Color defaultColor = Colors.grey[400]!;
   Color uploadingColor = Colors.blue[100]!;
-  bool pdfInputedProblem = false;
-  bool pdfInputedAnswer = false;
-  File? pickedFileProblem;
-  File? pickedFileAnswer;
-  Uint8List? capturedFileProblem;
-  Uint8List? capturedFileAnswer;
-  // post, 내가 뭘 보낼거다. 어떻게 해 줬으면 좋겠다. 간략하게 요청하면 됩니다.
-
-  RxString pickedFileNameProblem = "".obs;
-  RxString pickedFileNameAnswer = "".obs;
+  bool pdfInputed = false;
+  File? pickedFile;
+  Uint8List? capturedFile;
+  RxString pickedFileName = "".obs;
   RxBool dragging = false.obs;
-  RxBool isCapturedProblem = false.obs;
-  RxBool isCapturedAnswer = false.obs;
+  RxBool isCaptured = false.obs;
 
   ///Upload file into Application using FIlePicker.
   ///
   ///insert uploaded file's name into member variable showFileName.
-  void fileUpload(PdfFileType pdfFileType, context) async {
+  void fileUpload(context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
     if (result != null && result.files.isNotEmpty) {
-      if (pdfFileType == PdfFileType.problem) {
-        pickedFileProblem = File(result.files.first.path!);
-        String fileName = result.files.first.name;
-        debugPrint(fileName);
-        pickedFileNameProblem.value = fileName;
-
-        pdfInputedProblem = true;
-
-        // openPDF(context, pickedFileProblem!);
-      }
-      if (pdfFileType == PdfFileType.answer) {
-        pickedFileAnswer = File(result.files.first.path!);
-        String fileName = result.files.first.name;
-        debugPrint(fileName);
-        pickedFileNameAnswer.value = fileName;
-
-        pdfInputedAnswer = true;
-        // openPDF(context, pickedFileAnswer!);
-      }
+      pickedFile = File(result.files.first.path!);
+      String fileName = result.files.first.name;
+      debugPrint(fileName);
+      pickedFileName.value = fileName;
+      pdfInputed = true;
     }
   }
-
-  ///Open PDFViewerPage.
-  void openPDF(BuildContext context, File file) => Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
-      );
 
   ///Function when Drag&Drop is done.
   ///
   ///See Also:
   ///
   /// * [openPDF]
-  void onDragDone(detail, context, PdfFileType pdfFileType) {
+  void onDragDone(
+    detail,
+    context,
+  ) {
     debugPrint('onDragDone:');
     if (detail != null && detail.files.isNotEmpty) {
       String fileName = detail.files.first.name;
       debugPrint(fileName);
       debugPrint(detail.files.first.path);
-      if (pdfFileType == PdfFileType.problem) {
-        pickedFileNameProblem.value = fileName;
-        pickedFileProblem = File(detail.files.first.path);
-        pdfInputedProblem = true;
-      }
-      if (pdfFileType == PdfFileType.answer) {
-        pickedFileNameAnswer.value = fileName;
-        pickedFileAnswer = File(detail.files.first.path);
-        pdfInputedAnswer = true;
-      }
-      // openPDF(context, File(detail.files.first.path));
+      pickedFileName.value = fileName;
+      pickedFile = File(detail.files.first.path);
+      pdfInputed = true;
     }
   }
 
@@ -107,81 +76,36 @@ class PdfScreenController extends GetxController {
     dragging.value = false;
   }
 
-  String? getFileName(PdfFileType pdfFileType) {
-    if (pdfFileType == PdfFileType.problem) {
-      return pickedFileNameProblem.value;
-    }
-    if (pdfFileType == PdfFileType.answer) {
-      return pickedFileNameAnswer.value;
-    }
-    return "";
+  String? getFileName() {
+    return pickedFileName.value;
   }
 
-  void exitPdf(PdfFileType pdfFileType) {
-    if (pdfFileType == PdfFileType.problem) {
-      pdfInputedProblem = false;
-    }
-    if (pdfFileType == PdfFileType.answer) {
-      pdfInputedAnswer = false;
-    }
+  void exitPdf() {
+    pdfInputed = false;
   }
 
-  void capturePdf(PdfFileType pdfFileType) async {
-    if (pdfFileType == PdfFileType.problem) {
-      capturedFileProblem = null;
-      isCapturedProblem.value = false;
-    }
-    if (pdfFileType == PdfFileType.problem) {
-      capturedFileAnswer = null;
-      isCapturedAnswer.value = false;
-    }
+  void capturePdf() async {
+    capturedFile = null;
+    isCaptured.value = false;
+
     CapturedData? capturedData = await screenCapturer.capture(
       mode: CaptureMode.region, // screen, window
       imagePath: '<path>',
       copyToClipboard: true,
     );
-    if (pdfFileType == PdfFileType.problem) {
-      isCapturedProblem.value = false;
-      capturedFileProblem = capturedData!.imageBytes;
-      isCapturedProblem.value = true;
-    }
-    if (pdfFileType == PdfFileType.answer) {
-      isCapturedAnswer.value = false;
-      capturedFileAnswer = capturedData!.imageBytes;
-      isCapturedAnswer.value = true;
-    }
-    update();
+
+    isCaptured.value = false;
+    capturedFile = capturedData!.imageBytes;
+    isCaptured.value = true;
   }
 
-  void deleteCapturedImage(PdfFileType pdfFileType) {
-    if (pdfFileType == PdfFileType.problem) {
-      isCapturedProblem.value = false;
-      capturedFileProblem = null;
-    }
-    if (pdfFileType == PdfFileType.answer) {
-      isCapturedAnswer.value = false;
-      capturedFileAnswer = null;
-    }
+  void deleteCapturedImage() {
+    isCaptured.value = false;
+    capturedFile = null;
   }
 
-  bool isCaptured(PdfFileType pdfFileType) {
-    if (pdfFileType == PdfFileType.problem) {
-      return isCapturedProblem.value;
-    } else if (pdfFileType == PdfFileType.answer) {
-      return isCapturedAnswer.value;
-    } else {
-      return false;
-    }
-  }
-
-  Uint8List? getCapturedImage(pdfFileType) {
-    if (pdfFileType == PdfFileType.problem) {
-      return capturedFileProblem;
-    } else if (pdfFileType == PdfFileType.answer) {
-      return capturedFileAnswer;
-    } else {
-      return null;
-    }
+  Uint8List? getCapturedImage() {
+    return capturedFile;
   }
 
   ///Target Box Color.

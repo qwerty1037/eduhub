@@ -14,10 +14,10 @@ class PdfScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfScreen> {
-  final controller = Get.put(PdfScreenController());
-  final controller2 = Get.put(PdfScreenController());
+  final controllerProblem = Get.put(PdfScreenController(), tag: "Problem");
+  final controllerAnswer = Get.put(PdfScreenController(), tag: "Answer");
 
-  Widget selectPdfContainer(PdfFileType pdfFileType) {
+  Widget selectPdfContainer(PdfScreenController controller) {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 2 - 5,
       child: DropTarget(
@@ -25,7 +25,6 @@ class _PdfScreenState extends State<PdfScreen> {
           controller.onDragDone(
             detail,
             context,
-            pdfFileType,
           );
         },
         onDragEntered: (detail) {
@@ -75,7 +74,7 @@ class _PdfScreenState extends State<PdfScreen> {
               InkWell(
                 //A rectangular area of a Material that responds to touch.
                 onTap: () {
-                  controller.fileUpload(pdfFileType, context);
+                  controller.fileUpload(context);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +112,7 @@ class _PdfScreenState extends State<PdfScreen> {
                 height: 10,
               ),
               Text(
-                controller.getFileName(pdfFileType)!,
+                controller.getFileName()!,
                 style: TextStyle(
                   color: controller.buttoncolor(),
                 ),
@@ -125,14 +124,7 @@ class _PdfScreenState extends State<PdfScreen> {
     );
   }
 
-  Widget pdfViewerContainer(PdfFileType pdfFileType) {
-    File? file;
-    if (pdfFileType == PdfFileType.problem) {
-      file = controller.pickedFileProblem;
-    }
-    if (pdfFileType == PdfFileType.answer) {
-      file = controller.pickedFileAnswer;
-    }
+  Widget pdfViewerContainer(PdfScreenController controller) {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 2 - 5,
       height: MediaQuery.of(context).size.height,
@@ -163,7 +155,7 @@ class _PdfScreenState extends State<PdfScreen> {
                     FittedBox(
                       fit: BoxFit.fitHeight,
                       child: Text(
-                        "File name: ${controller.getFileName(pdfFileType)}",
+                        "File name: ${controller.getFileName()}",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -176,7 +168,7 @@ class _PdfScreenState extends State<PdfScreen> {
                   child: FloatingActionButton(
                     backgroundColor: Colors.black26,
                     onPressed: () async {
-                      controller.exitPdf(pdfFileType);
+                      controller.exitPdf();
                       setState(() {});
                     },
                     child: const Icon(
@@ -197,13 +189,13 @@ class _PdfScreenState extends State<PdfScreen> {
               children: [
                 SizedBox(
                   child: SfPdfViewer.file(
-                    file!,
+                    controller.pickedFile!,
                   ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Visibility(
-                    visible: controller.isCaptured(pdfFileType),
+                    visible: controller.isCaptured(),
                     child: Container(
                       height: 250,
                       child: Stack(
@@ -225,9 +217,9 @@ class _PdfScreenState extends State<PdfScreen> {
                                 ),
                               ],
                             ),
-                            child: controller.isCaptured(pdfFileType)
+                            child: controller.isCaptured()
                                 ? Image.memory(
-                                    controller.getCapturedImage(pdfFileType)!,
+                                    controller.getCapturedImage()!,
                                   )
                                 : const SizedBox(),
                           ),
@@ -236,7 +228,7 @@ class _PdfScreenState extends State<PdfScreen> {
                             child: FloatingActionButton(
                               backgroundColor: Colors.black26,
                               onPressed: () async {
-                                controller.deleteCapturedImage(pdfFileType);
+                                controller.deleteCapturedImage();
                               },
                               child: const Icon(
                                 Icons.exit_to_app,
@@ -250,13 +242,13 @@ class _PdfScreenState extends State<PdfScreen> {
                   ),
                 ),
                 Visibility(
-                  visible: !controller.isCaptured(pdfFileType),
+                  visible: !controller.isCaptured(),
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: FloatingActionButton(
                       backgroundColor: Colors.black26,
                       onPressed: () async {
-                        controller.capturePdf(pdfFileType);
+                        controller.capturePdf();
                         setState(() {});
                       },
                       child: const Icon(
@@ -278,24 +270,23 @@ class _PdfScreenState extends State<PdfScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: GetX<PdfScreenController>(
-          builder: (controller) {
-            ///desktop_drop library
-            return Row(
-              children: [
-                controller.pdfInputedProblem
-                    ? pdfViewerContainer(PdfFileType.problem)
-                    : selectPdfContainer(PdfFileType.problem),
-                Container(
-                  width: 10,
-                  color: Colors.black12,
-                ),
-                controller.pdfInputedAnswer
-                    ? pdfViewerContainer(PdfFileType.answer)
-                    : selectPdfContainer(PdfFileType.answer),
-              ],
-            );
-          },
+        child: Row(
+          children: [
+            Obx(() {
+              return controllerProblem.pdfInputed
+                  ? pdfViewerContainer(controllerProblem)
+                  : selectPdfContainer(controllerProblem);
+            }),
+            Container(
+              width: 10,
+              color: Colors.black12,
+            ),
+            Obx(() {
+              return controllerAnswer.pdfInputed
+                  ? pdfViewerContainer(controllerAnswer)
+                  : selectPdfContainer(controllerAnswer);
+            }),
+          ],
         ),
       ),
     );

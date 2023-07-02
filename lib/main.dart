@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/Screen/screen_file_drag_and_drop.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front_end/Screen/screen_pdf_web_view.dart';
-import 'package:front_end/Test/getX_test.dart';
+import 'package:front_end/Screen/Screen_PdfViewer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,9 +11,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       // home: PartialCaptureScreen(),
-      home: FileDragAndDropScreen(),
+      home: PdfScreen(),
     );
   }
 }

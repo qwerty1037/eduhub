@@ -24,16 +24,16 @@ class PDFViewerPageState extends State<PDFViewerPage> {
       appBar: AppBar(title: const Text("PDF Viewer")),
       body: Row(
         children: [
-          Container(
-            child: SfPdfViewer.file(File(widget.file.path)),
-            width: MediaQuery.of(context).size.width / 2 - 5,
-          ),
           SizedBox(
+            width: MediaQuery.of(context).size.width / 2 - 5,
+            child: SfPdfViewer.file(File(widget.file.path)),
+          ),
+          const SizedBox(
             width: 10,
           ),
-          Container(
-            child: SfPdfViewer.file(File(widget.file.path)),
+          SizedBox(
             width: MediaQuery.of(context).size.width / 2 - 5,
+            child: SfPdfViewer.file(File(widget.file.path)),
           ),
         ],
       ),
@@ -45,9 +45,9 @@ class PDFViewerPageState extends State<PDFViewerPage> {
             copyToClipboard: true,
           );
         },
-        child: Text("Capture"),
         style:
             ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20)),
+        child: const Text("Capture"),
       ),
     );
   }

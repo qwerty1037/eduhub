@@ -1,26 +1,23 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:pdf_render/pdf_render.dart';
-import 'package:pdf_render/pdf_render_widgets.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:screenshot/screenshot.dart';
-import 'dart:io';
 
 class PartialCaptureScreen extends StatefulWidget {
+  const PartialCaptureScreen({super.key});
+
   @override
   _PartialCaptureScreenState createState() => _PartialCaptureScreenState();
 }
 
 class _PartialCaptureScreenState extends State<PartialCaptureScreen> {
-  ScreenshotController _screenshotController = ScreenshotController();
+  final ScreenshotController _screenshotController = ScreenshotController();
   Rect? _captureRect;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Partial Capture'),
+        title: const Text('Partial Capture'),
       ),
       body: GestureDetector(
         onDoubleTap: () async {

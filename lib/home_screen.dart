@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TotalController());
     Get.put(HomeScreenController());
     final theme = Get.find<TotalController>();
 
@@ -114,26 +113,27 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           pane: NavigationPane(
-              menuButton: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                child: IconButton(
-                  icon: controller.paneIsOpen.isTrue
-                      ? const Icon(FluentIcons.chrome_back)
-                      : const Icon(FluentIcons.chrome_back_mirrored),
-                  onPressed: () {
-                    controller.paneIsOpen.value = !controller.paneIsOpen.value;
-                  },
-                ),
+            menuButton: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 40,
+              child: IconButton(
+                icon: controller.paneIsOpen.isTrue
+                    ? const Icon(FluentIcons.chrome_back)
+                    : const Icon(FluentIcons.chrome_back_mirrored),
+                onPressed: () {
+                  controller.paneIsOpen.value = !controller.paneIsOpen.value;
+                },
               ),
-              displayMode: controller.paneIsOpen.isTrue
-                  ? PaneDisplayMode.open
-                  : PaneDisplayMode.compact,
-              selected: controller.selectedIndex.value,
-              onChanged: (value) {
-                controller.onChanged(value);
-              },
-              items: controller.paneItemList),
+            ),
+            displayMode: controller.paneIsOpen.isTrue
+                ? PaneDisplayMode.open
+                : PaneDisplayMode.compact,
+            selected: controller.selectedIndex.value,
+            onChanged: (value) {
+              controller.onChanged(value);
+            },
+            items: controller.paneItemList,
+          ),
         );
       },
     );

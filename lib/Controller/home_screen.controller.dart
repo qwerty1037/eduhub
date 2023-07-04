@@ -30,7 +30,10 @@ class HomeScreenController extends GetxController {
           size: 20,
         ),
         title: const Text("1 프로젝트"),
-        body: const Text("1 프로젝트"),
+        body: Container(
+          color: Colors.blue,
+          child: const Text("1 프로젝트"),
+        ),
       ),
       PaneItem(
         icon: const Icon(

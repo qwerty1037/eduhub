@@ -54,20 +54,42 @@ merge를 코드 리뷰할 때 끝내기 + monday.com에 할 리스트 다 작성
             
     - Profile.dart : id, project, mode를 변수로 가지고 있는 class. id는 필수이며 ColorMode는 enum타입으로 dark, light가 존재한다
 
-    - Temporary.dart : 언젠가 사용될 코드지만, 현재는 사용하고 있지 않는 코드 보관 
+    
     
 ## Controller : Getx 관련 패키지를 모아둔 곳
+    - total.controller.dart : 앱 전체적으로 사용되는 전역변수들 모아두는 컨트롤러
+        
+        <variable>
+        isdark : light, dark 모드를 결정하기 위한 변수. true -> 다크모드
+
+    - tab.controller.dart : 로그인 후 maintabview 부분을 관리하는 컨트롤러. 
+
+        <variable>
+        currentTabIndex : 현재 화면에 보이는 탭의 인덱스
+        tabs : 관리되는 탭 리스트
+        isHomeScreen : true면 HomeScreen렌더링. 처음 or 홈 아이콘 누를시 true로 업데이트되며 다른 탭을 볼 때 false로 업데이트
+
+        <method>
+        addTab : widget 형식의 body 인자를 받아서 탭을 만들고 return하는 함수. 현재는 title의 제목 부분이 new tab으로 고정되어 있으나 추후 업데이트 필요시 변경해야함(프로젝트 이름 등)
+        onReordered : 탭 간의 순서가 바뀔 때 인덱스를 새로 업데이트해주는 함수.
+
+    - home_screen.controller.dart : 홈 스크린 관련 컨트롤러로 주로 홈 스크린의 navigation view관련 처리를 함.
+        
+        <variable>
+        selectedIndex : navigation view에서 보여줄 pane의 인덱스 
+        paneItemList : navigation view의 paneItemlist. 생성자로 초기화.
+        paneIsOpen : 왼쪽에 리스트로 보여줄 pane이 open(넓게 열린 상태)인지 minimal(아이콘만 보임) 상태인지 나타내며 true이 open.
+
+        <method>
+        onChanged : 현재 보고 있는 pane의 인덱스가 바뀔시 작동하는 함수. 새 인덱스를 인자로 받으며, 마지막의 new project부분이 아닐 경우 selectedIndex를 업데이트하고, new project 인덱스일 경우 새 paneItem을 삽입(새 프로젝트 생성).
 
 ## Screen : UI Screen, 전체 코드가 합쳐지는 부분
-    - main.dart : run 또는 디버깅할 시 가장 먼저 실행되는 파일.
+    - main.dart : run 또는 디버깅할 시 가장 먼저 실행되는 파일로 total controller와 함께 작동하며, themeMode 부분을 통해 테마 조절이 가능하다. homeTabview로 자동으로 이어진다.(추후 로그인 부분으로 변경 예정)
+
+    - home_tabview.dart : 로그인 후 처음 보여질 탭뷰이며 컨트롤러와 함께 연동되어 작동한다. 헤더에 home 아이콘 모양의 버튼을 두었으며 맨 처음 Screen 렌더링 또는 아이콘 클릭시 homeScreen이 stack 방식으로 렌더링된다. 다른 탭으로 넘어가거나 새로운 탭을 만들경우 해당 화면으로 렌더링 되도록 코드가 작성되었다.
+
+    - home_screen.dart : 탭뷰가 처음 렌더링 되거나 홈 아이콘 클릭시 보여지는 home_screen이다. fluent_ui의 navigationView를 이용하여 개발하였으며 왼쪽 부분에는 프로젝트 리스트와 새 프로젝트 만들기, pane list 사이즈 줄이기 버튼이 현재 존재한다. Appbar부분에는 테마 모드를 설정하는 toggle버튼과 내정보, 결제, 로그아웃 기능을 수행할 설정 dropdown button(기능 미구현), 추후 문제를 태그 형식으로 검색할 검색창 부분, appbar의 끝 부분에는 flyout을 통해 유튜브 사용법 보기, 언어 변경, 피드백 보내기(기능 미구현)가 가능하도록 ui가 구성되어 있다.
+    현재 각 pane의 body부분은 구현되지 않은 상태이다.
 
 
-
-## 이동규 이번주 내용
-기존 모바일 디자인 표본은 flutter/material을 사용하지만 윈도우 앱은 fluent_ui 라이브러리를 사용한다고 함
-
-공식 라이브러리 : 
-https://pub.dev/packages/fluent_ui/install
-관련 예시 : 
-https://bdlukaa.github.io/fluent_ui/#/theming/icons
 

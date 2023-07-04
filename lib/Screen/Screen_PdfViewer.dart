@@ -4,7 +4,6 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:get/get.dart';
 import '../Controller/Controller_PdfView.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'dart:io';
 
 class PdfScreen extends StatefulWidget {
   const PdfScreen({super.key});
@@ -169,7 +168,6 @@ class _PdfScreenState extends State<PdfScreen> {
                     backgroundColor: Colors.black26,
                     onPressed: () async {
                       controller.exitPdf();
-                      setState(() {});
                     },
                     child: const Icon(
                       Icons.exit_to_app,
@@ -249,7 +247,6 @@ class _PdfScreenState extends State<PdfScreen> {
                       backgroundColor: Colors.black26,
                       onPressed: () async {
                         controller.capturePdf();
-                        setState(() {});
                       },
                       child: const Icon(
                         Icons.camera,

@@ -3,19 +3,35 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-import 'package:front_end/Test/screen_pdf_viewer.dart';
 import 'dart:io';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:flutter/services.dart';
-import '../Test/screen_pdf_web_view.dart';
 
 enum PdfFileType {
   problem,
   answer,
 }
 
-class PdfFile {}
+class PdfFile {
+  Uint8List? capturedFile;
+}
 
+//
+// context : string ? 아니 미친놈아 image 어디감?
+// -> 사실은 이렇습니다 : string 안에 uri가 있어요!
+// 대충 이런식으로 : ${href} ㅇㅇ 이러면 본문 안에 어디든 img 간단하게 삽입 가능.
+// -> 아니 그러면 ㅅㅂ 보낼때 어떻게 보냄. 백엔드 니네야 서버가 있으니까 href로 퉁칠수있는데
+//    클라이언트는 어케보냄?
+// 보낼때 ${1}으로 보내고, file로 알아서 보내주세요.
+//
+// https://my.snu.ac.kr?professor=killed
+//
+// {
+//     "badWords": {
+//        "kor": ["sibal", "yabal"],
+//        "count": 2
+//    }
+//}
 ///GetxController of pdf_test
 class PdfScreenController extends GetxController {
   Color defaultColor = Colors.grey[400]!;

@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:front_end/Component/project_navigation_body.dart';
 import 'package:get/get.dart';
 
 class HomeScreenController extends GetxController {
@@ -14,7 +15,7 @@ class HomeScreenController extends GetxController {
           size: 20,
         ),
         title: const Text("최근 기록"),
-        body: const Text("최근 기록 페이지"),
+        body: const Center(child: Text("최근 기록 페이지")),
       ),
       PaneItem(
         icon: const Icon(
@@ -22,7 +23,7 @@ class HomeScreenController extends GetxController {
           size: 20,
         ),
         title: const Text("문제 모음"),
-        body: const Text("문제 모음 페이지"),
+        body: const Center(child: Text("문제 모음 페이지")),
       ),
       PaneItem(
         icon: const Icon(
@@ -31,8 +32,10 @@ class HomeScreenController extends GetxController {
         ),
         title: const Text("1 프로젝트"),
         body: Container(
-          color: Colors.blue,
-          child: const Text("1 프로젝트"),
+          color: Colors.teal,
+          child: ProjectNavigationBody(
+            projectName: "1 프로젝트",
+          ),
         ),
       ),
       PaneItem(
@@ -41,23 +44,35 @@ class HomeScreenController extends GetxController {
           size: 20,
         ),
         title: const Text("2 프로젝트"),
-        body: const Text("2 프로젝트 페이지"),
+        body: Container(
+          color: Colors.teal,
+          child: ProjectNavigationBody(
+            projectName: "2 프로젝트",
+          ),
+        ),
       ),
       PaneItem(
-        icon: const Icon(
-          FluentIcons.fabric_folder,
-          size: 20,
-        ),
-        title: const Text("3 프로젝트"),
-        body: const Text("3 프로젝트 페이지"),
-      ),
+          icon: const Icon(
+            FluentIcons.fabric_folder,
+            size: 20,
+          ),
+          title: const Text("3 프로젝트"),
+          body: Container(
+            color: Colors.teal,
+            child: ProjectNavigationBody(
+              projectName: "3 프로젝트",
+            ),
+          )),
       PaneItem(
         icon: const Icon(
           FluentIcons.add,
           size: 20,
         ),
         title: const Text("New Project"),
-        body: const Text("New project"),
+        body: Container(
+          color: Colors.teal,
+          child: ProjectNavigationBody(),
+        ),
       ),
     ]);
   }

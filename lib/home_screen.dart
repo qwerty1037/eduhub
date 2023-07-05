@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
                   ToggleSwitch(
                     checked: theme.isdark.value,
                     onChanged: (value) {
-                      theme.isdark.value = value;
+                      theme.isdark.value = !theme.isdark.value;
                     },
                     content: theme.isdark.isTrue
                         ? const Text(

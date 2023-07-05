@@ -7,13 +7,8 @@ import 'dart:io';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:flutter/services.dart';
 
-enum PdfFileType {
-  problem,
-  answer,
-}
-
 class PdfFile {
-  Uint8List? capturedFile;
+  Uint8List? capturedImage;
 }
 
 //
@@ -33,14 +28,14 @@ class PdfFile {
 //    }
 //}
 ///GetxController of pdf_test
-class PdfScreenController extends GetxController {
+class PdfViewerScreenController extends GetxController {
   Color defaultColor = Colors.grey[400]!;
   Color uploadingColor = Colors.blue[100]!;
-  bool pdfInputed = false;
+  bool isPdfInputed = false;
   File? pickedFile;
-  Uint8List? capturedFile;
+  Uint8List? capturedImage;
   RxString pickedFileName = "".obs;
-  RxBool dragging = false.obs;
+  RxBool isDragged = false.obs;
   RxBool isCaptured = false.obs;
 
   ///Upload file into Application using FIlePicker.
@@ -56,15 +51,11 @@ class PdfScreenController extends GetxController {
       String fileName = result.files.first.name;
       debugPrint(fileName);
       pickedFileName.value = fileName;
-      pdfInputed = true;
+      isPdfInputed = true;
     }
   }
 
   ///Function when Drag&Drop is done.
-  ///
-  ///See Also:
-  ///
-  /// * [openPDF]
   void onDragDone(
     detail,
     context,
@@ -76,20 +67,20 @@ class PdfScreenController extends GetxController {
       debugPrint(detail.files.first.path);
       pickedFileName.value = fileName;
       pickedFile = File(detail.files.first.path);
-      pdfInputed = true;
+      isPdfInputed = true;
     }
   }
 
   ///Function when Drag enter the target.
   void onDragEntered(detail) {
     debugPrint('onDragEntered:');
-    dragging.value = true;
+    isDragged.value = true;
   }
 
   ///Function when Drag exit the target.
   void onDragExited(detail) {
     debugPrint('onDragExited:');
-    dragging.value = false;
+    isDragged.value = false;
   }
 
   String? getFileName() {
@@ -97,39 +88,46 @@ class PdfScreenController extends GetxController {
   }
 
   void exitPdf() {
-    pdfInputed = false;
+    isPdfInputed = false;
   }
 
+  /// Capture image and save
+  ///
+  /// Always Delete saved Image and capture
+  ///
+  /// If capturedData is null,
   void capturePdf() async {
-    capturedFile = null;
-    isCaptured.value = false;
+    deleteCapturedImage();
 
     CapturedData? capturedData = await screenCapturer.capture(
       mode: CaptureMode.region, // screen, window
       imagePath: '<path>',
       copyToClipboard: true,
     );
-
-    isCaptured.value = false;
-    capturedFile = capturedData!.imageBytes;
+    // TODO: null이 입력되었을 때의 처리구문을 작성해야함
+    capturedImage = capturedData?.imageBytes;
     isCaptured.value = true;
   }
 
+  /// Delete capturedImage
+  ///
+  ///
   void deleteCapturedImage() {
     isCaptured.value = false;
-    capturedFile = null;
+    capturedImage = null;
   }
 
+  /// Return capturedImage
   Uint8List? getCapturedImage() {
-    return capturedFile;
+    return capturedImage;
   }
 
-  ///Target Box Color.
+  /// Target Box Color.
   ///
-  ///When Drag Cursor is inside the target, color = uploadingColor.
+  /// When Drag Cursor is inside the target, color = uploadingColor.
   ///
-  ///When Drag Cursor is outside the target, color = defaultColor.
+  /// When Drag Cursor is outside the target, color = defaultColor.
   Color buttoncolor() {
-    return dragging.value ? uploadingColor : defaultColor;
+    return isDragged.value ? uploadingColor : defaultColor;
   }
 }

@@ -224,8 +224,21 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                           ),
                           Align(
                             alignment: Alignment.topRight,
-                            child: FloatingActionButton(
-                              backgroundColor: Colors.black26,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black26),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                ),
+                              ),
                               onPressed: () async {
                                 controller.deleteCapturedImage();
                               },

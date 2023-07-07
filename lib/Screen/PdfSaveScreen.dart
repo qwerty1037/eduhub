@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/Controller/PdfSaveController.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/DefaultTextFIeld.dart';
-import 'package:front_end/Component/KeyTextSpan.dart';
+import 'package:front_end/Component/DefaultKeyText.dart';
 import 'package:front_end/Test/TempTag.dart';
 import 'package:korea_regexp/korea_regexp.dart';
 
@@ -78,7 +78,7 @@ class PdfSaveScreen extends StatelessWidget {
   Widget problemNameInputField() {
     return Column(
       children: [
-        const KeyText(text: "문제명"),
+        const DefaultKeyText(text: "문제명"),
         DefaultTextField(
           labelText: null,
           hintText: '문제명을 입력하세요',
@@ -91,7 +91,7 @@ class PdfSaveScreen extends StatelessWidget {
   Widget directroyInputField() {
     return Column(
       children: [
-        const KeyText(text: "디렉토리"),
+        const DefaultKeyText(text: "디렉토리"),
         DefaultTextField(
           labelText: null,
           hintText: '디렉토리를 입력하세요',
@@ -104,7 +104,29 @@ class PdfSaveScreen extends StatelessWidget {
   Widget tagsInputField() {
     return Column(
       children: [
-        const KeyText(text: "Tags"),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: RichText(
+            text: const TextSpan(
+              children: [
+                TextSpan(
+                  text: "Tags ",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextSpan(
+                  text: "- 눌러서 해제",
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         const SizedBox(height: 20),
         Obx(() {
           return Align(
@@ -143,7 +165,26 @@ class PdfSaveScreen extends StatelessWidget {
   Widget difficultyInputField() {
     return Column(
       children: [
-        const KeyText(text: "난이도"),
+        Stack(
+          children: [
+            const DefaultKeyText(text: "난이도"),
+            Align(
+              alignment: Alignment.center,
+              child: Obx(
+                () => Text(
+                  "[${controller.difficultySliderValue.value.round()}]",
+                  style: const TextStyle(
+                    fontSize: 35,
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
         Obx(() {
           return Slider(
             max: 5,
@@ -235,15 +276,24 @@ class PdfSaveScreen extends StatelessWidget {
 
   Widget saveButtonField() {
     return Container(
-      height: 50,
-      alignment: Alignment.center,
-      color: Colors.blueAccent,
-      child: const Text(
-        "이렇게 저장하기",
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
+      child: TextButton(
+        onPressed: () {},
+        child: Container(
+          height: 50,
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: Colors.blueAccent,
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: const Text(
+            "이렇게 저장하기",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );

@@ -19,11 +19,13 @@ class PdfSaveController extends GetxController {
     }
   }
 
+  /// Get Problem, Answer image as Uint8List
   void getImage(Uint8List image1, Uint8List image2) {
     capturedImageProblem = image1;
     capturedImageAnswer = image2;
   }
 
+  /// When ImagePreviewButton is Tapped, It will switch "-보기", "-숨기기"
   String imagePreviewButtonText() {
     if (isImagePreviewButtonTapped.value == false) {
       return "-보기";
@@ -32,7 +34,9 @@ class PdfSaveController extends GetxController {
     }
   }
 
+  /// executed when ImagePreviewButton is Tapped
   ///
+  /// change its tapped value
   void whenImagePreviewButtonTapped() {
     if (isImagePreviewButtonTapped.value == false) {
       isImagePreviewButtonTapped.value = true;

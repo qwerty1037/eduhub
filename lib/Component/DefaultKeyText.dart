@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class KeyText extends StatelessWidget {
+class DefaultKeyText extends StatelessWidget {
   final String text;
-  const KeyText({
+  const DefaultKeyText({
     super.key,
     required this.text,
   });

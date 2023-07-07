@@ -15,4 +15,4 @@ const double DEFAULT_HEAD_FONT_SIZE = 40;
 const double DEFAULT_TEXT_FONT_SIZE = 25;
 const double DEFAULT_BUTTON_FONT_SIZE = 30;
 
-const String HOST = '';
+const String HOST = '192.168.43.126:3000';

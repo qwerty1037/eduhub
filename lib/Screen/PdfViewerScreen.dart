@@ -73,7 +73,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 ],
               ),
               InkWell(
-                //A rectangular area of a Material that responds to touch.
                 onTap: () {
                   controller.fileUpload(context);
                 },

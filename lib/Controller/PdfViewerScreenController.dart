@@ -15,7 +15,7 @@ class PdfFile {
 class PdfViewerScreenController extends GetxController {
   Color defaultColor = Colors.grey[400]!;
   Color uploadingColor = Colors.blue[100]!;
-  bool isPdfInputed = false;
+  RxBool isPdfInputed = false.obs;
   File? pickedFile;
   Uint8List? capturedImage;
   RxString pickedFileName = "".obs;
@@ -35,7 +35,7 @@ class PdfViewerScreenController extends GetxController {
       String fileName = result.files.first.name;
       debugPrint(fileName);
       pickedFileName.value = fileName;
-      isPdfInputed = true;
+      isPdfInputed.value = true;
     } else {
       print("Upload Failed");
     }
@@ -53,7 +53,7 @@ class PdfViewerScreenController extends GetxController {
       debugPrint(detail.files.first.path);
       pickedFileName.value = fileName;
       pickedFile = File(detail.files.first.path);
-      isPdfInputed = true;
+      isPdfInputed.value = true;
     }
   }
 
@@ -74,7 +74,7 @@ class PdfViewerScreenController extends GetxController {
   }
 
   void exitPdf() {
-    isPdfInputed = false;
+    isPdfInputed.value = false;
   }
 
   /// Capture image and save
@@ -87,7 +87,7 @@ class PdfViewerScreenController extends GetxController {
 
     CapturedData? capturedData = await screenCapturer.capture(
       mode: CaptureMode.region, // screen, window
-      imagePath: '<path>',
+      imagePath: "<path>",
       copyToClipboard: true,
     );
     if (capturedData == null) {

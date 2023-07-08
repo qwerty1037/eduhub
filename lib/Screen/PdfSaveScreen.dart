@@ -92,7 +92,7 @@ class PdfSaveScreen extends StatelessWidget {
         DefaultTextField(
           labelText: null,
           hintText: '디렉토리를 입력하세요',
-          controller: controller.problemNameController,
+          controller: controller.directoryController,
         ),
       ],
     );

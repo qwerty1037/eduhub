@@ -177,7 +177,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         ),
                       ),
                     ),
-                    onPressed: () async {
+                    onPressed: () {
                       controller.exitPdf();
                     },
                     child: const Icon(
@@ -307,7 +307,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
             Row(
               children: [
                 Obx(() {
-                  return controllerProblem.isPdfInputed
+                  return controllerProblem.isPdfInputed.value
                       ? pdfViewerContainer(controllerProblem)
                       : selectPdfContainer(controllerProblem);
                 }),
@@ -316,7 +316,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   color: Colors.black12,
                 ),
                 Obx(() {
-                  return controllerAnswer.isPdfInputed
+                  return controllerAnswer.isPdfInputed.value
                       ? pdfViewerContainer(controllerAnswer)
                       : selectPdfContainer(controllerAnswer);
                 }),

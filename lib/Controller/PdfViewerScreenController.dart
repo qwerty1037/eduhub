@@ -11,22 +11,6 @@ class PdfFile {
   Uint8List? capturedImage;
 }
 
-//
-// context : string ? 아니 미친놈아 image 어디감?
-// -> 사실은 이렇습니다 : string 안에 uri가 있어요!
-// 대충 이런식으로 : ${href} ㅇㅇ 이러면 본문 안에 어디든 img 간단하게 삽입 가능.
-// -> 아니 그러면 ㅅㅂ 보낼때 어떻게 보냄. 백엔드 니네야 서버가 있으니까 href로 퉁칠수있는데
-//    클라이언트는 어케보냄?
-// 보낼때 ${1}으로 보내고, file로 알아서 보내주세요.
-//
-// https://my.snu.ac.kr?professor=killed
-//
-// {
-//     "badWords": {
-//        "kor": ["sibal", "yabal"],
-//        "count": 2
-//    }
-//}
 ///GetxController of pdf_test
 class PdfViewerScreenController extends GetxController {
   Color defaultColor = Colors.grey[400]!;
@@ -52,6 +36,8 @@ class PdfViewerScreenController extends GetxController {
       debugPrint(fileName);
       pickedFileName.value = fileName;
       isPdfInputed = true;
+    } else {
+      print("Upload Failed");
     }
   }
 
@@ -104,9 +90,13 @@ class PdfViewerScreenController extends GetxController {
       imagePath: '<path>',
       copyToClipboard: true,
     );
-    // TODO: null이 입력되었을 때의 처리구문을 작성해야함
-    capturedImage = capturedData?.imageBytes;
-    isCaptured.value = true;
+    if (capturedData == null) {
+      print("Capture Failed");
+    } else {
+      // TODO: null이 입력되었을 때의 처리구문을 작성해야함
+      capturedImage = capturedData?.imageBytes;
+      isCaptured.value = true;
+    }
   }
 
   /// Delete capturedImage

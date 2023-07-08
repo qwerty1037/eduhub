@@ -3,10 +3,12 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  bitsdojo_window_windows
   desktop_drop
   flutter_acrylic
   flutter_secure_storage_windows
+  screen_capturer
+  syncfusion_pdfviewer_windows
+  url_launcher_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

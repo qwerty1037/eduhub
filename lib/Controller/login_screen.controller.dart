@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 class loginScreenController extends GetxController {
   String? getCookieValue(String cookieHeader, String cookieName) {
     if (cookieHeader.isNotEmpty) {
-      RegExp regex = RegExp('$cookieName=([^;]+)');
-      Match? match = regex.firstMatch(cookieHeader);
-      if (match != null) {
-        return match.group(1)!;
+      List<String> cookies = cookieHeader.split(RegExp(r';|,'));
+      for (String cookie in cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith('$cookieName=')) {
+          return cookie.substring(cookieName.length + 1);
+        }
       }
     }
     return null;

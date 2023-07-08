@@ -45,11 +45,12 @@ class MyApp extends StatelessWidget {
           );
         } else {
           return material.MaterialApp(
-              theme: material.ThemeData(
-                fontFamily: GoogleFonts.poppins().fontFamily,
-              ),
-              debugShowCheckedModeBanner: false,
-              home: LoginScreen());
+            theme: material.ThemeData(
+              fontFamily: GoogleFonts.poppins().fontFamily,
+            ),
+            debugShowCheckedModeBanner: false,
+            home: LoginScreen(),
+          );
         }
       },
     );

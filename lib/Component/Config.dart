@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-const DEFAULT_DARK_COLOR = Color(0xFF110105);
+const DEFAULT_DARK_COLOR = Color(0xFF000000);
+const DEFAULT_TAB_COLOR = Colors.grey;
+// Color(0xFF363943);
+
 const DEFAULT_LIGHT_COLOR = Color(0xFFFFFFFF);
 
 const DEFAULT_TEXT_COLOR = Colors.black;
@@ -12,4 +15,4 @@ const double DEFAULT_HEAD_FONT_SIZE = 40;
 const double DEFAULT_TEXT_FONT_SIZE = 25;
 const double DEFAULT_BUTTON_FONT_SIZE = 30;
 
-const String HOST = '';
+const String HOST = '61.82.182.149:3000';

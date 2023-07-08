@@ -9,9 +9,6 @@ import 'package:korea_regexp/korea_regexp.dart';
 
 class PdfSaveScreen extends StatelessWidget {
   final controller = Get.put(PdfSaveController());
-  TextEditingController problemNameController = TextEditingController();
-  TextEditingController directoryController = TextEditingController();
-  TextEditingController tagsController = TextEditingController();
 
   @override
   PdfSaveScreen(Uint8List image1, Uint8List image2) {
@@ -82,7 +79,7 @@ class PdfSaveScreen extends StatelessWidget {
         DefaultTextField(
           labelText: null,
           hintText: '문제명을 입력하세요',
-          controller: problemNameController,
+          controller: controller.problemNameController,
         ),
       ],
     );
@@ -95,7 +92,7 @@ class PdfSaveScreen extends StatelessWidget {
         DefaultTextField(
           labelText: null,
           hintText: '디렉토리를 입력하세요',
-          controller: problemNameController,
+          controller: controller.problemNameController,
         ),
       ],
     );
@@ -145,7 +142,7 @@ class PdfSaveScreen extends StatelessWidget {
           onChanged: (text) {
             controller.tagsTextValue.value = text.toString();
           },
-          controller: tagsController,
+          controller: controller.tagsController,
         ),
         const SizedBox(height: 20),
         Obx(() {

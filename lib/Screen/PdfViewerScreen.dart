@@ -205,7 +205,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   alignment: Alignment.bottomLeft,
                   child: Visibility(
                     visible: controller.isCaptured(),
-                    child: Container(
+                    child: SizedBox(
                       height: 250,
                       child: Stack(
                         children: [

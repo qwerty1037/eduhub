@@ -1,11 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/DefaultTextBox.dart';
 import 'package:front_end/Controller/home_screen.controller.dart';
+import 'package:front_end/Controller/tab.controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
+import 'package:front_end/Screen/SearchScreen.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart' as material;
 
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
+  final tabController = Get.put(TabController());
 
   HomeScreen({super.key});
 
@@ -64,14 +69,25 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     width: 20,
                   ),
-                  Text(
-                    '검색창 들어갈 자리',
-                    style: TextStyle(
-                        fontSize: 24,
-                        color: theme.isdark.isTrue
-                            ? DEFAULT_LIGHT_COLOR
-                            : DEFAULT_DARK_COLOR),
+                  Expanded(
+                    child: DefaultTextBox(
+                      controller: controller.searchBarController,
+                      placeholder: "SearchBar",
+                      prefix: const material.Icon(material.Icons.search),
+                      suffix:
+                          const material.Icon(material.Icons.arrow_forward_ios),
+                      onChanged: (value) => controller.searchBarController.text,
+                      onEditingComplete: () {
+                        tabController.isHomeScreen.value = false;
+                        Tab newTab = tabController.addTab(SearchScreen());
+
+                        tabController.tabs.add(newTab);
+                        tabController.currentTabIndex.value =
+                            tabController.tabs.length - 1;
+                      },
+                    ),
                   ),
+                  const SizedBox(width: 40),
                 ],
               ),
             ),

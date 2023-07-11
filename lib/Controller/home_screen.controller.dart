@@ -6,6 +6,7 @@ class HomeScreenController extends GetxController {
   RxInt selectedIndex = 0.obs;
   RxList<NavigationPaneItem> paneItemList = RxList<NavigationPaneItem>();
   RxBool paneIsOpen = true.obs;
+  TextEditingController searchBarController = TextEditingController();
 
   HomeScreenController() {
     paneItemList.addAll([

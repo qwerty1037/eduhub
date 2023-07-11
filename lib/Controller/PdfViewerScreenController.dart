@@ -34,6 +34,7 @@ class PdfViewerScreenController extends GetxController {
       pickedFile = File(result.files.first.path!);
       String fileName = result.files.first.name;
       debugPrint(fileName);
+      debugPrint(result.files.first.path!);
       pickedFileName.value = fileName;
       isPdfInputed.value = true;
     } else {
@@ -87,7 +88,7 @@ class PdfViewerScreenController extends GetxController {
 
     CapturedData? capturedData = await screenCapturer.capture(
       mode: CaptureMode.region, // screen, window
-      imagePath: "<path>",
+      imagePath: "null",
       copyToClipboard: true,
     );
     if (capturedData == null) {

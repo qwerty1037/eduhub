@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:front_end/Component/DefaultTextBox.dart';
+import 'package:front_end/Test/TempFileClass.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Controller/SearchController.dart';
 import '../Component/DefaultTextFIeld.dart';
@@ -10,6 +11,7 @@ import 'package:front_end/Component/Custom_Dropdown.dart';
 
 class SearchScreen extends StatelessWidget {
   final controller = Get.put(SearchScreenController());
+  TempFileClass _tempFileClass = new TempFileClass();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,25 @@ class SearchScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(),
+                Expanded(
+                  child: Obx(
+                    () => CustomScrollView(
+                      primary: false,
+                      slivers: <Widget>[
+                        SliverPadding(
+                          padding: const EdgeInsets.all(20),
+                          sliver: SliverGrid.count(
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 2,
+                            children: _tempFileClass
+                                .getGridView(controller.getDifficulty()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),

@@ -11,11 +11,11 @@ class TabController extends GetxController {
   RxBool isHomeScreen = true.obs;
 
   ///새로운 탭을 추가하는 함수, 탭의 body부분만 인자로 받아 탭을 만들고 탭 이름은 New Tab으로 고정해두었는데, 추후 인자 등 변경을 통해 이름도 변경 가능.
-  Tab addTab(Widget body) {
+  Tab addTab(Widget body, String? text) {
     Tab? newTab;
     newTab = Tab(
       text: Text(
-        "New Tab",
+        text ?? "New Tab",
         style: TextStyle(
             color: _totalController.isdark.value
                 ? DEFAULT_LIGHT_COLOR

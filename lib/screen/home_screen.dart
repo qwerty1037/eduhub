@@ -79,8 +79,8 @@ class HomeScreen extends StatelessWidget {
                       onChanged: (value) => controller.searchBarController.text,
                       onEditingComplete: () {
                         tabController.isHomeScreen.value = false;
-                        Tab newTab = tabController.addTab(SearchScreen());
-
+                        Tab newTab = tabController.addTab(
+                            SearchScreen(), "SearchScreen");
                         tabController.tabs.add(newTab);
                         tabController.currentTabIndex.value =
                             tabController.tabs.length - 1;

@@ -37,7 +37,7 @@ class HomeTabView extends StatelessWidget {
                 },
                 onNewPressed: () {
                   controller.isHomeScreen.value = false;
-                  Tab newTab = controller.addTab(ProjectTabScreen());
+                  Tab newTab = controller.addTab(ProjectTabScreen(), null);
 
                   controller.tabs.add(newTab);
                   controller.currentTabIndex.value = controller.tabs.length - 1;

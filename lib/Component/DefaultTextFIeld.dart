@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class DefaultTextField extends StatelessWidget {
   const DefaultTextField(
-      {Key? key,
-      this.labelText,
+      {this.labelText,
       required this.hintText,
       this.onChanged,
-      this.controller})
-      : super(key: key);
+      this.controller});
 
   final String? labelText;
   final String hintText;

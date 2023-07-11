@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
+import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/TagModel.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
@@ -27,29 +28,50 @@ class PdfSaveController extends GetxController {
   }
 
   Future<int> sendRegisterInfo() async {
+    String HOST = "61.82.182.149:3000";
+    final url = Uri.parse('http://$HOST/api/data/');
+
     List<String> selectedTags = <String>[];
     for (int i = 0; i < tagsList.length; i++) {
       if (tagsList[i].isSelected == true) {
         selectedTags.add(tagsList[i].label);
       }
     }
+    String capturedFileNameProblem =
+        '${problemNameController.text}_problem.jpeg';
+    String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
 
-    String HOST = "192.168.1.1";
-    final url = Uri.parse('http://$HOST/api/auth/register');
+    //var request = http.MultipartRequest('POST', url);
+
+    var multipartFileProblem = http.MultipartFile.fromBytes(
+      'file',
+      capturedImageProblem,
+      filename: capturedFileNameProblem,
+      contentType:
+          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+    );
+    var multipartFileAnswer = http.MultipartFile.fromBytes(
+      'file',
+      capturedImageAnswer,
+      filename: capturedFileNameAnswer,
+      contentType:
+          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+    );
+
     final Map<String, dynamic> requestBody = {
-      "user_id": problemNameController.text,
+      "problem_name": problemNameController.text,
       "directory": directoryController.text,
-      "tags": selectedTags,
+      "tags": selectedTags, //애초에 TAG class가 있고 거기에서 id만 List<LongLongInt>로 보내기
       "difficulty": difficultySliderValue,
-      "problem_image": capturedImageProblem,
-      "answer_image": capturedImageAnswer,
+      "problem_image": multipartFileProblem,
+      "answer_image": multipartFileAnswer,
     };
-    final headers = {"Content-type": "application/json"};
+    final headers = {"Content-type": "multipart/form-data"};
 
     final response = await http.post(
       url,
       headers: headers,
-      body: jsonEncode(requestBody),
+      body: requestBody,
     );
     return response.statusCode;
   }

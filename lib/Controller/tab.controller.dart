@@ -30,7 +30,7 @@ class TabController extends GetxController {
         if (currentTabIndex > 0) {
           currentTabIndex--;
         }
-        if (currentTabIndex == 0) {
+        if (currentTabIndex.value == 0) {
           isHomeScreen.value = true;
         }
       },

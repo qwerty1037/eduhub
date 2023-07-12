@@ -74,7 +74,7 @@ class ProjectTabController extends GetxController {
               return Text(name);
             },
             onWillAccept: (Map<dynamic, dynamic>? data) {
-              if (data!["id"] != id) {
+              if (data!["id"] != id && data["parent"] != id) {
                 return true;
               } else {
                 return false;
@@ -84,10 +84,10 @@ class ProjectTabController extends GetxController {
               //삭제할 부분, 뒷 부분에 이미 있으며 성능 테스트를 위해 앞에도 뒀음.
               TreeViewItem targetFolder = totalfolders
                   .firstWhere((element) => element.value["id"] == data["id"]);
-              totalfolders
-                  .firstWhere((element) => element.value["id"] == id)
-                  .children
-                  .add(targetFolder);
+              TreeViewItem thisFolder = totalfolders
+                  .firstWhere((element) => element.value["id"] == id);
+              thisFolder.children.add(targetFolder);
+              thisFolder.expanded = true;
 
               if (data["parent"] != null) {
                 TreeViewItem parentItem = totalfolders.firstWhere(
@@ -121,10 +121,10 @@ class ProjectTabController extends GetxController {
               if (response.statusCode == 200) {
                 TreeViewItem targetFolder = totalfolders
                     .firstWhere((element) => element.value["id"] == data["id"]);
-                totalfolders
-                    .firstWhere((element) => element.value["id"] == id)
-                    .children
-                    .add(targetFolder);
+                TreeViewItem thisFolder = totalfolders
+                    .firstWhere((element) => element.value["id"] == id);
+                thisFolder.children.add(targetFolder);
+                thisFolder.expanded = true;
 
                 if (data["parent"] != null) {
                   TreeViewItem parentItem = totalfolders.firstWhere(

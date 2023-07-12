@@ -153,6 +153,10 @@ class ProjectTabScreen extends StatelessWidget {
                                                       555,
                                                       item.value["id"]);
                                               item.children.add(newFolder);
+                                              controller.totalfolders
+                                                  .add(newFolder);
+                                              item.expanded = true;
+
                                               controller.firstFolders.refresh();
 
                                               final url = Uri.parse(

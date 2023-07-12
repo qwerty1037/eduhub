@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
 import 'package:get/get.dart';
 
@@ -25,8 +26,10 @@ class loginScreenController extends GetxController {
     await storage.write(key: 'refresh_token', value: refreshToken);
   }
 
-  void loginSuccess() {
+  void loginSuccess() async {
     TotalController totalController = Get.find<TotalController>();
     totalController.cookieExist.value = true;
+    FolderController folderController = Get.find<FolderController>();
+    await folderController.receiveData();
   }
 }

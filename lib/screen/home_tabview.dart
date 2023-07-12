@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Controller/tab.controller.dart';
-import 'package:front_end/Screen/Project_Tab_Screen.dart';
+import 'package:front_end/Screen/Default_Tab_Body.dart';
+
 import 'home_screen.dart';
 import 'package:get/get.dart';
 
@@ -37,7 +38,8 @@ class HomeTabView extends StatelessWidget {
                 },
                 onNewPressed: () {
                   controller.isHomeScreen.value = false;
-                  Tab newTab = controller.addTab(ProjectTabScreen(), null);
+                  DefaultTabBody generatedTab = const DefaultTabBody();
+                  Tab newTab = controller.addTab(generatedTab, null);
 
                   controller.tabs.add(newTab);
                   controller.currentTabIndex.value = controller.tabs.length - 1;

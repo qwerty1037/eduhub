@@ -174,11 +174,7 @@ class LoginScreen extends StatelessWidget {
           } else {
             loginController.saveCookieToSecureStorage(
                 uid, accessToken, refreshToken);
-            print(uid);
-            print(accessToken);
-            print(refreshToken);
 
-            ///삭제예정
             loginController.loginSuccess();
           }
         } else {

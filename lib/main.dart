@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:front_end/Component/Config.dart';
 import 'package:front_end/Component/applifecycle_observer.dart';
+import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
 import 'package:front_end/screen/home_tabview.dart';
 import 'package:front_end/screen/login_screen.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(TotalController());
+    Get.put(FolderController());
     return GetX<TotalController>(
       builder: (controller) {
         if (controller.cookieExist.isTrue) {

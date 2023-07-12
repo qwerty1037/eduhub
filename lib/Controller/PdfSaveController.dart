@@ -29,7 +29,7 @@ class PdfSaveController extends GetxController {
 
   Future<int> sendRegisterInfo() async {
     String HOST = "61.82.182.149:3000";
-    final url = Uri.parse('http://$HOST/api/data/');
+    final url = Uri.parse('http://$HOST/api/data/create_problem');
 
     List<String> selectedTags = <String>[];
     for (int i = 0; i < tagsList.length; i++) {
@@ -37,42 +37,47 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].label);
       }
     }
-    String capturedFileNameProblem =
-        '${problemNameController.text}_problem.jpeg';
+    String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
 
-    //var request = http.MultipartRequest('POST', url);
+    var request = http.MultipartRequest('POST', url);
 
     var multipartFileProblem = http.MultipartFile.fromBytes(
-      'file',
+      'problem_image',
       capturedImageProblem,
       filename: capturedFileNameProblem,
-      contentType:
-          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
     var multipartFileAnswer = http.MultipartFile.fromBytes(
-      'file',
+      'problem_image',
       capturedImageAnswer,
       filename: capturedFileNameAnswer,
-      contentType:
-          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
     final Map<String, dynamic> requestBody = {
       "problem_name": problemNameController.text,
-      "directory": directoryController.text,
-      "tags": selectedTags, //애초에 TAG class가 있고 거기에서 id만 List<LongLongInt>로 보내기
-      "difficulty": difficultySliderValue,
-      "problem_image": multipartFileProblem,
-      "answer_image": multipartFileAnswer,
+      "parent_database": 1,
+      //"directory": "\"{directoryController.text}\"",
+      "tags": selectedTags.join(), //애초에 TAG class가 있고 거기에서 id만 List<LongLongInt>로 보내기
+      "level": difficultySliderValue.round(),
+      //"problem_image": [multipartFileProblem, multipartFileAnswer],
+      "problem_string": capturedFileNameProblem,
+      "answer_string": capturedFileNameAnswer,
     };
-    final headers = {"Content-type": "multipart/form-data"};
+    final Map<String, String> temp = {};
+    requestBody.forEach((key, value) {
+      temp.addAll(Map.fromEntries([MapEntry(key, value.toString())]));
+    });
 
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: requestBody,
-    );
+    final headers = {"Content-type": "multipart/form-data"};
+    request.files.add(multipartFileProblem);
+    request.files.add(multipartFileAnswer);
+
+    request.fields.addAll(temp);
+
+    final response = await request.send();
+    print(response.statusCode);
     return response.statusCode;
   }
 

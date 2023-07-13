@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Controller/tab.controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 
-import 'home_screen.dart';
+import 'package:front_end/Screen/HomeScreen.dart';
 import 'package:get/get.dart';
 
 class HomeTabView extends StatelessWidget {
@@ -43,7 +43,8 @@ class HomeTabView extends StatelessWidget {
                     Tab newTab = controller.addTab(generatedTab, null);
 
                     controller.tabs.add(newTab);
-                    controller.currentTabIndex.value = controller.tabs.length - 1;
+                    controller.currentTabIndex.value =
+                        controller.tabs.length - 1;
                   },
                   onReorder: (oldIndex, newIndex) {
                     controller.onReorder(oldIndex, newIndex);
@@ -51,13 +52,13 @@ class HomeTabView extends StatelessWidget {
                 ),
               ),
               Positioned(
-                  top: 34.0,
+                  top: 38.0,
                   child: controller.isHomeScreen.isTrue
-                      ? SizedBox(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: HomeScreen())
-                      : const SizedBox(
-                          height: 0,
-                          width: 0,
-                        ))
+                      ? SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height - 38,
+                          child: HomeScreen())
+                      : Container())
             ],
           ),
         );

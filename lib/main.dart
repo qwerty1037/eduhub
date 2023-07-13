@@ -34,8 +34,8 @@ class MyApp extends StatelessWidget {
       builder: (controller) {
         if (controller.cookieExist.isTrue) {
           //서버 없을때 추가할 코드 ======================================
-          FolderController folderController = Get.find<FolderController>();
-          folderController.makeExampleData();
+          // FolderController folderController = Get.find<FolderController>();
+          // folderController.makeExampleData();
           //=============================================================
           return FluentApp(
             debugShowCheckedModeBanner: false,

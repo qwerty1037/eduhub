@@ -28,8 +28,8 @@ class loginScreenController extends GetxController {
 
   void loginSuccess() async {
     TotalController totalController = Get.find<TotalController>();
-    totalController.cookieExist.value = true;
     FolderController folderController = Get.find<FolderController>();
     await folderController.receiveData();
+    totalController.cookieExist.value = true;
   }
 }

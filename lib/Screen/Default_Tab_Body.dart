@@ -12,12 +12,16 @@ class DefaultTabBody extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(flex: 1, child: FolderTreeView(controller)),
         Expanded(
-            flex: 5,
-            child: Container(
-              color: Colors.teal,
-            ))
+          flex: 1,
+          child: FolderTreeView(controller),
+        ),
+        Expanded(
+          flex: 5,
+          child: Container(
+            color: Colors.teal,
+          ),
+        )
       ],
     );
   }

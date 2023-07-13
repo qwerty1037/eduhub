@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
 import 'package:front_end/Component/DefaultTextBox.dart';
+import 'package:front_end/Component/SearchBarOverLay.dart';
 import 'package:front_end/Controller/home_screen.controller.dart';
 import 'package:front_end/Controller/tab.controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
@@ -14,7 +15,7 @@ class HomeScreen extends StatelessWidget {
 
   HomeScreen({super.key});
 
-  Widget menuCommandBar() {
+  Widget menuCommandBar(context, controller) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
@@ -69,7 +70,9 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () {
+            createHighlightOverlay(context: context, controller: controller, tabController: tabController);
+          },
         ),
       ),
     ];
@@ -154,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     width: 20,
                   ),
-                  menuCommandBar(),
+                  menuCommandBar(context, controller),
                   // Expanded(
                   //   child: searchBar(controller),
                   // ),

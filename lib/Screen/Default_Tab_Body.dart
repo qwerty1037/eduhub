@@ -4,7 +4,8 @@ import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:get/get.dart';
 
 class DefaultTabBody extends StatelessWidget {
-  const DefaultTabBody({super.key});
+  Widget? workingSpace;
+  DefaultTabBody({super.key, this.workingSpace});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,10 @@ class DefaultTabBody extends StatelessWidget {
         ),
         Expanded(
           flex: 5,
-          child: Container(
-            color: Colors.teal,
-          ),
+          child: workingSpace ??
+              Container(
+                color: Colors.teal,
+              ),
         )
       ],
     );

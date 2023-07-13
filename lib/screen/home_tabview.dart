@@ -38,7 +38,7 @@ class HomeTabView extends StatelessWidget {
                 },
                 onNewPressed: () {
                   controller.isHomeScreen.value = false;
-                  DefaultTabBody generatedTab = const DefaultTabBody();
+                  DefaultTabBody generatedTab = DefaultTabBody();
                   Tab newTab = controller.addTab(generatedTab, null);
 
                   controller.tabs.add(newTab);
@@ -51,10 +51,7 @@ class HomeTabView extends StatelessWidget {
               Positioned(
                   top: 34.0,
                   child: controller.isHomeScreen.isTrue
-                      ? SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          child: HomeScreen())
+                      ? SizedBox(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: HomeScreen())
                       : const SizedBox(
                           height: 0,
                           width: 0,

@@ -16,14 +16,13 @@ class DefaultTextBox extends StatelessWidget {
     return TextBox(
       placeholder: placeholder,
       highlightColor: Colors.transparent,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
-
-        // border: Border.all(
-        //   width: 1,
-        //   color: Colors.grey,
-        // ),
+        border: Border.all(
+          width: 1,
+          color: Colors.grey,
+        ),
       ),
       onChanged: onChanged,
       onEditingComplete: onEditingComplete,

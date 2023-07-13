@@ -18,38 +18,35 @@ class HomeTabView extends StatelessWidget {
           padding: EdgeInsets.zero,
           content: Stack(
             children: [
-              Obx(
-                () => TabView(
-                  header: IconButton(
-                      icon: const Icon(
-                        FluentIcons.home,
-                      ),
-                      onPressed: () {
-                        controller.currentTabIndex.value = -1;
-                        controller.isHomeScreen.value = true;
-                      }),
-                  currentIndex: controller.currentTabIndex.value,
-                  tabs: controller.tabs,
-                  tabWidthBehavior: TabWidthBehavior.equal,
-                  closeButtonVisibility: CloseButtonVisibilityMode.onHover,
-                  showScrollButtons: true,
-                  onChanged: (index) {
-                    controller.isHomeScreen.value = false;
-                    controller.currentTabIndex.value = index;
-                  },
-                  onNewPressed: () {
-                    controller.isHomeScreen.value = false;
-                    DefaultTabBody generatedTab = DefaultTabBody();
-                    Tab newTab = controller.addTab(generatedTab, null);
+              TabView(
+                header: IconButton(
+                    icon: const Icon(
+                      FluentIcons.home,
+                    ),
+                    onPressed: () {
+                      controller.currentTabIndex.value = -1;
+                      controller.isHomeScreen.value = true;
+                    }),
+                currentIndex: controller.currentTabIndex.value,
+                tabs: controller.tabs,
+                tabWidthBehavior: TabWidthBehavior.equal,
+                closeButtonVisibility: CloseButtonVisibilityMode.onHover,
+                showScrollButtons: true,
+                onChanged: (index) {
+                  controller.isHomeScreen.value = false;
+                  controller.currentTabIndex.value = index;
+                },
+                onNewPressed: () {
+                  controller.isHomeScreen.value = false;
+                  DefaultTabBody generatedTab = DefaultTabBody();
+                  Tab newTab = controller.addTab(generatedTab, null);
 
-                    controller.tabs.add(newTab);
-                    controller.currentTabIndex.value =
-                        controller.tabs.length - 1;
-                  },
-                  onReorder: (oldIndex, newIndex) {
-                    controller.onReorder(oldIndex, newIndex);
-                  },
-                ),
+                  controller.tabs.add(newTab);
+                  controller.currentTabIndex.value = controller.tabs.length - 1;
+                },
+                onReorder: (oldIndex, newIndex) {
+                  controller.onReorder(oldIndex, newIndex);
+                },
               ),
               Positioned(
                   top: 38.0,

@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
-import 'package:front_end/Component/Folder.dart';
+import 'package:front_end/Component/HomeTreeview.dart';
 import 'package:front_end/Component/cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/HomeScreen_Controller.dart';
+import 'package:front_end/Controller/tab.controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
+import 'package:front_end/Screen/Default_Tab_Body.dart';
+import 'package:front_end/Screen/PdfViewerScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
@@ -33,56 +36,38 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 width: 20,
               ),
-              ToggleSwitch(
-                checked: theme.isdark.value,
-                onChanged: (value) {
-                  theme.isdark.value = !theme.isdark.value;
-                },
-                content: theme.isdark.isTrue
-                    ? const Text(
-                        "어둡게",
-                        style: TextStyle(color: DEFAULT_LIGHT_COLOR),
-                      )
-                    : const Text(
-                        "밝은색",
-                        style: TextStyle(color: DEFAULT_DARK_COLOR),
-                      ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              DropDownButton(
-                  title: const Row(children: [
-                    Icon(
-                      FluentIcons.settings,
-                      size: 15,
-                    ),
-                    Text(
-                      " 설정",
-                      style: TextStyle(fontSize: 12),
-                    )
-                  ]),
-                  items: [
-                    MenuFlyoutItem(text: const Text('내정보'), onPressed: () {}),
-                    const MenuFlyoutSeparator(),
-                    MenuFlyoutItem(text: const Text('결제'), onPressed: () {}),
-                    const MenuFlyoutSeparator(),
-                    MenuFlyoutItem(text: const Text('로그아웃'), onPressed: () {}),
-                  ]),
-              const SizedBox(
-                width: 20,
-              ),
               menuCommandBar(),
               const Spacer(),
               FlyoutTarget(
                 controller: _flyoutController,
-                child: Icon(
-                  FluentIcons.status_circle_question_mark,
-                  size: 40,
-                  color: theme.isdark.isTrue
-                      ? DEFAULT_LIGHT_COLOR
-                      : DEFAULT_DARK_COLOR,
-                ),
+                child: IconButton(
+                    icon: const Icon(
+                      FluentIcons.status_circle_question_mark,
+                      size: 30,
+                      color: DEFAULT_DARK_COLOR,
+                    ),
+                    onPressed: () {
+                      _flyoutController.showFlyout(builder: ((context) {
+                        return MenuFlyout(
+                          items: [
+                            MenuFlyoutItem(
+                              text: const Text("유튜브로 사용법 보기"),
+                              onPressed: () {},
+                            ),
+                            const MenuFlyoutSeparator(),
+                            MenuFlyoutItem(
+                              text: const Text("언어 변경"),
+                              onPressed: () {},
+                            ),
+                            const MenuFlyoutSeparator(),
+                            MenuFlyoutItem(
+                              text: const Text("피드백 보내기"),
+                              onPressed: () {},
+                            ),
+                          ],
+                        );
+                      }));
+                    }),
               )
             ],
           ),
@@ -102,11 +87,11 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Container(
                           color: Colors.yellow,
-                          height: 30,
+                          height: 70,
                           child: const Center(child: Text("프로필 들어갈자리"))),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        height: 30,
+                        height: 40,
                         color: const Color.fromARGB(100, 50, 49, 48),
                         child: const Row(
                           children: [
@@ -128,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                         return homeScreenController.isFolderEmpty.isTrue
                             ? NewFolderButton(
                                 context, controller, homeScreenController)
-                            : FolderTreeView(controller);
+                            : HomeTreeView(controller);
                       })
                     ],
                   ),
@@ -254,7 +239,16 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () {
+            TabController tabController = TabController();
+            tabController.isHomeScreen.value = false;
+            DefaultTabBody generatedTab =
+                DefaultTabBody(workingSpace: const PdfViewerScreen());
+            Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
+
+            tabController.tabs.add(newTab);
+            tabController.currentTabIndex.value = tabController.tabs.length - 1;
+          },
         ),
       ),
       CommandBarBuilderItem(

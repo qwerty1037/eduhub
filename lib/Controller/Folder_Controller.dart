@@ -70,7 +70,7 @@ class FolderController extends GetxController {
         leading: const Icon(FluentIcons.fabric_folder),
         expanded: false,
         children: [],
-        value: {"parent": parent, "id": id},
+        value: {"parent": parent, "id": id, "name": name},
         content: Draggable(
           data: {"parent": parent, "id": id},
           feedback: Container(

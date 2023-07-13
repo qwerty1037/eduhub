@@ -1,10 +1,15 @@
 ///Screen: File_Drag_and_Drop.
 import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
+import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Controller/total.controller.dart';
+import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/PdfSaveScreen.dart';
 import 'package:get/get.dart';
 import '../Controller/PdfViewerScreenController.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:front_end/Controller/tab.controller.dart' as t;
+import 'package:fluent_ui/fluent_ui.dart' as f;
 
 class PdfViewerScreen extends StatefulWidget {
   const PdfViewerScreen({super.key});
@@ -14,13 +19,14 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfViewerScreen> {
-  final controllerProblem =
-      Get.put(PdfViewerScreenController(), tag: "Problem");
+  final controllerProblem = Get.put(PdfViewerScreenController(), tag: "Problem");
   final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer");
+  final tabController = Get.put(t.TabController());
 
-  Widget selectPdfContainer(PdfViewerScreenController controller) {
+  Widget selectPdfContainer(PdfViewerScreenController controller, constraints) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 2 - 5,
+      width: constraints.maxWidth / 2 - 5,
+      height: constraints.maxHeight,
       child: DropTarget(
         onDragDone: (detail) async {
           controller.onDragDone(
@@ -124,10 +130,10 @@ class _PdfScreenState extends State<PdfViewerScreen> {
     );
   }
 
-  Widget pdfViewerContainer(PdfViewerScreenController controller) {
+  Widget pdfViewerContainer(PdfViewerScreenController controller, constraints) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 2 - 5,
-      height: MediaQuery.of(context).size.height,
+      width: constraints.maxWidth / 2 - 5,
+      height: constraints.maxHeight,
       child: Column(
         children: [
           Container(
@@ -167,10 +173,8 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.black26),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
@@ -236,14 +240,9 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             alignment: Alignment.topRight,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.black26),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
                                   ),
@@ -269,12 +268,9 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black26),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
@@ -300,55 +296,69 @@ class _PdfScreenState extends State<PdfViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Stack(
-          children: [
-            Row(
-              children: [
-                Obx(() {
-                  return controllerProblem.isPdfInputed.value
-                      ? pdfViewerContainer(controllerProblem)
-                      : selectPdfContainer(controllerProblem);
-                }),
-                Container(
-                  width: 10,
-                  color: Colors.black12,
-                ),
-                Obx(() {
-                  return controllerAnswer.isPdfInputed.value
-                      ? pdfViewerContainer(controllerAnswer)
-                      : selectPdfContainer(controllerAnswer);
-                }),
-              ],
-            ),
-            Obx(() {
-              return Align(
-                alignment: Alignment.bottomRight,
-                child: Visibility(
-                  visible: (controllerProblem.isCaptured.value == true &&
-                      controllerAnswer.isCaptured.value == true),
-                  child: FloatingActionButton(
-                    heroTag: 'Save',
-                    backgroundColor: Colors.black26,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PdfSaveScreen(
-                                controllerProblem.getCapturedImage()!,
-                                controllerAnswer.getCapturedImage()!)),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.save,
-                      color: Colors.white,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) => Center(
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Row(
+                children: [
+                  Obx(() {
+                    return controllerProblem.isPdfInputed.value
+                        ? pdfViewerContainer(controllerProblem, constraints)
+                        : selectPdfContainer(controllerProblem, constraints);
+                  }),
+                  Container(
+                    width: 10,
+                    color: Colors.black12,
+                  ),
+                  Obx(() {
+                    return controllerAnswer.isPdfInputed.value
+                        ? pdfViewerContainer(controllerAnswer, constraints)
+                        : selectPdfContainer(controllerAnswer, constraints);
+                  }),
+                ],
+              ),
+              Obx(() {
+                return Align(
+                  alignment: Alignment.bottomRight,
+                  child: Visibility(
+                    visible: (controllerProblem.isCaptured.value == true && controllerAnswer.isCaptured.value == true),
+                    child: FloatingActionButton(
+                      heroTag: 'Save',
+                      backgroundColor: Colors.black26,
+                      onPressed: () {
+                        f.Tab newTab = tabController.addTab(
+                          DefaultTabBody(
+                            workingSpace: PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!),
+                          ),
+                          "Pdf Save",
+                        );
+
+                        tabController.hiddentabs.add(tabController.tabs[tabController.currentTabIndex.value]);
+                        tabController.tabs.removeAt(tabController.currentTabIndex.value);
+                        tabController.tabs.insert(tabController.currentTabIndex.value, newTab);
+                        tabController.hiddenTabIndex.value++;
+
+                        tabController.currentTabIndex.value -= 1;
+                        tabController.currentTabIndex.value += 1;
+                        tabController.tabs.refresh();
+                        tabController.hiddentabs.refresh();
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!)),
+                        // );
+                      },
+                      child: const Icon(
+                        Icons.save,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }),
-          ],
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );

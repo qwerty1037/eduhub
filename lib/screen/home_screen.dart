@@ -5,9 +5,12 @@ import 'package:front_end/Component/SearchBarOverLay.dart';
 import 'package:front_end/Controller/home_screen.controller.dart';
 import 'package:front_end/Controller/tab.controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
+import 'package:front_end/Screen/PdfViewerScreen.dart';
 import 'package:front_end/Screen/SearchScreen.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart' as material;
+
+import 'Default_Tab_Body.dart';
 
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
@@ -28,7 +31,14 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () {
+            tabController.isHomeScreen.value = false;
+            DefaultTabBody generatedTab = DefaultTabBody(workingSpace: PdfViewerScreen());
+            Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
+
+            tabController.tabs.add(newTab);
+            tabController.currentTabIndex.value = tabController.tabs.length - 1;
+          },
         ),
       ),
       CommandBarBuilderItem(

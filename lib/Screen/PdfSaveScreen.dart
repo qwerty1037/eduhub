@@ -1,14 +1,18 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:front_end/Controller/PdfSaveController.dart';
+import 'package:front_end/Controller/total.controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/DefaultTextFIeld.dart';
 import 'package:front_end/Component/DefaultKeyText.dart';
 import 'package:front_end/Test/TempTag.dart';
 import 'package:korea_regexp/korea_regexp.dart';
+import 'package:front_end/Controller/tab.controller.dart' as t;
+import 'package:fluent_ui/fluent_ui.dart' as f;
 
 class PdfSaveScreen extends StatelessWidget {
   final controller = Get.put(PdfSaveController());
+  final tabController = Get.put(t.TabController());
 
   @override
   PdfSaveScreen(Uint8List image1, Uint8List image2) {
@@ -332,7 +336,14 @@ class PdfSaveScreen extends StatelessWidget {
             child: ElevatedButton(
               child: const Text('Back'),
               onPressed: () {
-                Navigator.pop(context);
+                tabController.tabs.removeAt(tabController.currentTabIndex.value);
+                tabController.tabs.insert(tabController.currentTabIndex.value, tabController.hiddentabs[tabController.hiddenTabIndex.value]);
+                tabController.hiddenTabIndex.value--;
+                tabController.hiddentabs.removeLast();
+                tabController.hiddentabs.refresh();
+                tabController.tabs.refresh();
+                tabController.currentTabIndex.value -= 1;
+                tabController.currentTabIndex.value += 1;
               },
             ),
           ),

@@ -72,7 +72,7 @@ class FolderController extends GetxController {
         children: [],
         value: {"parent": parent, "id": id, "name": name},
         content: Draggable(
-          data: {"parent": parent, "id": id},
+          data: {"parent": parent, "id": id, "name": name},
           feedback: Container(
             color: Colors.grey.withOpacity(0.3),
             width: 140,

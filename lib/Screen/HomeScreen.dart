@@ -7,7 +7,6 @@ import 'package:front_end/Component/cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/HomeScreen_Controller.dart';
 import 'package:front_end/Controller/tab.controller.dart';
-import 'package:front_end/Controller/total.controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/PdfViewerScreen.dart';
 import 'package:front_end/Screen/TagManagementScreen.dart';
@@ -25,7 +24,7 @@ class HomeScreen extends StatelessWidget {
     HomeScreenController homeScreenController =
         Get.find<HomeScreenController>();
 
-    TotalController theme = Get.find<TotalController>();
+    FolderController folderController = Get.find<FolderController>();
     return Column(
       children: [
         Container(
@@ -82,14 +81,17 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Container(
-                  color: const Color.fromARGB(30, 50, 49, 48),
+                  color: const Color.fromARGB(255, 246, 222, 193),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
-                          color: Colors.yellow,
-                          height: 70,
-                          child: const Center(child: Text("프로필 들어갈자리"))),
+                        color: Colors.yellow,
+                        height: 70,
+                        child: const Center(
+                          child: Text("프로필 들어갈자리"),
+                        ),
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         height: 40,
@@ -110,12 +112,10 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      GetX<FolderController>(builder: (controller) {
-                        return homeScreenController.isFolderEmpty.isTrue
-                            ? NewFolderButton(
-                                context, controller, homeScreenController)
-                            : HomeTreeView(controller);
-                      })
+                      homeScreenController.isFolderEmpty.isTrue
+                          ? NewFolderButton(
+                              context, folderController, homeScreenController)
+                          : HomeTreeView()
                     ],
                   ),
                 ),
@@ -241,13 +241,14 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {
-            TabController tabController = TabController();
-            tabController.isHomeScreen.value = false;
+            TabController tabController = Get.find<TabController>();
+
             DefaultTabBody generatedTab =
                 DefaultTabBody(workingSpace: const PdfViewerScreen());
             Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
 
             tabController.tabs.add(newTab);
+            tabController.isHomeScreen.value = false;
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
           },
         ),

@@ -19,6 +19,7 @@ class HomeTabView extends StatelessWidget {
           content: Stack(
             children: [
               TabView(
+                closeDelayDuration: const Duration(milliseconds: 100),
                 header: IconButton(
                     icon: const Icon(
                       FluentIcons.home,
@@ -33,6 +34,9 @@ class HomeTabView extends StatelessWidget {
                 closeButtonVisibility: CloseButtonVisibilityMode.onHover,
                 showScrollButtons: true,
                 onChanged: (index) {
+                  if (index == -1) {
+                    debugPrint("테스트");
+                  }
                   controller.isHomeScreen.value = false;
                   controller.currentTabIndex.value = index;
                 },
@@ -48,14 +52,14 @@ class HomeTabView extends StatelessWidget {
                   controller.onReorder(oldIndex, newIndex);
                 },
               ),
-              Positioned(
-                  top: 38.0,
-                  child: controller.isHomeScreen.isTrue
-                      ? SizedBox(
+              controller.isHomeScreen.isTrue
+                  ? Positioned(
+                      top: 38.0,
+                      child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height - 38,
-                          child: HomeScreen())
-                      : Container())
+                          child: HomeScreen()))
+                  : Container()
             ],
           ),
         );

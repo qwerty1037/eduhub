@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DefaultTextField extends StatelessWidget {
-  const DefaultTextField(
-      {this.labelText,
-      required this.hintText,
-      this.onChanged,
-      this.controller});
+  const DefaultTextField({this.labelText, required this.hintText, this.onChanged, this.controller, this.onEditingComplete});
 
   final String? labelText;
   final String hintText;
   final Function(String)? onChanged;
   final TextEditingController? controller;
+  final VoidCallback? onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +30,7 @@ class DefaultTextField extends StatelessWidget {
       ),
       onChanged: onChanged,
       controller: controller,
+      onEditingComplete: onEditingComplete,
     );
   }
 }

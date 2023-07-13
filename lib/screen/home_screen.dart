@@ -14,6 +14,94 @@ class HomeScreen extends StatelessWidget {
 
   HomeScreen({super.key});
 
+  Widget menuCommandBar() {
+    final menuCommandBarItems = <CommandBarItem>[
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => Tooltip(
+          message: "Save your Pdf files!",
+          child: widget,
+        ),
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.save),
+          label: const Text("Save Pdf",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => Tooltip(
+          message: "Create Test!",
+          child: widget,
+        ),
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.page),
+          label: const Text("Create Test",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => Tooltip(
+          message: "Manage your students!",
+          child: widget,
+        ),
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.page),
+          label: const Text("Student Management",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => Tooltip(
+          message: "Search your problems!",
+          child: widget,
+        ),
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.search),
+          label: const Text("Search",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+    ];
+
+    return CommandBar(
+      primaryItems: menuCommandBarItems,
+      overflowBehavior: CommandBarOverflowBehavior.noWrap,
+    );
+  }
+
+/*
+  Widget searchBar(controller) {
+    return Overlay(
+      child: DefaultTextBox(
+        controller: controller.searchBarController,
+        placeholder: "SearchBar",
+        prefix: const Padding(
+          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: material.Icon(material.Icons.search),
+        ),
+        suffix: const material.Icon(material.Icons.arrow_forward_ios),
+        onChanged: (value) => controller.searchBarController.text,
+        onEditingComplete: () {
+          tabController.isHomeScreen.value = false;
+          Tab newTab = tabController.addTab(SearchScreen(), "SearchScreen");
+          tabController.tabs.add(newTab);
+          tabController.currentTabIndex.value = tabController.tabs.length - 1;
+        },
+      ),
+    );
+  }
+*/
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenController());
@@ -57,51 +145,31 @@ class HomeScreen extends StatelessWidget {
                         )
                       ]),
                       items: [
-                        MenuFlyoutItem(
-                            text: const Text('내정보'), onPressed: () {}),
+                        MenuFlyoutItem(text: const Text('내정보'), onPressed: () {}),
                         const MenuFlyoutSeparator(),
-                        MenuFlyoutItem(
-                            text: const Text('결제'), onPressed: () {}),
+                        MenuFlyoutItem(text: const Text('결제'), onPressed: () {}),
                         const MenuFlyoutSeparator(),
-                        MenuFlyoutItem(
-                            text: const Text('로그아웃'), onPressed: () {}),
+                        MenuFlyoutItem(text: const Text('로그아웃'), onPressed: () {}),
                       ]),
                   const SizedBox(
                     width: 20,
                   ),
-                  Expanded(
-                    child: DefaultTextBox(
-                      controller: controller.searchBarController,
-                      placeholder: "SearchBar",
-                      prefix: const material.Icon(material.Icons.search),
-                      suffix:
-                          const material.Icon(material.Icons.arrow_forward_ios),
-                      onChanged: (value) => controller.searchBarController.text,
-                      onEditingComplete: () {
-                        tabController.isHomeScreen.value = false;
-                        Tab newTab = tabController.addTab(
-                            SearchScreen(), "SearchScreen");
-                        tabController.tabs.add(newTab);
-                        tabController.currentTabIndex.value =
-                            tabController.tabs.length - 1;
-                      },
-                    ),
-                  ),
+                  menuCommandBar(),
+                  // Expanded(
+                  //   child: searchBar(controller),
+                  // ),
                   const SizedBox(width: 40),
                 ],
               ),
             ),
-            backgroundColor:
-                theme.isdark.isTrue ? DEFAULT_DARK_COLOR : DEFAULT_LIGHT_COLOR,
+            backgroundColor: theme.isdark.isTrue ? DEFAULT_DARK_COLOR : DEFAULT_LIGHT_COLOR,
             actions: FlyoutTarget(
               controller: _flyoutController,
               child: IconButton(
                 icon: Icon(
                   FluentIcons.status_circle_question_mark,
                   size: 40,
-                  color: theme.isdark.isTrue
-                      ? DEFAULT_LIGHT_COLOR
-                      : DEFAULT_DARK_COLOR,
+                  color: theme.isdark.isTrue ? DEFAULT_LIGHT_COLOR : DEFAULT_DARK_COLOR,
                 ),
                 onPressed: () {
                   _flyoutController.showFlyout(builder: ((context) {
@@ -133,17 +201,13 @@ class HomeScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: 40,
               child: IconButton(
-                icon: controller.paneIsOpen.isTrue
-                    ? const Icon(FluentIcons.chrome_back)
-                    : const Icon(FluentIcons.chrome_back_mirrored),
+                icon: controller.paneIsOpen.isTrue ? const Icon(FluentIcons.chrome_back) : const Icon(FluentIcons.chrome_back_mirrored),
                 onPressed: () {
                   controller.paneIsOpen.value = !controller.paneIsOpen.value;
                 },
               ),
             ),
-            displayMode: controller.paneIsOpen.isTrue
-                ? PaneDisplayMode.open
-                : PaneDisplayMode.compact,
+            displayMode: controller.paneIsOpen.isTrue ? PaneDisplayMode.open : PaneDisplayMode.compact,
             selected: controller.selectedIndex.value,
             onChanged: (value) {
               controller.onChanged(value);

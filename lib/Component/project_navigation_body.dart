@@ -27,10 +27,8 @@ class ProjectNavigationBody extends StatelessWidget {
                     ),
                   ),
                   items: [
-                    MenuFlyoutItem(
-                        text: const Text('프로젝트 이름 변경'), onPressed: () {}),
-                    MenuFlyoutItem(
-                        text: const Text('프로젝트 삭제'), onPressed: () {}),
+                    MenuFlyoutItem(text: const Text('프로젝트 이름 변경'), onPressed: () {}),
+                    MenuFlyoutItem(text: const Text('프로젝트 삭제'), onPressed: () {}),
                     MenuFlyoutItem(text: const Text('팀 정보'), onPressed: () {}),
                   ]),
               Row(
@@ -123,19 +121,21 @@ class ProjectNavigationBody extends StatelessWidget {
                           ),
                           onPressed: () {})),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    height: MediaQuery.of(context).size.width * 0.15,
+                    child: Button(
+                      child: const Center(
+                        child: Text(
+                          "학생 관리",
+                          style: TextStyle(fontSize: 30),
+                        ),
                       ),
-                      width: MediaQuery.of(context).size.width * 0.15,
-                      height: MediaQuery.of(context).size.width * 0.15,
-                      child: Button(
-                          child: const Center(
-                            child: Text(
-                              "학생 관리",
-                              style: TextStyle(fontSize: 30),
-                            ),
-                          ),
-                          onPressed: () {})),
+                      onPressed: () {},
+                    ),
+                  ),
                 ],
               )
             ],

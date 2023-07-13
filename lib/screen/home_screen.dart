@@ -7,6 +7,7 @@ import 'package:front_end/Controller/tab.controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
 import 'package:front_end/Screen/PdfViewerScreen.dart';
 import 'package:front_end/Screen/SearchScreen.dart';
+import 'package:front_end/Screen/TagManagementScreen.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart' as material;
 
@@ -85,6 +86,26 @@ class HomeScreen extends StatelessWidget {
           },
         ),
       ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => Tooltip(
+          message: "Make your tags!",
+          child: widget,
+        ),
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.tag),
+          label: const Text("Tags",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {
+            tabController.isHomeScreen.value = false;
+            DefaultTabBody generatedTab = DefaultTabBody(workingSpace: TagManagementScreen());
+            Tab newTab = tabController.addTab(generatedTab, "Generate Tags");
+            tabController.tabs.add(newTab);
+            tabController.currentTabIndex.value = tabController.tabs.length - 1;
+          },
+        ),
+      ),
     ];
 
     return CommandBar(
@@ -93,28 +114,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-/*
-  Widget searchBar(controller) {
-    return Overlay(
-      child: DefaultTextBox(
-        controller: controller.searchBarController,
-        placeholder: "SearchBar",
-        prefix: const Padding(
-          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-          child: material.Icon(material.Icons.search),
-        ),
-        suffix: const material.Icon(material.Icons.arrow_forward_ios),
-        onChanged: (value) => controller.searchBarController.text,
-        onEditingComplete: () {
-          tabController.isHomeScreen.value = false;
-          Tab newTab = tabController.addTab(SearchScreen(), "SearchScreen");
-          tabController.tabs.add(newTab);
-          tabController.currentTabIndex.value = tabController.tabs.length - 1;
-        },
-      ),
-    );
-  }
-*/
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenController());

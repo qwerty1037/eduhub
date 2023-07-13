@@ -10,6 +10,7 @@ import 'package:front_end/Controller/tab.controller.dart';
 import 'package:front_end/Controller/total.controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/PdfViewerScreen.dart';
+import 'package:front_end/Screen/TagManagementScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
@@ -291,6 +292,28 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => Tooltip(
+          message: "Make your tags!",
+          child: widget,
+        ),
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.tag),
+          label: const Text("Tags",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {
+            TabController tabController = Get.find<TabController>();
+            tabController.isHomeScreen.value = false;
+            DefaultTabBody generatedTab =
+                DefaultTabBody(workingSpace: TagManagementScreen());
+            Tab newTab = tabController.addTab(generatedTab, "Generate Tags");
+            tabController.tabs.add(newTab);
+            tabController.currentTabIndex.value = tabController.tabs.length - 1;
+          },
         ),
       ),
     ];

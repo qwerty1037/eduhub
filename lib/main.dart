@@ -33,6 +33,8 @@ class MyApp extends StatelessWidget {
     return GetX<TotalController>(
       builder: (controller) {
         if (controller.cookieExist.isTrue) {
+          FolderController folderController = Get.find<FolderController>();
+          folderController.makeExampleData();
           return FluentApp(
             debugShowCheckedModeBanner: false,
             home: const HomeTabView(),

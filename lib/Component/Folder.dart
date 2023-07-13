@@ -4,7 +4,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
 import 'package:front_end/Component/cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 TreeView FolderTreeView(FolderController controller) {

@@ -11,7 +11,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 class FolderController extends GetxController {
   List<TreeViewItem> totalfolders = [];
   RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
-  Rx<int> droptest = 0.obs;
 
   Future<void> receiveData() async {
     final url = Uri.parse('http://$HOST/api/data/user_database');

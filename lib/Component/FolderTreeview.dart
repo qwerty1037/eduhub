@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/Problem_list_view.dart';
 import 'package:front_end/Component/cookie.dart';
+import 'package:front_end/Controller/Default_Tab_Body.controller.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-FlyoutTarget FolderTreeView(FolderController controller) {
+FlyoutTarget FolderTreeView(FolderController controller, String tagName) {
   final flyoutcontroller = FlyoutController();
   final TextEditingController textcontroller = TextEditingController();
   return FlyoutTarget(
@@ -24,7 +27,6 @@ FlyoutTarget FolderTreeView(FolderController controller) {
                   final Map<String, dynamic> requestBody = {
                     "delete_database_id": item.value["id"]
                   };
-
                   final response = await http.post(
                     url,
                     headers: await sendCookieToBackend(),
@@ -185,9 +187,33 @@ FlyoutTarget FolderTreeView(FolderController controller) {
         });
       },
       onItemInvoked: (item, reason) async {
-        //클릭했을 때 넣을 함수 추가
+        if (reason == TreeViewItemInvokeReason.pressed) {
+          DefaultTabBodyController workingSpaceController =
+              Get.find<DefaultTabBodyController>(tag: tagName);
+          final problemUrl = Uri.parse(
+              'http://$HOST/api/data/problem/database/${item.value["id"]}');
 
-        controller.droptest.value = item.value["id"];
+          final response = await http.get(
+            problemUrl,
+            headers: await sendCookieToBackend(),
+          );
+          if (response.statusCode ~/ 100 == 2) {
+            final jsonResponse = jsonDecode(response.body);
+
+            final problems = jsonResponse['problem_list'];
+
+            workingSpaceController.workingSpaceWidget.value = Container(
+              child: ProblemList(
+                targetFolder: item,
+                folderName: item.value["name"],
+                problems: problems,
+              ),
+            );
+          } else {
+            debugPrint(response.statusCode.toString());
+            debugPrint("폴더 직속 문제 받기 오류 발생");
+          }
+        }
       },
       items: controller.firstFolders,
     ),

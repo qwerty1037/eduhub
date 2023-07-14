@@ -83,7 +83,9 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Container(
-                  color: const Color.fromARGB(255, 246, 222, 193),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          right: BorderSide(color: Colors.black, width: 0.5))),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -94,8 +96,8 @@ class HomeScreen extends StatelessWidget {
                           child: Button(
                             child: const Text("로그아웃(프로필)"),
                             onPressed: () async {
-                              final FlutterSecureStorage storage =
-                                  const FlutterSecureStorage();
+                              const FlutterSecureStorage storage =
+                                  FlutterSecureStorage();
                               await storage.delete(key: "uid");
                               await storage.delete(key: "access_token");
                               await storage.delete(key: "refresh_token");

@@ -276,18 +276,20 @@ FlyoutTarget HomeTreeView() {
               );
               if (response.statusCode ~/ 100 == 2) {
                 final jsonResponse = jsonDecode(response.body);
-                debugPrint(jsonResponse.toString());
+
                 final problems = jsonResponse['problem_list'];
-                debugPrint(problems.toString());
 
                 TabController tabController = Get.find<TabController>();
                 tabController.isHomeScreen.value = false;
                 DefaultTabBody generatedTab = DefaultTabBody(
-                    workingSpace: ProblemList(
-                        id: item.value["id"],
-                        folderName: item.value["name"],
-                        childFolder: item.children,
-                        problems: problems));
+                  workingSpace: Builder(
+                    builder: (context) => ProblemList(
+                      targetFolder: item,
+                      folderName: item.value["name"],
+                      problems: problems,
+                    ),
+                  ),
+                );
                 Tab newTab =
                     tabController.addTab(generatedTab, item.value["name"]);
                 tabController.tabs.add(newTab);

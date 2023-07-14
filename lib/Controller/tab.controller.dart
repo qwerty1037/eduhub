@@ -18,7 +18,10 @@ class TabController extends GetxController {
     newTab = Tab(
       text: Text(
         text ?? "New Tab",
-        style: TextStyle(color: _totalController.isdark.value ? DEFAULT_LIGHT_COLOR : DEFAULT_DARK_COLOR),
+        style: TextStyle(
+            color: _totalController.isdark.value
+                ? DEFAULT_LIGHT_COLOR
+                : DEFAULT_DARK_COLOR),
       ),
       icon: const Icon(
         FluentIcons.file_template,
@@ -35,6 +38,26 @@ class TabController extends GetxController {
       },
     );
     return newTab;
+  }
+
+  void renameTab(Tab tab, String newName) {
+    Tab newTab;
+    newTab = Tab(
+      text: Text(
+        newName,
+        style: TextStyle(
+            color: _totalController.isdark.value
+                ? DEFAULT_LIGHT_COLOR
+                : DEFAULT_DARK_COLOR),
+      ),
+      icon: tab.icon,
+      body: tab.body,
+      onClosed: () {
+        tab.onClosed;
+      },
+    );
+    tab = newTab;
+    tabs.refresh();
   }
 
   void onReorder(int oldIndex, int newIndex) {

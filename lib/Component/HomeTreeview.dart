@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/Problem_list_view.dart';
 import 'package:front_end/Component/cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/tab.controller.dart';
@@ -266,30 +267,36 @@ FlyoutTarget HomeTreeView() {
           onItemInvoked: (item, reason) async {
             if (reason == TreeViewItemInvokeReason.pressed) {
               //폴더 직속 문제들만 받아오기
-              final url =
-                  Uri.parse('http://$HOST/api/data/problem/database/:id');
+              final problemUrl = Uri.parse(
+                  'http://$HOST/api/data/problem/database/${item.value["id"]}');
 
               final response = await http.get(
-                url,
+                problemUrl,
                 headers: await sendCookieToBackend(),
               );
               if (response.statusCode ~/ 100 == 2) {
                 final jsonResponse = jsonDecode(response.body);
-                final problemList = jsonResponse['problem_list'];
-                debugPrint(problemList.toString());
+                debugPrint(jsonResponse.toString());
+                final problems = jsonResponse['problem_list'];
+                debugPrint(problems.toString());
+
+                TabController tabController = Get.find<TabController>();
+                tabController.isHomeScreen.value = false;
+                DefaultTabBody generatedTab = DefaultTabBody(
+                    workingSpace: ProblemList(
+                        id: item.value["id"],
+                        folderName: item.value["name"],
+                        childFolder: item.children,
+                        problems: problems));
+                Tab newTab =
+                    tabController.addTab(generatedTab, item.value["name"]);
+                tabController.tabs.add(newTab);
+                tabController.currentTabIndex.value =
+                    tabController.tabs.length - 1;
               } else {
                 debugPrint(response.statusCode.toString());
                 debugPrint("폴더 직속 문제 받기 오류 발생");
               }
-
-              TabController tabController = Get.find<TabController>();
-              tabController.isHomeScreen.value = false;
-              DefaultTabBody generatedTab = DefaultTabBody();
-              Tab newTab =
-                  tabController.addTab(generatedTab, item.value["name"]);
-              tabController.tabs.add(newTab);
-              tabController.currentTabIndex.value =
-                  tabController.tabs.length - 1;
             }
           },
         );

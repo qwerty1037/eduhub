@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Config.dart';
 import 'package:front_end/Component/HomeTreeview.dart';
 import 'package:front_end/Component/cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/HomeScreen_Controller.dart';
 import 'package:front_end/Controller/tab.controller.dart';
+import 'package:front_end/Controller/total.controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/PdfViewerScreen.dart';
 import 'package:front_end/Screen/TagManagementScreen.dart';
@@ -88,8 +90,20 @@ class HomeScreen extends StatelessWidget {
                       Container(
                         color: Colors.yellow,
                         height: 70,
-                        child: const Center(
-                          child: Text("프로필 들어갈자리"),
+                        child: Center(
+                          child: Button(
+                            child: const Text("로그아웃(프로필)"),
+                            onPressed: () async {
+                              final FlutterSecureStorage storage =
+                                  const FlutterSecureStorage();
+                              await storage.delete(key: "uid");
+                              await storage.delete(key: "access_token");
+                              await storage.delete(key: "refresh_token");
+                              final TotalController totalController =
+                                  Get.find<TotalController>();
+                              totalController.cookieExist.value = false;
+                            },
+                          ),
                         ),
                       ),
                       Container(

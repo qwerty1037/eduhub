@@ -265,6 +265,23 @@ FlyoutTarget HomeTreeView() {
           },
           onItemInvoked: (item, reason) async {
             if (reason == TreeViewItemInvokeReason.pressed) {
+              //폴더 직속 문제들만 받아오기
+              final url =
+                  Uri.parse('http://$HOST/api/data/problem/database/:id');
+
+              final response = await http.get(
+                url,
+                headers: await sendCookieToBackend(),
+              );
+              if (response.statusCode ~/ 100 == 2) {
+                final jsonResponse = jsonDecode(response.body);
+                final problemList = jsonResponse['problem_list'];
+                debugPrint(problemList.toString());
+              } else {
+                debugPrint(response.statusCode.toString());
+                debugPrint("폴더 직속 문제 받기 오류 발생");
+              }
+
               TabController tabController = Get.find<TabController>();
               tabController.isHomeScreen.value = false;
               DefaultTabBody generatedTab = DefaultTabBody();

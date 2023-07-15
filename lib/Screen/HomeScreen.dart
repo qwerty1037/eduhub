@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/FeedbackOverlay.dart';
 import 'package:front_end/Component/HomeTreeview.dart';
 import 'package:front_end/Component/SearchBarOverLay.dart';
 import 'package:front_end/Component/cookie.dart';
@@ -65,7 +66,9 @@ class HomeScreen extends StatelessWidget {
                             const MenuFlyoutSeparator(),
                             MenuFlyoutItem(
                               text: const Text("피드백 보내기"),
-                              onPressed: () {},
+                              onPressed: () {
+                                createFeedbackOverlay(context: context);
+                              },
                             ),
                           ],
                         );

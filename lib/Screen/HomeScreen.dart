@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Config.dart';
 import 'package:front_end/Component/HomeTreeview.dart';
+import 'package:front_end/Component/SearchBarOverLay.dart';
 import 'package:front_end/Component/cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/HomeScreen_Controller.dart';
@@ -17,14 +18,14 @@ import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
+  final tabController = Get.put(TabController());
 
   HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenController());
-    HomeScreenController homeScreenController =
-        Get.find<HomeScreenController>();
+    HomeScreenController homeScreenController = Get.find<HomeScreenController>();
 
     FolderController folderController = Get.find<FolderController>();
     return Column(
@@ -38,7 +39,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 width: 20,
               ),
-              menuCommandBar(),
+              menuCommandBar(context, homeScreenController),
               const Spacer(),
               FlyoutTarget(
                 controller: _flyoutController,
@@ -83,9 +84,7 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Container(
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          right: BorderSide(color: Colors.black, width: 0.5))),
+                  decoration: const BoxDecoration(border: Border(right: BorderSide(color: Colors.black, width: 0.5))),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -96,13 +95,11 @@ class HomeScreen extends StatelessWidget {
                           child: Button(
                             child: const Text("로그아웃(프로필)"),
                             onPressed: () async {
-                              const FlutterSecureStorage storage =
-                                  FlutterSecureStorage();
+                              const FlutterSecureStorage storage = FlutterSecureStorage();
                               await storage.delete(key: "uid");
                               await storage.delete(key: "access_token");
                               await storage.delete(key: "refresh_token");
-                              final TotalController totalController =
-                                  Get.find<TotalController>();
+                              final TotalController totalController = Get.find<TotalController>();
                               totalController.cookieExist.value = false;
                             },
                           ),
@@ -128,10 +125,7 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      homeScreenController.isFolderEmpty.isTrue
-                          ? NewFolderButton(
-                              context, folderController, homeScreenController)
-                          : HomeTreeView()
+                      homeScreenController.isFolderEmpty.isTrue ? NewFolderButton(context, folderController, homeScreenController) : HomeTreeView()
                     ],
                   ),
                 ),
@@ -150,8 +144,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Button NewFolderButton(BuildContext context,
-      FolderController folderController, HomeScreenController controller) {
+  Button NewFolderButton(BuildContext context, FolderController folderController, HomeScreenController controller) {
     return Button(
         child: const Text("새폴더 만들기"),
         onPressed: () async {
@@ -178,12 +171,8 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () async {
                         Navigator.pop(context);
 
-                        final url =
-                            Uri.parse('http://$HOST/api/data/create_database');
-                        final Map<String, dynamic> requestBody = {
-                          "name": textcontroller.text,
-                          "parent_id": null
-                        };
+                        final url = Uri.parse('http://$HOST/api/data/create_database');
+                        final Map<String, dynamic> requestBody = {"name": textcontroller.text, "parent_id": null};
 
                         final response = await http.post(
                           url,
@@ -194,12 +183,9 @@ class HomeScreen extends StatelessWidget {
                         if (response.statusCode ~/ 100 == 2) {
                           final jsonResponse = jsonDecode(response.body);
                           debugPrint(jsonResponse.toString());
-                          final int newFolderId =
-                              jsonResponse['inserted_database'][0]["id"];
+                          final int newFolderId = jsonResponse['inserted_database'][0]["id"];
 
-                          TreeViewItem newFolder =
-                              folderController.makeFolderItem(
-                                  textcontroller.text, newFolderId, null);
+                          TreeViewItem newFolder = folderController.makeFolderItem(textcontroller.text, newFolderId, null);
                           folderController.totalfolders.add(newFolder);
                           folderController.firstFolders.add(newFolder);
 
@@ -243,7 +229,7 @@ class HomeScreen extends StatelessWidget {
         });
   }
 
-  Widget menuCommandBar() {
+  Widget menuCommandBar(context, controller) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
@@ -259,8 +245,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             TabController tabController = Get.find<TabController>();
 
-            DefaultTabBody generatedTab =
-                DefaultTabBody(workingSpace: const PdfViewerScreen());
+            DefaultTabBody generatedTab = DefaultTabBody(workingSpace: const PdfViewerScreen());
             Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
 
             tabController.tabs.add(newTab);
@@ -308,7 +293,9 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () {
+            createHighlightOverlay(context: context, controller: controller, tabController: tabController);
+          },
         ),
       ),
       CommandBarBuilderItem(
@@ -325,8 +312,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             TabController tabController = Get.find<TabController>();
             tabController.isHomeScreen.value = false;
-            DefaultTabBody generatedTab =
-                DefaultTabBody(workingSpace: TagManagementScreen());
+            DefaultTabBody generatedTab = DefaultTabBody(workingSpace: TagManagementScreen());
             Tab newTab = tabController.addTab(generatedTab, "Generate Tags");
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;

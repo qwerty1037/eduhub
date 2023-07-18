@@ -10,7 +10,6 @@ import 'package:front_end/Component/Cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
@@ -106,9 +105,10 @@ class HomeScreen extends StatelessWidget {
                               await storage.delete(key: "uid");
                               await storage.delete(key: "access_token");
                               await storage.delete(key: "refresh_token");
-                              final TotalController totalController =
-                                  Get.find<TotalController>();
-                              totalController.isLoginSuccess = false;
+                              Get.deleteAll();
+                              // final TotalController totalController =
+                              //     Get.find<TotalController>();
+                              // totalController.isLoginSuccess = false;
                             },
                           ),
                         ),

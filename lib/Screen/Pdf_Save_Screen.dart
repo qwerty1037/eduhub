@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Pdf_Save_Controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
@@ -7,8 +8,11 @@ import 'package:front_end/Component/Default/Default_Key_Text.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class PdfSaveScreen extends StatelessWidget {
-  final controller = Get.put(PdfSaveController());
-  final tabController = Get.put(t.TabController());
+  final DefaultTabBodyController _defaultTabBodyController =
+      Get.find<DefaultTabBodyController>(
+          tag: Get.find<t.TabController>().getCurrentTabKey());
+  final controller = Get.put(PdfSaveController(),
+      tag: Get.find<t.TabController>().getCurrentTabKey());
 
   @override
   PdfSaveScreen(Uint8List image1, Uint8List image2, {super.key}) {
@@ -282,15 +286,8 @@ class PdfSaveScreen extends StatelessWidget {
       child: ElevatedButton(
         child: const Text('Back'),
         onPressed: () {
-          tabController.tabs.removeAt(tabController.currentTabIndex.value);
-          tabController.tabs.insert(tabController.currentTabIndex.value,
-              tabController.hiddentabs[tabController.hiddenTabIndex.value]);
-          tabController.hiddenTabIndex.value--;
-          tabController.hiddentabs.removeLast();
-          tabController.hiddentabs.refresh();
-          tabController.tabs.refresh();
-          tabController.currentTabIndex.value -= 1;
-          tabController.currentTabIndex.value += 1;
+          _defaultTabBodyController
+              .changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
         },
       ),
     );

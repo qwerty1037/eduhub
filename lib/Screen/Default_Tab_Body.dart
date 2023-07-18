@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:front_end/Component/Folder_Treeview.dart';
+import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
 
 import 'package:front_end/Controller/Folder_Controller.dart';
@@ -13,22 +14,20 @@ class DefaultTabBody extends StatelessWidget {
   Widget? workingSpace;
   DefaultTabBody({super.key, this.workingSpace});
   final FlyoutController _flyoutController = FlyoutController();
+  TabController tabController = Get.find<TabController>();
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String uniqueTag = now.millisecondsSinceEpoch.toString();
-    Get.put(DefaultTabBodyController(), tag: uniqueTag);
-    DefaultTabBodyController firstController =
-        Get.find<DefaultTabBodyController>(tag: uniqueTag);
+    DefaultTabBodyController firstController = Get.put(
+        DefaultTabBodyController(),
+        tag: tabController.getCurrentTabKey());
     if (workingSpace != null) {
-      firstController.workingSpaceWidget.value =
-          Container(child: workingSpace!);
+      firstController.workingSpaceWidget = Container(child: workingSpace);
     }
-
     FolderController foldercontroller = Get.find<FolderController>();
-    return GetX<DefaultTabBodyController>(
-      tag: uniqueTag,
+
+    return GetBuilder<DefaultTabBodyController>(
+      tag: tabController.getCurrentTabKey(),
       builder: (controller) {
         return Column(
           children: [
@@ -36,7 +35,7 @@ class DefaultTabBody extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: 40,
               color: Colors.teal,
-              child: topCommandBar(controller),
+              child: topCommandBar(controller, context),
             ),
             Expanded(
               child: Row(
@@ -45,7 +44,8 @@ class DefaultTabBody extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width / 6,
-                      child: FolderTreeView(foldercontroller, uniqueTag),
+                      child: FolderTreeView(
+                          foldercontroller, tabController.getCurrentTabKey()),
                     ),
                   ),
                   Container(
@@ -54,7 +54,7 @@ class DefaultTabBody extends StatelessWidget {
                               left:
                                   BorderSide(color: Colors.black, width: 0.5))),
                       width: MediaQuery.of(context).size.width / 6 * 5,
-                      child: controller.workingSpaceWidget.value)
+                      child: controller.workingSpaceWidget)
                 ],
               ),
             ),
@@ -64,7 +64,8 @@ class DefaultTabBody extends StatelessWidget {
     );
   }
 
-  Center topCommandBar(DefaultTabBodyController controller) {
+  Center topCommandBar(
+      DefaultTabBodyController controller, BuildContext context) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
@@ -77,10 +78,11 @@ class DefaultTabBody extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {
-            TabController tabController = Get.find<TabController>();
-            controller.workingSpaceWidget.value =
-                Container(child: const PdfViewerScreen());
+          onPressed: () async {
+            await controller.deleteWorkingSpaceController();
+            controller.changeWorkingSpace(
+              const PdfViewerScreen(),
+            );
             Tab currentTab =
                 tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Save Pdf");
@@ -126,7 +128,13 @@ class DefaultTabBody extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () async {
+            await controller.deleteWorkingSpaceController();
+            createHighlightOverlay(
+                context: context,
+                controller: controller,
+                tabController: tabController);
+          },
         ),
       ),
       CommandBarBuilderItem(
@@ -140,10 +148,9 @@ class DefaultTabBody extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {
-            TabController tabController = Get.find<TabController>();
-            controller.workingSpaceWidget.value =
-                Container(child: TagManagementScreen());
+          onPressed: () async {
+            await controller.deleteWorkingSpaceController();
+            controller.changeWorkingSpace(TagManagementScreen());
             Tab currentTab =
                 tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Generate Tags");

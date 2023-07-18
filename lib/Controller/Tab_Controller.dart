@@ -1,22 +1,20 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:get/get.dart';
 
 class TabController extends GetxController {
-  final TotalController _totalController = Get.find<TotalController>();
-
   RxInt currentTabIndex = 0.obs;
-  int hiddenTabIndex = (-1);
   RxList<Tab> tabs = <Tab>[].obs;
-  List<Tab> hiddentabs = <Tab>[];
   RxBool isHomeScreen = true.obs;
+  int tagNumber = 0;
 
   ///새로운 탭을 추가하는 함수, body와 탭 이름을 변수로 둘 수 있음.
   Tab addTab(Widget body, String? text) {
     Tab? newTab;
     newTab = Tab(
+      key: Key(tagNumber.toString()),
       text: Text(
         text ?? "New Tab",
         style: const TextStyle(color: DEFAULT_LIGHT_COLOR),
@@ -33,8 +31,12 @@ class TabController extends GetxController {
         if (currentTabIndex == 0) {
           isHomeScreen.value = true;
         }
+        Get.find<DefaultTabBodyController>().deleteWorkingSpaceController();
+        Get.delete<DefaultTabBodyController>(
+            tag: Key(tagNumber.toString()).toString());
       },
     );
+    tagNumber++;
     return newTab;
   }
 
@@ -52,6 +54,7 @@ class TabController extends GetxController {
       },
     );
     tab = newTab;
+    tabs.refresh();
   }
 
   void onReorder(int oldIndex, int newIndex) {
@@ -74,5 +77,9 @@ class TabController extends GetxController {
     Tab newTab = addTab(generatedTab, null);
     tabs.add(newTab);
     currentTabIndex.value = tabs.length - 1;
+  }
+
+  String getCurrentTabKey() {
+    return tabs[currentTabIndex.value].key.toString();
   }
 }

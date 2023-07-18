@@ -1,13 +1,12 @@
 ///Screen: File_Drag_and_Drop.
 import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:front_end/Screen/Default_Tab_Body.dart';
+import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Screen/Pdf_Save_Screen.dart';
 import 'package:get/get.dart';
 import '../Controller/Pdf_Viewer_Screen_Controller.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
-import 'package:fluent_ui/fluent_ui.dart' as f;
 
 class PdfViewerScreen extends StatefulWidget {
   const PdfViewerScreen({super.key});
@@ -17,10 +16,73 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfViewerScreen> {
-  final controllerProblem =
-      Get.put(PdfViewerScreenController(), tag: "Problem");
-  final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer");
-  final tabController = Get.put(t.TabController());
+  final DefaultTabBodyController _defaultTabBodyController =
+      Get.find<DefaultTabBodyController>(
+          tag: Get.find<t.TabController>().getCurrentTabKey());
+  final controllerProblem = Get.put(PdfViewerScreenController(),
+      tag: "Problem${Get.find<t.TabController>().getCurrentTabKey()}");
+  final controllerAnswer = Get.put(PdfViewerScreenController(),
+      tag: "Answer${Get.find<t.TabController>().getCurrentTabKey()}");
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) => Center(
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Row(
+                children: [
+                  Obx(() {
+                    return controllerProblem.isPdfInputed.value
+                        ? pdfViewerContainer(controllerProblem, constraints)
+                        : selectPdfContainer(controllerProblem, constraints);
+                  }),
+                  Container(
+                    width: 10,
+                    color: Colors.black12,
+                  ),
+                  Obx(() {
+                    return controllerAnswer.isPdfInputed.value
+                        ? pdfViewerContainer(controllerAnswer, constraints)
+                        : selectPdfContainer(controllerAnswer, constraints);
+                  }),
+                ],
+              ),
+              Obx(() {
+                return Align(
+                  alignment: Alignment.bottomRight,
+                  child: Visibility(
+                    visible: (controllerProblem.isCaptured.value == true &&
+                        controllerAnswer.isCaptured.value == true),
+                    child: FloatingActionButton(
+                      heroTag: 'Save',
+                      backgroundColor: Colors.black26,
+                      onPressed: () {
+                        _defaultTabBodyController.saveThisWorkingSpace();
+                        _defaultTabBodyController.changeWorkingSpace(
+                            PdfSaveScreen(controllerProblem.getCapturedImage()!,
+                                controllerAnswer.getCapturedImage()!));
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!)),
+                        // );
+                      },
+                      child: const Icon(
+                        Icons.save,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget selectPdfContainer(PdfViewerScreenController controller, constraints) {
     return SizedBox(
@@ -299,82 +361,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => Center(
-        child: Scaffold(
-          body: Stack(
-            children: [
-              Row(
-                children: [
-                  Obx(() {
-                    return controllerProblem.isPdfInputed.value
-                        ? pdfViewerContainer(controllerProblem, constraints)
-                        : selectPdfContainer(controllerProblem, constraints);
-                  }),
-                  Container(
-                    width: 10,
-                    color: Colors.black12,
-                  ),
-                  Obx(() {
-                    return controllerAnswer.isPdfInputed.value
-                        ? pdfViewerContainer(controllerAnswer, constraints)
-                        : selectPdfContainer(controllerAnswer, constraints);
-                  }),
-                ],
-              ),
-              Obx(() {
-                return Align(
-                  alignment: Alignment.bottomRight,
-                  child: Visibility(
-                    visible: (controllerProblem.isCaptured.value == true &&
-                        controllerAnswer.isCaptured.value == true),
-                    child: FloatingActionButton(
-                      heroTag: 'Save',
-                      backgroundColor: Colors.black26,
-                      onPressed: () {
-                        f.Tab newTab = tabController.addTab(
-                          DefaultTabBody(
-                            workingSpace: PdfSaveScreen(
-                                controllerProblem.getCapturedImage()!,
-                                controllerAnswer.getCapturedImage()!),
-                          ),
-                          "Pdf Save",
-                        );
-
-                        tabController.hiddentabs.add(tabController
-                            .tabs[tabController.currentTabIndex.value]);
-                        tabController.tabs
-                            .removeAt(tabController.currentTabIndex.value);
-                        tabController.tabs.insert(
-                            tabController.currentTabIndex.value, newTab);
-                        tabController.hiddenTabIndex.value++;
-
-                        tabController.currentTabIndex.value -= 1;
-                        tabController.currentTabIndex.value += 1;
-                        tabController.tabs.refresh();
-                        tabController.hiddentabs.refresh();
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!)),
-                        // );
-                      },
-                      child: const Icon(
-                        Icons.save,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ],
-          ),
-        ),
       ),
     );
   }

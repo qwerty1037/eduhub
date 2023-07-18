@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluent_ui/fluent_ui.dart';
 
-///어디든 폴더 필요한 곳에 find로 이 컨트롤러 찾고 TreeView(item)
+///폴더 관련 데이터를 처리하는 컨트롤러
 class FolderController extends GetxController {
   List<TreeViewItem> totalfolders = [];
-  RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
+  List<TreeViewItem> firstFolders = <TreeViewItem>[];
 
   Future<void> receiveData() async {
     final url = Uri.parse('http://$HOST/api/data/user_database');
@@ -28,11 +28,12 @@ class FolderController extends GetxController {
     }
   }
 
-//서버 없을때 연결 시킬 것
+  ///서버 없을때 연결 시킬 것 =====================================
   void makeExampleData() {
     makeFolderListInfo(example);
   }
 
+//==============================================================
   void makeFolderListInfo(List<dynamic> data) {
     final List<int> stack = [];
     final List<TreeViewItem> folders = [];
@@ -126,7 +127,7 @@ class FolderController extends GetxController {
                       (element) => element.value["id"] == data["id"]);
                 }
                 data["parent"] = id;
-                firstFolders.refresh();
+                update();
                 debugPrint("성공");
               } else {
                 debugPrint("실패");

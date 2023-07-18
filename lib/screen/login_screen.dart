@@ -74,11 +74,11 @@ class LoginScreen extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               registerInfoButton(),
-              inquiryButton(),
+              const inquiryButton(),
             ],
           )
         ],
@@ -359,33 +359,33 @@ class inquiryButton extends StatelessWidget {
 }
 
 class registerInfoButton extends StatelessWidget {
-  const registerInfoButton({
+  registerInfoButton({
     super.key,
   });
+  final RegisterInfoController _registerInfoController =
+      Get.put(RegisterInfoController());
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Get.put(RegisterInfoController());
-
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return GetBuilder<RegisterInfoController>(
-                builder: (controller) {
-                  return AlertDialog(
-                    shadowColor: Colors.transparent,
-                    title: const Text(
-                      "회원가입",
-                      textAlign: TextAlign.center,
+              return AlertDialog(
+                shadowColor: Colors.transparent,
+                title: const Text(
+                  "회원가입",
+                  textAlign: TextAlign.center,
+                ),
+                content: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
                     ),
-                    content: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                        ),
-                        child: Column(
+                    child: GetBuilder<RegisterInfoController>(
+                      builder: (controller) {
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text("아이디"),
@@ -430,50 +430,50 @@ class registerInfoButton extends StatelessWidget {
                                     ),
                             ),
                           ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                actions: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Get.delete<RegisterInfoController>();
+                          },
+                          child: const Text("취소"),
                         ),
                       ),
-                    ),
-                    actions: [
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                padding: const EdgeInsets.all(16.0),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Get.delete<RegisterInfoController>();
-                              },
-                              child: const Text("취소"),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: const EdgeInsets.all(16.0)),
-                              onPressed: () {
-                                controller.tryMakeId(context);
-                              },
-                              child: const Text("가입하기"),
-                            ),
-                          )
-                        ],
+                      const SizedBox(
+                        width: 10,
                       ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: const EdgeInsets.all(16.0)),
+                          onPressed: () {
+                            _registerInfoController.tryMakeId(context);
+                          },
+                          child: const Text("가입하기"),
+                        ),
+                      )
                     ],
-                  );
-                },
+                  ),
+                ],
               );
             });
       },

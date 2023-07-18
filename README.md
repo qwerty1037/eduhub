@@ -84,7 +84,7 @@ merge를 코드 리뷰할 때 끝내기 + monday.com에 할 리스트 다 작성
         onChanged : 현재 보고 있는 pane의 인덱스가 바뀔시 작동하는 함수. 새 인덱스를 인자로 받으며, 마지막의 new project부분이 아닐 경우 selectedIndex를 업데이트하고, new project 인덱스일 경우 새 paneItem을 삽입(새 프로젝트 생성).
 
 ## Screen : UI Screen, 전체 코드가 합쳐지는 부분
-    - main.dart : run 또는 디버깅할 시 가장 먼저 실행되는 파일로 total controller와 함께 작동하며, themeMode 부분을 통해 테마 조절이 가능하다. homeTabview로 자동으로 이어진다.(추후 로그인 부분으로 변경 예정)
+    - main.dart : run 또는 디버깅할 시 가장 먼저 실행되는 파일. 앱 전반에 사용되는 total, folder controller와 함께 작동한다. 초반에 homeTabview로 자동으로 이어진다.(추후 로그인 부분으로 변경 예정)
 
     - home_tabview.dart : 로그인 후 처음 보여질 탭뷰이며 컨트롤러와 함께 연동되어 작동한다. 헤더에 home 아이콘 모양의 버튼을 두었으며 맨 처음 Screen 렌더링 또는 아이콘 클릭시 homeScreen이 stack 방식으로 렌더링된다. 다른 탭으로 넘어가거나 새로운 탭을 만들경우 해당 화면으로 렌더링 되도록 코드가 작성되었다.
 

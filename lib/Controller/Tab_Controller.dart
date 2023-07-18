@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
 

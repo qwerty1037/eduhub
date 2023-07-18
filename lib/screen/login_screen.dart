@@ -2,136 +2,144 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:front_end/Component/Config.dart';
-import 'package:front_end/Component/register_textfield.dart';
+import 'package:front_end/Component/Default/Config.dart';
+
 import 'package:front_end/Controller/Login_Screen_Controller.dart';
 import 'package:front_end/Controller/Register_Info_Controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
+///로그인 화면
 class LoginScreen extends StatelessWidget {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  loginScreenController loginController = Get.put(loginScreenController());
   LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(loginScreenController());
-    loginScreenController loginController = Get.find<loginScreenController>();
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Row(
         children: [
           Expanded(
             flex: 2,
-            child: Stack(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/login.png"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color.fromARGB(172, 68, 137, 255),
-                        Color.fromARGB(119, 68, 137, 255)
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            FontAwesomeIcons.baby,
-                            size: 15.0,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Text(
-                            "Baby Teacher",
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      ),
-                      const Spacer(),
-                      backgroundOfLoginScreen(),
-                      const Spacer(),
-                    ],
-                  ),
-                )
-              ],
-            ),
+            child: leftScreen(),
           ),
           Expanded(
             flex: 1,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-              ),
-              color: const Color.fromARGB(52, 117, 117, 117),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Login",
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  loginTextfield(),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  passwordTextfield(),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: loginTryButton(loginController, context),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      registerInfoButton(),
-                      inquiryButton(),
-                    ],
-                  )
-                ],
-              ),
-            ),
+            child: rightScreen(context),
           ),
         ],
       ),
+    );
+  }
+
+  Container rightScreen(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+      ),
+      color: const Color.fromARGB(52, 117, 117, 117),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Login",
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              fontSize: 18.0,
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          loginTextfield(),
+          const SizedBox(
+            height: 8,
+          ),
+          passwordTextfield(),
+          const SizedBox(
+            height: 16,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: loginTryButton(loginController, context),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              registerInfoButton(),
+              inquiryButton(),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Stack leftScreen() {
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/login.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(172, 68, 137, 255),
+                Color.fromARGB(119, 68, 137, 255)
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    FontAwesomeIcons.baby,
+                    size: 15.0,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    "Baby Teacher",
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+              const Spacer(),
+              loginMainDescription(),
+              const Spacer(),
+            ],
+          ),
+        )
+      ],
     );
   }
 
@@ -172,7 +180,7 @@ class LoginScreen extends StatelessWidget {
               ),
             );
           } else {
-            loginController.saveCookieToSecureStorage(
+            await loginController.saveCookieToSecureStorage(
                 uid, accessToken, refreshToken);
 
             loginController.loginSuccess();
@@ -264,7 +272,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Column backgroundOfLoginScreen() {
+  Column loginMainDescription() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -364,7 +372,7 @@ class registerInfoButton extends StatelessWidget {
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return GetX<RegisterInfoController>(
+              return GetBuilder<RegisterInfoController>(
                 builder: (controller) {
                   return AlertDialog(
                     shadowColor: Colors.transparent,
@@ -385,91 +393,36 @@ class registerInfoButton extends StatelessWidget {
                               height: 5,
                             ),
                             registerTextfield(controller.idController, false),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text("비밀번호"),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            ...betweenTextfield("비밀번호"),
                             registerTextfield(
                                 controller.passwordController, true),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text("비밀번호 확인"),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            ...betweenTextfield("비밀번호 확인"),
                             registerTextfield(
                                 controller.checkPasswordController, true),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text("이름"),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            ...betweenTextfield("이름"),
                             registerTextfield(controller.nameController, false),
                             const SizedBox(
                               height: 10,
                             ),
                             const Text("성별"),
-                            Column(
-                              children: [
-                                RadioListTile<int>(
-                                  value: 0,
-                                  groupValue: controller.selectedGender.value,
-                                  onChanged: (value) {
-                                    controller.selectedGender.value = value!;
-                                  },
-                                  title: const Text('남'),
-                                ),
-                                RadioListTile<int>(
-                                  value: 1,
-                                  groupValue: controller.selectedGender.value,
-                                  onChanged: (value) {
-                                    controller.selectedGender.value = value!;
-                                  },
-                                  title: const Text('여'),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text("나이"),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            chooseSexButton(controller),
+                            ...betweenTextfield("나이"),
                             registerTextfield(controller.ageController, false),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text("이메일"),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            ...betweenTextfield("이메일"),
                             registerTextfield(
                                 controller.emailController, false),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text("닉네임"),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            ...betweenTextfield("닉네임"),
                             registerTextfield(
                                 controller.nicknameController, false),
                             SizedBox(
                               height: 20,
-                              child: controller.matchpassword.isTrue
+                              child: controller.matchpassword
                                   ? const Text("")
                                   : const Text("비밀번호가 다릅니다"),
                             ),
                             SizedBox(
                               height: 20,
-                              child: controller.formatCorrect.isTrue
+                              child: controller.formatCorrect
                                   ? const Text("")
                                   : const Text(
                                       "입력이 완료되지 않았습니다",
@@ -494,6 +447,7 @@ class registerInfoButton extends StatelessWidget {
                               ),
                               onPressed: () {
                                 Navigator.pop(context);
+                                Get.delete<RegisterInfoController>();
                               },
                               child: const Text("취소"),
                             ),
@@ -509,30 +463,8 @@ class registerInfoButton extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   padding: const EdgeInsets.all(16.0)),
-                              onPressed: () async {
-                                controller.matchpassword.value = true;
-                                controller.formatCorrect.value = true;
-
-                                if (controller.passwordController.text !=
-                                    controller.checkPasswordController.text) {
-                                  controller.matchpassword.value = false;
-                                } else {
-                                  if (controller.isCorrectFormat()) {
-                                    final statusCode =
-                                        await controller.sendRegisterInfo();
-                                    if (statusCode == 200) {
-                                      Navigator.pop(context);
-
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                              content: Text("회원가입이 완료되었습니다")));
-                                    } else {
-                                      controller.formatCorrect.value = false;
-                                    }
-                                  } else {
-                                    controller.formatCorrect.value = false;
-                                  }
-                                }
+                              onPressed: () {
+                                controller.tryMakeId(context);
                               },
                               child: const Text("가입하기"),
                             ),
@@ -557,5 +489,72 @@ class registerInfoButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Column chooseSexButton(RegisterInfoController controller) {
+    return Column(
+      children: [
+        RadioListTile<int>(
+          value: 0,
+          groupValue: controller.selectedGender,
+          onChanged: (value) {
+            controller.selectedGender = value!;
+            controller.update();
+          },
+          title: const Text('남'),
+        ),
+        RadioListTile<int>(
+          value: 1,
+          groupValue: controller.selectedGender,
+          onChanged: (value) {
+            controller.selectedGender = value!;
+            controller.update();
+          },
+          title: const Text('여'),
+        ),
+      ],
+    );
+  }
+
+  SizedBox registerTextfield(TextEditingController controller, bool obscure) {
+    return SizedBox(
+      width: 300,
+      child: TextField(
+        controller: controller,
+        obscureText: obscure,
+        style: const TextStyle(),
+        decoration: InputDecoration(
+          filled: true,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+          ),
+          fillColor: const Color.fromARGB(111, 158, 158, 158),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> betweenTextfield(String name) {
+    return [
+      const SizedBox(
+        height: 10,
+      ),
+      Text(name),
+      const SizedBox(
+        height: 5,
+      )
+    ];
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Cookie.dart';
 import 'package:front_end/Test/Folder_Example_Data.dart';
 import 'package:get/get.dart';

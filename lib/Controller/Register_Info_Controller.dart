@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterInfoController extends GetxController {
-  RxInt selectedGender = 0.obs;
-  RxBool matchpassword = true.obs;
-  RxBool formatCorrect = true.obs;
+  //0이면 남자 1이면 여자(버튼 순서)
+  int selectedGender = 0;
+  bool matchpassword = true;
+  bool formatCorrect = true;
 
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -45,5 +46,35 @@ class RegisterInfoController extends GetxController {
       body: jsonEncode(requestBody),
     );
     return response.statusCode;
+  }
+
+  Future<void> tryMakeId(BuildContext context) async {
+    matchpassword = true;
+    formatCorrect = true;
+
+    if (passwordController.text != checkPasswordController.text) {
+      matchpassword = false;
+      update();
+    } else {
+      if (isCorrectFormat()) {
+        final statusCode = await sendRegisterInfo();
+        if (statusCode == 200) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("회원가입이 완료되었습니다"),
+            ),
+          );
+          Get.delete<RegisterInfoController>();
+        } else {
+          debugPrint("서버에서 회원가입 거부");
+          formatCorrect = false;
+          update();
+        }
+      } else {
+        formatCorrect = false;
+        update();
+      }
+    }
   }
 }

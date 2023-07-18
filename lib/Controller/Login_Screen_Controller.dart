@@ -30,6 +30,7 @@ class loginScreenController extends GetxController {
     TotalController totalController = Get.find<TotalController>();
     FolderController folderController = Get.find<FolderController>();
     await folderController.receiveData();
-    totalController.isLoginSuccess = true;
+    totalController.reverseLoginState();
+    Get.delete<loginScreenController>();
   }
 }

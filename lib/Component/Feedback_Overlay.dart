@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Config.dart';
-import 'package:front_end/Component/Default_Key_Text.dart';
-import 'package:front_end/Component/Default_Text_FIeld.dart';
+import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Default/Default_Key_Text.dart';
+import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
 import 'package:front_end/Component/Cookie.dart';
 import 'package:front_end/Controller/Feedback_Controller.dart';
 import 'dart:ui';

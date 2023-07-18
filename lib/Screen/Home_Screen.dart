@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Feedback_Overlay.dart';
 import 'package:front_end/Component/Home_Treeview.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';

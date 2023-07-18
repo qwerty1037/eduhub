@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:front_end/Component/Config.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Tag_Model.dart';
 import 'package:get/get.dart';

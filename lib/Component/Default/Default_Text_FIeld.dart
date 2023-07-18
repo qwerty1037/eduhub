@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class DefaultTextField extends StatelessWidget {
-  const DefaultTextField({this.labelText, required this.hintText, this.onChanged, this.controller, this.onEditingComplete, this.maxLines, this.minLines});
+  const DefaultTextField(
+      {super.key,
+      this.labelText,
+      required this.hintText,
+      this.onChanged,
+      this.controller,
+      this.onEditingComplete,
+      this.maxLines,
+      this.minLines});
 
   final String? labelText;
   final String hintText;

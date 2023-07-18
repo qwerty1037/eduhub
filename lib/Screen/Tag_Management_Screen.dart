@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Default_Key_Text.dart';
-import 'package:front_end/Component/Default_Text_FIeld.dart';
+import 'package:front_end/Component/Default/Default_Key_Text.dart';
+import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';

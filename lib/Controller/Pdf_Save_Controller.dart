@@ -1,9 +1,11 @@
 import 'dart:typed_data';
+import 'package:front_end/Component/Config.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Tag_Model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:korea_regexp/korea_regexp.dart';
 import '../Test/Temp_Tag.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +29,6 @@ class PdfSaveController extends GetxController {
   }
 
   Future<int> sendRegisterInfo() async {
-    String HOST = "61.82.182.149:3000";
     final url = Uri.parse('http://$HOST/api/data/create_problem');
 
     List<String> selectedTags = <String>[];
@@ -49,6 +50,7 @@ class PdfSaveController extends GetxController {
       contentType:
           MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
+
     var multipartFileAnswer = http.MultipartFile.fromBytes(
       'problem_image',
       capturedImageAnswer,
@@ -60,7 +62,7 @@ class PdfSaveController extends GetxController {
     final Map<String, dynamic> requestBody = {
       "problem_name": problemNameController.text,
       "parent_database": 1,
-      //"directory": "\"{directoryController.text}\"",
+      //"directory": "\"{directorytext}\"",
       "tags": selectedTags
           .join(), //애초에 TAG class가 있고 거기에서 id만 List<LongLongInt>로 보내기
       "level": difficultySliderValue.round(),
@@ -107,6 +109,63 @@ class PdfSaveController extends GetxController {
       isImagePreviewButtonTapped.value = true;
     } else {
       isImagePreviewButtonTapped.value = false;
+    }
+  }
+
+  List<Widget> selectedChipsList() {
+    List<Widget> chips = [];
+    for (int i = 0; i < tagsList.length; i++) {
+      if (tagsList[i].isSelected == true) {
+        Widget item = FilterChip(
+          label: Text(tagsList[i].label),
+          labelStyle: const TextStyle(color: Colors.white, fontSize: 16),
+          backgroundColor: Colors.grey,
+          selected: tagsList[i].isSelected,
+          onSelected: (bool value) {
+            tagsList[i].isSelected = false;
+            tagsList.refresh();
+          },
+        );
+        chips.add(item);
+      }
+    }
+    return chips;
+  }
+
+  List<Widget> filterChipsList() {
+    List<Widget> chips = [];
+    if (tagsTextValue.value == "") {
+      return [];
+    } else {
+      RegExp regExp = getRegExp(
+        tagsTextValue.value,
+        RegExpOptions(
+          initialSearch: true,
+          startsWith: false,
+          endsWith: false,
+          fuzzy: true,
+          ignoreSpace: true,
+          ignoreCase: true,
+        ),
+      );
+      for (int i = 0; i < tagsList.length; i++) {
+        if (regExp.hasMatch(tagsList[i].label)) {
+          Widget item = FilterChip(
+            label: Text(tagsList[i].label),
+            labelStyle: const TextStyle(color: Colors.white, fontSize: 16),
+            backgroundColor: Colors.grey,
+            selected: tagsList[i].isSelected,
+            onSelected: (bool value) {
+              tagsList[i].isSelected = value;
+              tagsList.refresh();
+            },
+          );
+          if (tagsList[i].isSelected == false) {
+            chips.add(item);
+          }
+        }
+      }
+      return chips;
     }
   }
 }

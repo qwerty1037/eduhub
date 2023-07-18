@@ -1,14 +1,10 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:front_end/Controller/Pdf_Save_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/Default_Text_FIeld.dart';
 import 'package:front_end/Component/Default_Key_Text.dart';
-import 'package:front_end/Test/Temp_Tag.dart';
-import 'package:korea_regexp/korea_regexp.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
-import 'package:fluent_ui/fluent_ui.dart' as f;
 
 class PdfSaveScreen extends StatelessWidget {
   final controller = Get.put(PdfSaveController());
@@ -19,61 +15,41 @@ class PdfSaveScreen extends StatelessWidget {
     controller.getImage(image1, image2);
   }
 
-  List<Widget> selectedChipsList() {
-    List<Widget> chips = [];
-    for (int i = 0; i < controller.tagsList.length; i++) {
-      if (controller.tagsList[i].isSelected == true) {
-        Widget item = FilterChip(
-          label: Text(controller.tagsList[i].label),
-          labelStyle: const TextStyle(color: Colors.white, fontSize: 16),
-          backgroundColor: Colors.grey,
-          selected: controller.tagsList[i].isSelected,
-          onSelected: (bool value) {
-            controller.tagsList[i].isSelected = false;
-            controller.tagsList.refresh();
-          },
-        );
-        chips.add(item);
-      }
-    }
-    return chips;
-  }
-
-  List<Widget> filterChipsList() {
-    List<Widget> chips = [];
-    if (controller.tagsTextValue.value == "") {
-      return [];
-    } else {
-      RegExp regExp = getRegExp(
-        controller.tagsTextValue.value,
-        RegExpOptions(
-          initialSearch: true,
-          startsWith: false,
-          endsWith: false,
-          fuzzy: true,
-          ignoreSpace: true,
-          ignoreCase: true,
-        ),
-      );
-      for (int i = 0; i < controller.tagsList.length; i++) {
-        if (regExp.hasMatch(controller.tagsList[i].label)) {
-          Widget item = FilterChip(
-            label: Text(controller.tagsList[i].label),
-            labelStyle: const TextStyle(color: Colors.white, fontSize: 16),
-            backgroundColor: Colors.grey,
-            selected: controller.tagsList[i].isSelected,
-            onSelected: (bool value) {
-              controller.tagsList[i].isSelected = value;
-              controller.tagsList.refresh();
-            },
-          );
-          if (controller.tagsList[i].isSelected == false) {
-            chips.add(item);
-          }
-        }
-      }
-      return chips;
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('SaveCapture'),
+      ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(60, 20, 60, 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  problemNameInputField(),
+                  const SizedBox(height: 30),
+                  directroyInputField(),
+                  const SizedBox(height: 30),
+                  tagsInputField(),
+                  const SizedBox(height: 30),
+                  difficultyInputField(),
+                  const SizedBox(height: 30),
+                  imagePreviewField(),
+                  const SizedBox(height: 40),
+                  saveButtonField(),
+                ],
+              ),
+            ),
+          ),
+          backButton(),
+        ],
+      ),
+    );
   }
 
   Widget problemNameInputField() {
@@ -135,7 +111,7 @@ class PdfSaveScreen extends StatelessWidget {
             child: Wrap(
               spacing: 8,
               direction: Axis.horizontal,
-              children: selectedChipsList(),
+              children: controller.selectedChipsList(),
             ),
           );
         }),
@@ -155,7 +131,7 @@ class PdfSaveScreen extends StatelessWidget {
             child: Wrap(
               spacing: 8,
               direction: Axis.horizontal,
-              children: filterChipsList(),
+              children: controller.filterChipsList(),
             ),
           );
         }),
@@ -300,58 +276,22 @@ class PdfSaveScreen extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('SaveCapture'),
-      ),
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(60, 20, 60, 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  problemNameInputField(),
-                  const SizedBox(height: 30),
-                  directroyInputField(),
-                  const SizedBox(height: 30),
-                  tagsInputField(),
-                  const SizedBox(height: 30),
-                  difficultyInputField(),
-                  const SizedBox(height: 30),
-                  imagePreviewField(),
-                  const SizedBox(height: 40),
-                  saveButtonField(),
-                ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: ElevatedButton(
-              child: const Text('Back'),
-              onPressed: () {
-                tabController.tabs
-                    .removeAt(tabController.currentTabIndex.value);
-                tabController.tabs.insert(
-                    tabController.currentTabIndex.value,
-                    tabController
-                        .hiddentabs[tabController.hiddenTabIndex.value]);
-                tabController.hiddenTabIndex.value--;
-                tabController.hiddentabs.removeLast();
-                tabController.hiddentabs.refresh();
-                tabController.tabs.refresh();
-                tabController.currentTabIndex.value -= 1;
-                tabController.currentTabIndex.value += 1;
-              },
-            ),
-          ),
-        ],
+  Widget backButton() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: ElevatedButton(
+        child: const Text('Back'),
+        onPressed: () {
+          tabController.tabs.removeAt(tabController.currentTabIndex.value);
+          tabController.tabs.insert(tabController.currentTabIndex.value,
+              tabController.hiddentabs[tabController.hiddenTabIndex.value]);
+          tabController.hiddenTabIndex.value--;
+          tabController.hiddentabs.removeLast();
+          tabController.hiddentabs.refresh();
+          tabController.tabs.refresh();
+          tabController.currentTabIndex.value -= 1;
+          tabController.currentTabIndex.value += 1;
+        },
       ),
     );
   }

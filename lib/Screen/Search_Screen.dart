@@ -1,18 +1,14 @@
-import 'dart:ffi';
-
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:front_end/Component/DefaultTextBox.dart';
-import 'package:front_end/Screen/Default_Tab_Body.dart';
-import 'package:front_end/Test/TempFileClass.dart';
+import 'package:front_end/Component/Default_TextBox.dart';
+import 'package:front_end/Test/Temp_File_Class.dart';
 import 'package:get/get.dart';
-import 'package:front_end/Controller/SearchController.dart';
-import '../Component/DefaultTextFIeld.dart';
-import 'package:front_end/Component/Custom_Dropdown.dart';
+import 'package:front_end/Controller/Search_Controller.dart';
 
 class SearchScreen extends StatelessWidget {
   final controller = Get.put(SearchScreenController());
-  TempFileClass _tempFileClass = new TempFileClass();
+  final TempFileClass _tempFileClass = TempFileClass();
+
+  SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +68,8 @@ class SearchScreen extends StatelessWidget {
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                           crossAxisCount: 2,
-                          children: _tempFileClass.getGridView(controller.getDifficulty()),
+                          children: _tempFileClass
+                              .getGridView(controller.getDifficulty()),
                         ),
                       ),
                     ],

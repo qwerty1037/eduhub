@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:front_end/Component/DefaultTextBox.dart';
+import 'package:front_end/Component/Default_TextBox.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
-import 'package:front_end/Screen/SearchScreen.dart';
+import 'package:front_end/Screen/Search_Screen.dart';
 import 'dart:ui';
-import 'package:front_end/Controller/tab.controller.dart' as t;
+import 'package:front_end/Controller/Tab_Controller.dart' as t;
 import 'package:fluent_ui/fluent_ui.dart' as f;
 
 void createHighlightOverlay({
@@ -61,10 +61,13 @@ void createHighlightOverlay({
                   onChanged: (value) => controller.searchBarController.text,
                   onEditingComplete: () {
                     tabController.isHomeScreen.value = false;
-                    DefaultTabBody tabBody = DefaultTabBody(workingSpace: SearchScreen());
-                    f.Tab newTab = tabController.addTab(tabBody, "SearchScreen");
+                    DefaultTabBody tabBody =
+                        DefaultTabBody(workingSpace: SearchScreen());
+                    f.Tab newTab =
+                        tabController.addTab(tabBody, "SearchScreen");
                     tabController.tabs.add(newTab);
-                    tabController.currentTabIndex.value = tabController.tabs.length - 1;
+                    tabController.currentTabIndex.value =
+                        tabController.tabs.length - 1;
                     controller.searchBarController.text = "";
                     overlayEntry?.remove();
                   },

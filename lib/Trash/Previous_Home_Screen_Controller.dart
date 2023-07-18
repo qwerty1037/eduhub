@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/project_navigation_body.dart';
+import 'package:front_end/Component/Project_Navigation_Body.dart';
 import 'package:get/get.dart';
 
 class HomeScreenController extends GetxController {

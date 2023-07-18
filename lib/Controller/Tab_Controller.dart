@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
-import 'package:front_end/Controller/total.controller.dart';
+import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
 
 class TabController extends GetxController {
@@ -18,10 +18,7 @@ class TabController extends GetxController {
     newTab = Tab(
       text: Text(
         text ?? "New Tab",
-        style: TextStyle(
-            color: _totalController.isdark.value
-                ? DEFAULT_LIGHT_COLOR
-                : DEFAULT_DARK_COLOR),
+        style: const TextStyle(color: DEFAULT_LIGHT_COLOR),
       ),
       icon: const Icon(
         FluentIcons.file_template,
@@ -45,10 +42,7 @@ class TabController extends GetxController {
     newTab = Tab(
       text: Text(
         newName,
-        style: TextStyle(
-            color: _totalController.isdark.value
-                ? DEFAULT_LIGHT_COLOR
-                : DEFAULT_DARK_COLOR),
+        style: const TextStyle(color: DEFAULT_LIGHT_COLOR),
       ),
       icon: tab.icon,
       body: tab.body,

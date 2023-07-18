@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
-import 'package:front_end/Component/Problem_list_view.dart';
-import 'package:front_end/Component/cookie.dart';
-import 'package:front_end/Controller/Default_Tab_Body.controller.dart';
+import 'package:front_end/Component/Problem_List.dart';
+import 'package:front_end/Component/Cookie.dart';
+import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

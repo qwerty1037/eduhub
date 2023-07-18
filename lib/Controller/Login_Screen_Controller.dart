@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
-import 'package:front_end/Controller/total.controller.dart';
+import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
 
 class loginScreenController extends GetxController {
@@ -30,6 +30,6 @@ class loginScreenController extends GetxController {
     TotalController totalController = Get.find<TotalController>();
     FolderController folderController = Get.find<FolderController>();
     await folderController.receiveData();
-    totalController.cookieExist.value = true;
+    totalController.isLoginSuccess = true;
   }
 }

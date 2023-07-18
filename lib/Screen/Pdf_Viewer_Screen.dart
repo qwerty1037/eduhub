@@ -1,14 +1,12 @@
 ///Screen: File_Drag_and_Drop.
 import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:front_end/Component/Config.dart';
-import 'package:front_end/Controller/total.controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
-import 'package:front_end/Screen/PdfSaveScreen.dart';
+import 'package:front_end/Screen/Pdf_Save_Screen.dart';
 import 'package:get/get.dart';
-import '../Controller/PdfViewerScreenController.dart';
+import '../Controller/Pdf_Viewer_Screen_Controller.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:front_end/Controller/tab.controller.dart' as t;
+import 'package:front_end/Controller/Tab_Controller.dart' as t;
 import 'package:fluent_ui/fluent_ui.dart' as f;
 
 class PdfViewerScreen extends StatefulWidget {
@@ -19,7 +17,8 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfViewerScreen> {
-  final controllerProblem = Get.put(PdfViewerScreenController(), tag: "Problem");
+  final controllerProblem =
+      Get.put(PdfViewerScreenController(), tag: "Problem");
   final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer");
   final tabController = Get.put(t.TabController());
 
@@ -173,8 +172,10 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.black26),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
@@ -240,9 +241,14 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             alignment: Alignment.topRight,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black26),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
                                   ),
@@ -268,9 +274,12 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black26),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
@@ -323,21 +332,27 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 return Align(
                   alignment: Alignment.bottomRight,
                   child: Visibility(
-                    visible: (controllerProblem.isCaptured.value == true && controllerAnswer.isCaptured.value == true),
+                    visible: (controllerProblem.isCaptured.value == true &&
+                        controllerAnswer.isCaptured.value == true),
                     child: FloatingActionButton(
                       heroTag: 'Save',
                       backgroundColor: Colors.black26,
                       onPressed: () {
                         f.Tab newTab = tabController.addTab(
                           DefaultTabBody(
-                            workingSpace: PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!),
+                            workingSpace: PdfSaveScreen(
+                                controllerProblem.getCapturedImage()!,
+                                controllerAnswer.getCapturedImage()!),
                           ),
                           "Pdf Save",
                         );
 
-                        tabController.hiddentabs.add(tabController.tabs[tabController.currentTabIndex.value]);
-                        tabController.tabs.removeAt(tabController.currentTabIndex.value);
-                        tabController.tabs.insert(tabController.currentTabIndex.value, newTab);
+                        tabController.hiddentabs.add(tabController
+                            .tabs[tabController.currentTabIndex.value]);
+                        tabController.tabs
+                            .removeAt(tabController.currentTabIndex.value);
+                        tabController.tabs.insert(
+                            tabController.currentTabIndex.value, newTab);
                         tabController.hiddenTabIndex.value++;
 
                         tabController.currentTabIndex.value -= 1;

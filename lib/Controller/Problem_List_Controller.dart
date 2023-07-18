@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Config.dart';
-import 'package:front_end/Component/cookie.dart';
+import 'package:front_end/Component/Cookie.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 

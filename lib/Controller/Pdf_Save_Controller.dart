@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http_parser/http_parser.dart';
-import 'package:front_end/Component/TagModel.dart';
+import 'package:front_end/Component/Tag_Model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import '../Test/TempTag.dart';
+import '../Test/Temp_Tag.dart';
 import 'package:http/http.dart' as http;
 
 class PdfSaveController extends GetxController {
@@ -37,7 +36,8 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].label);
       }
     }
-    String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
+    String capturedFileNameProblem =
+        '${problemNameController.text}_problem.jpeg';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
 
     var request = http.MultipartRequest('POST', url);
@@ -46,20 +46,23 @@ class PdfSaveController extends GetxController {
       'problem_image',
       capturedImageProblem,
       filename: capturedFileNameProblem,
-      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType:
+          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
     var multipartFileAnswer = http.MultipartFile.fromBytes(
       'problem_image',
       capturedImageAnswer,
       filename: capturedFileNameAnswer,
-      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType:
+          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
     final Map<String, dynamic> requestBody = {
       "problem_name": problemNameController.text,
       "parent_database": 1,
       //"directory": "\"{directoryController.text}\"",
-      "tags": selectedTags.join(), //애초에 TAG class가 있고 거기에서 id만 List<LongLongInt>로 보내기
+      "tags": selectedTags
+          .join(), //애초에 TAG class가 있고 거기에서 id만 List<LongLongInt>로 보내기
       "level": difficultySliderValue.round(),
       //"problem_image": [multipartFileProblem, multipartFileAnswer],
       "problem_string": capturedFileNameProblem,

@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Controller/tab.controller.dart';
+import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 
-import 'package:front_end/Screen/HomeScreen.dart';
+import 'package:front_end/Screen/Home_Screen.dart';
 import 'package:get/get.dart';
 
 class HomeTabView extends StatelessWidget {

@@ -15,8 +15,8 @@ const double DEFAULT_HEAD_FONT_SIZE = 40;
 const double DEFAULT_TEXT_FONT_SIZE = 25;
 const double DEFAULT_BUTTON_FONT_SIZE = 30;
 
-const String HOST = '175.124.93.223:3000';
+const String HOST = '175.197.24.70:3000';
 
-//175.124.93.223
-//61.82.182.149 직접연결
+//175.197.24.70
+//61.82.182.149 원격연결
 

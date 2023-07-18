@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/cookie.dart';
-import 'package:front_end/Test/TempTag.dart';
+import 'package:front_end/Component/Cookie.dart';
+import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
 
 class TagController extends GetxController {

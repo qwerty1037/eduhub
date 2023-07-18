@@ -1,12 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-import 'package:front_end/Component/FolderTreeview.dart';
-import 'package:front_end/Controller/Default_Tab_Body.controller.dart';
+import 'package:front_end/Component/Folder_Treeview.dart';
+import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
 
 import 'package:front_end/Controller/Folder_Controller.dart';
-import 'package:front_end/Controller/tab.controller.dart';
-import 'package:front_end/Screen/PdfViewerScreen.dart';
-import 'package:front_end/Screen/TagManagementScreen.dart';
+import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
+import 'package:front_end/Screen/Tag_Management_Screen.dart';
 import 'package:get/get.dart';
 
 class DefaultTabBody extends StatelessWidget {

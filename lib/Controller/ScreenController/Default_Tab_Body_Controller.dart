@@ -3,12 +3,12 @@ import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 
 import 'package:get/get.dart';
 
 class DefaultTabBodyController extends GetxController {
+  late String tagName;
   Container workingSpaceWidget = Container(
     color: Colors.white,
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
@@ -29,7 +29,7 @@ class DefaultTabBodyController extends GetxController {
   ///현재 탭 안에서 만들어진 컨트롤러들을 제거하는 함수
   Future<void> deleteWorkingSpaceController() async {
     savedWorkingSpace = null;
-    String tag = Get.find<TabController>().getCurrentTabKey();
+    String tag = tagName;
     await Get.delete<PdfSaveController>(tag: tag);
     await Get.delete<PdfViewerScreenController>(tag: "Problem$tag");
     await Get.delete<PdfViewerScreenController>(tag: "Answer$tag");

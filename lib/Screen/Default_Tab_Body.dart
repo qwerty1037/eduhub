@@ -15,19 +15,21 @@ class DefaultTabBody extends StatelessWidget {
   DefaultTabBody({super.key, this.workingSpace});
   final FlyoutController _flyoutController = FlyoutController();
   TabController tabController = Get.find<TabController>();
-
+  late DefaultTabBodyController firstController;
+  late String tagName;
   @override
   Widget build(BuildContext context) {
-    DefaultTabBodyController firstController = Get.put(
-        DefaultTabBodyController(),
-        tag: tabController.getCurrentTabKey());
+    tagName = tabController.getNewTabKey();
+    firstController = Get.put(DefaultTabBodyController(), tag: tagName);
+
     if (workingSpace != null) {
-      firstController.workingSpaceWidget = Container(child: workingSpace);
+      firstController.changeWorkingSpace(workingSpace!);
     }
+    firstController.tagName = tagName;
     FolderController foldercontroller = Get.find<FolderController>();
 
     return GetBuilder<DefaultTabBodyController>(
-      tag: tabController.getCurrentTabKey(),
+      tag: tagName,
       builder: (controller) {
         return Column(
           children: [
@@ -44,8 +46,7 @@ class DefaultTabBody extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width / 6,
-                      child: FolderTreeView(
-                          foldercontroller, tabController.getCurrentTabKey()),
+                      child: FolderTreeView(foldercontroller, tagName),
                     ),
                   ),
                   Container(

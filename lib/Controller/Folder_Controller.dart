@@ -2,6 +2,10 @@ import 'dart:convert';
 
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
+import 'package:front_end/Component/Problem_List.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Test/Folder_Example_Data.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +14,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 ///폴더 관련 데이터를 처리하는 컨트롤러
 class FolderController extends GetxController {
   List<TreeViewItem> totalfolders = [];
-  RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
+  List<TreeViewItem> firstFolders = <TreeViewItem>[];
 
   Future<void> receiveData() async {
     final url = Uri.parse('http://$HOST/api/data/user_database');
@@ -135,5 +139,63 @@ class FolderController extends GetxController {
             },
           ),
         ));
+  }
+
+  Future<void> makeProblemListInNewTab(TreeViewItem item) async {
+    final problemUrl =
+        Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
+
+    final response = await http.get(
+      problemUrl,
+      headers: await sendCookieToBackend(),
+    );
+    if (response.statusCode ~/ 100 == 2) {
+      final jsonResponse = jsonDecode(response.body);
+
+      final problems = jsonResponse['problem_list'];
+
+      TabController tabController = Get.find<TabController>();
+      tabController.isHomeScreen.value = false;
+      DefaultTabBody generatedTab = DefaultTabBody(
+        workingSpace: ProblemList(
+          targetFolder: item,
+          folderName: item.value["name"],
+          problems: problems,
+        ),
+      );
+      Tab newTab = tabController.addTab(generatedTab, item.value["name"]);
+      tabController.tabs.add(newTab);
+      tabController.currentTabIndex.value = tabController.tabs.length - 1;
+    } else {
+      debugPrint(response.statusCode.toString());
+      debugPrint("폴더 직속 문제 받기 오류 발생");
+    }
+  }
+
+  Future<void> makeProblemListInCurrentTab(
+      TreeViewItem item, String tagName) async {
+    DefaultTabBodyController workingSpaceController =
+        Get.find<DefaultTabBodyController>(tag: tagName);
+
+    final problemUrl =
+        Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
+
+    final response = await http.get(
+      problemUrl,
+      headers: await sendCookieToBackend(),
+    );
+    if (response.statusCode ~/ 100 == 2) {
+      await workingSpaceController.deleteWorkingSpaceController();
+      final jsonResponse = jsonDecode(response.body);
+      final problems = jsonResponse['problem_list'];
+      workingSpaceController.changeWorkingSpace(ProblemList(
+        targetFolder: item,
+        folderName: item.value["name"],
+        problems: problems,
+      ));
+    } else {
+      debugPrint(response.statusCode.toString());
+      debugPrint("폴더 직속 문제 받기 오류 발생");
+    }
   }
 }

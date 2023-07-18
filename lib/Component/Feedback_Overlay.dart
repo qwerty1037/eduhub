@@ -123,6 +123,8 @@ void createFeedbackOverlay({
                                       debugPrint(
                                           response.statusCode.toString());
                                       debugPrint("피드백 전송 완료");
+                                      Get.delete<FeedbackController>();
+                                      Navigator.pop(context);
                                     } else {
                                       debugPrint(
                                           response.statusCode.toString());

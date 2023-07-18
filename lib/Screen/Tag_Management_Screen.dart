@@ -4,10 +4,12 @@ import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';
+import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class TagManagementScreen extends StatelessWidget {
   TagManagementScreen({super.key});
-  final tagController = Get.put(TagController());
+  final tagController =
+      Get.put(TagController(), tag: Get.find<t.TabController>().getTabKey());
 
   Widget saveButtonField() {
     return TextButton(

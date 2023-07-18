@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ProblemListController extends GetxController {
-  List<dynamic> problemList = [].obs;
+  List<dynamic> problemList = [];
   List<List<dynamic>> savedProblemArray = [];
 
   RxList<dynamic> currentPageProblems = [].obs;
@@ -38,7 +38,6 @@ class ProblemListController extends GetxController {
 
   @override
   void onInit() async {
-    // TODO: implement onInit
     super.onInit();
 
     lastButton = (problemList.length - 1) ~/ 16 + 1;
@@ -47,12 +46,6 @@ class ProblemListController extends GetxController {
     }
     makePageButton();
     await fetchPageData();
-  }
-
-  @override
-  void dispose() {
-    currentPageProblems.clear();
-    super.dispose();
   }
 
   void resetVariable(TreeViewItem targetFolder, List<dynamic> problems) async {

@@ -19,11 +19,11 @@ class PdfViewerScreen extends StatefulWidget {
 class _PdfScreenState extends State<PdfViewerScreen> {
   final DefaultTabBodyController _defaultTabBodyController =
       Get.find<DefaultTabBodyController>(
-          tag: Get.find<t.TabController>().getCurrentTabKey());
+          tag: Get.find<t.TabController>().getTabKey());
   final controllerProblem = Get.put(PdfViewerScreenController(),
-      tag: "Problem${Get.find<t.TabController>().getCurrentTabKey()}");
+      tag: "Problem${Get.find<t.TabController>().getTabKey()}");
   final controllerAnswer = Get.put(PdfViewerScreenController(),
-      tag: "Answer${Get.find<t.TabController>().getCurrentTabKey()}");
+      tag: "Answer${Get.find<t.TabController>().getTabKey()}");
 
   @override
   Widget build(BuildContext context) {

@@ -10,9 +10,9 @@ import 'package:front_end/Controller/Tab_Controller.dart' as t;
 class PdfSaveScreen extends StatelessWidget {
   final DefaultTabBodyController _defaultTabBodyController =
       Get.find<DefaultTabBodyController>(
-          tag: Get.find<t.TabController>().getCurrentTabKey());
+          tag: Get.find<t.TabController>().getTabKey());
   final controller = Get.put(PdfSaveController(),
-      tag: Get.find<t.TabController>().getCurrentTabKey());
+      tag: Get.find<t.TabController>().getTabKey());
 
   @override
   PdfSaveScreen(Uint8List image1, Uint8List image2, {super.key}) {

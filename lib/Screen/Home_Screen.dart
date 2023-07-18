@@ -175,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                                   textcontroller.text, newFolderId, null);
                           folderController.totalfolders.add(newFolder);
                           folderController.firstFolders.add(newFolder);
-                          folderController.firstFolders.refresh();
+                          folderController.update();
                           controller.isFolderEmpty = false;
                           textcontroller.text = "";
                           displayInfoBar(

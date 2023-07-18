@@ -82,4 +82,16 @@ class TabController extends GetxController {
   String getCurrentTabKey() {
     return tabs[currentTabIndex.value].key.toString();
   }
+
+  String getNewTabKey() {
+    return Key(tagNumber.toString()).toString();
+  }
+
+  String getTabKey() {
+    if (currentTabIndex.value == -1) {
+      return getNewTabKey();
+    } else {
+      return getCurrentTabKey();
+    }
+  }
 }

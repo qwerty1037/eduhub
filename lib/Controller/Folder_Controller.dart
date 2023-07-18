@@ -10,7 +10,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 ///폴더 관련 데이터를 처리하는 컨트롤러
 class FolderController extends GetxController {
   List<TreeViewItem> totalfolders = [];
-  List<TreeViewItem> firstFolders = <TreeViewItem>[];
+  RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
 
   Future<void> receiveData() async {
     final url = Uri.parse('http://$HOST/api/data/user_database');

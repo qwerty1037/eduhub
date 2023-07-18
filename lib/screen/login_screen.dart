@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:front_end/Component/Default/Config.dart';
 
-import 'package:front_end/Controller/Login_Screen_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Login_Screen_Controller.dart';
 import 'package:front_end/Controller/Register_Info_Controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';

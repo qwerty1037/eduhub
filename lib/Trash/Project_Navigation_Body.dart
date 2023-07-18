@@ -27,8 +27,10 @@ class ProjectNavigationBody extends StatelessWidget {
                     ),
                   ),
                   items: [
-                    MenuFlyoutItem(text: const Text('프로젝트 이름 변경'), onPressed: () {}),
-                    MenuFlyoutItem(text: const Text('프로젝트 삭제'), onPressed: () {}),
+                    MenuFlyoutItem(
+                        text: const Text('프로젝트 이름 변경'), onPressed: () {}),
+                    MenuFlyoutItem(
+                        text: const Text('프로젝트 삭제'), onPressed: () {}),
                     MenuFlyoutItem(text: const Text('팀 정보'), onPressed: () {}),
                   ]),
               Row(

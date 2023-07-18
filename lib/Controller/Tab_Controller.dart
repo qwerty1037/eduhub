@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:get/get.dart';
 

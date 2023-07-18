@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Feedback_Overlay.dart';
 import 'package:front_end/Component/Home_Treeview.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';
-import 'package:front_end/Component/Cookie.dart';
+import 'package:front_end/Component/Default/Cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
-import 'package:front_end/Controller/Home_Screen_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
@@ -18,7 +17,7 @@ import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
-  final tabController = Get.put(TabController());
+  final tabController = Get.find<TabController>();
 
   HomeScreen({super.key});
 
@@ -42,39 +41,7 @@ class HomeScreen extends StatelessWidget {
               ),
               menuCommandBar(context, homeScreenController),
               const Spacer(),
-              FlyoutTarget(
-                controller: _flyoutController,
-                child: IconButton(
-                    icon: const Icon(
-                      FluentIcons.status_circle_question_mark,
-                      size: 30,
-                      color: DEFAULT_DARK_COLOR,
-                    ),
-                    onPressed: () {
-                      _flyoutController.showFlyout(builder: ((context) {
-                        return MenuFlyout(
-                          items: [
-                            MenuFlyoutItem(
-                              text: const Text("유튜브로 사용법 보기"),
-                              onPressed: () {},
-                            ),
-                            const MenuFlyoutSeparator(),
-                            MenuFlyoutItem(
-                              text: const Text("언어 변경"),
-                              onPressed: () {},
-                            ),
-                            const MenuFlyoutSeparator(),
-                            MenuFlyoutItem(
-                              text: const Text("피드백 보내기"),
-                              onPressed: () {
-                                createFeedbackOverlay(context: context);
-                              },
-                            ),
-                          ],
-                        );
-                      }));
-                    }),
-              )
+              questionMarkButton(flyoutController: _flyoutController)
             ],
           ),
         ),
@@ -88,57 +55,12 @@ class HomeScreen extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   decoration: const BoxDecoration(
-                      border: Border(
-                          right: BorderSide(color: Colors.black, width: 0.5))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        color: Colors.yellow,
-                        height: 70,
-                        child: Center(
-                          child: Button(
-                            child: const Text("로그아웃(프로필)"),
-                            onPressed: () async {
-                              const FlutterSecureStorage storage =
-                                  FlutterSecureStorage();
-                              await storage.delete(key: "uid");
-                              await storage.delete(key: "access_token");
-                              await storage.delete(key: "refresh_token");
-                              Get.deleteAll();
-                              // final TotalController totalController =
-                              //     Get.find<TotalController>();
-                              // totalController.isLoginSuccess = false;
-                            },
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        height: 40,
-                        color: const Color.fromARGB(100, 50, 49, 48),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              FluentIcons.recent,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "최근 기록 페이지",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                      homeScreenController.isFolderEmpty.isTrue
-                          ? NewFolderButton(
-                              context, folderController, homeScreenController)
-                          : HomeTreeView()
-                    ],
+                    border: Border(
+                      right: BorderSide(color: Colors.black, width: 0.5),
+                    ),
                   ),
+                  child: leftDashboard(
+                      homeScreenController, context, folderController),
                 ),
               ),
               Expanded(
@@ -151,6 +73,52 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Column leftDashboard(HomeScreenController homeScreenController,
+      BuildContext context, FolderController folderController) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          color: Colors.yellow,
+          height: 70,
+          child: Center(
+            child: Button(
+              child: const Text("로그아웃(프로필)"),
+              onPressed: () async {
+                homeScreenController.logout();
+              },
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          height: 40,
+          color: const Color.fromARGB(100, 50, 49, 48),
+          child: const Row(
+            children: [
+              Icon(
+                FluentIcons.recent,
+                size: 20,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "최근 기록 페이지",
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        GetBuilder<HomeScreenController>(builder: (controller) {
+          return homeScreenController.isFolderEmpty
+              ? NewFolderButton(context, folderController, homeScreenController)
+              : HomeTreeView();
+        })
       ],
     );
   }
@@ -207,9 +175,8 @@ class HomeScreen extends StatelessWidget {
                                   textcontroller.text, newFolderId, null);
                           folderController.totalfolders.add(newFolder);
                           folderController.firstFolders.add(newFolder);
-
                           folderController.firstFolders.refresh();
-                          controller.isFolderEmpty.value = false;
+                          controller.isFolderEmpty = false;
                           textcontroller.text = "";
                           displayInfoBar(
                             context,
@@ -262,8 +229,6 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {
-            TabController tabController = Get.find<TabController>();
-
             DefaultTabBody generatedTab =
                 DefaultTabBody(workingSpace: const PdfViewerScreen());
             Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
@@ -333,7 +298,6 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {
-            TabController tabController = Get.find<TabController>();
             tabController.isHomeScreen.value = false;
             DefaultTabBody generatedTab =
                 DefaultTabBody(workingSpace: TagManagementScreen());
@@ -348,6 +312,52 @@ class HomeScreen extends StatelessWidget {
     return CommandBar(
       primaryItems: menuCommandBarItems,
       overflowBehavior: CommandBarOverflowBehavior.noWrap,
+    );
+  }
+}
+
+class questionMarkButton extends StatelessWidget {
+  const questionMarkButton({
+    super.key,
+    required FlyoutController flyoutController,
+  }) : _flyoutController = flyoutController;
+
+  final FlyoutController _flyoutController;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlyoutTarget(
+      controller: _flyoutController,
+      child: IconButton(
+          icon: const Icon(
+            FluentIcons.status_circle_question_mark,
+            size: 30,
+            color: DEFAULT_DARK_COLOR,
+          ),
+          onPressed: () {
+            _flyoutController.showFlyout(builder: ((context) {
+              return MenuFlyout(
+                items: [
+                  MenuFlyoutItem(
+                    text: const Text("유튜브로 사용법 보기"),
+                    onPressed: () {},
+                  ),
+                  const MenuFlyoutSeparator(),
+                  MenuFlyoutItem(
+                    text: const Text("언어 변경"),
+                    onPressed: () {},
+                  ),
+                  const MenuFlyoutSeparator(),
+                  MenuFlyoutItem(
+                    text: const Text("피드백 보내기"),
+                    onPressed: () {
+                      createFeedbackOverlay(context: context);
+                    },
+                  ),
+                ],
+              );
+            }));
+          }),
     );
   }
 }

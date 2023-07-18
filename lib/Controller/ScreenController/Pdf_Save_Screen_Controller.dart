@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:korea_regexp/korea_regexp.dart';
-import '../Test/Temp_Tag.dart';
+import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:http/http.dart' as http;
 
 class PdfSaveController extends GetxController {

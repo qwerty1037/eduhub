@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Problem_List.dart';
-import 'package:front_end/Component/Cookie.dart';
-import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Component/Default/Cookie.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -201,14 +201,11 @@ FlyoutTarget FolderTreeView(FolderController controller, String tagName) {
             final jsonResponse = jsonDecode(response.body);
 
             final problems = jsonResponse['problem_list'];
-
-            workingSpaceController.workingSpaceWidget.value = Container(
-              child: ProblemList(
-                targetFolder: item,
-                folderName: item.value["name"],
-                problems: problems,
-              ),
-            );
+            workingSpaceController.changeWorkingSpace(ProblemList(
+              targetFolder: item,
+              folderName: item.value["name"],
+              problems: problems,
+            ));
           } else {
             debugPrint(response.statusCode.toString());
             debugPrint("폴더 직속 문제 받기 오류 발생");

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Pdf_Save_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
 import 'package:front_end/Component/Default/Default_Key_Text.dart';

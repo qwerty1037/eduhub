@@ -1,10 +1,11 @@
 ///Screen: File_Drag_and_Drop.
 import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:front_end/Controller/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Screen/Pdf_Save_Screen.dart';
 import 'package:get/get.dart';
-import '../Controller/Pdf_Viewer_Screen_Controller.dart';
+
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 

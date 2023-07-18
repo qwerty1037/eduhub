@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Controller/Pdf_Save_Controller.dart';
-import 'package:front_end/Controller/Pdf_Viewer_Screen_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';

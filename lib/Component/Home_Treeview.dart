@@ -4,7 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Problem_List.dart';
-import 'package:front_end/Component/Cookie.dart';
+import 'package:front_end/Component/Default/Cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';

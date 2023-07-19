@@ -5,7 +5,7 @@ import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:get/get.dart';
 
 class TabController extends GetxController {
-  RxInt currentTabIndex = 0.obs;
+  RxInt currentTabIndex = (-1).obs;
   RxList<Tab> tabs = <Tab>[].obs;
   RxBool isHomeScreen = true.obs;
   int tagNumber = 0;
@@ -13,11 +13,12 @@ class TabController extends GetxController {
   ///새로운 탭을 추가하는 함수, body와 탭 이름을 변수로 둘 수 있음.
   Tab addTab(Widget body, String? text) {
     Tab? newTab;
+    Key newKey = Key(tagNumber.toString());
     newTab = Tab(
-      key: Key(tagNumber.toString()),
+      key: newKey,
       text: Text(
         text ?? "New Tab",
-        style: const TextStyle(color: DEFAULT_LIGHT_COLOR),
+        style: const TextStyle(color: DEFAULT_DARK_COLOR),
       ),
       icon: const Icon(
         FluentIcons.file_template,
@@ -25,15 +26,15 @@ class TabController extends GetxController {
       body: body,
       onClosed: () {
         tabs.remove(newTab);
-        if (currentTabIndex > 0) {
-          currentTabIndex--;
-        }
-        if (currentTabIndex == 0) {
+
+        currentTabIndex--;
+
+        if (currentTabIndex == -1) {
           isHomeScreen.value = true;
         }
-        Get.find<DefaultTabBodyController>().deleteWorkingSpaceController();
-        Get.delete<DefaultTabBodyController>(
-            tag: Key(tagNumber.toString()).toString());
+        Get.find<DefaultTabBodyController>(tag: newKey.toString())
+            .deleteWorkingSpaceController();
+        Get.delete<DefaultTabBodyController>(tag: newKey.toString());
       },
     );
     tagNumber++;
@@ -45,7 +46,7 @@ class TabController extends GetxController {
     newTab = Tab(
       text: Text(
         newName,
-        style: const TextStyle(color: DEFAULT_LIGHT_COLOR),
+        style: const TextStyle(color: DEFAULT_DARK_COLOR),
       ),
       icon: tab.icon,
       body: tab.body,
@@ -79,19 +80,19 @@ class TabController extends GetxController {
     currentTabIndex.value = tabs.length - 1;
   }
 
-  String getCurrentTabKey() {
+  String _getCurrentTabKey() {
     return tabs[currentTabIndex.value].key.toString();
   }
 
-  String getNewTabKey() {
+  String _getNewTabKey() {
     return Key(tagNumber.toString()).toString();
   }
 
   String getTabKey() {
     if (currentTabIndex.value == -1) {
-      return getNewTabKey();
+      return _getNewTabKey();
     } else {
-      return getCurrentTabKey();
+      return _getCurrentTabKey();
     }
   }
 }

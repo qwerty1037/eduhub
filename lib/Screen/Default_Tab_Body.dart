@@ -5,6 +5,7 @@ import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
@@ -19,7 +20,7 @@ class DefaultTabBody extends StatelessWidget {
   late String tagName;
   @override
   Widget build(BuildContext context) {
-    tagName = tabController.getNewTabKey();
+    tagName = tabController.getTabKey();
     firstController = Get.put(DefaultTabBodyController(), tag: tagName);
 
     if (workingSpace != null) {
@@ -130,10 +131,10 @@ class DefaultTabBody extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () async {
-            await controller.deleteWorkingSpaceController();
             createHighlightOverlay(
                 context: context,
-                controller: controller,
+                controller:
+                    Get.put(SearchScreenController(), tag: controller.tagName),
                 tabController: tabController);
           },
         ),

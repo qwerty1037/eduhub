@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:front_end/Component/Default/Default_TextBox.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Search_Screen.dart';
 import 'dart:ui';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 import 'package:fluent_ui/fluent_ui.dart' as f;
+import 'package:get/get.dart';
 
 void createHighlightOverlay({
   required BuildContext context,
-  required controller,
+  required SearchScreenController controller,
   required t.TabController tabController,
 }) {
   OverlayState? overlayState = Overlay.of(context);
@@ -60,16 +63,33 @@ void createHighlightOverlay({
                   suffix: const Icon(Icons.arrow_forward_ios),
                   onChanged: (value) => controller.searchBarController.text,
                   onEditingComplete: () {
-                    tabController.isHomeScreen.value = false;
-                    DefaultTabBody tabBody =
-                        DefaultTabBody(workingSpace: SearchScreen());
-                    f.Tab newTab =
-                        tabController.addTab(tabBody, "SearchScreen");
-                    tabController.tabs.add(newTab);
-                    tabController.currentTabIndex.value =
-                        tabController.tabs.length - 1;
-                    controller.searchBarController.text = "";
-                    overlayEntry?.remove();
+                    //홈화면에서 눌렀을때
+                    if (tabController.currentTabIndex.value == -1) {
+                      tabController.isHomeScreen.value = false;
+                      DefaultTabBody tabBody =
+                          DefaultTabBody(workingSpace: SearchScreen());
+                      f.Tab newTab =
+                          tabController.addTab(tabBody, "SearchScreen");
+                      tabController.tabs.add(newTab);
+                      tabController.currentTabIndex.value =
+                          tabController.tabs.length - 1;
+                      controller.searchBarController.text = "";
+                      overlayEntry?.remove();
+                    } else {
+                      controller.searchBarController.text = "";
+                      overlayEntry?.remove();
+                      Get.find<DefaultTabBodyController>(
+                              tag: tabController.getTabKey())
+                          .deleteWorkingSpaceController();
+
+                      Get.find<DefaultTabBodyController>(
+                              tag: tabController.getTabKey())
+                          .changeWorkingSpace(SearchScreen());
+
+                      f.Tab currentTab = tabController
+                          .tabs[tabController.currentTabIndex.value];
+                      tabController.renameTab(currentTab, "SearchScreen");
+                    }
                   },
                 ),
               ),

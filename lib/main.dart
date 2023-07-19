@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => TotalController());
-    Get.lazyPut(() => FolderController());
+    Get.put(TotalController());
+    Get.put(FolderController());
     return GetBuilder<TotalController>(
       builder: (controller) {
         if (controller.isLoginSuccess) {
@@ -36,7 +36,8 @@ class MyApp extends StatelessWidget {
           // FolderController folderController = Get.find<FolderController>();
           // folderController.makeExampleData();
           //====================================================================================================
-          return const FluentApp(
+          return FluentApp(
+            themeMode: ThemeMode.light,
             debugShowCheckedModeBanner: false,
             home: HomeTabView(),
           );

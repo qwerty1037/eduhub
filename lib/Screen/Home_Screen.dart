@@ -8,6 +8,7 @@ import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
+import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
@@ -281,7 +282,8 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             createHighlightOverlay(
                 context: context,
-                controller: controller,
+                controller: Get.put(SearchScreenController(),
+                    tag: tabController.getTabKey()),
                 tabController: tabController);
           },
         ),

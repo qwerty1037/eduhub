@@ -8,33 +8,7 @@ import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class TagManagementScreen extends StatelessWidget {
   TagManagementScreen({super.key});
-  final tagController =
-      Get.put(TagController(), tag: Get.find<t.TabController>().getTabKey());
-
-  Widget saveButtonField() {
-    return TextButton(
-      onPressed: () {
-        tagController.sendTags();
-      },
-      child: Container(
-        height: 50,
-        width: double.infinity,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          color: Colors.blueAccent,
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        child: const Text(
-          "태그 저장하기",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
+  final tagController = Get.put(TagController(), tag: Get.find<t.TabController>().getTabKey());
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +40,7 @@ class TagManagementScreen extends StatelessWidget {
               },
               controller: tagController.tagsInputController,
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Obx(() {
               return Align(
                 alignment: Alignment.centerLeft,
@@ -79,11 +51,37 @@ class TagManagementScreen extends StatelessWidget {
                 ),
               );
             }),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             saveButtonField(),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Button that saves inputed Tags
+  ///
+  /// When button clicked, http requests to backend
+  Widget saveButtonField() {
+    return TextButton(
+      onPressed: () {
+        tagController.sendTags();
+      },
+      child: Container(
+        height: 50,
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        child: const Text(
+          "태그 저장하기",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

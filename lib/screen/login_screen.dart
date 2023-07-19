@@ -1,19 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:front_end/Component/Default/Config.dart';
-
 import 'package:front_end/Controller/ScreenController/Login_Screen_Controller.dart';
 import 'package:front_end/Controller/Register_Info_Controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 
 ///로그인 화면
 class LoginScreen extends StatelessWidget {
-  TextEditingController idController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   loginScreenController loginController = Get.put(loginScreenController());
   LoginScreen({super.key});
 
@@ -33,6 +26,60 @@ class LoginScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Stack leftScreen() {
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/login.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color.fromARGB(172, 68, 137, 255), Color.fromARGB(119, 68, 137, 255)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    FontAwesomeIcons.baby,
+                    size: 15.0,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    "Baby Teacher",
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+              const Spacer(),
+              loginMainDescription(),
+              const Spacer(),
+            ],
+          ),
+        )
+      ],
     );
   }
 
@@ -77,8 +124,8 @@ class LoginScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              registerInfoButton(),
-              const inquiryButton(),
+              RegisterInfoButton(),
+              const InquiryButton(),
             ],
           )
         ],
@@ -86,65 +133,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Stack leftScreen() {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/login.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(172, 68, 137, 255),
-                Color.fromARGB(119, 68, 137, 255)
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(
-                    FontAwesomeIcons.baby,
-                    size: 15.0,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Text(
-                    "Baby Teacher",
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                    ),
-                  )
-                ],
-              ),
-              const Spacer(),
-              loginMainDescription(),
-              const Spacer(),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  ElevatedButton loginTryButton(
-      loginScreenController loginController, BuildContext context) {
+  ElevatedButton loginTryButton(loginScreenController loginController, BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -152,46 +141,7 @@ class LoginScreen extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(16.0)),
       onPressed: () async {
-        final url = Uri.parse('http://$HOST/api/auth/login');
-        final Map<String, dynamic> requestBody = {
-          "user_id": idController.text,
-          "user_password": passwordController.text
-        };
-        final headers = {"Content-type": "application/json"};
-
-        final response = await http.post(
-          url,
-          headers: headers,
-          body: jsonEncode(requestBody),
-        );
-        if (response.statusCode == 200) {
-          String? cookieList = response.headers["set-cookie"];
-
-          String? uid = loginController.getCookieValue(cookieList!, "uid");
-          String? accessToken =
-              loginController.getCookieValue(cookieList, "access_token");
-          String? refreshToken =
-              loginController.getCookieValue(cookieList, "refresh_token");
-
-          if (uid == null || accessToken == null || refreshToken == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("쿠키 저장 오류"),
-              ),
-            );
-          } else {
-            await loginController.saveCookieToSecureStorage(
-                uid, accessToken, refreshToken);
-
-            loginController.loginSuccess();
-          }
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("등록되지 않은 아이디입니다"),
-            ),
-          );
-        }
+        loginController.logInRequest(context);
       },
       child: const Text("로그인"),
     );
@@ -199,7 +149,7 @@ class LoginScreen extends StatelessWidget {
 
   TextField passwordTextfield() {
     return TextField(
-      controller: passwordController,
+      controller: loginController.passwordController,
       obscureText: true,
       style: const TextStyle(
         color: Colors.white,
@@ -237,7 +187,7 @@ class LoginScreen extends StatelessWidget {
 
   TextField loginTextfield() {
     return TextField(
-      controller: idController,
+      controller: loginController.idController,
       style: const TextStyle(
         color: Colors.white,
       ),
@@ -334,8 +284,8 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class inquiryButton extends StatelessWidget {
-  const inquiryButton({
+class InquiryButton extends StatelessWidget {
+  const InquiryButton({
     super.key,
   });
 
@@ -358,12 +308,11 @@ class inquiryButton extends StatelessWidget {
   }
 }
 
-class registerInfoButton extends StatelessWidget {
-  registerInfoButton({
+class RegisterInfoButton extends StatelessWidget {
+  RegisterInfoButton({
     super.key,
   });
-  final RegisterInfoController _registerInfoController =
-      Get.put(RegisterInfoController());
+  final RegisterInfoController _registerInfoController = Get.put(RegisterInfoController());
 
   @override
   Widget build(BuildContext context) {
@@ -394,11 +343,9 @@ class registerInfoButton extends StatelessWidget {
                             ),
                             registerTextfield(controller.idController, false),
                             ...betweenTextfield("비밀번호"),
-                            registerTextfield(
-                                controller.passwordController, true),
+                            registerTextfield(controller.passwordController, true),
                             ...betweenTextfield("비밀번호 확인"),
-                            registerTextfield(
-                                controller.checkPasswordController, true),
+                            registerTextfield(controller.checkPasswordController, true),
                             ...betweenTextfield("이름"),
                             registerTextfield(controller.nameController, false),
                             const SizedBox(
@@ -409,16 +356,12 @@ class registerInfoButton extends StatelessWidget {
                             ...betweenTextfield("나이"),
                             registerTextfield(controller.ageController, false),
                             ...betweenTextfield("이메일"),
-                            registerTextfield(
-                                controller.emailController, false),
+                            registerTextfield(controller.emailController, false),
                             ...betweenTextfield("닉네임"),
-                            registerTextfield(
-                                controller.nicknameController, false),
+                            registerTextfield(controller.nicknameController, false),
                             SizedBox(
                               height: 20,
-                              child: controller.matchpassword
-                                  ? const Text("")
-                                  : const Text("비밀번호가 다릅니다"),
+                              child: controller.matchpassword ? const Text("") : const Text("비밀번호가 다릅니다"),
                             ),
                             SizedBox(
                               height: 20,

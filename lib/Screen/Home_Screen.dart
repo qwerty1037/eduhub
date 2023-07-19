@@ -78,133 +78,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          color: Colors.yellow,
-          height: 70,
-          child: Center(
-            child: Button(
-              child: const Text("로그아웃(프로필)"),
-              onPressed: () async {
-                homeScreenController.logout();
-              },
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          height: 40,
-          color: const Color.fromARGB(100, 50, 49, 48),
-          child: const Row(
-            children: [
-              Icon(
-                FluentIcons.recent,
-                size: 20,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                "최근 기록 페이지",
-                style: TextStyle(fontSize: 12),
-              ),
-            ],
-          ),
-        ),
-        GetBuilder<HomeScreenController>(builder: (controller) {
-          return homeScreenController.isFolderEmpty ? NewFolderButton(context, folderController, homeScreenController) : HomeTreeView();
-        })
-      ],
-    );
-  }
-
-  Button NewFolderButton(BuildContext context, FolderController folderController, HomeScreenController controller) {
-    return Button(
-        child: const Text("새폴더 만들기"),
-        onPressed: () async {
-          TextEditingController textcontroller = TextEditingController();
-          await showDialog(
-              context: context,
-              builder: (context) {
-                return ContentDialog(
-                  title: const Text("새폴더 이름을 정해주세요"),
-                  content: TextBox(
-                    highlightColor: Colors.transparent,
-                    controller: textcontroller,
-                  ),
-                  actions: [
-                    Button(
-                      child: const Text("취소"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        textcontroller.text = "";
-                      },
-                    ),
-                    FilledButton(
-                      child: const Text('확인'),
-                      onPressed: () async {
-                        Navigator.pop(context);
-
-                        final url = Uri.parse('http://$HOST/api/data/create_database');
-                        final Map<String, dynamic> requestBody = {"name": textcontroller.text, "parent_id": null};
-
-                        final response = await http.post(
-                          url,
-                          headers: await defaultHeader(httpContentType.json),
-                          body: jsonEncode(requestBody),
-                        );
-
-                        if (response.statusCode ~/ 100 == 2) {
-                          final jsonResponse = jsonDecode(response.body);
-                          debugPrint(jsonResponse.toString());
-                          final int newFolderId = jsonResponse['inserted_database'][0]["id"];
-
-                          TreeViewItem newFolder = folderController.makeFolderItem(textcontroller.text, newFolderId, null);
-                          folderController.totalfolders.add(newFolder);
-                          folderController.firstFolders.add(newFolder);
-                          folderController.update();
-                          controller.isFolderEmpty = false;
-                          textcontroller.text = "";
-                          displayInfoBar(
-                            context,
-                            builder: (context, close) {
-                              return InfoBar(
-                                severity: InfoBarSeverity.success,
-                                title: const Text('폴더 만들기 성공'),
-                                action: IconButton(
-                                  icon: const Icon(FluentIcons.clear),
-                                  onPressed: close,
-                                ),
-                              );
-                            },
-                          );
-                        } else {
-                          debugPrint(response.statusCode.toString());
-                          displayInfoBar(
-                            context,
-                            builder: (context, close) {
-                              return InfoBar(
-                                severity: InfoBarSeverity.warning,
-                                title: const Text('폴더 만들기 실패'),
-                                action: IconButton(
-                                  icon: const Icon(FluentIcons.clear),
-                                  onPressed: close,
-                                ),
-                              );
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                );
-              });
-        });
-  }
-
   Widget menuCommandBar(context, controller) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
@@ -302,6 +175,133 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Container(
+        color: Colors.yellow,
+        height: 70,
+        child: Center(
+          child: Button(
+            child: const Text("로그아웃(프로필)"),
+            onPressed: () async {
+              homeScreenController.logout();
+            },
+          ),
+        ),
+      ),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        height: 40,
+        color: const Color.fromARGB(100, 50, 49, 48),
+        child: const Row(
+          children: [
+            Icon(
+              FluentIcons.recent,
+              size: 20,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              "최근 기록 페이지",
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+      GetBuilder<HomeScreenController>(builder: (controller) {
+        return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : HomeTreeView();
+      })
+    ],
+  );
+}
+
+Button newFolderButton(BuildContext context, FolderController folderController, HomeScreenController controller) {
+  return Button(
+      child: const Text("새폴더 만들기"),
+      onPressed: () async {
+        TextEditingController textcontroller = TextEditingController();
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return ContentDialog(
+                title: const Text("새폴더 이름을 정해주세요"),
+                content: TextBox(
+                  highlightColor: Colors.transparent,
+                  controller: textcontroller,
+                ),
+                actions: [
+                  Button(
+                    child: const Text("취소"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      textcontroller.text = "";
+                    },
+                  ),
+                  FilledButton(
+                    child: const Text('확인'),
+                    onPressed: () async {
+                      Navigator.pop(context);
+
+                      final url = Uri.parse('http://$HOST/api/data/create_database');
+                      final Map<String, dynamic> requestBody = {"name": textcontroller.text, "parent_id": null};
+
+                      final response = await http.post(
+                        url,
+                        headers: await defaultHeader(httpContentType.json),
+                        body: jsonEncode(requestBody),
+                      );
+
+                      if (response.statusCode ~/ 100 == 2) {
+                        final jsonResponse = jsonDecode(response.body);
+                        debugPrint(jsonResponse.toString());
+                        final int newFolderId = jsonResponse['inserted_database'][0]["id"];
+
+                        TreeViewItem newFolder = folderController.makeFolderItem(textcontroller.text, newFolderId, null);
+                        folderController.totalfolders.add(newFolder);
+                        folderController.firstFolders.add(newFolder);
+                        folderController.update();
+                        controller.isFolderEmpty = false;
+                        textcontroller.text = "";
+                        displayInfoBar(
+                          context,
+                          builder: (context, close) {
+                            return InfoBar(
+                              severity: InfoBarSeverity.success,
+                              title: const Text('폴더 만들기 성공'),
+                              action: IconButton(
+                                icon: const Icon(FluentIcons.clear),
+                                onPressed: close,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        debugPrint(response.statusCode.toString());
+                        displayInfoBar(
+                          context,
+                          builder: (context, close) {
+                            return InfoBar(
+                              severity: InfoBarSeverity.warning,
+                              title: const Text('폴더 만들기 실패'),
+                              action: IconButton(
+                                icon: const Icon(FluentIcons.clear),
+                                onPressed: close,
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ],
+              );
+            });
+      });
+}
+
 class questionMarkButton extends StatelessWidget {
   const questionMarkButton({
     super.key,
@@ -315,13 +315,14 @@ class questionMarkButton extends StatelessWidget {
     return FlyoutTarget(
       controller: _flyoutController,
       child: IconButton(
-          icon: const Icon(
-            FluentIcons.status_circle_question_mark,
-            size: 30,
-            color: DEFAULT_DARK_COLOR,
-          ),
-          onPressed: () {
-            _flyoutController.showFlyout(builder: ((context) {
+        icon: const Icon(
+          FluentIcons.status_circle_question_mark,
+          size: 30,
+          color: DEFAULT_DARK_COLOR,
+        ),
+        onPressed: () {
+          _flyoutController.showFlyout(
+            builder: ((context) {
               return MenuFlyout(
                 items: [
                   MenuFlyoutItem(
@@ -342,8 +343,10 @@ class questionMarkButton extends StatelessWidget {
                   ),
                 ],
               );
-            }));
-          }),
+            }),
+          );
+        },
+      ),
     );
   }
 }

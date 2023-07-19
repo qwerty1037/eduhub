@@ -2,12 +2,9 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/Cookie.dart';
 
-import 'package:front_end/Component/HttpConfig.dart';
-import 'package:front_end/Component/Problem_List.dart';
+import 'package:front_end/Component/Default/HttpConfig.dart';
 
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,7 +42,9 @@ class FolderTreeView extends StatelessWidget {
             text: const Text("폴더 삭제"),
             onPressed: () async {
               final url = Uri.parse('http://$HOST/api/data/delete_database');
-              final Map<String, dynamic> requestBody = {"delete_database_id": item.value["id"]};
+              final Map<String, dynamic> requestBody = {
+                "delete_database_id": item.value["id"]
+              };
               final response = await http.post(
                 url,
                 headers: await defaultHeader(httpContentType.json),
@@ -53,11 +52,15 @@ class FolderTreeView extends StatelessWidget {
               );
               if (response.statusCode ~/ 100 == 2) {
                 if (item.value["parent"] != null) {
-                  TreeViewItem deleteTargetParent = controller.totalfolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
+                  TreeViewItem deleteTargetParent = controller.totalfolders
+                      .firstWhere((element) =>
+                          item.value["parent"] == element.value["id"]);
                   deleteTargetParent.children.remove(item);
-                  TreeViewItem deleteTarget = controller.totalfolders.firstWhere((element) => item == element);
+                  TreeViewItem deleteTarget = controller.totalfolders
+                      .firstWhere((element) => item == element);
                 } else {
-                  controller.firstFolders.removeWhere((element) => item == element);
+                  controller.firstFolders
+                      .removeWhere((element) => item == element);
                 }
                 controller.update();
                 displayInfoBar(
@@ -124,23 +127,38 @@ class FolderTreeView extends StatelessWidget {
                           FilledButton(
                             child: const Text('확인'),
                             onPressed: () async {
-                              final url = Uri.parse('http://$HOST/api/data/create_database');
-                              final Map<String, dynamic> requestBody = {"name": textcontroller.text, "parent_id": item.value["id"]};
+                              final url = Uri.parse(
+                                  'http://$HOST/api/data/create_database');
+                              final Map<String, dynamic> requestBody = {
+                                "name": textcontroller.text,
+                                "parent_id": item.value["id"]
+                              };
 
                               final response = await http.post(
                                 url,
-                                headers: await defaultHeader(httpContentType.json),
+                                headers:
+                                    await defaultHeader(httpContentType.json),
                                 body: jsonEncode(requestBody),
                               );
 
                               if (response.statusCode ~/ 100 == 2) {
                                 final jsonResponse = jsonDecode(response.body);
                                 debugPrint(jsonResponse.toString());
-                                final int newFolderId = jsonResponse['inserted_database'][0]["id"];
-                                final int parentId = jsonResponse['inserted_database'][0]["parent_id"];
-                                TreeViewItem newFolder = controller.makeFolderItem(textcontroller.text, newFolderId, parentId);
+                                final int newFolderId =
+                                    jsonResponse['inserted_database'][0]["id"];
+                                final int parentId =
+                                    jsonResponse['inserted_database'][0]
+                                        ["parent_id"];
+                                TreeViewItem newFolder =
+                                    controller.makeFolderItem(
+                                        textcontroller.text,
+                                        newFolderId,
+                                        parentId);
                                 controller.totalfolders.add(newFolder);
-                                TreeViewItem parentFolder = controller.totalfolders.firstWhere((element) => element.value["id"] == parentId);
+                                TreeViewItem parentFolder = controller
+                                    .totalfolders
+                                    .firstWhere((element) =>
+                                        element.value["id"] == parentId);
                                 parentFolder.children.add(newFolder);
 
                                 controller.update();

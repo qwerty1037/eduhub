@@ -1,14 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/Cookie.dart';
-import 'package:front_end/Component/HttpConfig.dart';
+import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ProblemList extends StatelessWidget {
-  ProblemList({super.key, required this.targetFolder, required this.folderName, required this.problems});
+  ProblemList(
+      {super.key,
+      required this.targetFolder,
+      required this.folderName,
+      required this.problems});
   String folderName;
   TreeViewItem targetFolder;
   List<dynamic> problems;
@@ -22,7 +25,8 @@ class ProblemList extends StatelessWidget {
           return ProblemListController(problems);
         }, tag: tag),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.none && snapshot.connectionState != ConnectionState.waiting) {
+          if (snapshot.connectionState != ConnectionState.none &&
+              snapshot.connectionState != ConnectionState.waiting) {
             return Column(
               children: [
                 Expanded(
@@ -42,10 +46,14 @@ class ProblemList extends StatelessWidget {
                             tag: tag,
                             builder: (controller) {
                               return Button(
-                                child: controller.isAllProblems.isTrue ? const Text("폴더 바로 아래 문제보기") : const Text("폴더 아래 모든 문제보기"),
+                                child: controller.isAllProblems.isTrue
+                                    ? const Text("폴더 바로 아래 문제보기")
+                                    : const Text("폴더 아래 모든 문제보기"),
                                 onPressed: () async {
-                                  controller.resetVariable(targetFolder, problems);
-                                  controller.isAllProblems.value = !controller.isAllProblems.value;
+                                  controller.resetVariable(
+                                      targetFolder, problems);
+                                  controller.isAllProblems.value =
+                                      !controller.isAllProblems.value;
                                 },
                               );
                             })
@@ -65,20 +73,24 @@ class ProblemList extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(30),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: twoColumnProblemList(controller),
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: controller.pageButton,
                                     )
                                   ],
                                 ),
                               ),
                             ),
-                            Expanded(flex: 1, child: controller.problemImageViewer.value)
+                            Expanded(
+                                flex: 1,
+                                child: controller.problemImageViewer.value)
                           ],
                         );
                       }),
@@ -99,7 +111,8 @@ class ProblemList extends StatelessWidget {
         children: controller.currentPageProblems.map((element) {
           return Button(
             onPressed: () async {
-              final url = Uri.parse('http://$HOST/api/data/image/${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
+              final url = Uri.parse(
+                  'http://$HOST/api/data/image/${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
 
               final response = await http.get(
                 url,
@@ -122,7 +135,10 @@ class ProblemList extends StatelessWidget {
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text(element["name"]), Text("난이도 : ${element["level"]}")],
+                  children: [
+                    Text(element["name"]),
+                    Text("난이도 : ${element["level"]}")
+                  ],
                 ),
               ),
             ),

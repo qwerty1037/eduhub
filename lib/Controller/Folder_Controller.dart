@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/Cookie.dart';
 import 'package:front_end/Component/Problem_List.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
-import 'package:front_end/Component/HttpConfig.dart';
+import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Test/Folder_Example_Data.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -90,7 +89,8 @@ class FolderController extends GetxController {
             ),
           ),
           child: DragTarget(
-            builder: (BuildContext context, List<dynamic> candidateData, List<dynamic> rejectedData) {
+            builder: (BuildContext context, List<dynamic> candidateData,
+                List<dynamic> rejectedData) {
               return Text(name);
             },
             onWillAccept: (Map<dynamic, dynamic>? data) {
@@ -101,8 +101,12 @@ class FolderController extends GetxController {
               }
             },
             onAccept: (Map<String, dynamic> data) async {
-              final url = Uri.parse('http://$HOST/api/data/update_database_directory');
-              final Map<String, dynamic> requestBody = {"target_database_id": data["id"], "destination_database_id": parent};
+              final url =
+                  Uri.parse('http://$HOST/api/data/update_database_directory');
+              final Map<String, dynamic> requestBody = {
+                "target_database_id": data["id"],
+                "destination_database_id": parent
+              };
 
               final response = await http.post(
                 url,
@@ -110,16 +114,21 @@ class FolderController extends GetxController {
                 body: jsonEncode(requestBody),
               );
               if (response.statusCode ~/ 100 == 2) {
-                TreeViewItem targetFolder = totalfolders.firstWhere((element) => element.value["id"] == data["id"]);
-                TreeViewItem thisFolder = totalfolders.firstWhere((element) => element.value["id"] == id);
+                TreeViewItem targetFolder = totalfolders
+                    .firstWhere((element) => element.value["id"] == data["id"]);
+                TreeViewItem thisFolder = totalfolders
+                    .firstWhere((element) => element.value["id"] == id);
                 thisFolder.children.add(targetFolder);
                 thisFolder.expanded = true;
 
                 if (data["parent"] != null) {
-                  TreeViewItem parentItem = totalfolders.firstWhere((element) => element.value["id"] == data["parent"]);
-                  parentItem.children.removeWhere((element) => element.value["id"] == data["id"]);
+                  TreeViewItem parentItem = totalfolders.firstWhere(
+                      (element) => element.value["id"] == data["parent"]);
+                  parentItem.children.removeWhere(
+                      (element) => element.value["id"] == data["id"]);
                 } else {
-                  firstFolders.removeWhere((element) => element.value["id"] == data["id"]);
+                  firstFolders.removeWhere(
+                      (element) => element.value["id"] == data["id"]);
                 }
                 data["parent"] = id;
                 update();
@@ -133,7 +142,8 @@ class FolderController extends GetxController {
   }
 
   Future<void> makeProblemListInNewTab(TreeViewItem item) async {
-    final problemUrl = Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
+    final problemUrl =
+        Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,
@@ -162,10 +172,13 @@ class FolderController extends GetxController {
     }
   }
 
-  Future<void> makeProblemListInCurrentTab(TreeViewItem item, String tagName) async {
-    DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
+  Future<void> makeProblemListInCurrentTab(
+      TreeViewItem item, String tagName) async {
+    DefaultTabBodyController workingSpaceController =
+        Get.find<DefaultTabBodyController>(tag: tagName);
 
-    final problemUrl = Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
+    final problemUrl =
+        Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,

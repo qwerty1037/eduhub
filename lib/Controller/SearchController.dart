@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/cookie.dart';
+import 'package:front_end/Component/Default/Cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -78,15 +78,12 @@ class SearchScreenController extends GetxController {
       }
     }
 
-    final url = Uri.parse('http://$HOST/api/data/user_database');
+    final url = Uri.parse('http://$HOST/api/data/problem/database_all/${searchedFolderId[0]}');
     final response = await http.get(
       url,
       headers: await sendCookieToBackend(),
     );
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      final databaseFolder = jsonResponse['database_folders'];
-      folderController.makeFolderListInfo(databaseFolder);
+    if (response.statusCode ~/ 100 == 2) {
     } else {
       debugPrint("폴더 리스트 받기 오류 발생");
     }

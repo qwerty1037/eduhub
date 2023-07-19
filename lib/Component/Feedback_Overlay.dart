@@ -5,6 +5,8 @@ import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/Default_Key_Text.dart';
 import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
+
+import 'package:front_end/Component/HttpConfig.dart';
 import 'package:front_end/Controller/Feedback_Controller.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
@@ -108,7 +110,8 @@ void createFeedbackOverlay({
                                   onPressed: () async {
                                     final url = Uri.parse(
                                         'http://$HOST/api/data/feedback');
-                                    final headers = await sendCookieToBackend();
+                                    final headers = await defaultHeader(
+                                        httpContentType.json);
                                     final Map<String, dynamic> requestBody = {
                                       "title": controller.titleController.text,
                                       "feedback":

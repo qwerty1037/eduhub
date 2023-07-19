@@ -6,6 +6,7 @@ import 'package:front_end/Component/Problem_List.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
+import 'package:front_end/Component/HttpConfig.dart';
 import 'package:front_end/Test/Folder_Example_Data.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class FolderController extends GetxController {
 
     final response = await http.get(
       url,
-      headers: await sendCookieToBackend(),
+      headers: await defaultHeader(httpContentType.json),
     );
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
@@ -110,7 +111,7 @@ class FolderController extends GetxController {
 
               final response = await http.post(
                 url,
-                headers: await sendCookieToBackend(),
+                headers: await defaultHeader(httpContentType.json),
                 body: jsonEncode(requestBody),
               );
               if (response.statusCode ~/ 100 == 2) {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
+import 'package:front_end/Component/HttpConfig.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -60,7 +61,7 @@ class ProblemListController extends GetxController {
 
       final response = await http.get(
         problemUrl,
-        headers: await sendCookieToBackend(),
+        headers: await defaultHeader(httpContentType.json),
       );
       if (response.statusCode ~/ 100 == 2) {
         final jsonResponse = jsonDecode(response.body);
@@ -157,7 +158,7 @@ class ProblemListController extends GetxController {
 
     final response = await http.post(
       url,
-      headers: await sendCookieToBackend(),
+      headers: await defaultHeader(httpContentType.json),
       body: jsonEncode(requestBody),
     );
     if (response.statusCode ~/ 100 == 2) {

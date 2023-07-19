@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:front_end/Component/HttpConfig.dart';
 
 Future<Map<String, String>> sendCookieToBackend() async {
   const storage = FlutterSecureStorage();
@@ -6,9 +7,9 @@ Future<Map<String, String>> sendCookieToBackend() async {
   final accessToken = await storage.read(key: 'access_token');
   final refreshToken = await storage.read(key: 'refresh_token');
 
-  return {
+  Map<String, String> header = {
     "cookie":
         "access_token=$accessToken; refresh_token=$refreshToken; uid=$uid",
-    "Content-type": "application/json",
   };
+  return header;
 }

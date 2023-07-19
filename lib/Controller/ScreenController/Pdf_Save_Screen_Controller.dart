@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Cookie.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Tag_Model.dart';
 import 'package:get/get.dart';
@@ -29,8 +30,6 @@ class PdfSaveController extends GetxController {
   }
 
   Future<int> sendRegisterInfo() async {
-    final url = Uri.parse('http://$HOST/api/data/create_problem');
-
     List<String> selectedTags = <String>[];
     for (int i = 0; i < tagsList.length; i++) {
       if (tagsList[i].isSelected == true) {
@@ -40,6 +39,8 @@ class PdfSaveController extends GetxController {
     String capturedFileNameProblem =
         '${problemNameController.text}_problem.jpeg';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
+
+    final url = Uri.parse('http://$HOST/api/data/create_problem');
 
     var request = http.MultipartRequest('POST', url);
 
@@ -59,27 +60,25 @@ class PdfSaveController extends GetxController {
           MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
-    final Map<String, dynamic> requestBody = {
+    final Map<String, dynamic> requestField = {
       "problem_name": problemNameController.text,
       "parent_database": 1,
-      //"directory": "\"{directorytext}\"",
-      "tags": selectedTags
-          .join(), //애초에 TAG class가 있고 거기에서 id만 List<LongLongInt>로 보내기
+      "tags": selectedTags.join(),
       "level": difficultySliderValue.round(),
-      //"problem_image": [multipartFileProblem, multipartFileAnswer],
       "problem_string": capturedFileNameProblem,
       "answer_string": capturedFileNameAnswer,
     };
+
     final Map<String, String> temp = {};
-    requestBody.forEach((key, value) {
+    requestField.forEach((key, value) {
       temp.addAll(Map.fromEntries([MapEntry(key, value.toString())]));
     });
 
-    final headers = {"Content-type": "multipart/form-data"};
     request.files.add(multipartFileProblem);
     request.files.add(multipartFileAnswer);
-
     request.fields.addAll(temp);
+
+    request.headers.addAll(await sendCookieToBackendMultiPart());
 
     final response = await request.send();
     print(response.statusCode);

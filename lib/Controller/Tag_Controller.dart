@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
+import 'package:front_end/Component/HttpConfig.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -55,7 +56,7 @@ class TagController extends GetxController {
 
     final response = await http.post(
       url,
-      headers: await sendCookieToBackend(),
+      headers: await defaultHeader(httpContentType.json),
       body: jsonEncode(requestBody),
     );
     print(response.statusCode);

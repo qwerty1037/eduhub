@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Feedback_Overlay.dart';
 import 'package:front_end/Component/Home_Treeview.dart';
+import 'package:front_end/Component/HttpConfig.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
@@ -161,7 +162,7 @@ class HomeScreen extends StatelessWidget {
 
                         final response = await http.post(
                           url,
-                          headers: await sendCookieToBackend(),
+                          headers: await defaultHeader(httpContentType.json),
                           body: jsonEncode(requestBody),
                         );
 

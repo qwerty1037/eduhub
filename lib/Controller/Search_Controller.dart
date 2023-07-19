@@ -61,8 +61,8 @@ class SearchScreenController extends GetxController {
     ),
   ];
 
-  int getDifficulty() {
-    return difficulty.value;
+  int? getDifficulty() {
+    return difficulty.value != 999 ? difficulty.value : null;
   }
 
   String getContent() {

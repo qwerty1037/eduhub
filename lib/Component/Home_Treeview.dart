@@ -201,10 +201,10 @@ class HomeTreeView extends StatelessWidget {
 
                     final response = await http.post(
                       url,
-                      headers: await sendCookieToBackend(),
+                      headers: await defaultHeader(httpContentType.json),
                       body: jsonEncode(requestBody),
                     );
-
+                    print(response.statusCode);
                     if (isHttpRequestSuccess(response)) {
                       final jsonResponse = jsonDecode(response.body);
 

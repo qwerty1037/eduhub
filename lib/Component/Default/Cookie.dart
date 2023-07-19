@@ -8,8 +8,7 @@ Future<Map<String, String>> sendCookieToBackend() async {
   final refreshToken = await storage.read(key: 'refresh_token');
 
   Map<String, String> header = {
-    "cookie":
-        "access_token=$accessToken; refresh_token=$refreshToken; uid=$uid",
+    "cookie": "access_token=$accessToken; refresh_token=$refreshToken; uid=$uid",
   };
   return header;
 }

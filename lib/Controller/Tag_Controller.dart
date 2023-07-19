@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
 import 'package:front_end/Component/HttpConfig.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
@@ -38,7 +39,6 @@ class TagController extends GetxController {
   }
 
   void sendTags() async {
-    String HOST = "61.82.182.149:3000";
     final url = Uri.parse('http://$HOST/api/data/create_tag_list');
 
     List<String> selectedTags = <String>[];
@@ -51,8 +51,6 @@ class TagController extends GetxController {
     final Map<String, dynamic> requestBody = {
       "tag_name_list": selectedTags,
     };
-
-    final headers = {"Content-type": "application/json"};
 
     final response = await http.post(
       url,

@@ -103,7 +103,7 @@ class ProblemList extends StatelessWidget {
 
               final response = await http.get(
                 url,
-                headers: await sendCookieToBackend(),
+                headers: await defaultHeader(httpContentType.json),
               );
               if (response.statusCode ~/ 100 == 2) {
                 controller.problemImageViewer.value = Container(

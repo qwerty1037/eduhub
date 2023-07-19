@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 
 class DefaultTextField extends StatelessWidget {
   const DefaultTextField(
-      {super.key,
-      this.labelText,
-      required this.hintText,
-      this.onChanged,
-      this.controller,
-      this.onEditingComplete,
-      this.maxLines,
-      this.minLines});
+      {super.key, this.labelText, required this.hintText, this.onChanged, this.controller, this.onEditingComplete, this.maxLines, this.minLines});
 
   final String? labelText;
   final String hintText;
@@ -41,8 +34,8 @@ class DefaultTextField extends StatelessWidget {
       onChanged: onChanged,
       controller: controller,
       onEditingComplete: onEditingComplete,
-      maxLines: maxLines,
-      minLines: minLines,
+      maxLines: maxLines ?? 1,
+      minLines: minLines ?? 1,
     );
   }
 }

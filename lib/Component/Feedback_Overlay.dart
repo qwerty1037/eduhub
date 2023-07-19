@@ -86,8 +86,7 @@ void createFeedbackOverlay({
                                 DefaultTextField(
                                   controller: controller.titleController,
                                   hintText: "제목을 입력하세요",
-                                  onChanged: (value) =>
-                                      controller.titleController.text,
+                                  onChanged: (value) => controller.titleController.text,
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -97,8 +96,7 @@ void createFeedbackOverlay({
                                   child: DefaultTextField(
                                     controller: controller.contentController,
                                     hintText: "피드백 내용을 입력하세요",
-                                    onChanged: (value) =>
-                                        controller.contentController.text,
+                                    onChanged: (value) => controller.contentController.text,
                                     minLines: 1,
                                     maxLines: 8,
                                   ),
@@ -108,14 +106,11 @@ void createFeedbackOverlay({
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    final url = Uri.parse(
-                                        'http://$HOST/api/data/feedback');
-                                    final headers = await defaultHeader(
-                                        httpContentType.json);
+                                    final url = Uri.parse('http://$HOST/api/data/feedback');
+                                    final headers = await defaultHeader(httpContentType.json);
                                     final Map<String, dynamic> requestBody = {
                                       "title": controller.titleController.text,
-                                      "feedback":
-                                          controller.contentController.text,
+                                      "feedback": controller.contentController.text,
                                     };
                                     final response = await http.post(
                                       url,
@@ -123,14 +118,12 @@ void createFeedbackOverlay({
                                       body: jsonEncode(requestBody),
                                     );
                                     if (response.statusCode ~/ 100 == 2) {
-                                      debugPrint(
-                                          response.statusCode.toString());
+                                      debugPrint(response.statusCode.toString());
                                       debugPrint("피드백 전송 완료");
                                       Get.delete<FeedbackController>();
                                       Navigator.pop(context);
                                     } else {
-                                      debugPrint(
-                                          response.statusCode.toString());
+                                      debugPrint(response.statusCode.toString());
                                       debugPrint("피드백 전송 오류");
                                     }
                                   },
@@ -140,8 +133,7 @@ void createFeedbackOverlay({
                                     alignment: Alignment.center,
                                     decoration: const BoxDecoration(
                                       color: Colors.blueAccent,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
+                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                     ),
                                     child: const Text(
                                       "이렇게 저장하기",

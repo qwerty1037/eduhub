@@ -107,7 +107,7 @@ class LoginScreen extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          passwordTextfield(),
+          passwordTextfield(context),
           const SizedBox(
             height: 16,
           ),
@@ -147,10 +147,13 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  TextField passwordTextfield() {
+  TextField passwordTextfield(BuildContext context) {
     return TextField(
       controller: loginController.passwordController,
       obscureText: true,
+      onEditingComplete: () {
+        loginController.logInRequest(context);
+      },
       style: const TextStyle(
         color: Colors.white,
       ),

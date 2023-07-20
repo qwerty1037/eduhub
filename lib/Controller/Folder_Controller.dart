@@ -23,11 +23,11 @@ class FolderController extends GetxController {
       url,
       headers: await defaultHeader(httpContentType.json),
     );
-    if (response.statusCode == 200) {
+    if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
       final databaseFolder = jsonResponse['database_folders'];
       makeFolderListInfo(databaseFolder);
-    } else {
+    } else if (isHttpRequestFailure(response)) {
       debugPrint("폴더 리스트 받기 오류 발생");
     }
   }
@@ -108,7 +108,7 @@ class FolderController extends GetxController {
                 headers: await defaultHeader(httpContentType.json),
                 body: jsonEncode(requestBody),
               );
-              if (response.statusCode ~/ 100 == 2) {
+              if (isHttpRequestSuccess(response)) {
                 TreeViewItem targetFolder = totalFolders.firstWhere((element) => element.value["id"] == data["id"]);
                 TreeViewItem thisFolder = totalFolders.firstWhere((element) => element.value["id"] == id);
                 thisFolder.children.add(targetFolder);
@@ -123,7 +123,7 @@ class FolderController extends GetxController {
                 data["parent"] = id;
                 update();
                 debugPrint("성공");
-              } else {
+              } else if (isHttpRequestFailure(response)) {
                 debugPrint("실패");
               }
             },
@@ -138,7 +138,7 @@ class FolderController extends GetxController {
       problemUrl,
       headers: await defaultHeader(httpContentType.json),
     );
-    if (response.statusCode ~/ 100 == 2) {
+    if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
 
       final problems = jsonResponse['problem_list'];
@@ -155,7 +155,7 @@ class FolderController extends GetxController {
       Tab newTab = tabController.addTab(generatedTab, item.value["name"]);
       tabController.tabs.add(newTab);
       tabController.currentTabIndex.value = tabController.tabs.length - 1;
-    } else {
+    } else if (isHttpRequestFailure(response)) {
       debugPrint(response.statusCode.toString());
       debugPrint("폴더 직속 문제 받기 오류 발생");
     }
@@ -170,7 +170,7 @@ class FolderController extends GetxController {
       problemUrl,
       headers: await defaultHeader(httpContentType.json),
     );
-    if (response.statusCode ~/ 100 == 2) {
+    if (isHttpRequestSuccess(response)) {
       await workingSpaceController.deleteWorkingSpaceController();
       final jsonResponse = jsonDecode(response.body);
       final problems = jsonResponse['problem_list'];
@@ -179,7 +179,7 @@ class FolderController extends GetxController {
         folderName: item.value["name"],
         problems: problems,
       ));
-    } else {
+    } else if (isHttpRequestFailure(response)) {
       debugPrint(response.statusCode.toString());
       debugPrint("폴더 직속 문제 받기 오류 발생");
     }

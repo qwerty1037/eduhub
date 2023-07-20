@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Component/Default/cookie.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+/// GetX Controller that controls SearchScreen
 class SearchScreenController extends GetxController {
   TextEditingController searchBarController = TextEditingController();
 
@@ -81,9 +83,9 @@ class SearchScreenController extends GetxController {
     final url = Uri.parse('http://$HOST/api/data/user_database');
     final response = await http.get(
       url,
-      headers: await sendCookieToBackend(),
+      headers: await defaultHeader(httpContentType.json),
     );
-    if (response.statusCode == 200) {
+    if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
       final databaseFolder = jsonResponse['database_folders'];
       folderController.makeFolderListInfo(databaseFolder);

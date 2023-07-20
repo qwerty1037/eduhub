@@ -27,7 +27,6 @@ class HomeTabView extends StatelessWidget {
                 tabs: controller.tabs,
                 tabWidthBehavior: TabWidthBehavior.equal,
                 closeButtonVisibility: CloseButtonVisibilityMode.onHover,
-                showScrollButtons: true,
                 onChanged: (index) {
                   controller.isHomeScreen.value = false;
                   controller.currentTabIndex.value = index;

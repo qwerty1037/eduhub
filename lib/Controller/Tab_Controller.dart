@@ -11,7 +11,7 @@ class TabController extends GetxController {
   int tagNumber = 0;
 
   ///새로운 탭을 추가하는 함수, body와 탭 이름을 변수로 둘 수 있음.
-  Tab addTab(Widget body, String? text) {
+  Tab addTab(final Widget body, String? text) {
     Tab? newTab;
     Key newKey = Key(tagNumber.toString());
     newTab = Tab(
@@ -24,16 +24,21 @@ class TabController extends GetxController {
         FluentIcons.file_template,
       ),
       body: body,
-      onClosed: () {
-        if (currentTabIndex == -1) {
+      onClosed: () async {
+        tabs.remove(newTab);
+        final int indexToDelete = tabs.indexOf(newTab);
+        debugPrint(indexToDelete.toString());
+        if (indexToDelete <= currentTabIndex.value) {
+          currentTabIndex.value--;
+        }
+        if (currentTabIndex.value == -1) {
           isHomeScreen.value = true;
         }
-        Get.find<DefaultTabBodyController>(tag: newKey.toString())
+        debugPrint(newKey.toString());
+        await Get.find<DefaultTabBodyController>(tag: newKey.toString())
             .deleteWorkingSpaceController();
-        Get.delete<DefaultTabBodyController>(tag: newKey.toString());
-        tabs.remove(newTab);
 
-        currentTabIndex--;
+        Get.delete<DefaultTabBodyController>(tag: newKey.toString());
       },
     );
     tagNumber++;
@@ -61,6 +66,7 @@ class TabController extends GetxController {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
+
     final item = tabs.removeAt(oldIndex);
     tabs.insert(newIndex, item);
 
@@ -72,10 +78,10 @@ class TabController extends GetxController {
   }
 
   void onNewPressed() {
-    isHomeScreen.value = false;
     DefaultTabBody generatedTab = DefaultTabBody();
     Tab newTab = addTab(generatedTab, null);
     tabs.add(newTab);
+    isHomeScreen.value = false;
     currentTabIndex.value = tabs.length - 1;
   }
 

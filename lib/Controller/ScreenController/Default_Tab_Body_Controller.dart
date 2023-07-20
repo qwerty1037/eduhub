@@ -21,7 +21,7 @@ class DefaultTabBodyController extends GetxController {
   }
 
   ///default tab body의 workingspace부분을 바꾸는 method
-  void changeWorkingSpace(Widget newWorkingSpace) {
+  Future<void> changeWorkingSpace(Widget newWorkingSpace) async {
     workingSpaceWidget = Container(child: newWorkingSpace);
     update();
   }

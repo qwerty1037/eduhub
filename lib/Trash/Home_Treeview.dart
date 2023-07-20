@@ -12,7 +12,7 @@ class HomeTreeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<FolderController>(
+    return GetX<FolderController>(
       builder: (folderController) {
         return FlyoutTarget(
           controller: flyoutController,

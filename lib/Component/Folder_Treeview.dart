@@ -15,7 +15,7 @@ class FolderTreeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<FolderController>(
+    return GetX<FolderController>(
       builder: (controller) {
         return FlyoutTarget(
           controller: flyoutController,

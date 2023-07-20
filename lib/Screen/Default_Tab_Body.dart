@@ -14,20 +14,19 @@ class DefaultTabBody extends StatelessWidget {
     tagName = tabController.getTabKey();
     defaultTabBodyController =
         Get.put(DefaultTabBodyController(), tag: tagName);
-  }
-
-  final Widget? workingSpace;
-  final TabController tabController = Get.find<TabController>();
-  late DefaultTabBodyController defaultTabBodyController;
-  late String tagName;
-
-  @override
-  Widget build(BuildContext context) {
     if (workingSpace != null) {
       defaultTabBodyController.changeWorkingSpace(workingSpace!);
     }
     defaultTabBodyController.tagName = tagName;
+  }
 
+  final Widget? workingSpace;
+  final TabController tabController = Get.find<TabController>();
+  late final DefaultTabBodyController defaultTabBodyController;
+  late final String tagName;
+
+  @override
+  Widget build(BuildContext context) {
     return GetBuilder<DefaultTabBodyController>(
       tag: tagName,
       builder: (controller) {

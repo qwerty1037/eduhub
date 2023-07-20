@@ -65,7 +65,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
             folderController.firstFolders
                 .removeWhere((element) => item == element);
           }
-          folderController.update();
+          folderController.firstFolders.refresh();
           displayInfoBar(
             context,
             builder: (context, close) {
@@ -160,7 +160,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
               parentFolder.children.add(newFolder);
             }
 
-            controller.update();
+            folderController.firstFolders.refresh();
           }
         }
       },
@@ -223,7 +223,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
                               (element) => element.value["id"] == parentId);
                       parentFolder.children.add(newFolder);
 
-                      controller.update();
+                      folderController.firstFolders.refresh();
                       newNameController.text = "";
                       displayInfoBar(
                         context,

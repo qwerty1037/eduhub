@@ -47,14 +47,25 @@ merge를 코드 리뷰할 때 끝내기 + monday.com에 할 리스트 다 작성
 
 ## Class : 사용하는 클래스를 모아둔 곳
 
-## Component : component 부분은 반복적인 구조를 쉽게 끌어다 쓰는 것이 중요 
+## Component : 스크린을 구성하는 컴포넌트나 공통으로 사용되는 함수/위젯 등을 담아두는 폴더. 하위 폴더로 Default폴더가 있다. 이 폴더에는 주로 공용으로 사용되는 함수/위젯 파일을 포함한다.
+
+
+    [Default 폴더 내부 파일]
     - Config.dart : 공통으로 사용되는 상수들 저장
         flutter에서 색상의 경우 세밀한 조정 필요시 Color(0xFFFFFFFF), 아닐시 Colors.black[100]같은 방식으로 사용 가능하다 
-        다양한 화면에 사용될 color와 fontsize, 백엔드 host 등을 설정해놓았다.
+        다양한 화면에 사용될 color와 fontsize, 백엔드 host 등을 설정해놓았다
             
-    
+    - Cookie.dart : 쿠키 관련 공통으로 사용되는 작업을 모아놓은 곳. 현재는 쿠키를 읽고 header형태로 반환하는 함수만 존재한다
+        <method>
+        sendCookieToBackend : 백엔드의 엔드포인트로 보낼 header부분에 들어갈 쿠키를 안전한 저장소에서 읽고 반환하는 함수
 
-    
+    - Applifecycle_Observer : flutter의 lifecycle을 감시하다가 앱이 일시정지되거나 종료시 쿠키를 삭제하는 옵저버이다. 추후 마지막 작업을 쿠키에 저장하는 코드가 추가될 것이다
+
+    - Folder_TreeView.dart : 만들어진 각각의 탭의 왼쪽 대시보드에 default로 들어가게될 폴더 treeview이다. 유저의 폴더 내용이 탭별로 모두 동일해야하므로 태그를 사용하지 않는 folder controller의 정보를 이용한다. onSecondaryTap과 Flyout을 이용하여 폴더 우클릭후 폴더삭제/새폴더/폴더 이름바꾸기 기능을 쓸수 있다.(FolderTreeView_MenuFlyout 파일에서 처리) 폴더를 그냥 클릭시 현재 탭의 작업창 부분에 해당 폴더에 속하는 문제 리스트가 뜨게 된다.
+
+    - FolderTreeView_MenuFlyout.dart : Folder_TreeView와 Home_TreeView에서 공통으로 사용되어 묶인 위젯이다. 우클릭시 폴더의 삭제, 새폴더 만들기, 이름 바꾸기 기능이 포함되어 있으며 추후 변경이 있을 예정이다.
+
+    - Home_Treeview : 로그인 후 첫 화면 또는 홈 아이콘 클릭시 나오는 홈페이지에서 대시보드 부분의   
     
 ## Controller : Getx 관련 패키지를 모아둔 곳
     - total.controller.dart : 앱 전체적으로 사용되는 전역변수들 모아두는 컨트롤러

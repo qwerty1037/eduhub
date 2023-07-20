@@ -1,12 +1,14 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/FolderTreeView_MenuFlyout.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 
+///각 탭의 대시보드에서 폴더 리스트를 보여줄 위젯
 class FolderTreeView extends StatelessWidget {
-  FolderTreeView(this.tagName, {super.key});
+  FolderTreeView({this.tagName, super.key});
 
-  String tagName;
+  String? tagName;
   final flyoutController = FlyoutController();
   final TextEditingController reNameController = TextEditingController();
   final TextEditingController newNameController = TextEditingController();
@@ -35,7 +37,11 @@ class FolderTreeView extends StatelessWidget {
             },
             onItemInvoked: (item, reason) async {
               if (reason == TreeViewItemInvokeReason.pressed) {
-                await controller.makeProblemListInCurrentTab(item, tagName);
+                if (Get.find<TabController>().isHomeScreen.value) {
+                  await controller.makeProblemListInNewTab(item);
+                } else {
+                  await controller.makeProblemListInCurrentTab(item, tagName!);
+                }
               }
             },
             items: controller.firstFolders,

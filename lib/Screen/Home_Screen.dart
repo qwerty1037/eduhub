@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Feedback_Overlay.dart';
-import 'package:front_end/Component/Home_Treeview.dart';
+import 'package:front_end/Component/Folder_Treeview.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
@@ -25,7 +25,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenController());
-    HomeScreenController homeScreenController = Get.find<HomeScreenController>();
+    HomeScreenController homeScreenController =
+        Get.find<HomeScreenController>();
 
     FolderController folderController = Get.find<FolderController>();
     return Column(
@@ -59,7 +60,8 @@ class HomeScreen extends StatelessWidget {
                       right: BorderSide(color: Colors.black, width: 0.5),
                     ),
                   ),
-                  child: leftDashboard(homeScreenController, context, folderController),
+                  child: leftDashboard(
+                      homeScreenController, context, folderController),
                 ),
               ),
               Expanded(
@@ -90,7 +92,8 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {
-            DefaultTabBody generatedTab = DefaultTabBody(workingSpace: const PdfViewerScreen());
+            DefaultTabBody generatedTab =
+                DefaultTabBody(workingSpace: const PdfViewerScreen());
             Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
 
             tabController.tabs.add(newTab);
@@ -140,7 +143,10 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             createHighlightOverlay(
-                context: context, controller: Get.put(SearchScreenController(), tag: tabController.getTabKey()), tabController: tabController);
+                context: context,
+                controller: Get.put(SearchScreenController(),
+                    tag: tabController.getTabKey()),
+                tabController: tabController);
           },
         ),
       ),
@@ -157,7 +163,8 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             tabController.isHomeScreen.value = false;
-            DefaultTabBody generatedTab = DefaultTabBody(workingSpace: TagManagementScreen());
+            DefaultTabBody generatedTab =
+                DefaultTabBody(workingSpace: TagManagementScreen());
             Tab newTab = tabController.addTab(generatedTab, "Generate Tags");
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
@@ -173,7 +180,8 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
+Column leftDashboard(HomeScreenController homeScreenController,
+    BuildContext context, FolderController folderController) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
@@ -210,13 +218,16 @@ Column leftDashboard(HomeScreenController homeScreenController, BuildContext con
         ),
       ),
       GetBuilder<HomeScreenController>(builder: (controller) {
-        return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : HomeTreeView();
+        return homeScreenController.isFolderEmpty
+            ? newFolderButton(context, folderController, homeScreenController)
+            : FolderTreeView();
       })
     ],
   );
 }
 
-Button newFolderButton(BuildContext context, FolderController folderController, HomeScreenController controller) {
+Button newFolderButton(BuildContext context, FolderController folderController,
+    HomeScreenController controller) {
   return Button(
       child: const Text("새폴더 만들기"),
       onPressed: () async {
@@ -243,8 +254,12 @@ Button newFolderButton(BuildContext context, FolderController folderController, 
                     onPressed: () async {
                       Navigator.pop(context);
 
-                      final url = Uri.parse('http://$HOST/api/data/create_database');
-                      final Map<String, dynamic> requestBody = {"name": textcontroller.text, "parent_id": null};
+                      final url =
+                          Uri.parse('http://$HOST/api/data/create_database');
+                      final Map<String, dynamic> requestBody = {
+                        "name": textcontroller.text,
+                        "parent_id": null
+                      };
 
                       final response = await http.post(
                         url,
@@ -255,9 +270,12 @@ Button newFolderButton(BuildContext context, FolderController folderController, 
                       if (response.statusCode ~/ 100 == 2) {
                         final jsonResponse = jsonDecode(response.body);
                         debugPrint(jsonResponse.toString());
-                        final int newFolderId = jsonResponse['inserted_database'][0]["id"];
+                        final int newFolderId =
+                            jsonResponse['inserted_database'][0]["id"];
 
-                        TreeViewItem newFolder = folderController.makeFolderItem(textcontroller.text, newFolderId, null);
+                        TreeViewItem newFolder =
+                            folderController.makeFolderItem(
+                                textcontroller.text, newFolderId, null);
                         folderController.totalFolders.add(newFolder);
                         folderController.firstFolders.add(newFolder);
                         folderController.update();

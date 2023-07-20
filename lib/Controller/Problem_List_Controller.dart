@@ -55,14 +55,13 @@ class ProblemListController extends GetxController {
     currentPageProblems.clear();
 
     if (!isAllProblems.value) {
-      final problemUrl = Uri.parse(
-          'http://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
+      final problemUrl = Uri.parse('http://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
 
       final response = await http.get(
         problemUrl,
         headers: await defaultHeader(httpContentType.json),
       );
-      if (response.statusCode ~/ 100 == 2) {
+      if (isHttpRequestSuccess(response)) {
         final jsonResponse = jsonDecode(response.body);
 
         final totalProblems = jsonResponse['problem_list'];
@@ -90,7 +89,7 @@ class ProblemListController extends GetxController {
           ),
         );
         await fetchPageData();
-      } else {
+      } else if (isHttpRequestFailure(response)) {
         debugPrint(response.statusCode.toString());
         debugPrint("폴더 전체 문제 받기 오류 발생");
       }
@@ -129,9 +128,7 @@ class ProblemListController extends GetxController {
       Button newButton = Button(
         child: Text(
           i.toString(),
-          style: TextStyle(
-              fontWeight:
-                  currentPage == i ? FontWeight.bold : FontWeight.normal),
+          style: TextStyle(fontWeight: currentPage == i ? FontWeight.bold : FontWeight.normal),
         ),
         onPressed: () async {
           if (savedProblemArray[i].isEmpty) {
@@ -149,8 +146,7 @@ class ProblemListController extends GetxController {
   }
 
   Future<void> fetchPageData() async {
-    final url =
-        Uri.parse('http://$HOST/api/data/problem/get_detail_problem_data');
+    final url = Uri.parse('http://$HOST/api/data/problem/get_detail_problem_data');
     final Map<String, dynamic> requestBody = {
       "problem_list": problemList.sublist(startIndex, endIndex),
     };
@@ -160,7 +156,7 @@ class ProblemListController extends GetxController {
       headers: await defaultHeader(httpContentType.json),
       body: jsonEncode(requestBody),
     );
-    if (response.statusCode ~/ 100 == 2) {
+    if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
       final problemList = jsonResponse['problem_detail'];
       currentPageProblems.value = problemList;

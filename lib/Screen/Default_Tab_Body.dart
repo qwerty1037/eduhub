@@ -1,10 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
-
-import 'package:front_end/Component/Folder_TreeView.dart';
+import 'package:front_end/Component/Folder_Treeview.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-
-import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
@@ -13,23 +10,23 @@ import 'package:get/get.dart';
 
 ///새로운 탭이 만들어질때 제작되는 틀. workingSpace 부분에 위젯을 넣음으로써 작업창 부분 초기화가 가능하다.
 class DefaultTabBody extends StatelessWidget {
-  Widget? workingSpace;
-  DefaultTabBody({super.key, this.workingSpace});
-  final FlyoutController _flyoutController = FlyoutController();
-  TabController tabController = Get.find<TabController>();
-  late DefaultTabBodyController firstController;
+  DefaultTabBody({super.key, this.workingSpace}) {
+    tagName = tabController.getTabKey();
+    defaultTabBodyController =
+        Get.put(DefaultTabBodyController(), tag: tagName);
+  }
+
+  final Widget? workingSpace;
+  final TabController tabController = Get.find<TabController>();
+  late DefaultTabBodyController defaultTabBodyController;
   late String tagName;
 
   @override
   Widget build(BuildContext context) {
-    tagName = tabController.getTabKey();
-    firstController = Get.put(DefaultTabBodyController(), tag: tagName);
-
     if (workingSpace != null) {
-      firstController.changeWorkingSpace(workingSpace!);
+      defaultTabBodyController.changeWorkingSpace(workingSpace!);
     }
-    firstController.tagName = tagName;
-    FolderController foldercontroller = Get.find<FolderController>();
+    defaultTabBodyController.tagName = tagName;
 
     return GetBuilder<DefaultTabBodyController>(
       tag: tagName,
@@ -49,7 +46,7 @@ class DefaultTabBody extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width / 6,
-                      child: FolderTreeView(tagName),
+                      child: FolderTreeView(tagName: tagName),
                     ),
                   ),
                   Container(

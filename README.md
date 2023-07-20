@@ -50,9 +50,9 @@ merge를 코드 리뷰할 때 끝내기 + monday.com에 할 리스트 다 작성
 ## Component : component 부분은 반복적인 구조를 쉽게 끌어다 쓰는 것이 중요 
     - Config.dart : 공통으로 사용되는 상수들 저장
         flutter에서 색상의 경우 세밀한 조정 필요시 Color(0xFFFFFFFF), 아닐시 Colors.black[100]같은 방식으로 사용 가능하다 
-        dark, light mode에서 사용될 color와 font size들을 현재 설정해 놓았다
+        다양한 화면에 사용될 color와 fontsize, 백엔드 host 등을 설정해놓았다.
             
-    - Profile.dart : id, project, mode를 변수로 가지고 있는 class. id는 필수이며 ColorMode는 enum타입으로 dark, light가 존재한다
+    
 
     
     

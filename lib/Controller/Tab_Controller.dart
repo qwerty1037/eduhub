@@ -25,16 +25,15 @@ class TabController extends GetxController {
       ),
       body: body,
       onClosed: () {
-        tabs.remove(newTab);
-
-        currentTabIndex--;
-
         if (currentTabIndex == -1) {
           isHomeScreen.value = true;
         }
         Get.find<DefaultTabBodyController>(tag: newKey.toString())
             .deleteWorkingSpaceController();
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
+        tabs.remove(newTab);
+
+        currentTabIndex--;
       },
     );
     tagNumber++;

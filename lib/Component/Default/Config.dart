@@ -18,5 +18,5 @@ const double DEFAULT_BUTTON_FONT_SIZE = 30;
 const String HOST = '175.124.93.223:3000';
 
 //175.197.24.70
-//61.82.182.149 원격연결
+//175.124.93.223 원격연결
 

@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+///저장된 쿠키를 읽고 Map<String,String>형식으로 담아 header로 쓸 수 있게 반환하는 메소드
 Future<Map<String, String>> sendCookieToBackend() async {
   const storage = FlutterSecureStorage();
   final uid = await storage.read(key: 'uid');

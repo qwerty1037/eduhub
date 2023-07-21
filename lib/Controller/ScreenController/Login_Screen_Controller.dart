@@ -9,10 +9,12 @@ import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+///로그인 관련 로직처리하는 컨트롤러
 class loginScreenController extends GetxController {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  ///쿠키 headder와 cookieName을 파라미터로 받아 이름에 해당하는 내용을 추출하는 함수
   String? getCookieValue(String cookieHeader, String cookieName) {
     if (cookieHeader.isNotEmpty) {
       List<String> cookies = cookieHeader.split(RegExp(r';|,'));
@@ -26,7 +28,9 @@ class loginScreenController extends GetxController {
     return null;
   }
 
-  Future<void> saveCookieToSecureStorage(String uid, String accessToken, String refreshToken) async {
+  ///쿠키를 안전한 보관소에 저장하는 함수
+  Future<void> saveCookieToSecureStorage(
+      String uid, String accessToken, String refreshToken) async {
     const storage = FlutterSecureStorage();
 
     await storage.write(key: 'uid', value: uid);
@@ -34,6 +38,7 @@ class loginScreenController extends GetxController {
     await storage.write(key: 'refresh_token', value: refreshToken);
   }
 
+  ///로그인 성공시 적용되는 로직으로 초기 데이터를 받아오고 탭뷰를 띄워주며 현재 컨트롤러 인스턴스를 삭제
   void loginSuccess() async {
     TotalController totalController = Get.find<TotalController>();
     FolderController folderController = Get.find<FolderController>();
@@ -43,9 +48,13 @@ class loginScreenController extends GetxController {
     Get.delete<loginScreenController>();
   }
 
+  ///백엔드에 로그인을 요청하는 함수로 성공시 쿠키를 저장하고 loginSuccess를 실행한다
   Future<void> logInRequest(BuildContext context) async {
     final url = Uri.parse('http://$HOST/api/auth/login');
-    final Map<String, dynamic> requestBody = {"user_id": idController.text, "user_password": passwordController.text};
+    final Map<String, dynamic> requestBody = {
+      "user_id": idController.text,
+      "user_password": passwordController.text
+    };
     final headers = {"Content-type": "application/json"};
 
     final response = await http.post(

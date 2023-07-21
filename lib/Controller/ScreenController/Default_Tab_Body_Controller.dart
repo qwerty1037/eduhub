@@ -3,12 +3,14 @@ import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
+import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 
 import 'package:get/get.dart';
 
+///각 탭을 관리하는 컨트롤러
 class DefaultTabBodyController extends GetxController {
-  late String tagName;
+  late final String tagName;
   Container workingSpaceWidget = Container(
     color: Colors.white,
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
@@ -16,12 +18,21 @@ class DefaultTabBodyController extends GetxController {
 
   Widget? savedWorkingSpace;
 
+  DefaultTabBodyController(Widget? workingSpace) {
+    final TabController tabController = Get.find<TabController>();
+    tagName = tabController.getNewTabKey();
+    if (workingSpace != null) {
+      changeWorkingSpace(workingSpace);
+    }
+  }
+
+  ///현재 작업창 내용을 저장하는 함수
   void saveThisWorkingSpace() {
     savedWorkingSpace = workingSpaceWidget;
   }
 
   ///default tab body의 workingspace부분을 바꾸는 method
-  Future<void> changeWorkingSpace(Widget newWorkingSpace) async {
+  void changeWorkingSpace(Widget newWorkingSpace) {
     workingSpaceWidget = Container(child: newWorkingSpace);
     update();
   }

@@ -6,10 +6,10 @@ import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+///ProblemList의 로직을 담당하는 컨트롤러
 class ProblemListController extends GetxController {
   List<dynamic> problemList = [];
   List<List<dynamic>> savedProblemArray = [];
-
   RxList<dynamic> currentPageProblems = [].obs;
   Rx<Widget> problemImageViewer = Container(
     decoration: const BoxDecoration(
@@ -27,7 +27,6 @@ class ProblemListController extends GetxController {
   int itemsPerPage = 16;
   late int startIndex;
   late int endIndex;
-
   int lastButton = 1;
   List<Button> pageButton = <Button>[];
 
@@ -48,6 +47,7 @@ class ProblemListController extends GetxController {
     await fetchPageData();
   }
 
+  ///폴더 직속문제 보기 / 폴더 아래 모든 문제 보기 버튼을 클릭했을때 내부 데이터를 새로 초기화하는 함수
   void resetVariable(TreeViewItem targetFolder, List<dynamic> problems) async {
     problemList.clear();
     savedProblemArray.clear();
@@ -55,7 +55,8 @@ class ProblemListController extends GetxController {
     currentPageProblems.clear();
 
     if (!isAllProblems.value) {
-      final problemUrl = Uri.parse('http://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
+      final problemUrl = Uri.parse(
+          'http://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
 
       final response = await http.get(
         problemUrl,
@@ -122,13 +123,16 @@ class ProblemListController extends GetxController {
     currentPageProblems.refresh();
   }
 
+  ///문제 리스트들의 페이지 버튼을 새로 만드는 함수
   void makePageButton() {
     for (int i = 1; i <= lastButton; i++) {
       savedProblemArray.add([]);
       Button newButton = Button(
         child: Text(
           i.toString(),
-          style: TextStyle(fontWeight: currentPage == i ? FontWeight.bold : FontWeight.normal),
+          style: TextStyle(
+              fontWeight:
+                  currentPage == i ? FontWeight.bold : FontWeight.normal),
         ),
         onPressed: () async {
           if (savedProblemArray[i].isEmpty) {
@@ -145,8 +149,10 @@ class ProblemListController extends GetxController {
     }
   }
 
+  ///문제 리스트 중에 현재 페이지에 있는 리스트들의 자세한 데이터를 받아오는 함수
   Future<void> fetchPageData() async {
-    final url = Uri.parse('http://$HOST/api/data/problem/get_detail_problem_data');
+    final url =
+        Uri.parse('http://$HOST/api/data/problem/get_detail_problem_data');
     final Map<String, dynamic> requestBody = {
       "problem_list": problemList.sublist(startIndex, endIndex),
     };

@@ -4,10 +4,11 @@ import 'package:front_end/Screen/Home_Screen.dart';
 import 'package:get/get.dart';
 
 class HomeTabView extends StatelessWidget {
-  HomeTabView({super.key});
-  final TabController _tabController = Get.put(TabController());
+  const HomeTabView({super.key});
+
   @override
   Widget build(BuildContext context) {
+    Get.put(TabController());
     return ScaffoldPage(
       padding: EdgeInsets.zero,
       content: GetX<TabController>(
@@ -38,7 +39,7 @@ class HomeTabView extends StatelessWidget {
                   controller.onReorder(oldIndex, newIndex);
                 },
               ),
-              _tabController.isHomeScreen.isTrue
+              controller.isHomeScreen.isTrue
                   ? Positioned(
                       top: 38.0,
                       child: SizedBox(

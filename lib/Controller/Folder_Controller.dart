@@ -16,6 +16,7 @@ class FolderController extends GetxController {
   List<TreeViewItem> totalFolders = [];
   RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
 
+  ///처음에 유저의 백엔드로부터 폴더 리스트를 받아와 보여줄 리스트를 구성
   Future<void> receiveData() async {
     final url = Uri.parse('http://$HOST/api/data/user_database');
 
@@ -38,6 +39,8 @@ class FolderController extends GetxController {
   }
 
 //==============================================================
+
+  ///json 형태로 데이터가 들어올 때 보여줄 폴더들을 만드는 핵심 함수
   void makeFolderListInfo(List<dynamic> data) {
     final List<int> stack = [];
     final List<TreeViewItem> folders = [];
@@ -69,6 +72,7 @@ class FolderController extends GetxController {
     firstFolders.addAll(rootFolders);
   }
 
+  ///폴더의 이름, id, parent를 받아 새로운 TreeViewItem을 반환한다.
   TreeViewItem makeFolderItem(String name, int id, int? parent) {
     return TreeViewItem(
         leading: const Icon(FluentIcons.fabric_folder),
@@ -141,6 +145,7 @@ class FolderController extends GetxController {
         ));
   }
 
+  /// 특정 폴더를 클릭했을 때 해당하는 문제 내용을 백엔드로부터 받고 새로운탭을 열면서 보여주는 함수
   Future<void> makeProblemListInNewTab(TreeViewItem item) async {
     final problemUrl =
         Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
@@ -172,6 +177,7 @@ class FolderController extends GetxController {
     }
   }
 
+  ///특정 폴더를 클릭했을 때 현재 탭에서 폴더에 속하는 문제 리스트들을 보여주는 함수
   Future<void> makeProblemListInCurrentTab(
       TreeViewItem item, String tagName) async {
     DefaultTabBodyController workingSpaceController =

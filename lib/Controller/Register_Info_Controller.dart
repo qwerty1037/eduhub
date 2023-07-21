@@ -5,6 +5,7 @@ import 'package:front_end/Component/Default/Config.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+///회원 가입에 사용되는 컨트롤러
 class RegisterInfoController extends GetxController {
   //0이면 남자 1이면 여자(버튼 순서)
   int selectedGender = 0;
@@ -19,6 +20,7 @@ class RegisterInfoController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController nicknameController = TextEditingController();
 
+  ///채워야할 정보를 모두 채웠는지 확인하는 함수
   bool isCorrectFormat() {
     return idController.text.isNotEmpty &&
         passwordController.text.isNotEmpty &&
@@ -27,6 +29,7 @@ class RegisterInfoController extends GetxController {
         emailController.text.isNotEmpty;
   }
 
+  ///입력한 정보를 백엔드에 보내는 함수
   Future<int> sendRegisterInfo() async {
     final url = Uri.parse('http://$HOST/api/auth/register');
     final Map<String, dynamic> requestBody = {
@@ -48,6 +51,7 @@ class RegisterInfoController extends GetxController {
     return response.statusCode;
   }
 
+  ///유저가 회원가입 시도시 회원가입이 가능한 형태인지 검증한 후 가능한 형태시 다른 함수에 넘겨줌
   Future<void> tryMakeId(BuildContext context) async {
     matchpassword = true;
     formatCorrect = true;

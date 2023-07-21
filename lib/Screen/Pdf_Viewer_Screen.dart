@@ -17,9 +17,6 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfViewerScreen> {
-  final DefaultTabBodyController _defaultTabBodyController =
-      Get.find<DefaultTabBodyController>(
-          tag: Get.find<t.TabController>().getTabKey());
   final controllerProblem = Get.put(PdfViewerScreenController(),
       tag: "Problem${Get.find<t.TabController>().getTabKey()}");
   final controllerAnswer = Get.put(PdfViewerScreenController(),
@@ -60,8 +57,12 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       heroTag: 'Save',
                       backgroundColor: Colors.black26,
                       onPressed: () {
-                        _defaultTabBodyController.saveThisWorkingSpace();
-                        _defaultTabBodyController.changeWorkingSpace(
+                        final DefaultTabBodyController
+                            defaultTabBodyController =
+                            Get.find<DefaultTabBodyController>(
+                                tag: Get.find<t.TabController>().getTabKey());
+                        defaultTabBodyController.saveThisWorkingSpace();
+                        defaultTabBodyController.changeWorkingSpace(
                             PdfSaveScreen(controllerProblem.getCapturedImage()!,
                                 controllerAnswer.getCapturedImage()!));
 

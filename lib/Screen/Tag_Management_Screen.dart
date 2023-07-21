@@ -8,7 +8,8 @@ import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class TagManagementScreen extends StatelessWidget {
   TagManagementScreen({super.key});
-  final tagController = Get.put(TagController(), tag: Get.find<t.TabController>().getTabKey());
+  final tagController =
+      Get.put(TagController(), tag: Get.find<t.TabController>().getTabKey());
 
   @override
   Widget build(BuildContext context) {

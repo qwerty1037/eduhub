@@ -4,13 +4,15 @@ import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controlle
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:get/get.dart';
 
+///앱 전체적으로 사용되는 탭들을 관리하는 컨트롤러
 class TabController extends GetxController {
   RxInt currentTabIndex = (-1).obs;
   RxList<Tab> tabs = <Tab>[].obs;
   RxBool isHomeScreen = true.obs;
   int tagNumber = 0;
+  bool isNewTab = true;
 
-  ///새로운 탭을 추가하는 함수, body와 탭 이름을 변수로 둘 수 있음.
+  ///새로운 탭을 추가하는 함수, body와 탭 이름을 파라미터로 받는다 탭 이름은 안주면 NewTab으로 된다.
   Tab addTab(final Widget body, String? text) {
     Tab? newTab;
     Key newKey = Key(tagNumber.toString());
@@ -39,12 +41,16 @@ class TabController extends GetxController {
             .deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
+        if (tabs.isEmpty) {
+          isNewTab = true;
+        }
       },
     );
     tagNumber++;
     return newTab;
   }
 
+  ///탭의 이름을 바꾸는 함수로 바꿀 탭과 바꿀 이름을 파라미터로 주면 된다
   void renameTab(Tab tab, String newName) {
     Tab newTab;
     newTab = Tab(
@@ -62,6 +68,7 @@ class TabController extends GetxController {
     tabs.refresh();
   }
 
+  ///탭의 순서가 바뀔때 로직
   void onReorder(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) {
       newIndex -= 1;
@@ -77,25 +84,31 @@ class TabController extends GetxController {
     }
   }
 
+  ///tab view에서 오른쪽의 +버튼을 눌렀을때 로직
   void onNewPressed() {
+    isNewTab = true;
     DefaultTabBody generatedTab = DefaultTabBody();
     Tab newTab = addTab(generatedTab, null);
     tabs.add(newTab);
     isHomeScreen.value = false;
     currentTabIndex.value = tabs.length - 1;
+    isNewTab = false;
   }
 
+  ///현재 탭의 키를 반환하는 함수
   String _getCurrentTabKey() {
     return tabs[currentTabIndex.value].key.toString();
   }
 
-  String _getNewTabKey() {
+  ///새로 만들 탭의 key값을 반환하는 함수
+  String getNewTabKey() {
     return Key(tagNumber.toString()).toString();
   }
 
+  ///새탭을 만들경우 getNewTabKey를 아닐 경우 _getCurrentTabKey를 반환하는 함수
   String getTabKey() {
-    if (currentTabIndex.value == -1) {
-      return _getNewTabKey();
+    if (isNewTab) {
+      return getNewTabKey();
     } else {
       return _getCurrentTabKey();
     }

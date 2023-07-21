@@ -65,6 +65,7 @@ void createHighlightOverlay({
                   onEditingComplete: () {
                     //홈화면에서 눌렀을때
                     if (tabController.currentTabIndex.value == -1) {
+                      tabController.isNewTab = true;
                       tabController.isHomeScreen.value = false;
                       DefaultTabBody tabBody =
                           DefaultTabBody(workingSpace: SearchScreen());
@@ -75,6 +76,7 @@ void createHighlightOverlay({
                           tabController.tabs.length - 1;
                       controller.searchBarController.text = "";
                       overlayEntry?.remove();
+                      tabController.isNewTab = false;
                     } else {
                       controller.searchBarController.text = "";
                       overlayEntry?.remove();

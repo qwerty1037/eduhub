@@ -6,6 +6,7 @@ import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+///폴더에 속하는 문제 리스트를 보여주며 직속문제/아래모든문제를 볼 수 있다. 클릭시 오른쪽에 이미지가 뜨며 버튼 부분은 수정이 필요하다
 class ProblemList extends StatelessWidget {
   ProblemList(
       {super.key,

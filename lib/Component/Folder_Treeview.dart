@@ -4,7 +4,7 @@ import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 
-///각 탭의 대시보드에서 폴더 리스트를 보여줄 위젯
+///각 탭의 대시보드에서 폴더 리스트를 보여주는 위젯
 class FolderTreeView extends StatelessWidget {
   FolderTreeView({this.tagName, super.key});
 

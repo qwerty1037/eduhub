@@ -1,7 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Folder_Treeview.dart';
+import 'package:front_end/Component/New_Folder_Button.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';
+import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
@@ -11,13 +14,8 @@ import 'package:get/get.dart';
 ///새로운 탭이 만들어질때 제작되는 틀. workingSpace 부분에 위젯을 넣음으로써 작업창 부분 초기화가 가능하다.
 class DefaultTabBody extends StatelessWidget {
   DefaultTabBody({super.key, this.workingSpace}) {
-    tagName = tabController.getTabKey();
-    defaultTabBodyController =
-        Get.put(DefaultTabBodyController(), tag: tagName);
-    if (workingSpace != null) {
-      defaultTabBodyController.changeWorkingSpace(workingSpace!);
-    }
-    defaultTabBodyController.tagName = tagName;
+    tagName = tabController.getNewTabKey();
+    // Get.put(DefaultTabBodyController(workingSpace), tag: tagName);
   }
 
   final Widget? workingSpace;
@@ -27,41 +25,85 @@ class DefaultTabBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DefaultTabBodyController>(
-      tag: tagName,
-      builder: (controller) {
-        return Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 40,
-              color: Colors.teal,
-              child: topCommandBar(controller, context),
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 6,
-                      child: FolderTreeView(tagName: tagName),
+    return FutureBuilder(
+        future: Get.putAsync<DefaultTabBodyController>(() async {
+          return DefaultTabBodyController(workingSpace);
+        }, tag: tagName),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.waiting) {
+            return GetBuilder<DefaultTabBodyController>(
+              tag: tagName,
+              builder: (controller) {
+                return Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 40,
+                      color: Colors.teal,
+                      child: topCommandBar(controller, context),
                     ),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width / 6,
+                              child: FolderTreeView(tagName: tagName),
+                            ),
+                          ),
+                          Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: Colors.black, width: 0.5))),
+                              width: MediaQuery.of(context).size.width / 6 * 5,
+                              child: controller.workingSpaceWidget)
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            return Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  color: Colors.teal,
+                  child: fakeScreen(),
+                ),
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 6,
+                          child: Get.find<HomeScreenController>().isFolderEmpty
+                              ? newFolderButton(
+                                  context,
+                                  Get.find<FolderController>(),
+                                  Get.find<HomeScreenController>())
+                              : FolderTreeView(tagName: tagName),
+                        ),
+                      ),
+                      Container(
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      color: Colors.black, width: 0.5))),
+                          width: MediaQuery.of(context).size.width / 6 * 5,
+                          child: const SizedBox())
+                    ],
                   ),
-                  Container(
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              left:
-                                  BorderSide(color: Colors.black, width: 0.5))),
-                      width: MediaQuery.of(context).size.width / 6 * 5,
-                      child: controller.workingSpaceWidget)
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
+                ),
+              ],
+            );
+          }
+        }));
   }
 
   Center topCommandBar(
@@ -162,6 +204,78 @@ class DefaultTabBody extends StatelessWidget {
     return Center(
       child: CommandBar(
         primaryItems: menuCommandBarItems,
+        overflowBehavior: CommandBarOverflowBehavior.noWrap,
+      ),
+    );
+  }
+
+  Center fakeScreen() {
+    final fakeItems = <CommandBarItem>[
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => widget,
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.save),
+          label: const Text("Save Pdf",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) {
+          return widget;
+        },
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.page),
+          label: const Text("Create Test",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) {
+          return widget;
+        },
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.page),
+          label: const Text("Student Management",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => widget,
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.search),
+          label: const Text("Search",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) {
+          return widget;
+        },
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.tag),
+          label: const Text("Tags",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+    ];
+    return Center(
+      child: CommandBar(
+        primaryItems: fakeItems,
         overflowBehavior: CommandBarOverflowBehavior.noWrap,
       ),
     );

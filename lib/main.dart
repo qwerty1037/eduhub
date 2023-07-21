@@ -9,6 +9,7 @@ import 'package:front_end/screen/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'package:win32/win32.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TotalController());
+    Get.put(TotalController(), permanent: true);
     Get.put(FolderController());
     return GetBuilder<TotalController>(
       builder: (controller) {
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
           // FolderController folderController = Get.find<FolderController>();
           // folderController.makeExampleData();
           //====================================================================================================
-          return FluentApp(
+          return const FluentApp(
             themeMode: ThemeMode.light,
             debugShowCheckedModeBanner: false,
             home: HomeTabView(),

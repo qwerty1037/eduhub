@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+/// Tag of Chip
 class TagModel {
   String label;
   bool isSelected;

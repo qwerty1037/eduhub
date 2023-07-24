@@ -10,6 +10,7 @@ import 'package:korea_regexp/korea_regexp.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:http/http.dart' as http;
 
+/// Pdf 저장 스크린을 컨트롤하는 Controller
 class PdfSaveController extends GetxController {
   late Uint8List capturedImageProblem;
   late Uint8List capturedImageAnswer;
@@ -29,7 +30,10 @@ class PdfSaveController extends GetxController {
     }
   }
 
-  Future<int> sendRegisterInfo() async {
+  /// Send information of problem to backend
+  ///
+  /// 백엔드에 문제 정보를 보내는 메서드
+  Future<int> sendProblemInfo() async {
     List<String> selectedTags = <String>[];
     for (int i = 0; i < tagsList.length; i++) {
       if (tagsList[i].isSelected == true) {
@@ -111,6 +115,7 @@ class PdfSaveController extends GetxController {
     }
   }
 
+  /// 선택된 칩 리스트 반환
   List<Widget> selectedChipsList() {
     List<Widget> chips = [];
     for (int i = 0; i < tagsList.length; i++) {
@@ -131,6 +136,7 @@ class PdfSaveController extends GetxController {
     return chips;
   }
 
+  /// 검색한 텍스트에 맞춘 칩 리스트 반환
   List<Widget> filterChipsList() {
     List<Widget> chips = [];
     if (tagsTextValue.value == "") {

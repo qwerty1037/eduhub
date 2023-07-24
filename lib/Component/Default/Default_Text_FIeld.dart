@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 
+/// Format of TextField
+///
+/// 텍스트필드 양식
 class DefaultTextField extends StatelessWidget {
   const DefaultTextField(
-      {super.key, this.labelText, required this.hintText, this.onChanged, this.controller, this.onEditingComplete, this.maxLines, this.minLines});
+      {super.key,
+      this.labelText,
+      required this.hintText,
+      this.onChanged,
+      this.controller,
+      this.onEditingComplete,
+      this.maxLines,
+      this.minLines});
 
   final String? labelText;
   final String hintText;

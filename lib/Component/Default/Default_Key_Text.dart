@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Format of title of TextField
+///
+/// 텍스트필드의 제목 양식
 class DefaultKeyText extends StatelessWidget {
   final String text;
   const DefaultKeyText({

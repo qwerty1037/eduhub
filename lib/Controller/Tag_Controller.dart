@@ -7,6 +7,7 @@ import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+/// Controller of tag input Screen
 class TagController extends GetxController {
   TextEditingController tagsInputController = TextEditingController();
   int numberOfTags = 0;
@@ -19,6 +20,7 @@ class TagController extends GetxController {
 
   RxString tagsInputValue = "".obs;
 
+  /// 입력된 칩 리스트 반환
   List<Widget> inputedChipsList() {
     List<Widget> chips = [];
 
@@ -37,6 +39,7 @@ class TagController extends GetxController {
     return chips;
   }
 
+  /// Tags를 Backend로 http request
   void sendTags() async {
     final url = Uri.parse('http://$HOST/api/data/create_tag_list');
 

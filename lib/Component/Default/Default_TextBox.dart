@@ -1,8 +1,18 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 
+/// Format of TextBox
+///
+/// Fluent UI에서 사용하는 TextField의 대용, TextBox의 양식
 class DefaultTextBox extends StatelessWidget {
-  const DefaultTextBox({this.labelText, required this.placeholder, this.onChanged, this.controller, this.prefix, this.suffix, this.onEditingComplete});
+  const DefaultTextBox(
+      {this.labelText,
+      required this.placeholder,
+      this.onChanged,
+      this.controller,
+      this.prefix,
+      this.suffix,
+      this.onEditingComplete});
 
   final String? labelText;
   final String placeholder;

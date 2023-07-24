@@ -5,6 +5,9 @@ enum httpContentType {
   multipart,
 }
 
+/// Return header of http Request
+///
+/// Argument: httpContentType(json, multipart...)
 Future<Map<String, String>> defaultHeader(httpContentType type) async {
   Map<String, String> header = await sendCookieToBackend();
   if (type == httpContentType.json) {

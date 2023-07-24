@@ -10,6 +10,7 @@ import 'package:front_end/Controller/Tab_Controller.dart' as t;
 import 'package:fluent_ui/fluent_ui.dart' as f;
 import 'package:get/get.dart';
 
+/// Create Overlay of SearchBar
 void createHighlightOverlay({
   required BuildContext context,
   required SearchScreenController controller,

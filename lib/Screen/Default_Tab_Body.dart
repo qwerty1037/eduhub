@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Folder_Treeview.dart';
+import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Folder_Treeview_Explore.dart';
 import 'package:front_end/Component/New_Folder_Button.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
@@ -13,11 +14,15 @@ import 'package:get/get.dart';
 
 ///새로운 탭이 만들어질때 제작되는 틀. workingSpace 부분에 위젯을 넣음으로써 작업창 부분 초기화가 가능하다.
 class DefaultTabBody extends StatelessWidget {
-  DefaultTabBody({super.key, this.workingSpace}) {
+  DefaultTabBody({
+    super.key,
+    required this.dashBoardType,
+    this.workingSpace,
+  }) {
     tagName = tabController.getNewTabKey();
     // Get.put(DefaultTabBodyController(workingSpace), tag: tagName);
   }
-
+  final DashBoardType dashBoardType;
   final Widget? workingSpace;
   final TabController tabController = Get.find<TabController>();
   late final DefaultTabBodyController defaultTabBodyController;
@@ -27,7 +32,7 @@ class DefaultTabBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: Get.putAsync<DefaultTabBodyController>(() async {
-          return DefaultTabBodyController(workingSpace);
+          return DefaultTabBodyController(tagName, dashBoardType, workingSpace);
         }, tag: tagName),
         builder: ((context, snapshot) {
           if (snapshot.connectionState != ConnectionState.waiting) {
@@ -49,16 +54,14 @@ class DefaultTabBody extends StatelessWidget {
                           Expanded(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width / 6,
-                              child: FolderTreeView(tagName: tagName),
+                              child: controller.dashBoard(dashBoardType),
                             ),
                           ),
                           Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      left: BorderSide(
-                                          color: Colors.black, width: 0.5))),
-                              width: MediaQuery.of(context).size.width / 6 * 5,
-                              child: controller.workingSpaceWidget)
+                            decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))),
+                            width: MediaQuery.of(context).size.width / 6 * 5,
+                            child: controller.workingSpaceWidget,
+                          ),
                         ],
                       ),
                     ),
@@ -83,18 +86,14 @@ class DefaultTabBody extends StatelessWidget {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width / 6,
                           child: Get.find<HomeScreenController>().isFolderEmpty
-                              ? newFolderButton(
-                                  context,
-                                  Get.find<FolderController>(),
-                                  Get.find<HomeScreenController>())
-                              : FolderTreeView(tagName: tagName),
+                              ? newFolderButton(context, Get.find<FolderController>(), Get.find<HomeScreenController>())
+                              : FolderTreeView(
+                                  tagName: tagName,
+                                ),
                         ),
                       ),
                       Container(
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(
-                                      color: Colors.black, width: 0.5))),
+                          decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))),
                           width: MediaQuery.of(context).size.width / 6 * 5,
                           child: const SizedBox())
                     ],
@@ -106,8 +105,7 @@ class DefaultTabBody extends StatelessWidget {
         }));
   }
 
-  Center topCommandBar(
-      DefaultTabBodyController controller, BuildContext context) {
+  Center topCommandBar(DefaultTabBodyController controller, BuildContext context) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
@@ -125,8 +123,7 @@ class DefaultTabBody extends StatelessWidget {
             controller.changeWorkingSpace(
               const PdfViewerScreen(),
             );
-            Tab currentTab =
-                tabController.tabs[tabController.currentTabIndex.value];
+            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Save Pdf");
           },
         ),
@@ -171,11 +168,7 @@ class DefaultTabBody extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () async {
-            createHighlightOverlay(
-                context: context,
-                controller:
-                    Get.put(SearchScreenController(), tag: controller.tagName),
-                tabController: tabController);
+            createHighlightOverlay(context: context, controller: Get.put(SearchScreenController(), tag: controller.tagName), tabController: tabController);
           },
         ),
       ),
@@ -193,8 +186,7 @@ class DefaultTabBody extends StatelessWidget {
           onPressed: () async {
             await controller.deleteWorkingSpaceController();
             controller.changeWorkingSpace(TagManagementScreen());
-            Tab currentTab =
-                tabController.tabs[tabController.currentTabIndex.value];
+            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Generate Tags");
           },
         ),

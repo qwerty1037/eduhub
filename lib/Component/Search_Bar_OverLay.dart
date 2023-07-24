@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/Default_TextBox.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
@@ -68,29 +69,24 @@ void createHighlightOverlay({
                     if (tabController.currentTabIndex.value == -1) {
                       tabController.isNewTab = true;
                       tabController.isHomeScreen.value = false;
-                      DefaultTabBody tabBody =
-                          DefaultTabBody(workingSpace: SearchScreen());
-                      f.Tab newTab =
-                          tabController.addTab(tabBody, "SearchScreen");
+                      DefaultTabBody tabBody = DefaultTabBody(
+                        dashBoardType: DashBoardType.search,
+                        workingSpace: SearchScreen(),
+                      );
+                      f.Tab newTab = tabController.addTab(tabBody, "SearchScreen");
                       tabController.tabs.add(newTab);
-                      tabController.currentTabIndex.value =
-                          tabController.tabs.length - 1;
+                      tabController.currentTabIndex.value = tabController.tabs.length - 1;
                       controller.searchBarController.text = "";
                       overlayEntry?.remove();
                       tabController.isNewTab = false;
                     } else {
                       controller.searchBarController.text = "";
                       overlayEntry?.remove();
-                      Get.find<DefaultTabBodyController>(
-                              tag: tabController.getTabKey())
-                          .deleteWorkingSpaceController();
+                      Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).deleteWorkingSpaceController();
 
-                      Get.find<DefaultTabBodyController>(
-                              tag: tabController.getTabKey())
-                          .changeWorkingSpace(SearchScreen());
+                      Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).changeWorkingSpace(SearchScreen());
 
-                      f.Tab currentTab = tabController
-                          .tabs[tabController.currentTabIndex.value];
+                      f.Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
                       tabController.renameTab(currentTab, "SearchScreen");
                     }
                   },

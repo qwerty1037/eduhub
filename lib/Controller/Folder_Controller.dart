@@ -13,6 +13,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 ///폴더 관련 데이터를 처리하는 컨트롤러
 class FolderController extends GetxController {
+  RxInt selectedDirectoryID = 99999999999.obs;
   List<TreeViewItem> totalFolders = [];
   RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
 
@@ -75,80 +76,81 @@ class FolderController extends GetxController {
   ///폴더의 이름, id, parent를 받아 새로운 TreeViewItem을 반환한다.
   TreeViewItem makeFolderItem(String name, int id, int? parent) {
     return TreeViewItem(
-        leading: const Icon(FluentIcons.fabric_folder),
-        expanded: false,
-        children: [],
-        value: {"parent": parent, "id": id, "name": name},
-        content: Draggable(
-          data: {"parent": parent, "id": id, "name": name},
-          feedback: Container(
-            color: Colors.grey.withOpacity(0.3),
-            width: 140,
-            height: 30,
-            child: Center(
-              child: Text(
-                name,
-                style: const TextStyle(color: Colors.black, fontSize: 12),
-              ),
+      backgroundColor: ButtonState.resolveWith((states) {
+        final res = FluentThemeData.light().resources;
+        if (selectedDirectoryID.value == id) {
+          return Colors.white;
+        } else {
+          if (states.isPressing) return res.subtleFillColorTertiary;
+          if (states.isHovering) return res.subtleFillColorSecondary;
+          if (states.isDisabled) return res.controlAltFillColorDisabled;
+        }
+        return res.controlAltFillColorSecondary;
+      }), //selectedDirectoryID?.value == id ? ButtonState<Color>(Colors.white) : Colors.grey,
+      leading: const Icon(FluentIcons.fabric_folder),
+      expanded: false,
+      children: [],
+      value: {"parent": parent, "id": id, "name": name},
+      content: Draggable(
+        data: {"parent": parent, "id": id, "name": name},
+        feedback: Container(
+          color: Colors.grey.withOpacity(0.3),
+          width: 140,
+          height: 30,
+          child: Center(
+            child: Text(
+              name,
+              style: const TextStyle(color: Colors.black, fontSize: 12),
             ),
           ),
-          child: DragTarget(
-            builder: (BuildContext context, List<dynamic> candidateData,
-                List<dynamic> rejectedData) {
-              return Text(name);
-            },
-            onWillAccept: (Map<dynamic, dynamic>? data) {
-              if (data!["id"] != id && data["parent"] != id) {
-                return true;
+        ),
+        child: DragTarget(
+          builder: (BuildContext context, List<dynamic> candidateData, List<dynamic> rejectedData) {
+            return Text(name);
+          },
+          onWillAccept: (Map<dynamic, dynamic>? data) {
+            if (data!["id"] != id && data["parent"] != id) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+          onAccept: (Map<String, dynamic> data) async {
+            final url = Uri.parse('http://$HOST/api/data/update_database_directory');
+            final Map<String, dynamic> requestBody = {"target_database_id": data["id"], "destination_database_id": parent};
+
+            final response = await http.post(
+              url,
+              headers: await defaultHeader(httpContentType.json),
+              body: jsonEncode(requestBody),
+            );
+            if (isHttpRequestSuccess(response)) {
+              TreeViewItem targetFolder = totalFolders.firstWhere((element) => element.value["id"] == data["id"]);
+              TreeViewItem thisFolder = totalFolders.firstWhere((element) => element.value["id"] == id);
+              thisFolder.children.add(targetFolder);
+              thisFolder.expanded = true;
+
+              if (data["parent"] != null) {
+                TreeViewItem parentItem = totalFolders.firstWhere((element) => element.value["id"] == data["parent"]);
+                parentItem.children.removeWhere((element) => element.value["id"] == data["id"]);
               } else {
-                return false;
+                firstFolders.removeWhere((element) => element.value["id"] == data["id"]);
               }
-            },
-            onAccept: (Map<String, dynamic> data) async {
-              final url =
-                  Uri.parse('http://$HOST/api/data/update_database_directory');
-              final Map<String, dynamic> requestBody = {
-                "target_database_id": data["id"],
-                "destination_database_id": parent
-              };
-
-              final response = await http.post(
-                url,
-                headers: await defaultHeader(httpContentType.json),
-                body: jsonEncode(requestBody),
-              );
-              if (isHttpRequestSuccess(response)) {
-                TreeViewItem targetFolder = totalFolders
-                    .firstWhere((element) => element.value["id"] == data["id"]);
-                TreeViewItem thisFolder = totalFolders
-                    .firstWhere((element) => element.value["id"] == id);
-                thisFolder.children.add(targetFolder);
-                thisFolder.expanded = true;
-
-                if (data["parent"] != null) {
-                  TreeViewItem parentItem = totalFolders.firstWhere(
-                      (element) => element.value["id"] == data["parent"]);
-                  parentItem.children.removeWhere(
-                      (element) => element.value["id"] == data["id"]);
-                } else {
-                  firstFolders.removeWhere(
-                      (element) => element.value["id"] == data["id"]);
-                }
-                data["parent"] = id;
-                firstFolders.refresh();
-                debugPrint("성공");
-              } else if (isHttpRequestFailure(response)) {
-                debugPrint("실패");
-              }
-            },
-          ),
-        ));
+              data["parent"] = id;
+              firstFolders.refresh();
+              debugPrint("성공");
+            } else if (isHttpRequestFailure(response)) {
+              debugPrint("실패");
+            }
+          },
+        ),
+      ),
+    );
   }
 
   /// 특정 폴더를 클릭했을 때 해당하는 문제 내용을 백엔드로부터 받고 새로운탭을 열면서 보여주는 함수
   Future<void> makeProblemListInNewTab(TreeViewItem item) async {
-    final problemUrl =
-        Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
+    final problemUrl = Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,
@@ -162,6 +164,7 @@ class FolderController extends GetxController {
       TabController tabController = Get.find<TabController>();
       tabController.isHomeScreen.value = false;
       DefaultTabBody generatedTab = DefaultTabBody(
+        dashBoardType: DashBoardType.explore,
         workingSpace: ProblemList(
           targetFolder: item,
           folderName: item.value["name"],
@@ -178,13 +181,10 @@ class FolderController extends GetxController {
   }
 
   ///특정 폴더를 클릭했을 때 현재 탭에서 폴더에 속하는 문제 리스트들을 보여주는 함수
-  Future<void> makeProblemListInCurrentTab(
-      TreeViewItem item, String tagName) async {
-    DefaultTabBodyController workingSpaceController =
-        Get.find<DefaultTabBodyController>(tag: tagName);
+  Future<void> makeProblemListInCurrentTab(TreeViewItem item, String tagName) async {
+    DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
 
-    final problemUrl =
-        Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
+    final problemUrl = Uri.parse('http://$HOST/api/data/problem/database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,

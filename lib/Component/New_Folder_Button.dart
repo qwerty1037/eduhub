@@ -7,8 +7,7 @@ import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:http/http.dart' as http;
 
-Button newFolderButton(BuildContext context, FolderController folderController,
-    HomeScreenController controller) {
+Button newFolderButton(BuildContext context, FolderController folderController, HomeScreenController controller) {
   return Button(
       child: const Text("새폴더 만들기"),
       onPressed: () async {
@@ -35,12 +34,8 @@ Button newFolderButton(BuildContext context, FolderController folderController,
                     onPressed: () async {
                       Navigator.pop(context);
 
-                      final url =
-                          Uri.parse('http://$HOST/api/data/create_database');
-                      final Map<String, dynamic> requestBody = {
-                        "name": textcontroller.text,
-                        "parent_id": null
-                      };
+                      final url = Uri.parse('http://$HOST/api/data/create_database');
+                      final Map<String, dynamic> requestBody = {"name": textcontroller.text, "parent_id": null};
 
                       final response = await http.post(
                         url,
@@ -51,12 +46,9 @@ Button newFolderButton(BuildContext context, FolderController folderController,
                       if (response.statusCode ~/ 100 == 2) {
                         final jsonResponse = jsonDecode(response.body);
                         debugPrint(jsonResponse.toString());
-                        final int newFolderId =
-                            jsonResponse['inserted_database'][0]["id"];
+                        final int newFolderId = jsonResponse['inserted_database'][0]["id"];
 
-                        TreeViewItem newFolder =
-                            folderController.makeFolderItem(
-                                textcontroller.text, newFolderId, null);
+                        TreeViewItem newFolder = folderController.makeFolderItem(textcontroller.text, newFolderId, null);
                         folderController.totalFolders.add(newFolder);
                         folderController.firstFolders.add(newFolder);
                         folderController.update();

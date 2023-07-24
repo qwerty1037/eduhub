@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Feedback_Overlay.dart';
-import 'package:front_end/Component/Folder_Treeview.dart';
+import 'package:front_end/Component/Folder_Treeview_Explore.dart';
 import 'package:front_end/Component/New_Folder_Button.dart';
 import 'package:front_end/Component/Search_Bar_OverLay.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
@@ -22,8 +22,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenController());
-    HomeScreenController homeScreenController =
-        Get.find<HomeScreenController>();
+    HomeScreenController homeScreenController = Get.find<HomeScreenController>();
 
     FolderController folderController = Get.find<FolderController>();
     return Column(
@@ -57,8 +56,7 @@ class HomeScreen extends StatelessWidget {
                       right: BorderSide(color: Colors.black, width: 0.5),
                     ),
                   ),
-                  child: leftDashboard(
-                      homeScreenController, context, folderController),
+                  child: leftDashboard(homeScreenController, context, folderController),
                 ),
               ),
               Expanded(
@@ -89,8 +87,10 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {
-            DefaultTabBody generatedTab =
-                DefaultTabBody(workingSpace: const PdfViewerScreen());
+            DefaultTabBody generatedTab = DefaultTabBody(
+              dashBoardType: DashBoardType.savePdf,
+              workingSpace: const PdfViewerScreen(),
+            );
             Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
 
             tabController.tabs.add(newTab);
@@ -140,10 +140,7 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             createHighlightOverlay(
-                context: context,
-                controller: Get.put(SearchScreenController(),
-                    tag: tabController.getNewTabKey()),
-                tabController: tabController);
+                context: context, controller: Get.put(SearchScreenController(), tag: tabController.getNewTabKey()), tabController: tabController);
           },
         ),
       ),
@@ -160,8 +157,10 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             tabController.isHomeScreen.value = false;
-            DefaultTabBody generatedTab =
-                DefaultTabBody(workingSpace: TagManagementScreen());
+            DefaultTabBody generatedTab = DefaultTabBody(
+              dashBoardType: DashBoardType.tagManagement,
+              workingSpace: TagManagementScreen(),
+            );
             Tab newTab = tabController.addTab(generatedTab, "Generate Tags");
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
@@ -177,8 +176,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Column leftDashboard(HomeScreenController homeScreenController,
-    BuildContext context, FolderController folderController) {
+Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
@@ -215,9 +213,7 @@ Column leftDashboard(HomeScreenController homeScreenController,
         ),
       ),
       GetBuilder<HomeScreenController>(builder: (controller) {
-        return homeScreenController.isFolderEmpty
-            ? newFolderButton(context, folderController, homeScreenController)
-            : FolderTreeView();
+        return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : FolderTreeView();
       })
     ],
   );

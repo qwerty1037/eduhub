@@ -37,8 +37,7 @@ class TabController extends GetxController {
           isHomeScreen.value = true;
         }
         debugPrint(newKey.toString());
-        await Get.find<DefaultTabBodyController>(tag: newKey.toString())
-            .deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: newKey.toString()).deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
         if (tabs.isEmpty) {
@@ -87,7 +86,9 @@ class TabController extends GetxController {
   ///tab view에서 오른쪽의 +버튼을 눌렀을때 로직
   void onNewPressed() {
     isNewTab = true;
-    DefaultTabBody generatedTab = DefaultTabBody();
+    DefaultTabBody generatedTab = DefaultTabBody(
+      dashBoardType: DashBoardType.explore,
+    );
     Tab newTab = addTab(generatedTab, null);
     tabs.add(newTab);
     isHomeScreen.value = false;

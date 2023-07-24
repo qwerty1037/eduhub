@@ -1,4 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Folder_Treeview_Explore.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
@@ -10,7 +12,9 @@ import 'package:get/get.dart';
 
 ///각 탭을 관리하는 컨트롤러
 class DefaultTabBodyController extends GetxController {
-  late final String tagName;
+  final String tagName;
+  final DashBoardType dashBoardType;
+
   Container workingSpaceWidget = Container(
     color: Colors.white,
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
@@ -18,9 +22,7 @@ class DefaultTabBodyController extends GetxController {
 
   Widget? savedWorkingSpace;
 
-  DefaultTabBodyController(Widget? workingSpace) {
-    final TabController tabController = Get.find<TabController>();
-    tagName = tabController.getNewTabKey();
+  DefaultTabBodyController(this.tagName, this.dashBoardType, Widget? workingSpace) {
     if (workingSpace != null) {
       changeWorkingSpace(workingSpace);
     }
@@ -47,5 +49,26 @@ class DefaultTabBodyController extends GetxController {
     await Get.delete<SearchScreenController>(tag: tag);
     await Get.delete<ProblemListController>(tag: tag);
     await Get.delete<TagController>(tag: tag);
+  }
+
+  Widget dashBoard(DashBoardType dashBoardType) {
+    switch (dashBoardType) {
+      case DashBoardType.explore:
+        return FolderTreeView(
+          tagName: tagName,
+        );
+      case DashBoardType.savePdf:
+        return FolderTreeView(
+          tagName: tagName,
+        );
+      case DashBoardType.search:
+        return FolderTreeView(
+          tagName: tagName,
+        );
+      case DashBoardType.tagManagement:
+        return FolderTreeView(
+          tagName: tagName,
+        );
+    }
   }
 }

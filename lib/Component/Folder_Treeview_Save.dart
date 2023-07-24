@@ -3,12 +3,16 @@ import 'package:front_end/Component/FolderTreeView_MenuFlyout.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
+import 'package:front_end/Component/Default/Config.dart';
 
 ///각 탭의 대시보드에서 폴더 리스트를 보여주는 위젯
-class FolderTreeView extends StatelessWidget {
-  FolderTreeView({this.tagName, super.key});
+class FolderTreeView_Search extends StatelessWidget {
+  FolderTreeView_Search({
+    this.tagName,
+    super.key,
+  });
 
-  String? tagName;
+  final String? tagName;
   final flyoutController = FlyoutController();
   final TextEditingController reNameController = TextEditingController();
   final TextEditingController newNameController = TextEditingController();

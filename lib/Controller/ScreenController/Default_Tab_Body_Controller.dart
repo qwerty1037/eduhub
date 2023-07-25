@@ -5,7 +5,6 @@ import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 
 import 'package:get/get.dart';
@@ -22,7 +21,8 @@ class DefaultTabBodyController extends GetxController {
 
   Widget? savedWorkingSpace;
 
-  DefaultTabBodyController(this.tagName, this.dashBoardType, Widget? workingSpace) {
+  DefaultTabBodyController(
+      this.tagName, this.dashBoardType, Widget? workingSpace) {
     if (workingSpace != null) {
       changeWorkingSpace(workingSpace);
     }

@@ -37,7 +37,8 @@ class TabController extends GetxController {
           isHomeScreen.value = true;
         }
         debugPrint(newKey.toString());
-        await Get.find<DefaultTabBodyController>(tag: newKey.toString()).deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: newKey.toString())
+            .deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
         if (tabs.isEmpty) {
@@ -53,6 +54,7 @@ class TabController extends GetxController {
   void renameTab(Tab tab, String newName) {
     Tab newTab;
     newTab = Tab(
+      key: tab.key,
       text: Text(
         newName,
         style: const TextStyle(color: DEFAULT_DARK_COLOR),
@@ -63,8 +65,10 @@ class TabController extends GetxController {
         tab.onClosed;
       },
     );
-    tab = newTab;
-    tabs.refresh();
+    final int index = tabs.indexOf(tab);
+    tabs[index] = newTab;
+    currentTabIndex.value++;
+    currentTabIndex.value--;
   }
 
   ///탭의 순서가 바뀔때 로직

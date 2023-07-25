@@ -41,25 +41,15 @@ class FolderTreeView extends StatelessWidget {
               );
             },
             onItemInvoked: (item, reason) async {
-              /*
-              for (int i = 0; i < controller.totalFolders.length; i++) {
-                if (controller.totalFolders[i].value["id"] == controller.selectedDirectoryID?.value) {
-                  String name = controller.totalFolders[i].value["name"];
-                  int id = controller.totalFolders[i].value["id"];
-                  int? parent = controller.totalFolders[i].value["parent"];
-                  controller.totalFolders[i] = controller.makeFolderItem(name, id, parent);
-                  break;
-                }
-              }
-              controller.firstFolders.refresh();
-              */
               if (reason == TreeViewItemInvokeReason.pressed) {
                 controller.selectedDirectoryID.value = item.value["id"];
+                controller.firstFolders.refresh();
+
                 debugPrint("${controller.selectedDirectoryID.value}");
                 if (Get.find<TabController>().isHomeScreen.value) {
-                  await controller.makeProblemListInNewTab(item);
+                  controller.makeProblemListInNewTab(item);
                 } else {
-                  await controller.makeProblemListInCurrentTab(item, tagName!);
+                  controller.makeProblemListInCurrentTab(item, tagName!);
                 }
               }
             },

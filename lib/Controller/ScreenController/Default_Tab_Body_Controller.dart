@@ -15,10 +15,10 @@ class DefaultTabBodyController extends GetxController {
   final String tagName;
   final DashBoardType dashBoardType;
 
-  Container workingSpaceWidget = Container(
+  Rx<Widget> workingSpaceWidget = Container(
     color: Colors.white,
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
-  );
+  ).obs;
 
   Widget? savedWorkingSpace;
 
@@ -30,13 +30,12 @@ class DefaultTabBodyController extends GetxController {
 
   ///현재 작업창 내용을 저장하는 함수
   void saveThisWorkingSpace() {
-    savedWorkingSpace = workingSpaceWidget;
+    savedWorkingSpace = workingSpaceWidget.value;
   }
 
   ///default tab body의 workingspace부분을 바꾸는 method
   void changeWorkingSpace(Widget newWorkingSpace) {
-    workingSpaceWidget = Container(child: newWorkingSpace);
-    update();
+    workingSpaceWidget.value = Container(child: newWorkingSpace);
   }
 
   ///현재 탭 안에서 만들어진 컨트롤러들을 제거하는 함수

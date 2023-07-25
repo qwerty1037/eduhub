@@ -36,7 +36,7 @@ class DefaultTabBody extends StatelessWidget {
         }, tag: tagName),
         builder: ((context, snapshot) {
           if (snapshot.connectionState != ConnectionState.waiting) {
-            return GetBuilder<DefaultTabBodyController>(
+            return GetX<DefaultTabBodyController>(
               tag: tagName,
               builder: (controller) {
                 return Column(
@@ -63,7 +63,7 @@ class DefaultTabBody extends StatelessWidget {
                                     left: BorderSide(
                                         color: Colors.black, width: 0.5))),
                             width: MediaQuery.of(context).size.width / 6 * 5,
-                            child: controller.workingSpaceWidget,
+                            child: controller.workingSpaceWidget.value,
                           ),
                         ],
                       ),

@@ -20,7 +20,6 @@ class FolderController extends GetxController {
   ///처음에 유저의 백엔드로부터 폴더 리스트를 받아와 보여줄 리스트를 구성
   Future<void> receiveData() async {
     final url = Uri.parse('http://$HOST/api/data/user_database');
-
     final response = await http.get(
       url,
       headers: await defaultHeader(httpContentType.json),
@@ -75,6 +74,7 @@ class FolderController extends GetxController {
 
   ///폴더의 이름, id, parent를 받아 새로운 TreeViewItem을 반환한다.
   TreeViewItem makeFolderItem(String name, int id, int? parent) {
+    debugPrint("make folder");
     return TreeViewItem(
       backgroundColor: ButtonState.resolveWith((states) {
         final res = FluentThemeData.light().resources;

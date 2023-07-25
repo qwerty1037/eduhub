@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:front_end/Component/Applifecycle_Observer.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Home_Tabview.dart';
 
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           // FolderController folderController = Get.find<FolderController>();
           // folderController.makeExampleData();
           //====================================================================================================
+          Get.put(TagController());
           return const FluentApp(
             themeMode: ThemeMode.light,
             debugShowCheckedModeBanner: false,

@@ -8,8 +8,7 @@ import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class TagManagementScreen extends StatelessWidget {
   TagManagementScreen({super.key});
-  final tagController =
-      Get.put(TagController(), tag: Get.find<t.TabController>().getTabKey());
+  final tagController = Get.find<TagController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +28,10 @@ class TagManagementScreen extends StatelessWidget {
                   //TODO: 나중에 엄밀한 문자열 알고리즘 필요
                   tagController.inputedTagsList.add(
                     Tag(
-                      id: tagController.tagId,
+                      id: null,
                       name: tagController.tagsInputController.text,
                       problemCount: 0,
-                      ownerId: 1,
+                      ownerId: null,
                     ),
                   );
                   tagController.numberOfTags++;

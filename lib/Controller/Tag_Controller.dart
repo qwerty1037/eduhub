@@ -12,13 +12,12 @@ class TagController extends GetxController {
   TextEditingController tagsInputController = TextEditingController();
   int numberOfTags = 0;
   RxList<Tag> inputedTagsList = <Tag>[].obs;
-  late int tagId;
+  RxString tagsInputValue = "".obs;
+  RxList<Tag> totalTagList = <Tag>[].obs;
 
   TagController() {
-    tagId = 10000 * 1 + numberOfTags;
+    receiveTags();
   }
-
-  RxString tagsInputValue = "".obs;
 
   /// 입력된 칩 리스트 반환
   List<Widget> inputedChipsList() {
@@ -47,9 +46,11 @@ class TagController extends GetxController {
     for (int i = 0; i < inputedTagsList.length; i++) {
       selectedTags.add(inputedTagsList[i].name);
     }
+    /*
     for (int i = 0; i < selectedTags.length; i++) {
       print(selectedTags[i]);
     }
+*/
     final Map<String, dynamic> requestBody = {
       "tag_name_list": selectedTags,
     };
@@ -65,5 +66,26 @@ class TagController extends GetxController {
     } else if (isHttpRequestFailure(response)) {
       debugPrint("태그 전송 실패");
     }
+    receiveTags();
+  }
+
+  void receiveTags() async {
+    totalTagList = <Tag>[].obs;
+    final url = Uri.parse('http://$HOST/api/data/mytags');
+    final response = await http.get(
+      url,
+      headers: await defaultHeader(httpContentType.json),
+    );
+    final tempTagList = jsonDecode(response.body)["tags"];
+    for (int i = 0; i < tempTagList.length; i++) {
+      Tag tempTag = Tag(
+        id: tempTagList[i]["id"],
+        name: tempTagList[i]["name"],
+        ownerId: tempTagList[i]["owner_id"],
+        problemCount: tempTagList[i]["problem_count"],
+      );
+      totalTagList.add(tempTag);
+    }
+    totalTagList.refresh();
   }
 }

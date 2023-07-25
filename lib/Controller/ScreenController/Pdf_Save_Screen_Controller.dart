@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Tag_Model.dart';
 import 'package:get/get.dart';
@@ -25,8 +27,9 @@ class PdfSaveController extends GetxController {
 
   @override
   PdfSaveController() {
-    for (int i = 0; i < tags.length; i++) {
-      tagsList.add(TagModel(tags[i], false));
+    final tagController = Get.find<TagController>();
+    for (int i = 0; i < tagController.totalTagList.length; i++) {
+      tagsList.add(TagModel(tagController.totalTagList[i].name, false));
     }
   }
 
@@ -40,8 +43,7 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].label);
       }
     }
-    String capturedFileNameProblem =
-        '${problemNameController.text}_problem.jpeg';
+    String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
 
     final url = Uri.parse('http://$HOST/api/data/create_problem');
@@ -52,25 +54,23 @@ class PdfSaveController extends GetxController {
       'problem_image',
       capturedImageProblem,
       filename: capturedFileNameProblem,
-      contentType:
-          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
     var multipartFileAnswer = http.MultipartFile.fromBytes(
       'problem_image',
       capturedImageAnswer,
       filename: capturedFileNameAnswer,
-      contentType:
-          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
     final Map<String, dynamic> requestField = {
       "problem_name": problemNameController.text,
       "parent_database": 1,
-      "tags": selectedTags.join(),
+      "tags": jsonEncode(selectedTags),
       "level": difficultySliderValue.round(),
-      "problem_string": capturedFileNameProblem,
-      "answer_string": capturedFileNameAnswer,
+      "problem_string": "\${${capturedFileNameProblem}}",
+      "answer_string": "\${${capturedFileNameAnswer}}",
     };
 
     final Map<String, String> temp = {};
@@ -83,7 +83,7 @@ class PdfSaveController extends GetxController {
     request.fields.addAll(temp);
 
     request.headers.addAll(await defaultHeader(httpContentType.multipart));
-
+    debugPrint("$requestField");
     final response = await request.send();
     print(response.statusCode);
     return response.statusCode;

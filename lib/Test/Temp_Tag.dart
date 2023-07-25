@@ -16,9 +16,9 @@ class Tag {
     required this.problemCount,
     required this.ownerId,
   });
-  int id;
+  int? id;
   String name;
   int problemCount;
-  int ownerId;
+  int? ownerId;
   //id: number, name: string, problemCount: number, ownerId: number
 }

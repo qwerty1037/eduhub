@@ -1,16 +1,14 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:front_end/Component/Applifecycle_Observer.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Home_Tabview.dart';
-
-import 'package:front_end/screen/login_screen.dart';
+import 'package:front_end/Screen/Login_Screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart';
-import 'package:win32/win32.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(TotalController(), permanent: true);
     Get.put(FolderController());
+
     return GetBuilder<TotalController>(
       builder: (controller) {
         if (controller.isLoginSuccess) {

@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   desktop_drop
   flutter_acrylic
   flutter_secure_storage_windows
+  pasteboard
   screen_capturer
   syncfusion_pdfviewer_windows
   url_launcher_windows

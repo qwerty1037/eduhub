@@ -24,13 +24,14 @@ class ProblemListController extends GetxController {
   ).obs;
   RxBool isAllProblems = false.obs;
   int currentPage = 0;
-  int itemsPerPage = 16;
+  final int itemsPerPage = 16;
   late int startIndex;
   late int endIndex;
   int lastButton = 1;
   List<Button> pageButton = <Button>[];
 
-  ProblemListController(this.problemList) {
+  ProblemListController(List<dynamic> data) {
+    problemList = data.toList();
     startIndex = currentPage * itemsPerPage;
     endIndex = currentPage * itemsPerPage + itemsPerPage;
   }
@@ -39,16 +40,18 @@ class ProblemListController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    lastButton = (problemList.length - 1) ~/ 16 + 1;
+    lastButton = (problemList.length - 1) ~/ itemsPerPage + 1;
     if (endIndex > problemList.length) {
       endIndex = problemList.length;
     }
+
     makePageButton();
     await fetchPageData();
   }
 
   ///폴더 직속문제 보기 / 폴더 아래 모든 문제 보기 버튼을 클릭했을때 내부 데이터를 새로 초기화하는 함수
-  void resetVariable(TreeViewItem targetFolder, List<dynamic> problems) async {
+  Future<void> resetVariable(
+      TreeViewItem targetFolder, List<dynamic> problems) async {
     problemList.clear();
     savedProblemArray.clear();
     pageButton.clear();
@@ -67,7 +70,7 @@ class ProblemListController extends GetxController {
 
         final totalProblems = jsonResponse['problem_list'];
         problemList.addAll(totalProblems);
-        lastButton = (totalProblems.length - 1) ~/ 20 + 1;
+        lastButton = (totalProblems.length - 1) ~/ itemsPerPage + 1;
         currentPage = 0;
         startIndex = 0;
         endIndex = itemsPerPage;
@@ -96,7 +99,7 @@ class ProblemListController extends GetxController {
       }
     } else {
       problemList.addAll(problems);
-      lastButton = (problems.length - 1) ~/ 20 + 1;
+      lastButton = (problems.length - 1) ~/ itemsPerPage + 1;
       currentPage = 0;
       startIndex = 0;
       endIndex = itemsPerPage;

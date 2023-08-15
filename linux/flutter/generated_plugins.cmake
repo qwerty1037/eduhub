@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   desktop_drop
   flutter_acrylic
   flutter_secure_storage_linux
+  pasteboard
   screen_capturer
   url_launcher_linux
 )

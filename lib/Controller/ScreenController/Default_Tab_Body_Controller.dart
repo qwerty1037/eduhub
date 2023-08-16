@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Folder_Treeview_Explore.dart';
+import 'package:front_end/Component/Folder_Treeview_Save.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
@@ -21,8 +22,7 @@ class DefaultTabBodyController extends GetxController {
 
   Widget? savedWorkingSpace;
 
-  DefaultTabBodyController(
-      this.tagName, this.dashBoardType, Widget? workingSpace) {
+  DefaultTabBodyController(this.tagName, this.dashBoardType, Widget? workingSpace) {
     if (workingSpace != null) {
       changeWorkingSpace(workingSpace);
     }
@@ -53,19 +53,19 @@ class DefaultTabBodyController extends GetxController {
   Widget dashBoard(DashBoardType dashBoardType) {
     switch (dashBoardType) {
       case DashBoardType.explore:
-        return FolderTreeView(
+        return FolderTreeViewExplore(
           tagName: tagName,
         );
       case DashBoardType.savePdf:
-        return FolderTreeView(
+        return FolderTreeViewSave(
           tagName: tagName,
         );
       case DashBoardType.search:
-        return FolderTreeView(
+        return FolderTreeViewExplore(
           tagName: tagName,
         );
       case DashBoardType.tagManagement:
-        return FolderTreeView(
+        return FolderTreeViewExplore(
           tagName: tagName,
         );
     }

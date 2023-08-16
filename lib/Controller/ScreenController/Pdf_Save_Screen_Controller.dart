@@ -29,18 +29,18 @@ class PdfSaveController extends GetxController {
   PdfSaveController() {
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
-      tagsList.add(TagModel(tagController.totalTagList[i].name, false));
+      tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
     }
   }
 
   /// Send information of problem to backend
   ///
   /// 백엔드에 문제 정보를 보내는 메서드
-  Future<int> sendProblemInfo() async {
-    List<String> selectedTags = <String>[];
+  Future<int> sendProblemInfo(int selectedDirectoryID) async {
+    List<int> selectedTags = <int>[];
     for (int i = 0; i < tagsList.length; i++) {
       if (tagsList[i].isSelected == true) {
-        selectedTags.add(tagsList[i].label);
+        selectedTags.add(tagsList[i].ID);
       }
     }
     String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
@@ -66,7 +66,7 @@ class PdfSaveController extends GetxController {
 
     final Map<String, dynamic> requestField = {
       "problem_name": problemNameController.text,
-      "parent_database": 1,
+      "parent_database": selectedDirectoryID,
       "tags": jsonEncode(selectedTags),
       "level": difficultySliderValue.round(),
       "problem_string": "\${${capturedFileNameProblem}}",
@@ -83,8 +83,9 @@ class PdfSaveController extends GetxController {
     request.fields.addAll(temp);
 
     request.headers.addAll(await defaultHeader(httpContentType.multipart));
-    debugPrint("$requestField");
+    debugPrint(request.toString());
     final response = await request.send();
+    debugPrint("${response.request}");
     print(response.statusCode);
     return response.statusCode;
   }

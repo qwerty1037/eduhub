@@ -22,8 +22,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenController());
-    HomeScreenController homeScreenController =
-        Get.find<HomeScreenController>();
+    HomeScreenController homeScreenController = Get.find<HomeScreenController>();
 
     FolderController folderController = Get.find<FolderController>();
     return Column(
@@ -57,8 +56,7 @@ class HomeScreen extends StatelessWidget {
                       right: BorderSide(color: Colors.black, width: 0.5),
                     ),
                   ),
-                  child: leftDashboard(
-                      homeScreenController, context, folderController),
+                  child: leftDashboard(homeScreenController, context, folderController),
                 ),
               ),
               Expanded(
@@ -144,10 +142,7 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             createHighlightOverlay(
-                context: context,
-                controller: Get.put(SearchScreenController(),
-                    tag: tabController.getNewTabKey()),
-                tabController: tabController);
+                context: context, controller: Get.put(SearchScreenController(), tag: tabController.getNewTabKey()), tabController: tabController);
           },
         ),
       ),
@@ -185,8 +180,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Column leftDashboard(HomeScreenController homeScreenController,
-    BuildContext context, FolderController folderController) {
+Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
@@ -223,9 +217,7 @@ Column leftDashboard(HomeScreenController homeScreenController,
         ),
       ),
       GetBuilder<HomeScreenController>(builder: (controller) {
-        return homeScreenController.isFolderEmpty
-            ? newFolderButton(context, folderController, homeScreenController)
-            : FolderTreeView();
+        return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : FolderTreeViewExplore();
       })
     ],
   );

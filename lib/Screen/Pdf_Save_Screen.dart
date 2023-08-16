@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
 import 'package:get/get.dart';
@@ -8,11 +9,9 @@ import 'package:front_end/Component/Default/Default_Key_Text.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class PdfSaveScreen extends StatelessWidget {
-  final DefaultTabBodyController _defaultTabBodyController =
-      Get.find<DefaultTabBodyController>(
-          tag: Get.find<t.TabController>().getTabKey());
-  final controller = Get.put(PdfSaveController(),
-      tag: Get.find<t.TabController>().getTabKey());
+  final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
+  final controller = Get.put(PdfSaveController(), tag: Get.find<t.TabController>().getTabKey());
+  final FolderController folderController = Get.find<FolderController>();
 
   @override
   PdfSaveScreen(Uint8List image1, Uint8List image2, {super.key}) {
@@ -73,11 +72,8 @@ class PdfSaveScreen extends StatelessWidget {
     return Column(
       children: [
         const DefaultKeyText(text: "디렉토리"),
-        DefaultTextField(
-          labelText: null,
-          hintText: '디렉토리를 입력하세요',
-          controller: controller.directoryController,
-        ),
+        const DefaultKeyText(text: "왼쪽 대시보드에서 저장할 폴더를 클릭하세요"),
+        Obx(() => DefaultKeyText(text: folderController.selectedPath.value)),
       ],
     );
   }
@@ -258,7 +254,7 @@ class PdfSaveScreen extends StatelessWidget {
   Widget saveButtonField() {
     return TextButton(
       onPressed: () {
-        controller.sendProblemInfo();
+        controller.sendProblemInfo(folderController.selectedDirectoryID.value);
       },
       child: Container(
         height: 50,
@@ -286,8 +282,7 @@ class PdfSaveScreen extends StatelessWidget {
       child: ElevatedButton(
         child: const Text('Back'),
         onPressed: () {
-          _defaultTabBodyController
-              .changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
+          _defaultTabBodyController.changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
         },
       ),
     );

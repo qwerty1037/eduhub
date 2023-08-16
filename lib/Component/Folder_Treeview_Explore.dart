@@ -5,8 +5,8 @@ import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 
 ///각 탭의 대시보드에서 폴더 리스트를 보여주는 위젯
-class FolderTreeView extends StatelessWidget {
-  FolderTreeView({
+class FolderTreeViewExplore extends StatelessWidget {
+  FolderTreeViewExplore({
     this.tagName,
     super.key,
   });
@@ -41,15 +41,15 @@ class FolderTreeView extends StatelessWidget {
             onItemInvoked: (item, reason) async {
               if (reason == TreeViewItemInvokeReason.pressed) {
                 controller.selectedDirectoryID.value = item.value["id"];
-                controller.firstFolders.refresh();
 
-                debugPrint("${controller.selectedDirectoryID.value}");
+                controller.firstFolders.refresh();
+                await controller.getPath();
+                //debugPrint("${controller.selectedDirectoryID.value}");
                 if (Get.find<TabController>().isHomeScreen.value) {
                   controller.makeProblemListInNewTab(item);
                 } else {
                   final tabController = Get.find<TabController>();
-                  Tab currentTab =
-                      tabController.tabs[tabController.currentTabIndex.value];
+                  Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
                   tabController.renameTab(currentTab, item.value["name"]);
                   await controller.makeProblemListInCurrentTab(item, tagName!);
                 }

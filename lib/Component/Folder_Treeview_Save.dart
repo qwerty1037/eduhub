@@ -1,13 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/FolderTreeView_MenuFlyout.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
-import 'package:front_end/Component/Default/Config.dart';
 
 ///각 탭의 대시보드에서 폴더 리스트를 보여주는 위젯
-class FolderTreeView_Search extends StatelessWidget {
-  FolderTreeView_Search({
+class FolderTreeViewSave extends StatelessWidget {
+  FolderTreeViewSave({
     this.tagName,
     super.key,
   });
@@ -41,11 +39,10 @@ class FolderTreeView_Search extends StatelessWidget {
             },
             onItemInvoked: (item, reason) async {
               if (reason == TreeViewItemInvokeReason.pressed) {
-                if (Get.find<TabController>().isHomeScreen.value) {
-                  await controller.makeProblemListInNewTab(item);
-                } else {
-                  await controller.makeProblemListInCurrentTab(item, tagName!);
-                }
+                controller.selectedDirectoryID.value = item.value["id"];
+
+                controller.firstFolders.refresh();
+                await controller.getPath();
               }
             },
             items: controller.firstFolders,

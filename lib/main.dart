@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TotalController(), permanent: true);
+    Get.put(TotalController());
     Get.put(FolderController());
 
     return GetBuilder<TotalController>(
@@ -39,10 +39,17 @@ class MyApp extends StatelessWidget {
           // folderController.makeExampleData();
           //====================================================================================================
           Get.put(TagController());
-          return const FluentApp(
-            themeMode: ThemeMode.light,
+          return FluentApp(
+            themeMode: controller.isDark ? ThemeMode.dark : ThemeMode.light,
+            theme: FluentThemeData(
+              iconTheme: IconThemeData(color: controller.iconColor),
+              accentColor: controller.accentColor,
+              brightness: Brightness.light,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+            ),
+            darkTheme: FluentThemeData(brightness: Brightness.dark),
             debugShowCheckedModeBanner: false,
-            home: HomeTabView(),
+            home: const HomeTabView(),
           );
         } else {
           return material.MaterialApp(

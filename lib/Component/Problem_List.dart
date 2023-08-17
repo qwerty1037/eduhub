@@ -53,19 +53,8 @@ class ProblemList extends StatelessWidget {
                                       targetFolder, problems);
                                   controller.isAllProblems.value = info;
                                 },
-                                content: const Text('폴더 아래 모든문제'),
+                                content: const Text('하위 폴더 포함'),
                               );
-                              // Button(
-                              //   child: controller.isAllProblems.isTrue
-                              //       ? const Text("모든 문제")
-                              //       : const Text("직속 문제"),
-                              //   onPressed: () async {
-                              //     await controller.resetVariable(
-                              //         targetFolder, problems);
-                              //     controller.isAllProblems.value =
-                              //         !controller.isAllProblems.value;
-                              //   },
-                              // );
                             })
                       ],
                     ),

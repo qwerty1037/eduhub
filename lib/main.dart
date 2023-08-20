@@ -42,12 +42,20 @@ class MyApp extends StatelessWidget {
           return FluentApp(
             themeMode: controller.isDark ? ThemeMode.dark : ThemeMode.light,
             theme: FluentThemeData(
-              iconTheme: IconThemeData(color: controller.iconColor),
-              accentColor: controller.accentColor,
+              typography: const Typography.raw(
+                  body: TextStyle(fontWeight: FontWeight.bold)),
+              scaffoldBackgroundColor: Colors.white,
+              accentColor: controller.activeColor,
               brightness: Brightness.light,
               fontFamily: GoogleFonts.poppins().fontFamily,
             ),
-            darkTheme: FluentThemeData(brightness: Brightness.dark),
+            darkTheme: FluentThemeData(
+                typography: const Typography.raw(
+                    body: TextStyle(fontWeight: FontWeight.bold)),
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                scaffoldBackgroundColor: const Color(0xFF141212),
+                accentColor: controller.activeColor,
+                brightness: Brightness.dark),
             debugShowCheckedModeBanner: false,
             home: const HomeTabView(),
           );

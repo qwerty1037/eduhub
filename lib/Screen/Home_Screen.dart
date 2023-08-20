@@ -8,6 +8,7 @@ import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
@@ -16,13 +17,14 @@ import 'package:get/get.dart';
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
   final tabController = Get.find<TabController>();
-
+  final totalController = Get.find<TotalController>();
   HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Get.put(HomeScreenController());
-    HomeScreenController homeScreenController = Get.find<HomeScreenController>();
+    HomeScreenController homeScreenController =
+        Get.find<HomeScreenController>();
 
     FolderController folderController = Get.find<FolderController>();
     return Column(
@@ -56,7 +58,8 @@ class HomeScreen extends StatelessWidget {
                       right: BorderSide(color: Colors.black, width: 0.5),
                     ),
                   ),
-                  child: leftDashboard(homeScreenController, context, folderController),
+                  child: leftDashboard(homeScreenController, context,
+                      folderController, totalController),
                 ),
               ),
               Expanded(
@@ -142,7 +145,10 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             createHighlightOverlay(
-                context: context, controller: Get.put(SearchScreenController(), tag: tabController.getNewTabKey()), tabController: tabController);
+                context: context,
+                controller: Get.put(SearchScreenController(),
+                    tag: tabController.getNewTabKey()),
+                tabController: tabController);
           },
         ),
       ),
@@ -180,19 +186,35 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
+Column leftDashboard(
+    HomeScreenController homeScreenController,
+    BuildContext context,
+    FolderController folderController,
+    TotalController totalController) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      Container(
-        color: Colors.yellow,
+      SizedBox(
         height: 70,
         child: Center(
-          child: Button(
-            child: const Text("로그아웃(프로필)"),
-            onPressed: () async {
-              homeScreenController.logout();
-            },
+          child: Column(
+            children: [
+              Button(
+                child: const Text("로그아웃(프로필)"),
+                onPressed: () async {
+                  homeScreenController.logout();
+                },
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              ToggleSwitch(
+                checked: totalController.isDark,
+                onChanged: (value) {
+                  totalController.isDark = value;
+                },
+              )
+            ],
           ),
         ),
       ),
@@ -217,7 +239,9 @@ Column leftDashboard(HomeScreenController homeScreenController, BuildContext con
         ),
       ),
       GetBuilder<HomeScreenController>(builder: (controller) {
-        return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : FolderTreeViewExplore();
+        return homeScreenController.isFolderEmpty
+            ? newFolderButton(context, folderController, homeScreenController)
+            : FolderTreeViewExplore();
       })
     ],
   );

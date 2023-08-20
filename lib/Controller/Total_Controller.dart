@@ -5,9 +5,8 @@ import 'package:get/get.dart';
 ///전역변수처럼 사용되는 변수들을 모아두는 컨트롤러
 class TotalController extends GetxController {
   bool isLoginSuccess = false;
-  Color mainColor = Colors.blue;
-  AccentColor accentColor = Colors.yellow;
-  Color iconColor = Colors.red;
+
+  AccentColor activeColor = Colors.blue;
 
   bool isDark = false;
 

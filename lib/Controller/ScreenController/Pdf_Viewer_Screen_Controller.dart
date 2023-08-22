@@ -17,8 +17,8 @@ class PdfViewerScreenController extends GetxController {
   Color uploadingColor = Colors.blue[100]!;
   RxBool isPdfInputed = false.obs;
   File? pickedFile;
-  Uint8List? capturedImage;
   RxString pickedFileName = "".obs;
+  Uint8List? capturedImage;
   RxBool isDragged = false.obs;
   RxBool isCaptured = false.obs;
 

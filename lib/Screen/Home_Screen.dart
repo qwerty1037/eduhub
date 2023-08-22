@@ -3,7 +3,7 @@ import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Feedback_Overlay.dart';
 import 'package:front_end/Component/Folder_Treeview_Explore.dart';
 import 'package:front_end/Component/New_Folder_Button.dart';
-import 'package:front_end/Component/Search_Bar_OverLay.dart';
+import 'package:front_end/Component/Search_Bar_Overlay.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';

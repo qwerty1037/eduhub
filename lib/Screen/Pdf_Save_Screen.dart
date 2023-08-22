@@ -9,8 +9,11 @@ import 'package:front_end/Component/Default/Default_Key_Text.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class PdfSaveScreen extends StatelessWidget {
-  final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
-  final controller = Get.put(PdfSaveController(), tag: Get.find<t.TabController>().getTabKey());
+  final DefaultTabBodyController _defaultTabBodyController =
+      Get.find<DefaultTabBodyController>(
+          tag: Get.find<t.TabController>().getTabKey());
+  final controller = Get.put(PdfSaveController(),
+      tag: Get.find<t.TabController>().getTabKey());
   final FolderController folderController = Get.find<FolderController>();
 
   @override
@@ -119,9 +122,6 @@ class PdfSaveScreen extends StatelessWidget {
         DefaultTextField(
           labelText: null,
           hintText: 'Tags을 입력하세요',
-          onChanged: (text) {
-            controller.tagsTextValue.value = text.toString();
-          },
           controller: controller.tagsController,
         ),
         const SizedBox(height: 20),
@@ -282,7 +282,8 @@ class PdfSaveScreen extends StatelessWidget {
       child: ElevatedButton(
         child: const Text('Back'),
         onPressed: () {
-          _defaultTabBodyController.changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
+          _defaultTabBodyController
+              .changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
         },
       ),
     );

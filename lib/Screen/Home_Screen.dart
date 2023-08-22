@@ -17,7 +17,7 @@ import 'package:get/get.dart';
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
   final tabController = Get.find<TabController>();
-  final totalController = Get.find<TotalController>();
+
   HomeScreen({super.key});
 
   @override
@@ -58,14 +58,13 @@ class HomeScreen extends StatelessWidget {
                       right: BorderSide(color: Colors.black, width: 0.5),
                     ),
                   ),
-                  child: leftDashboard(homeScreenController, context,
-                      folderController, totalController),
+                  child: leftDashboard(
+                      homeScreenController, context, folderController),
                 ),
               ),
               Expanded(
                 flex: 5,
                 child: Container(
-                  color: Colors.white,
                   child: const Center(child: Text("최근 기록 페이지")),
                 ),
               )
@@ -186,37 +185,36 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Column leftDashboard(
-    HomeScreenController homeScreenController,
-    BuildContext context,
-    FolderController folderController,
-    TotalController totalController) {
+Column leftDashboard(HomeScreenController homeScreenController,
+    BuildContext context, FolderController folderController) {
   return Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
+    // crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      SizedBox(
-        height: 70,
-        child: Center(
-          child: Column(
-            children: [
-              Button(
-                child: const Text("로그아웃(프로필)"),
-                onPressed: () async {
-                  homeScreenController.logout();
-                },
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              ToggleSwitch(
-                checked: totalController.isDark,
-                onChanged: (value) {
-                  totalController.isDark = value;
-                },
-              )
-            ],
-          ),
+      Center(
+        child: Button(
+          child: const Text("로그아웃(프로필)"),
+          onPressed: () async {
+            homeScreenController.logout();
+          },
         ),
+      ),
+      const SizedBox(height: 10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Text("다크 모드"),
+          GetBuilder<TotalController>(
+            builder: (controller) {
+              return ToggleSwitch(
+                checked: controller.isDark,
+                onChanged: (value) {
+                  controller.isDark = value;
+                  controller.update();
+                },
+              );
+            },
+          ),
+        ],
       ),
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -263,7 +261,6 @@ class questionMarkButton extends StatelessWidget {
         icon: const Icon(
           FluentIcons.status_circle_question_mark,
           size: 30,
-          color: DEFAULT_DARK_COLOR,
         ),
         onPressed: () {
           _flyoutController.showFlyout(

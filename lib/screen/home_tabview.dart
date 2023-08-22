@@ -19,6 +19,7 @@ class HomeTabView extends StatelessWidget {
                 header: IconButton(
                     icon: const Icon(
                       FluentIcons.home,
+                      // color: FluentTheme.of(context).iconTheme.color,
                     ),
                     onPressed: () {
                       controller.currentTabIndex.value = -1;

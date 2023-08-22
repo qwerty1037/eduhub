@@ -43,17 +43,19 @@ class MyApp extends StatelessWidget {
             themeMode: controller.isDark ? ThemeMode.dark : ThemeMode.light,
             theme: FluentThemeData(
               typography: const Typography.raw(
-                  body: TextStyle(fontWeight: FontWeight.bold)),
-              scaffoldBackgroundColor: Colors.white,
+                  body: TextStyle(
+                      color: Color(0xFF141212), fontWeight: FontWeight.bold)),
+              scaffoldBackgroundColor: controller.mainColor,
               accentColor: controller.activeColor,
               brightness: Brightness.light,
               fontFamily: GoogleFonts.poppins().fontFamily,
             ),
             darkTheme: FluentThemeData(
                 typography: const Typography.raw(
-                    body: TextStyle(fontWeight: FontWeight.bold)),
+                    body: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
                 fontFamily: GoogleFonts.poppins().fontFamily,
-                scaffoldBackgroundColor: const Color(0xFF141212),
+                scaffoldBackgroundColor: controller.mainColor,
                 accentColor: controller.activeColor,
                 brightness: Brightness.dark),
             debugShowCheckedModeBanner: false,

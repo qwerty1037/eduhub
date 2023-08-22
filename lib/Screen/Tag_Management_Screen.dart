@@ -20,9 +20,6 @@ class TagManagementScreen extends StatelessWidget {
             const DefaultKeyText(text: "추가하실 태그를 입력하세요"),
             DefaultTextField(
               hintText: "Insert Tags",
-              onChanged: (value) {
-                tagController.tagsInputValue.value = value.toString();
-              },
               onEditingComplete: () {
                 if (tagController.tagsInputController.text != " ") {
                   //TODO: 나중에 엄밀한 문자열 알고리즘 필요

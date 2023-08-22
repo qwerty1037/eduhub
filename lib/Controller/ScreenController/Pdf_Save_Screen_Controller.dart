@@ -18,18 +18,17 @@ class PdfSaveController extends GetxController {
   late Uint8List capturedImageAnswer;
   RxList<TagModel> tagsList = <TagModel>[].obs;
   RxBool isImagePreviewButtonTapped = false.obs;
-  RxString tagsTextValue = "".obs;
   RxDouble difficultySliderValue = 0.0.obs;
 
   TextEditingController problemNameController = TextEditingController();
-  TextEditingController directoryController = TextEditingController();
   TextEditingController tagsController = TextEditingController();
 
   @override
   PdfSaveController() {
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
-      tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
+      tagsList.add(TagModel(tagController.totalTagList[i].name,
+          tagController.totalTagList[i].id!, false));
     }
   }
 
@@ -43,7 +42,8 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].ID);
       }
     }
-    String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
+    String capturedFileNameProblem =
+        '${problemNameController.text}_problem.jpeg';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
 
     final url = Uri.parse('http://$HOST/api/data/create_problem');
@@ -54,14 +54,16 @@ class PdfSaveController extends GetxController {
       'problem_image',
       capturedImageProblem,
       filename: capturedFileNameProblem,
-      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType:
+          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
     var multipartFileAnswer = http.MultipartFile.fromBytes(
       'problem_image',
       capturedImageAnswer,
       filename: capturedFileNameAnswer,
-      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType:
+          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
     final Map<String, dynamic> requestField = {
@@ -140,11 +142,11 @@ class PdfSaveController extends GetxController {
   /// 검색한 텍스트에 맞춘 칩 리스트 반환
   List<Widget> filterChipsList() {
     List<Widget> chips = [];
-    if (tagsTextValue.value == "") {
+    if (tagsController.text == "") {
       return [];
     } else {
       RegExp regExp = getRegExp(
-        tagsTextValue.value,
+        tagsController.text,
         RegExpOptions(
           initialSearch: true,
           startsWith: false,

@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Folder_Treeview_Explore.dart';
 import 'package:front_end/Component/New_Folder_Button.dart';
-import 'package:front_end/Component/Search_Bar_OverLay.dart';
+import 'package:front_end/Component/Search_Bar_Overlay.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
@@ -58,7 +58,10 @@ class DefaultTabBody extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    left: BorderSide(
+                                        color: Colors.black, width: 0.5))),
                             width: MediaQuery.of(context).size.width / 6 * 5,
                             child: controller.workingSpaceWidget.value,
                           ),
@@ -86,14 +89,20 @@ class DefaultTabBody extends StatelessWidget {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width / 6,
                           child: Get.find<HomeScreenController>().isFolderEmpty
-                              ? newFolderButton(context, Get.find<FolderController>(), Get.find<HomeScreenController>())
+                              ? newFolderButton(
+                                  context,
+                                  Get.find<FolderController>(),
+                                  Get.find<HomeScreenController>())
                               : FolderTreeViewExplore(
                                   tagName: tagName,
                                 ),
                         ),
                       ),
                       Container(
-                          decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      color: Colors.black, width: 0.5))),
                           width: MediaQuery.of(context).size.width / 6 * 5,
                           child: const SizedBox())
                     ],
@@ -105,7 +114,8 @@ class DefaultTabBody extends StatelessWidget {
         }));
   }
 
-  Center topCommandBar(DefaultTabBodyController controller, BuildContext context) {
+  Center topCommandBar(
+      DefaultTabBodyController controller, BuildContext context) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
@@ -123,9 +133,12 @@ class DefaultTabBody extends StatelessWidget {
             controller.changeWorkingSpace(
               const PdfViewerScreen(),
             );
-            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Save Pdf");
-            debugPrint(tabController.tabs[tabController.currentTabIndex.value].text.toString());
+            debugPrint(tabController
+                .tabs[tabController.currentTabIndex.value].text
+                .toString());
           },
         ),
       ),
@@ -169,7 +182,11 @@ class DefaultTabBody extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () async {
-            createHighlightOverlay(context: context, controller: Get.put(SearchScreenController(), tag: controller.tagName), tabController: tabController);
+            createHighlightOverlay(
+                context: context,
+                controller:
+                    Get.put(SearchScreenController(), tag: controller.tagName),
+                tabController: tabController);
           },
         ),
       ),
@@ -187,7 +204,8 @@ class DefaultTabBody extends StatelessWidget {
           onPressed: () async {
             await controller.deleteWorkingSpaceController();
             controller.changeWorkingSpace(TagManagementScreen());
-            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Generate Tags");
           },
         ),

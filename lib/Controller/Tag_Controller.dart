@@ -12,7 +12,6 @@ class TagController extends GetxController {
   TextEditingController tagsInputController = TextEditingController();
   int numberOfTags = 0;
   RxList<Tag> inputedTagsList = <Tag>[].obs;
-  RxString tagsInputValue = "".obs;
   RxList<Tag> totalTagList = <Tag>[].obs;
 
   TagController() {

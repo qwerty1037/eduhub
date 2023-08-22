@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TotalController());
+    Get.put(TotalController(), permanent: true);
     Get.put(FolderController());
 
     return GetBuilder<TotalController>(

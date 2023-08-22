@@ -19,7 +19,6 @@ class HomeTabView extends StatelessWidget {
                 header: IconButton(
                     icon: const Icon(
                       FluentIcons.home,
-                      // color: FluentTheme.of(context).iconTheme.color,
                     ),
                     onPressed: () {
                       controller.currentTabIndex.value = -1;
@@ -27,8 +26,8 @@ class HomeTabView extends StatelessWidget {
                     }),
                 currentIndex: controller.currentTabIndex.value,
                 tabs: controller.tabs,
-                tabWidthBehavior: TabWidthBehavior.equal,
-                closeButtonVisibility: CloseButtonVisibilityMode.onHover,
+                tabWidthBehavior: TabWidthBehavior.sizeToContent,
+                closeButtonVisibility: CloseButtonVisibilityMode.always,
                 onChanged: (index) {
                   controller.isHomeScreen.value = false;
                   controller.currentTabIndex.value = index;

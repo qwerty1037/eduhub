@@ -21,7 +21,7 @@ class HomeScreenController extends GetxController {
     await storage.delete(key: "refresh_token");
     final TotalController previousTotalController = Get.find<TotalController>();
     previousTotalController.isLoginSuccess = false;
-    Get.delete<FolderController>();
+    Get.deleteAll();
     Get.put(FolderController());
     previousTotalController.update();
   }

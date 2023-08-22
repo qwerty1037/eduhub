@@ -20,7 +20,6 @@ class TabController extends GetxController {
       key: newKey,
       text: Text(
         text ?? "New Tab",
-        style: const TextStyle(color: DEFAULT_DARK_COLOR),
       ),
       icon: const Icon(
         FluentIcons.file_template,

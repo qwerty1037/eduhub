@@ -5,17 +5,14 @@ const DEFAULT_TAB_COLOR = Colors.grey;
 // Color(0xFF363943);
 
 const DEFAULT_LIGHT_COLOR = Color(0xFFFFFFFF);
-
 const DEFAULT_TEXT_COLOR = Colors.black;
 const DEFAULT_TEXT_ALERT_COLOR = Colors.red;
 const DEFAULT_BUTTON_COLOR = Colors.blueAccent;
 const DEFAULT_UNABLE_COLOR = Colors.grey;
-
 const double DEFAULT_HEAD_FONT_SIZE = 40;
 const double DEFAULT_TEXT_FONT_SIZE = 25;
 const double DEFAULT_BUTTON_FONT_SIZE = 30;
-
-const String HOST = '175.124.93.223:3000';
+const String HOST = '118.36.177.117:3000';
 
 //118.36.177.117 스터디라운지
 //175.124.93.223 원격연결

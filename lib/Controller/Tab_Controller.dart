@@ -28,18 +28,19 @@ class TabController extends GetxController {
       onClosed: () async {
         tabs.remove(newTab);
         final int indexToDelete = tabs.indexOf(newTab);
-        debugPrint(indexToDelete.toString());
+
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;
         }
         if (currentTabIndex.value == -1) {
           isHomeScreen.value = true;
         }
-        debugPrint(newKey.toString());
+
         await Get.find<DefaultTabBodyController>(tag: newKey.toString())
             .deleteWorkingSpaceController();
 
-        Get.delete<DefaultTabBodyController>(tag: newKey.toString());
+        Get.delete<DefaultTabBodyController>(
+            tag: newKey.toString(), force: true);
         if (tabs.isEmpty) {
           isNewTab = true;
         }
@@ -51,17 +52,34 @@ class TabController extends GetxController {
 
   ///탭의 이름을 바꾸는 함수로 바꿀 탭과 바꿀 이름을 파라미터로 주면 된다
   void renameTab(Tab tab, String newName) {
-    Tab newTab;
+    Tab? newTab;
+
     newTab = Tab(
       key: tab.key,
       text: Text(
         newName,
-        style: const TextStyle(color: DEFAULT_DARK_COLOR),
       ),
       icon: tab.icon,
       body: tab.body,
-      onClosed: () {
-        tab.onClosed;
+      onClosed: () async {
+        tabs.remove(newTab);
+        final int indexToDelete = tabs.indexOf(newTab);
+
+        if (indexToDelete <= currentTabIndex.value) {
+          currentTabIndex.value--;
+        }
+        if (currentTabIndex.value == -1) {
+          isHomeScreen.value = true;
+        }
+
+        await Get.find<DefaultTabBodyController>(tag: tab.key.toString())
+            .deleteWorkingSpaceController();
+
+        Get.delete<DefaultTabBodyController>(
+            tag: tab.key.toString(), force: true);
+        if (tabs.isEmpty) {
+          isNewTab = true;
+        }
       },
     );
     final int index = tabs.indexOf(tab);

@@ -20,12 +20,11 @@ class DefaultTabBody extends StatelessWidget {
     this.workingSpace,
   }) {
     tagName = tabController.getNewTabKey();
-    // Get.put(DefaultTabBodyController(workingSpace), tag: tagName);
   }
   final DashBoardType dashBoardType;
   final Widget? workingSpace;
   final TabController tabController = Get.find<TabController>();
-  late final DefaultTabBodyController defaultTabBodyController;
+
   late final String tagName;
 
   @override
@@ -54,7 +53,7 @@ class DefaultTabBody extends StatelessWidget {
                           Expanded(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width / 6,
-                              child: controller.dashBoard(dashBoardType),
+                              child: controller.dashBoard.value,
                             ),
                           ),
                           Container(
@@ -133,12 +132,11 @@ class DefaultTabBody extends StatelessWidget {
             controller.changeWorkingSpace(
               const PdfViewerScreen(),
             );
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.savePdf);
             Tab currentTab =
                 tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Save Pdf");
-            debugPrint(tabController
-                .tabs[tabController.currentTabIndex.value].text
-                .toString());
           },
         ),
       ),
@@ -187,6 +185,9 @@ class DefaultTabBody extends StatelessWidget {
                 controller:
                     Get.put(SearchScreenController(), tag: controller.tagName),
                 tabController: tabController);
+
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.search);
           },
         ),
       ),
@@ -204,6 +205,8 @@ class DefaultTabBody extends StatelessWidget {
           onPressed: () async {
             await controller.deleteWorkingSpaceController();
             controller.changeWorkingSpace(TagManagementScreen());
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.tagManagement);
             Tab currentTab =
                 tabController.tabs[tabController.currentTabIndex.value];
             tabController.renameTab(currentTab, "Generate Tags");

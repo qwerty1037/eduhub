@@ -20,12 +20,16 @@ class DefaultTabBodyController extends GetxController {
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
   ).obs;
 
+  late Rx<Widget> dashBoard;
+
   Widget? savedWorkingSpace;
 
-  DefaultTabBodyController(this.tagName, this.dashBoardType, Widget? workingSpace) {
+  DefaultTabBodyController(
+      this.tagName, this.dashBoardType, Widget? workingSpace) {
     if (workingSpace != null) {
       changeWorkingSpace(workingSpace);
     }
+    dashBoard = makeDashBoard(dashBoardType).obs;
   }
 
   ///현재 작업창 내용을 저장하는 함수
@@ -50,7 +54,7 @@ class DefaultTabBodyController extends GetxController {
     await Get.delete<TagController>(tag: tag);
   }
 
-  Widget dashBoard(DashBoardType dashBoardType) {
+  Widget makeDashBoard(DashBoardType dashBoardType) {
     switch (dashBoardType) {
       case DashBoardType.explore:
         return FolderTreeViewExplore(

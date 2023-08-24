@@ -9,16 +9,27 @@ import 'package:front_end/Screen/Home_Tabview.dart';
 import 'package:front_end/Screen/Login_Screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appLifecycleObserver = AppLifecycleObserver();
   WidgetsBinding.instance.addObserver(appLifecycleObserver);
+  await windowManager.ensureInitialized();
   await Window.initialize();
   await Window.setEffect(
     effect: WindowEffect.aero,
     color: const Color.fromARGB(50, 0, 0, 0),
   );
+  WindowOptions windowOptions = const WindowOptions(
+      // fullScreen: true,
+
+      minimumSize: Size(1000, 250),
+      titleBarStyle: TitleBarStyle.normal);
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
 
   runApp(const MyApp());
 }

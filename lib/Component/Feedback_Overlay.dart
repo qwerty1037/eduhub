@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/Default_Key_Text.dart';
-import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
+import 'package:front_end/Component/Default/Default_TextBox.dart';
 
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Feedback_Controller.dart';
@@ -30,9 +30,8 @@ void createFeedbackOverlay({
             sigmaX: 2,
             sigmaY: 2,
           ),
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            body: Stack(
+          child: ScaffoldPage(
+            content: Stack(
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
@@ -44,7 +43,7 @@ void createFeedbackOverlay({
                             alignment: Alignment.topCenter,
                             child: Center(
                               child: Text(
-                                "피드백 보내기",
+                                "평가 및 건의",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 21,
@@ -55,7 +54,7 @@ void createFeedbackOverlay({
                           ),
                           Align(
                             alignment: Alignment.topRight,
-                            child: ElevatedButton(
+                            child: Button(
                               child: const Text("나가기"),
                               onPressed: () {
                                 controller.delete();
@@ -82,30 +81,35 @@ void createFeedbackOverlay({
                             child: Column(
                               children: [
                                 const DefaultKeyText(text: "제목"),
-                                DefaultTextField(
-                                  controller: controller.titleController,
-                                  hintText: "제목을 입력하세요",
-                                  onChanged: (value) =>
-                                      controller.titleController.text,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                const DefaultKeyText(text: "피드백 내용"),
-                                Scrollbar(
-                                  child: DefaultTextField(
-                                    controller: controller.contentController,
-                                    hintText: "피드백 내용을 입력하세요",
+                                SizedBox(
+                                  height: 50,
+                                  child: DefaultTextBox(
+                                    placeholder: "제목을 입력하세요",
+                                    controller: controller.titleController,
                                     onChanged: (value) =>
-                                        controller.contentController.text,
-                                    minLines: 1,
-                                    maxLines: 8,
+                                        controller.titleController.text,
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                TextButton(
+                                const DefaultKeyText(text: "평가 및 건의 내용"),
+                                Scrollbar(
+                                    child: SizedBox(
+                                  height: 50,
+                                  child: DefaultTextBox(
+                                    placeholder: "내용을 입력하세요",
+                                    controller: controller.contentController,
+                                    onChanged: (value) =>
+                                        controller.contentController.text,
+                                    minLines: 1,
+                                    maxLines: 8,
+                                  ),
+                                )),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Button(
                                   onPressed: () async {
                                     final url = Uri.parse(
                                         'http://$HOST/api/data/feedback');
@@ -138,7 +142,6 @@ void createFeedbackOverlay({
                                     width: double.infinity,
                                     alignment: Alignment.center,
                                     decoration: const BoxDecoration(
-                                      color: Colors.blueAccent,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10.0)),
                                     ),
@@ -146,7 +149,6 @@ void createFeedbackOverlay({
                                       "이렇게 저장하기",
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),

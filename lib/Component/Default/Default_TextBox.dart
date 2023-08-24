@@ -6,13 +6,16 @@ import 'package:flutter/material.dart' as m;
 /// Fluent UI에서 사용하는 TextField의 대용, TextBox의 양식
 class DefaultTextBox extends StatelessWidget {
   const DefaultTextBox(
-      {this.labelText,
+      {super.key,
+      this.labelText,
       required this.placeholder,
       this.onChanged,
       this.controller,
       this.prefix,
       this.suffix,
-      this.onEditingComplete});
+      this.onEditingComplete,
+      this.maxLines,
+      this.minLines});
 
   final String? labelText;
   final String placeholder;
@@ -21,6 +24,9 @@ class DefaultTextBox extends StatelessWidget {
   final Widget? prefix;
   final Widget? suffix;
   final VoidCallback? onEditingComplete;
+  final int? maxLines;
+  final int? minLines;
+
   @override
   Widget build(BuildContext context) {
     return TextBox(
@@ -28,7 +34,7 @@ class DefaultTextBox extends StatelessWidget {
       highlightColor: Colors.transparent,
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         border: Border.all(
           width: 1,
           color: Colors.grey,
@@ -39,6 +45,8 @@ class DefaultTextBox extends StatelessWidget {
       controller: controller,
       suffix: suffix,
       prefix: prefix,
+      maxLines: maxLines ?? 1,
+      minLines: minLines ?? 1,
     );
   }
 }

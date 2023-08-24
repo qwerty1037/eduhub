@@ -136,7 +136,8 @@ class DefaultTabBody extends StatelessWidget {
                 controller.makeDashBoard(DashBoardType.savePdf);
             Tab currentTab =
                 tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(currentTab, "문제 저장");
+            tabController.renameTab(
+                currentTab, "문제 저장", const Icon(FluentIcons.save));
           },
         ),
       ),
@@ -209,7 +210,8 @@ class DefaultTabBody extends StatelessWidget {
                 controller.makeDashBoard(DashBoardType.tagManagement);
             Tab currentTab =
                 tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(currentTab, "태그");
+            tabController.renameTab(
+                currentTab, "태그", const Icon(FluentIcons.tag));
           },
         ),
       ),

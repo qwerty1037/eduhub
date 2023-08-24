@@ -50,7 +50,8 @@ class FolderTreeViewExplore extends StatelessWidget {
                   final tabController = Get.find<TabController>();
                   Tab currentTab =
                       tabController.tabs[tabController.currentTabIndex.value];
-                  tabController.renameTab(currentTab, item.value["name"]);
+                  tabController.renameTab(currentTab, item.value["name"],
+                      const Icon(FluentIcons.fabric_folder));
                   await controller.makeProblemListInCurrentTab(item, tagName!);
                 }
               }

@@ -12,8 +12,8 @@ class TabController extends GetxController {
   int tagNumber = 0;
   bool isNewTab = true;
 
-  ///새로운 탭을 추가하는 함수, body와 탭 이름을 파라미터로 받는다 탭 이름은 안주면 NewTab으로 된다.
-  Tab addTab(final Widget body, String? text) {
+  ///새로운 탭을 추가하는 함수, body와 탭 이름, 아이콘을 파라미터로 받는다 탭 이름은 안주면 NewTab으로 된다.
+  Tab addTab(final Widget body, final String? text, final Icon? icon) {
     Tab? newTab;
     Key newKey = Key(tagNumber.toString());
     newTab = Tab(
@@ -21,9 +21,10 @@ class TabController extends GetxController {
       text: Text(
         text ?? "New Tab",
       ),
-      icon: const Icon(
-        FluentIcons.file_template,
-      ),
+      icon: icon ??
+          const Icon(
+            FluentIcons.file_template,
+          ),
       body: body,
       onClosed: () async {
         tabs.remove(newTab);
@@ -52,8 +53,8 @@ class TabController extends GetxController {
     return newTab;
   }
 
-  ///탭의 이름을 바꾸는 함수로 바꿀 탭과 바꿀 이름을 파라미터로 주면 된다
-  void renameTab(Tab tab, String newName) {
+  ///탭의 이름을 바꾸는 함수로 바꿀 탭과 바꿀 이름, 아이콘을 파라미터로 주면 된다
+  void renameTab(final Tab tab, final String newName, final Icon? newIcon) {
     Tab? newTab;
 
     newTab = Tab(
@@ -61,7 +62,7 @@ class TabController extends GetxController {
       text: Text(
         newName,
       ),
-      icon: tab.icon,
+      icon: newIcon ?? tab.icon,
       body: tab.body,
       onClosed: () async {
         tabs.remove(newTab);
@@ -113,7 +114,7 @@ class TabController extends GetxController {
     DefaultTabBody generatedTab = DefaultTabBody(
       dashBoardType: DashBoardType.explore,
     );
-    Tab newTab = addTab(generatedTab, null);
+    Tab newTab = addTab(generatedTab, null, null);
 
     tabs.add(newTab);
     isHomeScreen.value = false;

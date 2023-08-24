@@ -91,7 +91,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.savePdf,
               workingSpace: const PdfViewerScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "문제 저장");
+            Tab newTab = tabController.addTab(
+                generatedTab, "문제 저장", const Icon(FluentIcons.save));
 
             tabController.tabs.add(newTab);
             tabController.isHomeScreen.value = false;
@@ -166,7 +167,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.tagManagement,
               workingSpace: TagManagementScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "태그");
+            Tab newTab = tabController.addTab(
+                generatedTab, "태그", const Icon(FluentIcons.tag));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;

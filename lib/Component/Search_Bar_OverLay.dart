@@ -72,8 +72,8 @@ void createHighlightOverlay({
                         dashBoardType: DashBoardType.search,
                         workingSpace: SearchScreen(),
                       );
-                      Tab newTab =
-                          tabController.addTab(tabBody, "SearchScreen");
+                      Tab newTab = tabController.addTab(tabBody, "SearchScreen",
+                          const Icon(FluentIcons.search));
                       tabController.tabs.add(newTab);
                       tabController.currentTabIndex.value =
                           tabController.tabs.length - 1;
@@ -93,7 +93,8 @@ void createHighlightOverlay({
 
                       Tab currentTab = tabController
                           .tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, "SearchScreen");
+                      tabController.renameTab(currentTab, "SearchScreen",
+                          const Icon(FluentIcons.search));
                     }
                   },
                 ),

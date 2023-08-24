@@ -22,8 +22,7 @@ void main() async {
     color: const Color.fromARGB(50, 0, 0, 0),
   );
   WindowOptions windowOptions = const WindowOptions(
-      // fullScreen: true,
-
+      title: "바선생",
       minimumSize: Size(1000, 250),
       titleBarStyle: TitleBarStyle.normal);
   windowManager.waitUntilReadyToShow(windowOptions, () async {

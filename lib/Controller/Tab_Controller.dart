@@ -32,8 +32,10 @@ class TabController extends GetxController {
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;
         }
-        if (currentTabIndex.value == -1) {
+        if (currentTabIndex.value == -1 && tabs.isEmpty) {
           isHomeScreen.value = true;
+        } else {
+          currentTabIndex.value = 0;
         }
 
         await Get.find<DefaultTabBodyController>(tag: newKey.toString())
@@ -84,6 +86,7 @@ class TabController extends GetxController {
     );
     final int index = tabs.indexOf(tab);
     tabs[index] = newTab;
+
     currentTabIndex.value++;
     currentTabIndex.value--;
   }
@@ -111,6 +114,7 @@ class TabController extends GetxController {
       dashBoardType: DashBoardType.explore,
     );
     Tab newTab = addTab(generatedTab, null);
+
     tabs.add(newTab);
     isHomeScreen.value = false;
     currentTabIndex.value = tabs.length - 1;

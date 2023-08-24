@@ -40,7 +40,7 @@ class DefaultTabBody extends StatelessWidget {
               builder: (controller) {
                 return Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 40,
                       //color: FluentTheme.of(context).acrylicBackgroundColor,
@@ -57,7 +57,10 @@ class DefaultTabBody extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    left: BorderSide(
+                                        color: Colors.black, width: 0.5))),
                             width: MediaQuery.of(context).size.width / 6 * 5,
                             child: controller.workingSpaceWidget.value,
                           ),
@@ -71,7 +74,7 @@ class DefaultTabBody extends StatelessWidget {
           } else {
             return Column(
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 40,
                   //color: Colors.teal,
@@ -85,14 +88,20 @@ class DefaultTabBody extends StatelessWidget {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width / 6,
                           child: Get.find<HomeScreenController>().isFolderEmpty
-                              ? newFolderButton(context, Get.find<FolderController>(), Get.find<HomeScreenController>())
+                              ? newFolderButton(
+                                  context,
+                                  Get.find<FolderController>(),
+                                  Get.find<HomeScreenController>())
                               : FolderTreeViewExplore(
                                   tagName: tagName,
                                 ),
                         ),
                       ),
                       Container(
-                          decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      color: Colors.black, width: 0.5))),
                           width: MediaQuery.of(context).size.width / 6 * 5,
                           child: const SizedBox())
                     ],
@@ -104,16 +113,17 @@ class DefaultTabBody extends StatelessWidget {
         }));
   }
 
-  Center topCommandBar(DefaultTabBodyController controller, BuildContext context) {
+  Center topCommandBar(
+      DefaultTabBodyController controller, BuildContext context) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Save your Pdf files!",
+          message: "hwp, pdf 파일에서 문제 추출",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.save),
-          label: const Text("Save Pdf",
+          label: const Text("문제 저장",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -122,20 +132,22 @@ class DefaultTabBody extends StatelessWidget {
             controller.changeWorkingSpace(
               const PdfViewerScreen(),
             );
-            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.savePdf);
-            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(currentTab, "Save Pdf");
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.savePdf);
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(currentTab, "문제 저장");
           },
         ),
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Create Test!",
+          message: "시험지 만들기",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.page),
-          label: const Text("Create Test",
+          label: const Text("시험지",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -144,12 +156,12 @@ class DefaultTabBody extends StatelessWidget {
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Manage your students!",
+          message: "학생 관리",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.page),
-          label: const Text("Student Management",
+          label: const Text("학생",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -158,39 +170,46 @@ class DefaultTabBody extends StatelessWidget {
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Search your problems!",
+          message: "문제 검색",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.search),
-          label: const Text("Search",
+          label: const Text("검색",
               style: TextStyle(
                 fontSize: 15,
               )),
           onPressed: () async {
-            createHighlightOverlay(context: context, controller: Get.put(SearchScreenController(), tag: controller.tagName), tabController: tabController);
+            createHighlightOverlay(
+                context: context,
+                controller:
+                    Get.put(SearchScreenController(), tag: controller.tagName),
+                tabController: tabController);
 
-            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.search);
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.search);
           },
         ),
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Make your tags!",
+          message: "태그 만들기",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.tag),
-          label: const Text("Tags",
+          label: const Text("태그",
               style: TextStyle(
                 fontSize: 15,
               )),
           onPressed: () async {
             await controller.deleteWorkingSpaceController();
             controller.changeWorkingSpace(TagManagementScreen());
-            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.tagManagement);
-            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(currentTab, "Generate Tags");
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.tagManagement);
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(currentTab, "태그");
           },
         ),
       ),
@@ -210,7 +229,7 @@ class DefaultTabBody extends StatelessWidget {
         builder: (context, mode, widget) => widget,
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.save),
-          label: const Text("Save Pdf",
+          label: const Text("문제 저장",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -223,7 +242,7 @@ class DefaultTabBody extends StatelessWidget {
         },
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.page),
-          label: const Text("Create Test",
+          label: const Text("시험지",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -236,7 +255,7 @@ class DefaultTabBody extends StatelessWidget {
         },
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.page),
-          label: const Text("Student Management",
+          label: const Text("학생",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -247,7 +266,7 @@ class DefaultTabBody extends StatelessWidget {
         builder: (context, mode, widget) => widget,
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.search),
-          label: const Text("Search",
+          label: const Text("검색",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -260,7 +279,7 @@ class DefaultTabBody extends StatelessWidget {
         },
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.tag),
-          label: const Text("Tags",
+          label: const Text("태그",
               style: TextStyle(
                 fontSize: 15,
               )),

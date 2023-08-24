@@ -35,9 +35,6 @@ class HomeScreen extends StatelessWidget {
           //color: Colors.teal,
           child: Row(
             children: [
-              const SizedBox(
-                width: 20,
-              ),
               menuCommandBar(context, homeScreenController),
               const Spacer(),
               questionMarkButton(flyoutController: _flyoutController)
@@ -79,12 +76,12 @@ class HomeScreen extends StatelessWidget {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Save your Pdf files!",
+          message: "hwp, pdf 파일에서 문제 추출",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.save),
-          label: const Text("Save Pdf",
+          label: const Text("문제 저장",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -94,7 +91,7 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.savePdf,
               workingSpace: const PdfViewerScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "Save Pdf");
+            Tab newTab = tabController.addTab(generatedTab, "문제 저장");
 
             tabController.tabs.add(newTab);
             tabController.isHomeScreen.value = false;
@@ -105,12 +102,12 @@ class HomeScreen extends StatelessWidget {
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Create Test!",
+          message: "시험지 만들기",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.page),
-          label: const Text("Create Test",
+          label: const Text("시험지",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -119,12 +116,12 @@ class HomeScreen extends StatelessWidget {
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Manage your students!",
+          message: "학생 관리",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.page),
-          label: const Text("Student Management",
+          label: const Text("학생",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -133,12 +130,12 @@ class HomeScreen extends StatelessWidget {
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Search your problems!",
+          message: "문제 검색",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.search),
-          label: const Text("Search",
+          label: const Text("검색",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -153,12 +150,12 @@ class HomeScreen extends StatelessWidget {
       ),
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
-          message: "Make your tags!",
+          message: "태그 만들기",
           child: widget,
         ),
         wrappedItem: CommandBarButton(
           icon: const Icon(FluentIcons.tag),
-          label: const Text("Tags",
+          label: const Text("태그",
               style: TextStyle(
                 fontSize: 15,
               )),
@@ -169,7 +166,7 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.tagManagement,
               workingSpace: TagManagementScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "Generate Tags");
+            Tab newTab = tabController.addTab(generatedTab, "태그");
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;

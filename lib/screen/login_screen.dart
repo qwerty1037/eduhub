@@ -88,22 +88,24 @@ class LoginScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
       ),
-      color: const Color.fromARGB(52, 117, 117, 117),
+      color: Theme.of(context).colorScheme.primaryContainer, //const Color.fromARGB(52, 117, 117, 117),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             "Login",
-            style: GoogleFonts.poppins(
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ), /*
+                GoogleFonts.poppins(
               fontWeight: FontWeight.w700,
-              color: Colors.white,
-              fontSize: 18.0,
-            ),
+              color: Theme.of(context).colorScheme.onSecondaryContainer, //Colors.white,
+              fontSize: 18,*/
           ),
           const SizedBox(
             height: 16,
           ),
-          loginTextfield(),
+          loginTextfield(context),
           const SizedBox(
             height: 8,
           ),
@@ -154,19 +156,12 @@ class LoginScreen extends StatelessWidget {
       onEditingComplete: () {
         loginController.logInRequest(context);
       },
-      style: const TextStyle(
-        color: Colors.white,
-      ),
       decoration: InputDecoration(
         prefixIcon: const Icon(
           FontAwesomeIcons.lock,
           size: 15.0,
-          color: Color.fromARGB(155, 255, 255, 255),
         ),
         hintText: "Password",
-        hintStyle: const TextStyle(
-          color: Color.fromARGB(127, 255, 255, 255),
-        ),
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16.0,
@@ -188,22 +183,23 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  TextField loginTextfield() {
+  TextField loginTextfield(BuildContext context) {
     return TextField(
       controller: loginController.idController,
-      style: const TextStyle(
-        color: Colors.white,
-      ),
+      /*style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
+          ),*/
       decoration: InputDecoration(
-        prefixIcon: const Icon(
+        prefixIcon: Icon(
           FontAwesomeIcons.mailBulk,
           size: 15.0,
-          color: Color.fromARGB(155, 255, 255, 255),
+          //color: Theme.of(context).colorScheme.onSecondaryContainer, //Color.fromARGB(155, 255, 255, 255),
         ),
         hintText: "ID",
+        /*
         hintStyle: const TextStyle(
           color: Color.fromARGB(127, 255, 255, 255),
-        ),
+        ),*/
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16.0,
@@ -296,16 +292,14 @@ class InquiryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {},
+      /*
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.all(Colors.transparent),
       ),
+      */
       child: Text(
         "문의하기",
-        style: GoogleFonts.poppins(
-          fontWeight: FontWeight.w300,
-          color: Colors.white,
-          fontSize: 14.0,
-        ),
+        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }
@@ -423,16 +417,14 @@ class RegisterInfoButton extends StatelessWidget {
               );
             });
       },
+      /*
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.all(Colors.transparent),
       ),
+      */
       child: Text(
         "회원가입",
-        style: GoogleFonts.poppins(
-          fontWeight: FontWeight.w300,
-          color: Colors.white,
-          fontSize: 14.0,
-        ),
+        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }

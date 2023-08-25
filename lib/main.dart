@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:front_end/Component/Applifecycle_Observer.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Home_Tabview.dart';
@@ -29,7 +30,8 @@ void main() async {
     await windowManager.show();
     await windowManager.focus();
   });
-
+  Get.put(TotalController(), permanent: true);
+  Get.put(FolderController());
   runApp(const MyApp());
 }
 
@@ -38,28 +40,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TotalController(), permanent: true);
-    Get.put(FolderController());
-
     return GetBuilder<TotalController>(
       builder: (controller) {
         if (controller.isLoginSuccess) {
-          //서버 없을때 주석 풀기 + TotalController의 isLoginSuccess true로======================================
-          // FolderController folderController = Get.find<FolderController>();
-          // folderController.makeExampleData();
-          //====================================================================================================
+          //로직상 한번만 호출되서 괜찮음
+
           Get.put(TagController());
+          Get.put(TabController());
           return FluentApp(
             themeMode: controller.isDark ? ThemeMode.dark : ThemeMode.light,
             theme: FluentThemeData(
-              typography: const Typography.raw(body: TextStyle(color: Color(0xFF141212), fontWeight: FontWeight.bold)),
+              typography: const Typography.raw(
+                  body: TextStyle(
+                      color: Color(0xFF141212), fontWeight: FontWeight.bold)),
               scaffoldBackgroundColor: Colors.grey[10],
               accentColor: Colors.orange,
               brightness: Brightness.light,
               fontFamily: GoogleFonts.poppins().fontFamily,
             ),
             darkTheme: FluentThemeData(
-                typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                typography: const Typography.raw(
+                    body: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
                 fontFamily: GoogleFonts.poppins().fontFamily,
                 scaffoldBackgroundColor: Colors.grey[160],
                 accentColor: Colors.orange,
@@ -72,7 +74,8 @@ class MyApp extends StatelessWidget {
             theme: material.ThemeData(
               fontFamily: GoogleFonts.poppins().fontFamily,
               useMaterial3: true,
-              colorScheme: material.ColorScheme.fromSeed(seedColor: material.Colors.red),
+              colorScheme:
+                  material.ColorScheme.fromSeed(seedColor: material.Colors.red),
             ),
             debugShowCheckedModeBanner: false,
             home: LoginScreen(),

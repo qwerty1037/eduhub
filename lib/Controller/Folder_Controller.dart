@@ -79,7 +79,7 @@ class FolderController extends GetxController {
   TreeViewItem makeFolderItem(String name, int id, int? parent) {
     return TreeViewItem(
       backgroundColor: ButtonState.resolveWith((states) {
-        final res = const ResourceDictionary.light();
+        const res = ResourceDictionary.light();
         if (selectedDirectoryID.value == id) {
           return Colors.grey[80];
         } else {
@@ -176,7 +176,7 @@ class FolderController extends GetxController {
 
       TabController tabController = Get.find<TabController>();
       tabController.isNewTab = true;
-      tabController.isHomeScreen.value = false;
+
       DefaultTabBody generatedTab = DefaultTabBody(
         dashBoardType: DashBoardType.explore,
         workingSpace: ProblemList(

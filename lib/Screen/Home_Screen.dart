@@ -16,17 +16,14 @@ import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
-  final tabController = Get.find<TabController>();
+  late final TabController tabController;
+  HomeScreenController homeScreenController = Get.put(HomeScreenController());
+  FolderController folderController = Get.find<FolderController>();
 
-  HomeScreen({super.key});
+  HomeScreen({super.key, tabController});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(HomeScreenController());
-    HomeScreenController homeScreenController =
-        Get.find<HomeScreenController>();
-
-    FolderController folderController = Get.find<FolderController>();
     return Column(
       children: [
         SizedBox(
@@ -41,9 +38,7 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 78,
+        Expanded(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -95,7 +90,6 @@ class HomeScreen extends StatelessWidget {
                 generatedTab, "문제 저장", const Icon(FluentIcons.save));
 
             tabController.tabs.add(newTab);
-            tabController.isHomeScreen.value = false;
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
           },
@@ -162,7 +156,7 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             tabController.isNewTab = true;
-            tabController.isHomeScreen.value = false;
+
             DefaultTabBody generatedTab = DefaultTabBody(
               dashBoardType: DashBoardType.tagManagement,
               workingSpace: TagManagementScreen(),
@@ -187,7 +181,6 @@ class HomeScreen extends StatelessWidget {
 Column leftDashboard(HomeScreenController homeScreenController,
     BuildContext context, FolderController folderController) {
   return Column(
-    // crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       Center(
         child: FilledButton(

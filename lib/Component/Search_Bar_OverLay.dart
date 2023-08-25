@@ -65,9 +65,9 @@ void createHighlightOverlay({
                   onChanged: (value) => controller.searchBarController.text,
                   onEditingComplete: () {
                     //홈화면에서 눌렀을때
-                    if (tabController.currentTabIndex.value == -1) {
+                    if (tabController.currentTabIndex.value == 0) {
                       tabController.isNewTab = true;
-                      tabController.isHomeScreen.value = false;
+
                       DefaultTabBody tabBody = DefaultTabBody(
                         dashBoardType: DashBoardType.search,
                         workingSpace: SearchScreen(),

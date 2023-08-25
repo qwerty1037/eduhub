@@ -2,19 +2,38 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
+import 'package:front_end/Screen/Home_Screen.dart';
 import 'package:get/get.dart';
 
 ///앱 전체적으로 사용되는 탭들을 관리하는 컨트롤러
 class TabController extends GetxController {
-  RxInt currentTabIndex = (-1).obs;
+  RxInt currentTabIndex = (0).obs;
   RxList<Tab> tabs = <Tab>[].obs;
-  RxBool isHomeScreen = true.obs;
   int tagNumber = 0;
   bool isNewTab = true;
+
+  TabController() {
+    tabs.add(
+      Tab(
+        icon: GestureDetector(
+          child: const Icon(FluentIcons.home),
+          onTap: () {
+            currentTabIndex.value = 0;
+          },
+        ),
+        text: const SizedBox.shrink(),
+        body: HomeScreen(tabController: this),
+        disabled: true,
+        closeIcon: null,
+        onClosed: () {},
+      ),
+    );
+  }
 
   ///새로운 탭을 추가하는 함수, body와 탭 이름, 아이콘을 파라미터로 받는다 탭 이름은 안주면 NewTab으로 된다.
   Tab addTab(final Widget body, final String? text, final Icon? icon) {
     Tab? newTab;
+
     Key newKey = Key(tagNumber.toString());
     newTab = Tab(
       key: newKey,
@@ -33,18 +52,11 @@ class TabController extends GetxController {
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;
         }
-        if (currentTabIndex.value == -1 && tabs.isEmpty) {
-          isHomeScreen.value = true;
-        } else {
-          currentTabIndex.value = 0;
-        }
-
         await Get.find<DefaultTabBodyController>(tag: newKey.toString())
             .deleteWorkingSpaceController();
 
-        Get.delete<DefaultTabBodyController>(
-            tag: newKey.toString(), force: true);
-        if (tabs.isEmpty) {
+        Get.delete<DefaultTabBodyController>(tag: newKey.toString());
+        if (currentTabIndex.value == 0) {
           isNewTab = true;
         }
       },
@@ -71,23 +83,20 @@ class TabController extends GetxController {
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;
         }
-        if (currentTabIndex.value == -1) {
-          isHomeScreen.value = true;
-        }
 
         await Get.find<DefaultTabBodyController>(tag: tab.key.toString())
             .deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(
             tag: tab.key.toString(), force: true);
-        if (tabs.isEmpty) {
+        if (currentTabIndex.value == 0) {
           isNewTab = true;
         }
       },
     );
     final int index = tabs.indexOf(tab);
     tabs[index] = newTab;
-
+    //탭 바 부분이 currentIndex가 바뀌어야 다시 렌더링됌
     currentTabIndex.value++;
     currentTabIndex.value--;
   }
@@ -117,7 +126,7 @@ class TabController extends GetxController {
     Tab newTab = addTab(generatedTab, null, null);
 
     tabs.add(newTab);
-    isHomeScreen.value = false;
+
     currentTabIndex.value = tabs.length - 1;
     isNewTab = false;
   }

@@ -1,11 +1,11 @@
 ///Screen: File_Drag_and_Drop.
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Screen/Pdf_Save_Screen.dart';
 import 'package:get/get.dart';
-
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
@@ -17,17 +17,15 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfViewerScreen> {
-  final controllerProblem = Get.put(PdfViewerScreenController(),
-      tag: "Problem${Get.find<t.TabController>().getTabKey()}");
-  final controllerAnswer = Get.put(PdfViewerScreenController(),
-      tag: "Answer${Get.find<t.TabController>().getTabKey()}");
+  final controllerProblem = Get.put(PdfViewerScreenController(), tag: "Problem${Get.find<t.TabController>().getTabKey()}");
+  final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer${Get.find<t.TabController>().getTabKey()}");
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Center(
-        child: Scaffold(
-          body: Stack(
+        child: ScaffoldPage(
+          content: Stack(
             children: [
               Row(
                 children: [
@@ -37,8 +35,8 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         : selectPdfContainer(controllerProblem, constraints);
                   }),
                   Container(
-                    width: 10,
-                    color: Colors.black12,
+                    width: 4,
+                    //color: Colors.black,
                   ),
                   Obx(() {
                     return controllerAnswer.isPdfInputed.value
@@ -51,29 +49,22 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 return Align(
                   alignment: Alignment.bottomRight,
                   child: Visibility(
-                    visible: (controllerProblem.isCaptured.value == true &&
-                        controllerAnswer.isCaptured.value == true),
-                    child: FloatingActionButton(
-                      heroTag: 'Save',
-                      backgroundColor: Colors.black26,
+                    visible: (controllerProblem.isCaptured.value == true && controllerAnswer.isCaptured.value == true),
+                    child: IconButton(
                       onPressed: () {
-                        final DefaultTabBodyController
-                            defaultTabBodyController =
-                            Get.find<DefaultTabBodyController>(
-                                tag: Get.find<t.TabController>().getTabKey());
+                        final DefaultTabBodyController defaultTabBodyController =
+                            Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
                         defaultTabBodyController.saveThisWorkingSpace();
-                        defaultTabBodyController.changeWorkingSpace(
-                            PdfSaveScreen(controllerProblem.getCapturedImage()!,
-                                controllerAnswer.getCapturedImage()!));
+                        defaultTabBodyController.changeWorkingSpace(PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!));
 
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) => PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!)),
                         // );
                       },
-                      child: const Icon(
-                        Icons.save,
-                        color: Colors.white,
+                      icon: const Icon(
+                        FluentIcons.save,
+                        //color: Colors.white,
                       ),
                     ),
                   ),
@@ -129,7 +120,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     ),
                   ),
                   Icon(
-                    Icons.insert_drive_file_rounded,
+                    FluentIcons.insert_signature_line,
                     color: controller.buttoncolor(),
                   ),
                   Text(
@@ -141,7 +132,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   ),
                 ],
               ),
-              InkWell(
+              GestureDetector(
                 onTap: () {
                   controller.fileUpload(context);
                 },
@@ -165,7 +156,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       ),
                     ),
                     Icon(
-                      Icons.upload_rounded,
+                      FluentIcons.upload,
                       color: controller.buttoncolor(),
                     ),
                   ],
@@ -204,9 +195,10 @@ class _PdfScreenState extends State<PdfViewerScreen> {
             decoration: BoxDecoration(
               border: Border.all(
                 width: 1,
-                color: Colors.black,
+                //color: Colors.black,
               ),
-              color: Colors.black12,
+              //color: Colors.black,
+              /*
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -215,12 +207,13 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   offset: const Offset(0, 3),
                 ),
               ],
+              */
             ),
             child: Stack(
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.note_outlined),
+                    const Icon(FluentIcons.quick_note),
                     FittedBox(
                       fit: BoxFit.fitHeight,
                       child: Text(
@@ -234,24 +227,24 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
+                    /*
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.black26),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                       ),
                     ),
+                    */
                     onPressed: () {
                       controller.exitPdf();
                     },
                     child: const Icon(
-                      Icons.exit_to_app,
-                      color: Colors.white,
+                      FluentIcons.chrome_close,
+                      //color: Colors.white,
                     ),
                   ),
                 ),
@@ -283,9 +276,9 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 width: 1,
-                                color: Colors.black,
+                                //color: Colors.black,
                               ),
-                              color: Colors.black12,
+                              //color: Colors.black,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.5),
@@ -303,27 +296,24 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                           ),
                           Align(
                             alignment: Alignment.topRight,
-                            child: ElevatedButton(
+                            child: IconButton(
+                              /*
                               style: ButtonStyle(
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.black26),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
                                   ),
                                 ),
                               ),
+                              */
                               onPressed: () async {
                                 controller.deleteCapturedImage();
                               },
-                              child: const Icon(
-                                Icons.exit_to_app,
-                                color: Colors.white,
+                              icon: const Icon(
+                                FluentIcons.chrome_close,
+                                //color: Colors.white,
                               ),
                             ),
                           ),
@@ -336,25 +326,24 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   visible: !controller.isCaptured(),
                   child: Align(
                     alignment: Alignment.bottomRight,
-                    child: ElevatedButton(
+                    child: IconButton(
+                      /*
                       style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black26),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
                         ),
                       ),
+                      */
                       onPressed: () async {
                         controller.capturePdf();
                       },
-                      child: const Icon(
-                        Icons.camera,
-                        color: Colors.white,
+                      icon: const Icon(
+                        FluentIcons.camera,
+                        //scolor: Colors.white,
                       ),
                     ),
                   ),

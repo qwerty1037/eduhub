@@ -19,16 +19,14 @@ class PdfSaveController extends GetxController {
   RxList<TagModel> tagsList = <TagModel>[].obs;
   RxBool isImagePreviewButtonTapped = false.obs;
   RxDouble difficultySliderValue = 0.0.obs;
-
+  RxString tagTextFieldValue = "".obs;
   TextEditingController problemNameController = TextEditingController();
-  TextEditingController tagsController = TextEditingController();
 
   @override
   PdfSaveController() {
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
-      tagsList.add(TagModel(tagController.totalTagList[i].name,
-          tagController.totalTagList[i].id!, false));
+      tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
     }
   }
 
@@ -42,28 +40,22 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].ID);
       }
     }
-    String capturedFileNameProblem =
-        '${problemNameController.text}_problem.jpeg';
+    String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
 
     final url = Uri.parse('http://$HOST/api/data/create_problem');
-
     var request = http.MultipartRequest('POST', url);
-
     var multipartFileProblem = http.MultipartFile.fromBytes(
       'problem_image',
       capturedImageProblem,
       filename: capturedFileNameProblem,
-      contentType:
-          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
-
     var multipartFileAnswer = http.MultipartFile.fromBytes(
       'problem_image',
       capturedImageAnswer,
       filename: capturedFileNameAnswer,
-      contentType:
-          MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
     );
 
     final Map<String, dynamic> requestField = {
@@ -88,7 +80,7 @@ class PdfSaveController extends GetxController {
     debugPrint(request.toString());
     final response = await request.send();
     debugPrint("${response.request}");
-    print(response.statusCode);
+    debugPrint("${response.statusCode}");
     return response.statusCode;
   }
 
@@ -142,38 +134,39 @@ class PdfSaveController extends GetxController {
   /// 검색한 텍스트에 맞춘 칩 리스트 반환
   List<Widget> filterChipsList() {
     List<Widget> chips = [];
-    if (tagsController.text == "") {
-      return [];
-    } else {
-      RegExp regExp = getRegExp(
-        tagsController.text,
-        RegExpOptions(
-          initialSearch: true,
-          startsWith: false,
-          endsWith: false,
-          fuzzy: true,
-          ignoreSpace: true,
-          ignoreCase: true,
-        ),
-      );
-      for (int i = 0; i < tagsList.length; i++) {
-        if (regExp.hasMatch(tagsList[i].label)) {
-          Widget item = FilterChip(
-            label: Text(tagsList[i].label),
-            labelStyle: const TextStyle(color: Colors.white, fontSize: 16),
-            backgroundColor: Colors.grey,
-            selected: tagsList[i].isSelected,
-            onSelected: (bool value) {
-              tagsList[i].isSelected = value;
-              tagsList.refresh();
-            },
-          );
-          if (tagsList[i].isSelected == false) {
-            chips.add(item);
-          }
+    if (tagTextFieldValue.value == "") return chips;
+    RegExp regExp = getRegExp(
+      tagTextFieldValue.value, // != "" ? tagTextFieldValue.value : " ",
+      RegExpOptions(
+        initialSearch: true,
+        startsWith: false,
+        endsWith: false,
+        fuzzy: true,
+        ignoreSpace: true,
+        ignoreCase: true,
+      ),
+    );
+
+    for (int i = 0; i < tagsList.length; i++) {
+      if (tagTextFieldValue.value == "") {
+        break;
+      }
+      if (regExp.hasMatch(tagsList[i].label)) {
+        Widget item = FilterChip(
+          label: Text(tagsList[i].label),
+          labelStyle: const TextStyle(color: Colors.white, fontSize: 16),
+          backgroundColor: Colors.grey,
+          selected: tagsList[i].isSelected,
+          onSelected: (bool value) {
+            tagsList[i].isSelected = value;
+            tagsList.refresh();
+          },
+        );
+        if (tagsList[i].isSelected == false) {
+          chips.add(item);
         }
       }
-      return chips;
     }
+    return chips;
   }
 }

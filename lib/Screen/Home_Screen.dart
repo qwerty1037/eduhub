@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreenController homeScreenController = Get.put(HomeScreenController());
   FolderController folderController = Get.find<FolderController>();
 
-  HomeScreen({super.key, tabController});
+  HomeScreen({super.key, required this.tabController});
 
   @override
   Widget build(BuildContext context) {
@@ -261,11 +261,6 @@ class questionMarkButton extends StatelessWidget {
                 items: [
                   MenuFlyoutItem(
                     text: const Text("유튜브로 사용법 보기"),
-                    onPressed: () {},
-                  ),
-                  const MenuFlyoutSeparator(),
-                  MenuFlyoutItem(
-                    text: const Text("언어 변경"),
                     onPressed: () {},
                   ),
                   const MenuFlyoutSeparator(),

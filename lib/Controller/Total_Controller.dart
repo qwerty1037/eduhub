@@ -10,34 +10,7 @@ class TotalController extends GetxController {
   Color? mainColor;
   AccentColor activeColor = Colors.blue;
 
-  bool isDark = false;
-
-//  Iterable<ThemeExtension<dynamic>>? extensions,
-//     Brightness? brightness,
-//     VisualDensity? visualDensity,
-//     Typography? typography,
-//     String? fontFamily,
-//     AccentColor? accentColor,
-//     Color? activeColor,
-//     Color? inactiveColor,
-//     Color? inactiveBackgroundColor,
-//     Color? scaffoldBackgroundColor,
-//     Color? acrylicBackgroundColor,
-//     Color? micaBackgroundColor,
-//     Color? shadowColor,
-//     Color? menuColor,
-//     Color? cardColor,
-
-//     ButtonThemeData? buttonTheme,
-//     CheckboxThemeData? checkboxTheme,
-//     ChipThemeData? chipTheme,
-//     ToggleSwitchThemeData? toggleSwitchTheme,
-//     IconThemeData? iconTheme,
-//     NavigationPaneThemeData? navigationPaneTheme,
-//     RadioButtonThemeData? radioButtonTheme,
-//     ToggleButtonThemeData? toggleButtonTheme,
-//     SliderThemeData? sliderTheme,
-//     InfoBarThemeData? infoBarTheme,
+  RxBool isDark = false.obs;
 
   ///isLoginSuccess 값을 뒤집는 함수
   void reverseLoginState() {

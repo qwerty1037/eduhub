@@ -22,10 +22,7 @@ void main() async {
     effect: WindowEffect.aero,
     color: const Color.fromARGB(50, 0, 0, 0),
   );
-  WindowOptions windowOptions = const WindowOptions(
-      title: "바선생",
-      minimumSize: Size(1000, 250),
-      titleBarStyle: TitleBarStyle.normal);
+  WindowOptions windowOptions = const WindowOptions(title: "바선생", minimumSize: Size(1000, 250), titleBarStyle: TitleBarStyle.normal);
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
@@ -48,22 +45,31 @@ class MyApp extends StatelessWidget {
           Get.put(TagController());
           Get.put(TabController());
           return FluentApp(
-            themeMode: controller.isDark ? ThemeMode.dark : ThemeMode.light,
+            themeMode: controller.isDark.value ? ThemeMode.dark : ThemeMode.light,
             theme: FluentThemeData(
-              typography: const Typography.raw(
-                  body: TextStyle(
-                      color: Color(0xFF141212), fontWeight: FontWeight.bold)),
-              scaffoldBackgroundColor: Colors.grey[10],
-              accentColor: Colors.orange,
               brightness: Brightness.light,
+              typography: const Typography.raw(body: TextStyle(color: Color(0xFF141212), fontWeight: FontWeight.bold)),
+
+              accentColor: Colors.orange,
+              activeColor: Colors.blue, //?
+              //inactiveColor: Colors.green, //탭 버튼에서 +위에 마우스를 올렸을 때(Hovering) 나오는 십자가 색깔
+              inactiveBackgroundColor: Colors.green, //?
+              scaffoldBackgroundColor: Colors.grey[30],
+              //acrylicBackgroundColor: Colors.red, //?
+              micaBackgroundColor: Colors.black,
+              //shadowColor: Colors.purple, //그림자 색깔
+              //menuColor: Colors.red, //우클릭했을 때 나오는 메뉴 색깔을 결정
+              cardColor: Colors.blue, //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
+              selectionColor: Colors.magenta, //?
+
               fontFamily: GoogleFonts.poppins().fontFamily,
             ),
             darkTheme: FluentThemeData(
-                typography: const Typography.raw(
-                    body: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+                typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 fontFamily: GoogleFonts.poppins().fontFamily,
                 scaffoldBackgroundColor: Colors.grey[160],
+                //menuColor: Colors.blue,
+                selectionColor: Colors.green,
                 accentColor: Colors.orange,
                 brightness: Brightness.dark),
             debugShowCheckedModeBanner: false,
@@ -74,8 +80,7 @@ class MyApp extends StatelessWidget {
             theme: material.ThemeData(
               fontFamily: GoogleFonts.poppins().fontFamily,
               useMaterial3: true,
-              colorScheme:
-                  material.ColorScheme.fromSeed(seedColor: material.Colors.red),
+              colorScheme: material.ColorScheme.fromSeed(seedColor: material.Colors.red),
             ),
             debugShowCheckedModeBanner: false,
             home: LoginScreen(),

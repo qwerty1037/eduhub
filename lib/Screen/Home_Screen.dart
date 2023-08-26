@@ -31,11 +31,7 @@ class HomeScreen extends StatelessWidget {
           height: 40,
           //color: Colors.teal,
           child: Row(
-            children: [
-              menuCommandBar(context, homeScreenController),
-              const Spacer(),
-              questionMarkButton(flyoutController: _flyoutController)
-            ],
+            children: [menuCommandBar(context, homeScreenController), const Spacer(), questionMarkButton(flyoutController: _flyoutController)],
           ),
         ),
         Expanded(
@@ -50,8 +46,7 @@ class HomeScreen extends StatelessWidget {
                       right: BorderSide(color: Colors.black, width: 0.5),
                     ),
                   ),
-                  child: leftDashboard(
-                      homeScreenController, context, folderController),
+                  child: leftDashboard(homeScreenController, context, folderController),
                 ),
               ),
               Expanded(
@@ -86,8 +81,7 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.savePdf,
               workingSpace: const PdfViewerScreen(),
             );
-            Tab newTab = tabController.addTab(
-                generatedTab, "문제 저장", const Icon(FluentIcons.save));
+            Tab newTab = tabController.addTab(generatedTab, "문제 저장", const Icon(FluentIcons.save));
 
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
@@ -136,10 +130,7 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             createHighlightOverlay(
-                context: context,
-                controller: Get.put(SearchScreenController(),
-                    tag: tabController.getNewTabKey()),
-                tabController: tabController);
+                context: context, controller: Get.put(SearchScreenController(), tag: tabController.getNewTabKey()), tabController: tabController);
           },
         ),
       ),
@@ -161,8 +152,7 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.tagManagement,
               workingSpace: TagManagementScreen(),
             );
-            Tab newTab = tabController.addTab(
-                generatedTab, "태그", const Icon(FluentIcons.tag));
+            Tab newTab = tabController.addTab(generatedTab, "태그", const Icon(FluentIcons.tag));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
@@ -178,8 +168,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Column leftDashboard(HomeScreenController homeScreenController,
-    BuildContext context, FolderController folderController) {
+Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
   return Column(
     children: [
       Center(
@@ -198,9 +187,9 @@ Column leftDashboard(HomeScreenController homeScreenController,
           GetBuilder<TotalController>(
             builder: (controller) {
               return ToggleSwitch(
-                checked: controller.isDark,
+                checked: controller.isDark.value,
                 onChanged: (value) {
-                  controller.isDark = value;
+                  controller.isDark.value = value;
                   controller.update();
                 },
               );
@@ -229,9 +218,7 @@ Column leftDashboard(HomeScreenController homeScreenController,
         ),
       ),
       GetBuilder<HomeScreenController>(builder: (controller) {
-        return homeScreenController.isFolderEmpty
-            ? newFolderButton(context, folderController, homeScreenController)
-            : FolderTreeViewExplore();
+        return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : FolderTreeViewExplore();
       })
     ],
   );

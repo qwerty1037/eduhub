@@ -59,10 +59,46 @@ class MyApp extends StatelessWidget {
               micaBackgroundColor: Colors.black,
               //shadowColor: Colors.purple, //그림자 색깔
               //menuColor: Colors.red, //우클릭했을 때 나오는 메뉴 색깔을 결정
-              cardColor: Colors.blue, //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
+              cardColor: Colors.grey[30], //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
               selectionColor: Colors.magenta, //?
 
+              /// buttonTheme: 버튼의 테마 조절, tabView의 탭에서 x가 버튼이고 그 이외의 색을 조절하려 했었는데 이것은 buttonTheme이 아님
+              ///
+              /// 어지간하면 widget theme은 안건드리는 것이 좋아보임
+              /*
+              buttonTheme: ButtonThemeData.all(ButtonStyle().copyWith(
+                foregroundColor: ButtonState.resolveWith((states) {
+                  final res = FluentThemeData.light().resources;
+                  if (states.isPressing) {
+                    return res.textFillColorTertiary;
+                  } else if (states.isHovering) {
+                    return res.textFillColorSecondary;
+                  } else if (states.isDisabled) {
+                    return res.textFillColorDisabled;
+                  }
+                  return res.textFillColorPrimary;
+                }),
+                backgroundColor: ButtonState.resolveWith((states) {
+                  final res = FluentThemeData.light().resources;
+                  if (states.isPressing) {
+                    return res.controlFillColorTertiary;
+                  } else if (states.isHovering) {
+                    return res.controlFillColorSecondary;
+                  } else if (states.isDisabled) {
+                    return res.controlFillColorDisabled;
+                  }
+                  //return Colors.red;
+                  //return res.subtleFillColorTransparent;
+                  //return res.controlFillColorDefault;
+                }),
+              )),
+              */
+              scrollbarTheme: ScrollbarThemeData.standard(FluentThemeData.light()),
+
+              //chipTheme: ChipThemeData.standard(FluentThemeData.light()), //
+
               fontFamily: GoogleFonts.poppins().fontFamily,
+              resources: Get.find<TotalController>().customResourceLight,
             ),
             darkTheme: FluentThemeData(
                 typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),

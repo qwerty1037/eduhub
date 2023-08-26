@@ -24,7 +24,10 @@ class TabController extends GetxController {
           },
         ),
         text: const SizedBox.shrink(),
-        body: HomeScreen(tabController: this),
+        body: Obx(() => Container(
+              color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
+              child: HomeScreen(tabController: this),
+            )),
         disabled: true,
         closeIcon: null,
         onClosed: () {},

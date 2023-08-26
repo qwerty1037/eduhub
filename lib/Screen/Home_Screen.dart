@@ -41,9 +41,9 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
-                      right: BorderSide(color: Colors.black, width: 0.5),
+                      right: BorderSide(color: Colors.grey[40], width: 1),
                     ),
                   ),
                   child: leftDashboard(homeScreenController, context, folderController),
@@ -52,6 +52,7 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Container(
+                  color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
                   child: const Center(child: Text("최근 기록 페이지")),
                 ),
               )

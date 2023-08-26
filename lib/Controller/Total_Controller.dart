@@ -102,6 +102,7 @@ class TotalController extends GetxController {
     systemFillColorSolidNeutralBackground: Color(0xFFf3f3f3),
   );
 
+  /// check [Colors]
   final ResourceDictionary customResourceDark = const ResourceDictionary.raw(
     textFillColorPrimary: Color(0xFFffffff),
     textFillColorSecondary: Color(0xc5ffffff),
@@ -166,7 +167,7 @@ class TotalController extends GetxController {
     layerOnMicaBaseAltFillColorTransparent: Color(0x00ffffff),
     solidBackgroundFillColorBase: Color(0xFF202020),
     solidBackgroundFillColorSecondary: Color(0xFF1c1c1c),
-    solidBackgroundFillColorTertiary: Color(0xFF282828),
+    solidBackgroundFillColorTertiary: Color(0xFF323130), //Grey[160] // Default: Color(0xFF282828),
     solidBackgroundFillColorQuarternary: Color(0xFF2c2c2c),
     solidBackgroundFillColorTransparent: Color(0x00202020),
     solidBackgroundFillColorBaseAlt: Color(0xFF0a0a0a),

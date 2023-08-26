@@ -31,80 +31,94 @@ class DefaultTabBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Get.putAsync<DefaultTabBodyController>(() async {
-          return DefaultTabBodyController(tagName, dashBoardType, workingSpace);
-        }, tag: tagName),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.waiting) {
-            return GetX<DefaultTabBodyController>(
-              tag: tagName,
-              builder: (controller) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 40,
-                      //color: FluentTheme.of(context).acrylicBackgroundColor,
-                      child: topCommandBar(controller, context),
-                    ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width / 6,
-                              child: controller.dashBoard.value,
+      future: Get.putAsync<DefaultTabBodyController>(() async {
+        return DefaultTabBodyController(tagName, dashBoardType, workingSpace);
+      }, tag: tagName),
+      builder: ((context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.waiting) {
+          return GetX<DefaultTabBodyController>(
+            tag: tagName,
+            builder: (controller) {
+              return Column(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 40,
+                    //color: FluentTheme.of(context).acrylicBackgroundColor,
+                    child: topCommandBar(controller, context),
+                  ),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width / 6,
+                            child: controller.dashBoard.value,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+                            border: Border(
+                              left: BorderSide(
+                                color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                                width: 1,
+                              ),
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
-                                border: Border(left: BorderSide(color: Colors.grey[40], width: 1))),
-                            width: MediaQuery.of(context).size.width / 6 * 5,
-                            child: controller.workingSpaceWidget.value,
-                          ),
-                        ],
+                          width: MediaQuery.of(context).size.width / 6 * 5,
+                          child: controller.workingSpaceWidget.value,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          return Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 40,
+                //color: Colors.teal,
+                child: fakeScreen(),
+              ),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 6,
+                        child: Get.find<HomeScreenController>().isFolderEmpty
+                            ? newFolderButton(context, Get.find<FolderController>(), Get.find<HomeScreenController>())
+                            : FolderTreeViewExplore(
+                                tagName: tagName,
+                              ),
                       ),
                     ),
-                  ],
-                );
-              },
-            );
-          } else {
-            return Column(
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40,
-                  //color: Colors.teal,
-                  child: fakeScreen(),
-                ),
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 6,
-                          child: Get.find<HomeScreenController>().isFolderEmpty
-                              ? newFolderButton(context, Get.find<FolderController>(), Get.find<HomeScreenController>())
-                              : FolderTreeViewExplore(
-                                  tagName: tagName,
-                                ),
+                    Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                              width: 1,
+                            ),
+                          ),
                         ),
-                      ),
-                      Container(
-                          decoration: BoxDecoration(border: Border(left: BorderSide(color: Colors.grey[40], width: 1))),
-                          width: MediaQuery.of(context).size.width / 6 * 5,
-                          child: const SizedBox())
-                    ],
-                  ),
+                        width: MediaQuery.of(context).size.width / 6 * 5,
+                        child: const SizedBox())
+                  ],
                 ),
-              ],
-            );
-          }
-        }));
+              ),
+            ],
+          );
+        }
+      }),
+    );
   }
 
   Center topCommandBar(DefaultTabBodyController controller, BuildContext context) {

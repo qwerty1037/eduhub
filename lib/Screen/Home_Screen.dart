@@ -43,7 +43,10 @@ class HomeScreen extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border(
-                      right: BorderSide(color: Colors.grey[40], width: 1),
+                      right: BorderSide(
+                        color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                        width: 1,
+                      ),
                     ),
                   ),
                   child: leftDashboard(homeScreenController, context, folderController),

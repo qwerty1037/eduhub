@@ -17,38 +17,46 @@ class FolderTreeViewSave extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<FolderController>(
-      builder: (controller) {
-        return FlyoutTarget(
-          controller: flyoutController,
-          child: TreeView(
-            onSecondaryTap: (item, details) {
-              flyoutController.showFlyout(
-                position: details.globalPosition,
-                builder: (context) {
-                  return FolderTreeView_MenuFlyout(
-                    folderController: controller,
-                    item: item,
-                    details: details,
-                    reNameController: reNameController,
-                    newNameController: newNameController,
-                    flyoutController: flyoutController,
+    return Column(
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text("  ㅇㅇ님의 워크스페이스"),
+        ),
+        GetX<FolderController>(
+          builder: (controller) {
+            return FlyoutTarget(
+              controller: flyoutController,
+              child: TreeView(
+                onSecondaryTap: (item, details) {
+                  flyoutController.showFlyout(
+                    position: details.globalPosition,
+                    builder: (context) {
+                      return FolderTreeView_MenuFlyout(
+                        folderController: controller,
+                        item: item,
+                        details: details,
+                        reNameController: reNameController,
+                        newNameController: newNameController,
+                        flyoutController: flyoutController,
+                      );
+                    },
                   );
                 },
-              );
-            },
-            onItemInvoked: (item, reason) async {
-              if (reason == TreeViewItemInvokeReason.pressed) {
-                controller.selectedDirectoryID.value = item.value["id"];
+                onItemInvoked: (item, reason) async {
+                  if (reason == TreeViewItemInvokeReason.pressed) {
+                    controller.selectedDirectoryID.value = item.value["id"];
 
-                controller.firstFolders.refresh();
-                await controller.getPath();
-              }
-            },
-            items: controller.firstFolders,
-          ),
-        );
-      },
+                    controller.firstFolders.refresh();
+                    await controller.getPath();
+                  }
+                },
+                items: controller.firstFolders,
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

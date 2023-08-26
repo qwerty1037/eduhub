@@ -18,48 +18,54 @@ class FolderTreeViewExplore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<FolderController>(
-      builder: (controller) {
-        return FlyoutTarget(
-          controller: flyoutController,
-          child: TreeView(
-            onSecondaryTap: (item, details) {
-              flyoutController.showFlyout(
-                position: details.globalPosition,
-                builder: (context) {
-                  return FolderTreeView_MenuFlyout(
-                    folderController: controller,
-                    item: item,
-                    details: details,
-                    reNameController: reNameController,
-                    newNameController: newNameController,
-                    flyoutController: flyoutController,
+    return Column(
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text("  ㅇㅇ님의 워크스페이스"),
+        ),
+        GetX<FolderController>(
+          builder: (controller) {
+            return FlyoutTarget(
+              controller: flyoutController,
+              child: TreeView(
+                onSecondaryTap: (item, details) {
+                  flyoutController.showFlyout(
+                    position: details.globalPosition,
+                    builder: (context) {
+                      return FolderTreeView_MenuFlyout(
+                        folderController: controller,
+                        item: item,
+                        details: details,
+                        reNameController: reNameController,
+                        newNameController: newNameController,
+                        flyoutController: flyoutController,
+                      );
+                    },
                   );
                 },
-              );
-            },
-            onItemInvoked: (item, reason) async {
-              if (reason == TreeViewItemInvokeReason.pressed) {
-                controller.selectedDirectoryID.value = item.value["id"];
-                controller.firstFolders.refresh();
-                await controller.getPath();
-                //debugPrint("${controller.selectedDirectoryID.value}");
-                if (Get.find<TabController>().currentTabIndex.value == 0) {
-                  controller.makeProblemListInNewTab(item);
-                } else {
-                  final tabController = Get.find<TabController>();
-                  Tab currentTab =
-                      tabController.tabs[tabController.currentTabIndex.value];
-                  tabController.renameTab(currentTab, item.value["name"],
-                      const Icon(FluentIcons.fabric_folder));
-                  await controller.makeProblemListInCurrentTab(item, tagName!);
-                }
-              }
-            },
-            items: controller.firstFolders,
-          ),
-        );
-      },
+                onItemInvoked: (item, reason) async {
+                  if (reason == TreeViewItemInvokeReason.pressed) {
+                    controller.selectedDirectoryID.value = item.value["id"];
+                    controller.firstFolders.refresh();
+                    await controller.getPath();
+                    //debugPrint("${controller.selectedDirectoryID.value}");
+                    if (Get.find<TabController>().currentTabIndex.value == 0) {
+                      controller.makeProblemListInNewTab(item);
+                    } else {
+                      final tabController = Get.find<TabController>();
+                      Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+                      tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
+                      await controller.makeProblemListInCurrentTab(item, tagName!);
+                    }
+                  }
+                },
+                items: controller.firstFolders,
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

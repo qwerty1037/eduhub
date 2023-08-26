@@ -54,7 +54,10 @@ class DefaultTabBody extends StatelessWidget {
                         Expanded(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 6,
-                            child: controller.dashBoard.value,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(1, 10, 1, 10),
+                              child: controller.dashBoard.value,
+                            ),
                           ),
                         ),
                         Container(

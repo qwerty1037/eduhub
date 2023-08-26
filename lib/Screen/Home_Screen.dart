@@ -49,7 +49,14 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: leftDashboard(homeScreenController, context, folderController),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(1, 10, 1, 10),
+                    child: leftDashboard(
+                      homeScreenController,
+                      context,
+                      folderController,
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -201,10 +208,11 @@ Column leftDashboard(HomeScreenController homeScreenController, BuildContext con
           ),
         ],
       ),
+      const SizedBox(height: 10),
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         height: 40,
-        color: const Color.fromARGB(100, 50, 49, 48),
+        //color: const Color.fromARGB(100, 50, 49, 48),
         child: const Row(
           children: [
             Icon(

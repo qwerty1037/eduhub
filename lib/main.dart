@@ -22,10 +22,7 @@ void main() async {
     effect: WindowEffect.aero,
     color: const Color.fromARGB(50, 0, 0, 0),
   );
-  WindowOptions windowOptions = const WindowOptions(
-      title: "바선생",
-      minimumSize: Size(1000, 250),
-      titleBarStyle: TitleBarStyle.normal);
+  WindowOptions windowOptions = const WindowOptions(title: "바선생", minimumSize: Size(1000, 250), titleBarStyle: TitleBarStyle.normal);
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
@@ -48,24 +45,80 @@ class MyApp extends StatelessWidget {
           Get.put(TagController());
           Get.put(TabController());
           return FluentApp(
-            themeMode: controller.isDark ? ThemeMode.dark : ThemeMode.light,
+            themeMode: controller.isDark.value ? ThemeMode.dark : ThemeMode.light,
             theme: FluentThemeData(
-              typography: const Typography.raw(
-                  body: TextStyle(
-                      color: Color(0xFF141212), fontWeight: FontWeight.bold)),
-              scaffoldBackgroundColor: Colors.grey[10],
-              accentColor: Colors.orange,
               brightness: Brightness.light,
+              typography: const Typography.raw(body: TextStyle(color: Color(0xFF141212), fontWeight: FontWeight.bold)),
               fontFamily: GoogleFonts.poppins().fontFamily,
+
+              accentColor: Colors.orange,
+              activeColor: Colors.blue, //?
+              //inactiveColor: Colors.green, //탭 버튼에서 +위에 마우스를 올렸을 때(Hovering) 나오는 십자가 색깔
+              //inactiveBackgroundColor: Colors.green, //메뉴창(우클릭했을 때 나오는) 테두리 색깔
+              scaffoldBackgroundColor: Colors.grey[30],
+              //acrylicBackgroundColor: Colors.red, //?
+              micaBackgroundColor: Colors.black,
+              //shadowColor: Colors.purple, //그림자 색깔
+              //menuColor: Colors.red, //우클릭했을 때 나오는 메뉴 색깔을 결정
+              cardColor: Colors.grey[30], //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
+              selectionColor: Colors.magenta, //?
+
+              /// buttonTheme: 버튼의 테마 조절, tabView의 탭에서 x가 버튼이고 그 이외의 색을 조절하려 했었는데 이것은 buttonTheme이 아님
+              ///
+              /// 어지간하면 widget theme은 안건드리는 것이 좋아보임
+              /*
+              buttonTheme: ButtonThemeData.all(ButtonStyle().copyWith(
+                foregroundColor: ButtonState.resolveWith((states) {
+                  final res = FluentThemeData.light().resources;
+                  if (states.isPressing) {
+                    return res.textFillColorTertiary;
+                  } else if (states.isHovering) {
+                    return res.textFillColorSecondary;
+                  } else if (states.isDisabled) {
+                    return res.textFillColorDisabled;
+                  }
+                  return res.textFillColorPrimary;
+                }),
+                backgroundColor: ButtonState.resolveWith((states) {
+                  final res = FluentThemeData.light().resources;
+                  if (states.isPressing) {
+                    return res.controlFillColorTertiary;
+                  } else if (states.isHovering) {
+                    return res.controlFillColorSecondary;
+                  } else if (states.isDisabled) {
+                    return res.controlFillColorDisabled;
+                  }
+                  //return Colors.red;
+                  //return res.subtleFillColorTransparent;
+                  //return res.controlFillColorDefault;
+                }),
+              )),
+              */
+              //scrollbarTheme: ScrollbarThemeData.standard(FluentThemeData.light()),
+
+              //chipTheme: ChipThemeData.standard(FluentThemeData.light()), //
+
+              resources: Get.find<TotalController>().customResourceLight,
             ),
             darkTheme: FluentThemeData(
-                typography: const Typography.raw(
-                    body: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                fontFamily: GoogleFonts.poppins().fontFamily,
-                scaffoldBackgroundColor: Colors.grey[160],
-                accentColor: Colors.orange,
-                brightness: Brightness.dark),
+              brightness: Brightness.dark,
+              typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              fontFamily: GoogleFonts.poppins().fontFamily,
+
+              accentColor: Colors.orange,
+              activeColor: Colors.blue, //?
+              //inactiveColor: Colors.green, //탭 버튼에서 +위에 마우스를 올렸을 때(Hovering) 나오는 십자가 색깔
+              //inactiveBackgroundColor: Colors.green, //메뉴창(우클릭했을 때 나오는) 테두리 색깔
+              scaffoldBackgroundColor: Colors.grey[160],
+              //acrylicBackgroundColor: Colors.red, //?
+              micaBackgroundColor: Colors.black,
+              //shadowColor: Colors.purple, //그림자 색깔
+              //menuColor: Colors.red, //우클릭했을 때 나오는 메뉴 색깔을 결정
+              cardColor: Colors.grey[30], //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
+              selectionColor: Colors.magenta, //?
+
+              resources: Get.find<TotalController>().customResourceDark,
+            ),
             debugShowCheckedModeBanner: false,
             home: const HomeTabView(),
           );
@@ -74,8 +127,7 @@ class MyApp extends StatelessWidget {
             theme: material.ThemeData(
               fontFamily: GoogleFonts.poppins().fontFamily,
               useMaterial3: true,
-              colorScheme:
-                  material.ColorScheme.fromSeed(seedColor: material.Colors.red),
+              colorScheme: material.ColorScheme.fromSeed(seedColor: material.Colors.red),
             ),
             debugShowCheckedModeBanner: false,
             home: LoginScreen(),

@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Home_Screen.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ class TabController extends GetxController {
   RxList<Tab> tabs = <Tab>[].obs;
   int tagNumber = 0;
   bool isNewTab = true;
+  TotalController totalController = Get.find<TotalController>();
 
   TabController() {
     tabs.add(
@@ -22,7 +24,10 @@ class TabController extends GetxController {
           },
         ),
         text: const SizedBox.shrink(),
-        body: HomeScreen(tabController: this),
+        body: Obx(() => Container(
+              color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
+              child: HomeScreen(tabController: this),
+            )),
         disabled: true,
         closeIcon: null,
         onClosed: () {},
@@ -44,7 +49,10 @@ class TabController extends GetxController {
           const Icon(
             FluentIcons.file_template,
           ),
-      body: body,
+      body: Obx(() => Container(
+            color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
+            child: body,
+          )),
       onClosed: () async {
         tabs.remove(newTab);
         final int indexToDelete = tabs.indexOf(newTab);
@@ -52,8 +60,7 @@ class TabController extends GetxController {
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;
         }
-        await Get.find<DefaultTabBodyController>(tag: newKey.toString())
-            .deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: newKey.toString()).deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
         if (currentTabIndex.value == 0) {
@@ -84,11 +91,9 @@ class TabController extends GetxController {
           currentTabIndex.value--;
         }
 
-        await Get.find<DefaultTabBodyController>(tag: tab.key.toString())
-            .deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: tab.key.toString()).deleteWorkingSpaceController();
 
-        Get.delete<DefaultTabBodyController>(
-            tag: tab.key.toString(), force: true);
+        Get.delete<DefaultTabBodyController>(tag: tab.key.toString(), force: true);
         if (currentTabIndex.value == 0) {
           isNewTab = true;
         }

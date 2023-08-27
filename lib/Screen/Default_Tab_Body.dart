@@ -4,6 +4,7 @@ import 'package:front_end/Component/Search_Bar_Overlay.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
 import 'package:get/get.dart';
@@ -43,13 +44,27 @@ class DefaultTabBody extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width / 6,
-                      child: controller.dashBoard.value,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(1, 10, 1, 10),
+                        child: controller.dashBoard.value,
+                      ),
                     ),
                   ),
                   Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(color: Colors.black, width: 0.5))),
+                    decoration: BoxDecoration(
+                      color: Get.find<TotalController>().isDark.value == true
+                          ? Colors.grey[150]
+                          : Colors.grey[30],
+                      border: Border(
+                        left: BorderSide(
+                          color:
+                              Get.find<TotalController>().isDark.value == true
+                                  ? Colors.grey[130]
+                                  : Colors.grey[50],
+                          width: 1,
+                        ),
+                      ),
+                    ),
                     width: MediaQuery.of(context).size.width / 6 * 5,
                     child: controller.workingSpaceWidget.value,
                   ),

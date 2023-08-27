@@ -24,7 +24,7 @@ class PdfSaveScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('SaveCapture'),
       ),
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       body: Stack(
         children: [
           SingleChildScrollView(

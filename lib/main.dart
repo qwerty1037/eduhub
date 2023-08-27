@@ -49,12 +49,11 @@ class MyApp extends StatelessWidget {
             theme: FluentThemeData(
               brightness: Brightness.light,
               typography: const Typography.raw(body: TextStyle(color: Color(0xFF141212), fontWeight: FontWeight.bold)),
-              fontFamily: GoogleFonts.poppins().fontFamily,
 
               accentColor: Colors.orange,
               activeColor: Colors.blue, //?
               //inactiveColor: Colors.green, //탭 버튼에서 +위에 마우스를 올렸을 때(Hovering) 나오는 십자가 색깔
-              //inactiveBackgroundColor: Colors.green, //메뉴창(우클릭했을 때 나오는) 테두리 색깔
+              inactiveBackgroundColor: Colors.green, //?
               scaffoldBackgroundColor: Colors.grey[30],
               //acrylicBackgroundColor: Colors.red, //?
               micaBackgroundColor: Colors.black,
@@ -94,31 +93,21 @@ class MyApp extends StatelessWidget {
                 }),
               )),
               */
-              //scrollbarTheme: ScrollbarThemeData.standard(FluentThemeData.light()),
+              scrollbarTheme: ScrollbarThemeData.standard(FluentThemeData.light()),
 
               //chipTheme: ChipThemeData.standard(FluentThemeData.light()), //
 
+              fontFamily: GoogleFonts.poppins().fontFamily,
               resources: Get.find<TotalController>().customResourceLight,
             ),
             darkTheme: FluentThemeData(
-              brightness: Brightness.dark,
-              typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              fontFamily: GoogleFonts.poppins().fontFamily,
-
-              accentColor: Colors.orange,
-              activeColor: Colors.blue, //?
-              //inactiveColor: Colors.green, //탭 버튼에서 +위에 마우스를 올렸을 때(Hovering) 나오는 십자가 색깔
-              //inactiveBackgroundColor: Colors.green, //메뉴창(우클릭했을 때 나오는) 테두리 색깔
-              scaffoldBackgroundColor: Colors.grey[160],
-              //acrylicBackgroundColor: Colors.red, //?
-              micaBackgroundColor: Colors.black,
-              //shadowColor: Colors.purple, //그림자 색깔
-              //menuColor: Colors.red, //우클릭했을 때 나오는 메뉴 색깔을 결정
-              cardColor: Colors.grey[30], //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
-              selectionColor: Colors.magenta, //?
-
-              resources: Get.find<TotalController>().customResourceDark,
-            ),
+                typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                scaffoldBackgroundColor: Colors.grey[160],
+                //menuColor: Colors.blue,
+                selectionColor: Colors.green,
+                accentColor: Colors.orange,
+                brightness: Brightness.dark),
             debugShowCheckedModeBanner: false,
             home: const HomeTabView(),
           );

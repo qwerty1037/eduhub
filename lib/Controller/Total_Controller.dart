@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 ///전역변수처럼 사용되는 변수들을 모아두는 컨트롤러
@@ -12,13 +17,69 @@ class TotalController extends GetxController {
 
   RxBool isDark = false.obs;
 
+  late Timer _timer;
+
+  String? getCookieValue(String cookieHeader, String cookieName) {
+    if (cookieHeader.isNotEmpty) {
+      List<String> cookies = cookieHeader.split(RegExp(r';|,'));
+      for (String cookie in cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith('$cookieName=')) {
+          return cookie.substring(cookieName.length + 1);
+        }
+      }
+    }
+    return null;
+  }
+
+  Future<void> saveCookieToSecureStorage(
+      String uid, String accessToken, String refreshToken) async {
+    const storage = FlutterSecureStorage();
+
+    await storage.write(key: 'uid', value: uid);
+    await storage.write(key: 'access_token', value: accessToken);
+    await storage.write(key: 'refresh_token', value: refreshToken);
+  }
+
+  @override
+  void onInit() async {
+    super.onInit();
+    _timer = Timer.periodic(const Duration(minutes: 29), (timer) async {
+      if (isLoginSuccess) {
+        debugPrint("테스트");
+        final url = Uri.parse('http://$HOST/api/auth/refresh');
+        final response = await http.post(
+          url,
+          headers: await defaultHeader(httpContentType.json),
+        );
+        //쿠키를 같이 보냄 refresh cookie로
+
+        if (isHttpRequestSuccess(response)) {
+          String? cookieList = response.headers["set-cookie"];
+
+          String? uid = getCookieValue(cookieList!, "uid");
+          String? accessToken = getCookieValue(cookieList, "access_token");
+          String? refreshToken = getCookieValue(cookieList, "refresh_token");
+          if (uid == null || accessToken == null || refreshToken == null) {
+            debugPrint("refresh 토큰 받기 도중 변환 실패");
+          } else {
+            await saveCookieToSecureStorage(uid, accessToken, refreshToken);
+          }
+        } else if (isHttpRequestFailure(response)) {
+          debugPrint("refresh 토큰 받기 오류 발생(서버연결x)");
+        }
+      }
+    });
+  }
+
   ///isLoginSuccess 값을 뒤집는 함수
   void reverseLoginState() {
     isLoginSuccess = !isLoginSuccess;
     update();
   }
 
-  m.ColorScheme customColorScheme = m.ColorScheme.fromSeed(seedColor: Colors.red);
+  m.ColorScheme customColorScheme =
+      m.ColorScheme.fromSeed(seedColor: Colors.red);
 
   final ResourceDictionary customResourceLight = const ResourceDictionary.raw(
     textFillColorPrimary: Color(0xe4000000),
@@ -41,11 +102,13 @@ class TotalController extends GetxController {
     controlStrongFillColorDisabled: Color(0x51000000),
     controlSolidFillColorDefault: Color(0xFFffffff),
     subtleFillColorTransparent: Color(0x00ffffff),
-    subtleFillColorSecondary: Color(0x09000000), //Color(0xffe81123), //Colors.red.normal
+    subtleFillColorSecondary:
+        Color(0x09000000), //Color(0xffe81123), //Colors.red.normal
     subtleFillColorTertiary: Color(0x06000000),
     subtleFillColorDisabled: Color(0x00ffffff),
     controlAltFillColorTransparent: Color(0x00ffffff),
-    controlAltFillColorSecondary: Color(0x06000000), //Color(0xffffeb3b), //Colors.yellow.normal
+    controlAltFillColorSecondary:
+        Color(0x06000000), //Color(0xffffeb3b), //Colors.yellow.normal
     controlAltFillColorTertiary: Color(0x0f000000),
     controlAltFillColorQuarternary: Color(0x18000000),
     controlAltFillColorDisabled: Color(0x00ffffff),
@@ -84,7 +147,8 @@ class TotalController extends GetxController {
     layerOnMicaBaseAltFillColorTransparent: Color(0x00000000),
     solidBackgroundFillColorBase: Color(0xFFf3f3f3),
     solidBackgroundFillColorSecondary: Color(0xFFeeeeee),
-    solidBackgroundFillColorTertiary: Color(0xFFFAF9F8), //Colors.grey[10], // Default: Color(0xFFf9f9f9),
+    solidBackgroundFillColorTertiary:
+        Color(0xFFFAF9F8), //Colors.grey[10], // Default: Color(0xFFf9f9f9),
     solidBackgroundFillColorQuarternary: Color(0xFFffffff),
     solidBackgroundFillColorTransparent: Color(0x00f3f3f3),
     solidBackgroundFillColorBaseAlt: Color(0xFFdadada),

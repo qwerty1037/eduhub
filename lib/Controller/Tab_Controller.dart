@@ -120,6 +120,9 @@ class TabController extends GetxController {
   ///tab view에서 오른쪽의 +버튼을 눌렀을때 로직
   void onNewPressed() {
     isNewTab = true;
+    Get.put<DefaultTabBodyController>(
+        DefaultTabBodyController(getNewTabKey(), DashBoardType.explore, null),
+        tag: getNewTabKey());
     DefaultTabBody generatedTab = DefaultTabBody(
       dashBoardType: DashBoardType.explore,
     );

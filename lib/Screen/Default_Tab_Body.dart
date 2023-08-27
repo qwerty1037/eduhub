@@ -1,11 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Folder_Treeview_Explore.dart';
-import 'package:front_end/Component/New_Folder_Button.dart';
 import 'package:front_end/Component/Search_Bar_Overlay.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
@@ -29,88 +25,41 @@ class DefaultTabBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Get.putAsync<DefaultTabBodyController>(() async {
-          return DefaultTabBodyController(tagName, dashBoardType, workingSpace);
-        }, tag: tagName),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.waiting) {
-            return GetX<DefaultTabBodyController>(
-              tag: tagName,
-              builder: (controller) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 40,
-                      //color: FluentTheme.of(context).acrylicBackgroundColor,
-                      child: topCommandBar(controller, context),
+    return GetX<DefaultTabBodyController>(
+      tag: tagName,
+      builder: (controller) {
+        return Column(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 40,
+              //color: FluentTheme.of(context).acrylicBackgroundColor,
+              child: topCommandBar(controller, context),
+            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 6,
+                      child: controller.dashBoard.value,
                     ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width / 6,
-                              child: controller.dashBoard.value,
-                            ),
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    left: BorderSide(
-                                        color: Colors.black, width: 0.5))),
-                            width: MediaQuery.of(context).size.width / 6 * 5,
-                            child: controller.workingSpaceWidget.value,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
-            );
-          } else {
-            return Column(
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40,
-                  //color: Colors.teal,
-                  child: fakeScreen(),
-                ),
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 6,
-                          child: Get.find<HomeScreenController>().isFolderEmpty
-                              ? newFolderButton(
-                                  context,
-                                  Get.find<FolderController>(),
-                                  Get.find<HomeScreenController>())
-                              : FolderTreeViewExplore(
-                                  tagName: tagName,
-                                ),
-                        ),
-                      ),
-                      Container(
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(
-                                      color: Colors.black, width: 0.5))),
-                          width: MediaQuery.of(context).size.width / 6 * 5,
-                          child: const SizedBox())
-                    ],
                   ),
-                ),
-              ],
-            );
-          }
-        }));
+                  Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            left: BorderSide(color: Colors.black, width: 0.5))),
+                    width: MediaQuery.of(context).size.width / 6 * 5,
+                    child: controller.workingSpaceWidget.value,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Center topCommandBar(

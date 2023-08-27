@@ -34,7 +34,6 @@ class DefaultTabBody extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 40,
-              //color: FluentTheme.of(context).acrylicBackgroundColor,
               child: topCommandBar(controller, context),
             ),
             Expanded(

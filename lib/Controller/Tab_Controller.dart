@@ -25,7 +25,9 @@ class TabController extends GetxController {
         ),
         text: const SizedBox.shrink(),
         body: Obx(() => Container(
-              color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
+              color: totalController.isDark.value == true
+                  ? Colors.grey[170]
+                  : Colors.grey[10],
               child: HomeScreen(tabController: this),
             )),
         disabled: true,
@@ -50,7 +52,9 @@ class TabController extends GetxController {
             FluentIcons.file_template,
           ),
       body: Obx(() => Container(
-            color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
+            color: totalController.isDark.value == true
+                ? Colors.grey[170]
+                : Colors.grey[10],
             child: body,
           )),
       onClosed: () async {
@@ -60,7 +64,8 @@ class TabController extends GetxController {
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;
         }
-        await Get.find<DefaultTabBodyController>(tag: newKey.toString()).deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: newKey.toString())
+            .deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
         if (currentTabIndex.value == 0) {
@@ -91,9 +96,11 @@ class TabController extends GetxController {
           currentTabIndex.value--;
         }
 
-        await Get.find<DefaultTabBodyController>(tag: tab.key.toString()).deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: tab.key.toString())
+            .deleteWorkingSpaceController();
 
-        Get.delete<DefaultTabBodyController>(tag: tab.key.toString(), force: true);
+        Get.delete<DefaultTabBodyController>(
+            tag: tab.key.toString(), force: true);
         if (currentTabIndex.value == 0) {
           isNewTab = true;
         }
@@ -125,9 +132,6 @@ class TabController extends GetxController {
   ///tab view에서 오른쪽의 +버튼을 눌렀을때 로직
   void onNewPressed() {
     isNewTab = true;
-    Get.put<DefaultTabBodyController>(
-        DefaultTabBodyController(getNewTabKey(), DashBoardType.explore, null),
-        tag: getNewTabKey());
     DefaultTabBody generatedTab = DefaultTabBody(
       dashBoardType: DashBoardType.explore,
     );

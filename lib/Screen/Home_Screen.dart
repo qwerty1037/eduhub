@@ -31,7 +31,11 @@ class HomeScreen extends StatelessWidget {
           height: 40,
           //color: Colors.teal,
           child: Row(
-            children: [menuCommandBar(context, homeScreenController), const Spacer(), questionMarkButton(flyoutController: _flyoutController)],
+            children: [
+              menuCommandBar(context, homeScreenController),
+              const Spacer(),
+              questionMarkButton(flyoutController: _flyoutController)
+            ],
           ),
         ),
         Expanded(
@@ -44,7 +48,9 @@ class HomeScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
-                        color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                        color: Get.find<TotalController>().isDark.value == true
+                            ? Colors.grey[130]
+                            : Colors.grey[50],
                         width: 1,
                       ),
                     ),
@@ -62,8 +68,10 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Container(
-                  color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
-                  child: const Center(child: Text("최근 기록 페이지")),
+                  color: Get.find<TotalController>().isDark.value == true
+                      ? Colors.grey[150]
+                      : Colors.grey[30],
+                  child: const Center(child: Text("알림(학생들 과제 현황 등) 또는 달력?")),
                 ),
               )
             ],
@@ -92,7 +100,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.savePdf,
               workingSpace: const PdfViewerScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "문제 저장", const Icon(FluentIcons.save));
+            Tab newTab = tabController.addTab(
+                generatedTab, "문제 저장", const Icon(FluentIcons.save));
 
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
@@ -141,7 +150,10 @@ class HomeScreen extends StatelessWidget {
               )),
           onPressed: () {
             createHighlightOverlay(
-                context: context, controller: Get.put(SearchScreenController(), tag: tabController.getNewTabKey()), tabController: tabController);
+                context: context,
+                controller: Get.put(SearchScreenController(),
+                    tag: tabController.getNewTabKey()),
+                tabController: tabController);
           },
         ),
       ),
@@ -163,7 +175,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.tagManagement,
               workingSpace: TagManagementScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "태그", const Icon(FluentIcons.tag));
+            Tab newTab = tabController.addTab(
+                generatedTab, "태그", const Icon(FluentIcons.tag));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
@@ -179,60 +192,91 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Column leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
-  return Column(
-    children: [
-      Center(
-        child: FilledButton(
-          child: const Text("로그아웃(프로필)"),
-          onPressed: () async {
-            homeScreenController.logout();
-          },
-        ),
-      ),
-      const SizedBox(height: 10),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Text("다크 모드"),
-          GetBuilder<TotalController>(
-            builder: (controller) {
-              return ToggleSwitch(
-                checked: controller.isDark.value,
-                onChanged: (value) {
-                  controller.isDark.value = value;
-                  controller.update();
+SingleChildScrollView leftDashboard(HomeScreenController homeScreenController,
+    BuildContext context, FolderController folderController) {
+  return SingleChildScrollView(
+    child: Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Text("OOO님"),
+                  GestureDetector(
+                      child: const Icon(FluentIcons.settings),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ContentDialog(
+                                title: const Center(child: Text("프로필 설정")),
+                                content: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Center(child: Text("닉네임 변경")),
+                                    Text("OOO님 들어갈 자리")
+                                  ],
+                                ),
+                                actions: [
+                                  Button(
+                                    child: const Text('취소'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  FilledButton(
+                                      child: const Text('저장'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }),
+                                ],
+                              );
+                            });
+                      }),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Button(
+                child: const Text("로그아웃"),
+                onPressed: () async {
+                  homeScreenController.logout();
                 },
-              );
-            },
+              ),
+            ],
           ),
-        ],
-      ),
-      const SizedBox(height: 10),
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        height: 40,
-        //color: const Color.fromARGB(100, 50, 49, 48),
-        child: const Row(
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(
-              FluentIcons.recent,
-              size: 20,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              "최근 기록 페이지",
-              style: TextStyle(fontSize: 12),
+            const Text("다크 모드"),
+            GetBuilder<TotalController>(
+              builder: (controller) {
+                return ToggleSwitch(
+                  checked: controller.isDark.value,
+                  onChanged: (value) {
+                    controller.isDark.value = value;
+                    controller.update();
+                  },
+                );
+              },
             ),
           ],
         ),
-      ),
-      GetBuilder<HomeScreenController>(builder: (controller) {
-        return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : FolderTreeViewExplore();
-      })
-    ],
+        const SizedBox(height: 10),
+        GetBuilder<HomeScreenController>(builder: (controller) {
+          return homeScreenController.isFolderEmpty
+              ? newFolderButton(context, folderController, homeScreenController)
+              : FolderTreeViewExplore();
+        })
+      ],
+    ),
   );
 }
 

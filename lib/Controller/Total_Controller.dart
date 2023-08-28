@@ -46,13 +46,11 @@ class TotalController extends GetxController {
     super.onInit();
     _timer = Timer.periodic(const Duration(minutes: 29), (timer) async {
       if (isLoginSuccess) {
-        debugPrint("테스트");
         final url = Uri.parse('http://$HOST/api/auth/refresh');
         final response = await http.post(
           url,
           headers: await defaultHeader(httpContentType.json),
         );
-        //쿠키를 같이 보냄 refresh cookie로
 
         if (isHttpRequestSuccess(response)) {
           String? cookieList = response.headers["set-cookie"];

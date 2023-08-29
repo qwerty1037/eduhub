@@ -43,7 +43,10 @@ class LoginScreen extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color.fromARGB(172, 68, 137, 255), Color.fromARGB(119, 68, 137, 255)],
+              colors: [
+                Color.fromARGB(172, 68, 137, 255),
+                Color.fromARGB(119, 68, 137, 255)
+              ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -88,7 +91,9 @@ class LoginScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
       ),
-      color: Theme.of(context).colorScheme.primaryContainer, //const Color.fromARGB(52, 117, 117, 117),
+      color: Theme.of(context)
+          .colorScheme
+          .primaryContainer, //const Color.fromARGB(52, 117, 117, 117),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -135,7 +140,8 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  ElevatedButton loginTryButton(loginScreenController loginController, BuildContext context) {
+  ElevatedButton loginTryButton(
+      loginScreenController loginController, BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -190,7 +196,7 @@ class LoginScreen extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),*/
       decoration: InputDecoration(
-        prefixIcon: Icon(
+        prefixIcon: const Icon(
           FontAwesomeIcons.mailBulk,
           size: 15.0,
           //color: Theme.of(context).colorScheme.onSecondaryContainer, //Color.fromARGB(155, 255, 255, 255),
@@ -299,7 +305,10 @@ class InquiryButton extends StatelessWidget {
       */
       child: Text(
         "문의하기",
-        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge!
+            .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }
@@ -309,7 +318,8 @@ class RegisterInfoButton extends StatelessWidget {
   RegisterInfoButton({
     super.key,
   });
-  final RegisterInfoController _registerInfoController = Get.put(RegisterInfoController());
+  final RegisterInfoController _registerInfoController =
+      Get.put(RegisterInfoController());
 
   @override
   Widget build(BuildContext context) {
@@ -340,9 +350,11 @@ class RegisterInfoButton extends StatelessWidget {
                             ),
                             registerTextfield(controller.idController, false),
                             ...betweenTextfield("비밀번호"),
-                            registerTextfield(controller.passwordController, true),
+                            registerTextfield(
+                                controller.passwordController, true),
                             ...betweenTextfield("비밀번호 확인"),
-                            registerTextfield(controller.checkPasswordController, true),
+                            registerTextfield(
+                                controller.checkPasswordController, true),
                             ...betweenTextfield("이름"),
                             registerTextfield(controller.nameController, false),
                             const SizedBox(
@@ -353,12 +365,16 @@ class RegisterInfoButton extends StatelessWidget {
                             ...betweenTextfield("나이"),
                             registerTextfield(controller.ageController, false),
                             ...betweenTextfield("이메일"),
-                            registerTextfield(controller.emailController, false),
+                            registerTextfield(
+                                controller.emailController, false),
                             ...betweenTextfield("닉네임"),
-                            registerTextfield(controller.nicknameController, false),
+                            registerTextfield(
+                                controller.nicknameController, false),
                             SizedBox(
                               height: 20,
-                              child: controller.matchpassword ? const Text("") : const Text("비밀번호가 다릅니다"),
+                              child: controller.matchpassword
+                                  ? const Text("")
+                                  : const Text("비밀번호가 다릅니다"),
                             ),
                             SizedBox(
                               height: 20,
@@ -424,7 +440,10 @@ class RegisterInfoButton extends StatelessWidget {
       */
       child: Text(
         "회원가입",
-        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge!
+            .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }

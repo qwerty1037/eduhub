@@ -36,13 +36,6 @@ class FolderController extends GetxController {
     }
   }
 
-  ///서버 없을때 연결 시킬 것 =====================================
-  void makeExampleData() {
-    makeFolderListInfo(example);
-  }
-
-//==============================================================
-
   ///json 형태로 데이터가 들어올 때 보여줄 폴더들을 만드는 핵심 함수
   void makeFolderListInfo(List<dynamic> data) {
     final List<int> stack = [];
@@ -73,6 +66,10 @@ class FolderController extends GetxController {
     }
     totalFolders.addAll(folders);
     firstFolders.addAll(rootFolders);
+  }
+
+  TreeViewItem findTreeViewItem(int id) {
+    return totalFolders.firstWhere((element) => element.value["id"] == id);
   }
 
   ///폴더의 이름, id, parent를 받아 새로운 TreeViewItem을 반환한다.

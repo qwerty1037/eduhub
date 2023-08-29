@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Search_Bar_Overlay.dart';
+import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
@@ -10,6 +15,8 @@ import 'package:get/get.dart';
 class TabController extends GetxController {
   RxInt currentTabIndex = (0).obs;
   RxList<Tab> tabs = <Tab>[].obs;
+  List<DefaultTabBody> tabInfo = <DefaultTabBody>[];
+
   int tagNumber = 0;
   bool isNewTab = true;
   TotalController totalController = Get.find<TotalController>();
@@ -36,11 +43,39 @@ class TabController extends GetxController {
       ),
     );
   }
+  @override
+  void onInit() async {
+    super.onInit();
+    const storage = FlutterSecureStorage();
+
+    if (await storage.read(key: 'uid') ==
+            await storage.read(key: 'saved_uid') &&
+        await storage.read(key: 'saved_tabs') != null) {
+      List<dynamic> tabToRestore =
+          jsonDecode(await storage.read(key: 'saved_tabs') as String);
+
+      FolderController folderController = Get.find<FolderController>();
+      for (int i = 0; i < tabToRestore.length; i++) {
+        String type = tabToRestore[i]["type"];
+        if (type == "explore") {
+          int folderId = tabToRestore[i]["id"];
+          //아이디로 폴더 찾고,
+          TreeViewItem currentFolder =
+              folderController.findTreeViewItem(folderId);
+          folderController.makeProblemListInNewTab(currentFolder);
+        } else if (type == "search") {
+          String searchText = tabToRestore[i]["text"];
+          //텍스트 넣은채로 탭 구현, 현재는 검색 오버레이와 검색 세부 내역이 연동이 안되어 있어 미구현.
+          debugPrint("검색창 복구 구현해야함(관련 위젯 tab 컨트롤러, event리스너, 홈스크린 컨트롤러)");
+        }
+      }
+    }
+  }
 
   ///새로운 탭을 추가하는 함수, body와 탭 이름, 아이콘을 파라미터로 받는다 탭 이름은 안주면 NewTab으로 된다.
   Tab addTab(final Widget body, final String? text, final Icon? icon) {
     Tab? newTab;
-
+    tabInfo.add(body as DefaultTabBody);
     Key newKey = Key(tagNumber.toString());
     newTab = Tab(
       key: newKey,
@@ -59,6 +94,7 @@ class TabController extends GetxController {
           )),
       onClosed: () async {
         tabs.remove(newTab);
+        tabInfo.remove(body);
         final int indexToDelete = tabs.indexOf(newTab);
 
         if (indexToDelete <= currentTabIndex.value) {

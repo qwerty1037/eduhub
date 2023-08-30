@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/Register_Info_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -46,6 +47,7 @@ class loginScreenController extends GetxController {
     totalController.reverseLoginState();
     totalController.update();
     Get.delete<loginScreenController>();
+    Get.delete<RegisterInfoController>();
   }
 
   ///백엔드에 로그인을 요청하는 함수로 성공시 쿠키를 저장하고 loginSuccess를 실행한다

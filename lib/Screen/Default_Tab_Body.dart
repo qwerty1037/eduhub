@@ -21,19 +21,22 @@ class DefaultTabBody extends StatelessWidget {
     this.workingSpace,
   }) {
     tagName = tabController.getNewTabKey();
+    _defaultTabBodyController = Get.put(
+        DefaultTabBodyController(tagName, dashBoardType, workingSpace),
+        tag: tagName);
   }
   final DashBoardType dashBoardType;
   final Widget? workingSpace;
   final TabController tabController = Get.find<TabController>();
+  late DefaultTabBodyController _defaultTabBodyController;
 
   late final String tagName;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("test");
     return FutureBuilder(
-        future: Get.putAsync<DefaultTabBodyController>(() async {
-          return DefaultTabBodyController(tagName, dashBoardType, workingSpace);
-        }, tag: tagName),
+        future: Future.delayed(Duration.zero),
         builder: ((context, snapshot) {
           if (snapshot.connectionState != ConnectionState.waiting) {
             return GetX<DefaultTabBodyController>(

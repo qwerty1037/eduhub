@@ -23,7 +23,7 @@ class ProblemListController extends GetxController {
   ).obs;
   RxBool isAllProblems = false.obs;
   int currentPage = 0;
-  final int itemsPerPage = 16;
+  final int itemsPerPage = 16; //2;
   late int startIndex;
   late int endIndex;
   int lastButton = 1;

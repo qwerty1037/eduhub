@@ -74,7 +74,7 @@ class ProblemList extends StatelessWidget {
                                       child: twoColumnProblemList(controller),
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: controller.pageButton,
                                     )
                                   ],

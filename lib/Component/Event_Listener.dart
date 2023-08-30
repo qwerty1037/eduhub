@@ -44,7 +44,7 @@ class _eventListenerState extends State<eventListener> with WindowListener {
     if (isPreventClose) {
       const storage = FlutterSecureStorage();
       storage.write(key: 'saved_uid', value: await storage.read(key: 'uid'));
-
+      await storage.delete(key: 'saved_tabs');
       List<String> tabToSave = [];
       List<DefaultTabBody> bodyList = Get.find<TabController>().tabInfo;
       for (int i = 0; i < bodyList.length; i++) {

@@ -24,12 +24,7 @@ class TabController extends GetxController {
   TabController() {
     tabs.add(
       Tab(
-        icon: GestureDetector(
-          child: const Icon(FluentIcons.home),
-          onTap: () {
-            currentTabIndex.value = 0;
-          },
-        ),
+        icon: const Icon(FluentIcons.home),
         text: const SizedBox.shrink(),
         body: Obx(() => Container(
               color: totalController.isDark.value == true
@@ -37,7 +32,6 @@ class TabController extends GetxController {
                   : Colors.grey[10],
               child: HomeScreen(tabController: this),
             )),
-        disabled: true,
         closeIcon: null,
         onClosed: () {},
       ),

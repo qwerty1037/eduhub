@@ -1,4 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' as m;
+import 'package:front_end/Component/Calendar.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Feedback_Overlay.dart';
 import 'package:front_end/Component/Folder_Treeview_Explore.dart';
@@ -13,6 +15,7 @@ import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
 import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
@@ -71,7 +74,32 @@ class HomeScreen extends StatelessWidget {
                   color: Get.find<TotalController>().isDark.value == true
                       ? Colors.grey[150]
                       : Colors.grey[30],
-                  child: const Center(child: Text("알림(학생들 과제 현황 등) 또는 달력?")),
+                  child: m.Scaffold(
+                    appBar: null,
+                    body: SingleChildScrollView(
+                      child: Row(children: [
+                        Expanded(
+                            flex: 2,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                  right: BorderSide(
+                                    color: Get.find<TotalController>()
+                                                .isDark
+                                                .value ==
+                                            true
+                                        ? Colors.grey[130]
+                                        : Colors.grey[50],
+                                    width: 1,
+                                  ),
+                                )),
+                                child: const HomeCalendar())),
+                        const Expanded(
+                            flex: 1,
+                            child: Center(child: Text("연동 후 알림창 들어갈 부분")))
+                      ]),
+                    ),
+                  ),
                 ),
               )
             ],

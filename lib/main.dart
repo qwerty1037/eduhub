@@ -10,6 +10,7 @@ import 'package:front_end/Screen/Home_Tabview.dart';
 import 'package:front_end/Screen/Login_Screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -29,7 +30,7 @@ void main() async {
     await windowManager.show();
     await windowManager.focus();
   });
-
+  await initializeDateFormatting();
   Get.put(TotalController(), permanent: true);
   Get.put(FolderController());
   runApp(const MyApp());

@@ -69,11 +69,12 @@ class _eventListenerState extends State<eventListener> with WindowListener {
         }
       }
       storage.write(key: 'saved_tabs', value: tabToSave.toString());
-      await windowManager.destroy();
+
       await storage.delete(key: 'uid');
       await storage.delete(key: 'access_token');
       await storage.delete(key: 'refresh_token');
       Get.deleteAll(force: true);
+      await windowManager.destroy();
     }
   }
 

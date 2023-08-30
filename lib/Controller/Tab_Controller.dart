@@ -93,9 +93,9 @@ class TabController extends GetxController {
             child: body,
           )),
       onClosed: () async {
+        final int indexToDelete = tabs.indexOf(newTab);
         tabs.remove(newTab);
         tabInfo.remove(body);
-        final int indexToDelete = tabs.indexOf(newTab);
 
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;

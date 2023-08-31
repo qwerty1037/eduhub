@@ -1,4 +1,9 @@
+import 'dart:ui';
+
+import 'package:fluent_ui/fluent_ui.dart' as f;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:front_end/Component/Default/Default_TextBox.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomeCalendar extends StatefulWidget {
@@ -78,24 +83,85 @@ class _HomeCalendarState extends State<HomeCalendar> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
-                      onPressed: () {
-                        OverlayState? overlayState = Overlay.of(context);
-                        OverlayEntry? overlayEntry;
-                        overlayEntry = OverlayEntry(
-                          builder: (BuildContext context) {
-                            return Positioned(
-                                left: MediaQuery.of(context).size.width * 0.1,
-                                top: MediaQuery.of(context).size.height * 0.15,
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                height: MediaQuery.of(context).size.height * 0.7,
-                                child: Center(
-                                  child: Column(
-                                    children: [Text("${selectedDay.month}월 ${selectedDay.day}일 일정 추가")],
-                                  ),
-                                ));
-                          },
+                      onPressed: () async {
+                        TextEditingController titleController = TextEditingController();
+                        TextEditingController hourController = TextEditingController();
+                        TextEditingController minuteController = TextEditingController();
+                        await f.showDialog<String>(
+                          barrierDismissible: true,
+                          context: context,
+                          builder: (context) => f.ContentDialog(
+                            title: Text("${selectedDay.month}월 ${selectedDay.day}일 일정 추가"),
+                            content: SingleChildScrollView(
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.4,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Text(
+                                      "내용",
+                                    ),
+                                    DefaultTextBox(
+                                      placeholder: "필수",
+                                      controller: titleController,
+                                    ),
+                                    const Text("시(24H)"),
+                                    DefaultTextBox(
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly // 숫자만 입력되도록 필터링
+                                      ],
+                                      placeholder: "선택",
+                                      controller: hourController,
+                                    ),
+                                    const Text("분"),
+                                    DefaultTextBox(
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly // 숫자만 입력되도록 필터링
+                                      ],
+                                      placeholder: "선택",
+                                      controller: minuteController,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            actions: [
+                              f.Button(
+                                child: const Text('추가'),
+                                onPressed: () {
+                                  if (titleController.text != "") {
+                                    setState(() {
+                                      if (events[selectedDay] != null) {
+                                        events[selectedDay]!.add(CalendarEvent(text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text)));
+                                      } else {
+                                        events[selectedDay] = [CalendarEvent(text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text))];
+                                      }
+                                    });
+                                    Navigator.pop(context);
+                                  } else {
+                                    Navigator.pop(context);
+                                    f.showSnackbar(
+                                        context,
+                                        const f.InfoBar(
+                                          title: Text('일정 미입력:'),
+                                          content: Text(
+                                            '일정 내용이 입력되지 않았습니다',
+                                          ),
+                                          severity: f.InfoBarSeverity.info,
+                                        ));
+                                  }
+                                },
+                              ),
+                              f.FilledButton(
+                                child: const Text('취소'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
                         );
-                        // overlayState.insert(overlayEntry);
                       },
                       icon: const Icon(Icons.add))
                 ],
@@ -105,8 +171,14 @@ class _HomeCalendarState extends State<HomeCalendar> {
                     ? []
                     : events[selectedDay]!
                         .map((e) => ListTile(
-                              leading: e.minute == 0 ? Text("${e.hour}시") : Text("${e.hour}시 ${e.minute}분"),
-                              title: Text(e.text),
+                              leading: e.hour == null
+                                  ? null
+                                  : e.minute == 0
+                                      ? Text("${e.hour}시")
+                                      : Text("${e.hour}시 ${e.minute}분"),
+                              title: Text(
+                                e.text,
+                              ),
                             ))
                         .toList(),
               )
@@ -122,8 +194,5 @@ class CalendarEvent {
   String text;
   int? hour;
   int? minute;
-  CalendarEvent({required this.text, this.hour, this.minute}) {
-    hour ??= 9;
-    minute ??= 0;
-  }
+  CalendarEvent({required this.text, this.hour, this.minute});
 }

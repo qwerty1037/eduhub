@@ -8,6 +8,7 @@ import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
+import 'package:front_end/Test/Default_Tab_Body_stful.dart';
 import 'package:get/get.dart';
 
 ///홈스크린 관련 로직 처리하는 컨트롤러
@@ -42,14 +43,20 @@ class HomeScreenController extends GetxController {
         tabToSave.add('{"type": "explore", "id": $folderId }');
         debugPrint("folderId");
       } else if (tabType == DashBoardType.search) {
-        debugPrint("search");
         String searchText =
             Get.find<SearchScreenController>(tag: bodyList[i].tagName)
                 .searchBarController
                 .text;
-        tabToSave.add('{"type": "search", "text": $searchText }');
-        debugPrint(searchText);
-        //searchscreen controller찾고 그 안의 searchBarController.text를 저장
+        String searchDifficulty =
+            Get.find<SearchScreenController>(tag: bodyList[i].tagName)
+                .getDifficulty()
+                .toString();
+        String searchContent =
+            Get.find<SearchScreenController>(tag: bodyList[i].tagName)
+                .getContent();
+
+        tabToSave.add(
+            '{"type": "search", "text": "$searchText" , "difficulty" : "$searchDifficulty", "content" : "$searchContent"}');
       }
     }
     storage.write(key: 'saved_tabs', value: tabToSave.toString());

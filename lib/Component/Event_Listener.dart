@@ -61,7 +61,7 @@ class _eventListenerState extends State<eventListener> with WindowListener {
           String searchDifficulty = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getDifficulty().toString();
           String searchContent = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getContent();
 
-          tabToSave.add('{"type": "searchContent", "text": "${searchText}" , "difficulty" : "${searchDifficulty}", "content" : "${searchContent}"}');
+          tabToSave.add('{"type": "search", "text": "${searchText}" , "difficulty" : "${searchDifficulty}", "content" : "${searchContent}"}');
 
           //searchscreen controller찾고 그 안의 searchBarController.text를 저장
         }

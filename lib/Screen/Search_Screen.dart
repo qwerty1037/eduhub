@@ -9,7 +9,17 @@ class SearchScreen extends StatelessWidget {
   final controller = Get.put(SearchScreenController(), tag: Get.find<TabController>().getTabKey());
   final TempFileClass _tempFileClass = TempFileClass();
 
-  SearchScreen({super.key});
+  SearchScreen({Key? key, String? text, int? difficulty, String? content}) {
+    if (text != null) {
+      controller.searchBarController.text = text;
+    }
+    if (difficulty != null) {
+      controller.setDifficulty(difficulty);
+    }
+    if (content != null) {
+      controller.setContent(content);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

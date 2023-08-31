@@ -71,6 +71,14 @@ class SearchScreenController extends GetxController {
     return content.value;
   }
 
+  void setDifficulty(int value) {
+    difficulty.value = value;
+  }
+
+  void setContent(String value) {
+    content.value = value;
+  }
+
   void backend() async {
     final folderController = Get.find<FolderController>();
     List<int> searchedFolderId = [];

@@ -58,26 +58,23 @@ class TabController extends GetxController {
           String searchText = tabToRestore[i]["text"];
           String searchDifficulty = tabToRestore[i]["difficulty"];
           String searchContent = tabToRestore[i]["content"];
+          debugPrint(searchText);
+          debugPrint(searchDifficulty);
+          debugPrint(searchContent);
+          isNewTab = true;
 
-          if (currentTabIndex.value == 0) {
-            isNewTab = true;
-
-            DefaultTabBody tabBody = DefaultTabBody(
-              dashBoardType: DashBoardType.search,
-              workingSpace: SearchScreen(),
-            );
-            Tab newTab = addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
-            tabs.add(newTab);
-            currentTabIndex.value = tabs.length - 1;
-            isNewTab = false;
-          } else {
-            Get.find<DefaultTabBodyController>(tag: getTabKey()).deleteWorkingSpaceController();
-
-            Get.find<DefaultTabBodyController>(tag: getTabKey()).changeWorkingSpace(SearchScreen());
-
-            Tab currentTab = tabs[currentTabIndex.value];
-            renameTab(currentTab, "SearchScreen", const Icon(FluentIcons.search));
-          }
+          DefaultTabBody tabBody = DefaultTabBody(
+            dashBoardType: DashBoardType.search,
+            workingSpace: SearchScreen(
+              text: searchText,
+              difficulty: int.parse(searchDifficulty),
+              content: searchContent,
+            ),
+          );
+          Tab newTab = addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
+          tabs.add(newTab);
+          currentTabIndex.value = tabs.length - 1;
+          isNewTab = false;
         }
       }
     }

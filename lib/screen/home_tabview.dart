@@ -24,11 +24,12 @@ class HomeTabView extends StatelessWidget {
               controller.onNewPressed();
             },
             onReorder: (oldIndex, newIndex) {
-              if (oldIndex * newIndex > 0) {
-                controller.onReorder(oldIndex, newIndex);
-              } else {
-                null;
-              }
+              null;
+              // if (oldIndex * newIndex > 0) {
+              //   controller.onReorder(oldIndex, newIndex);
+              // } else {
+              //   null;
+              // }
             },
           );
         },

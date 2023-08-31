@@ -59,7 +59,7 @@ dependencies:
   flutter_quill: ^7.2.18
   window_manager: ^0.3.5
   table_calendar: ^3.0.9
-  intl: ^0.18.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

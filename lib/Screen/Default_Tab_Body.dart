@@ -34,7 +34,7 @@ class DefaultTabBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("test");
+    debugPrint(tagName);
     return FutureBuilder(
         future: Future.delayed(Duration.zero),
         builder: ((context, snapshot) {
@@ -47,7 +47,6 @@ class DefaultTabBody extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 40,
-                      //color: FluentTheme.of(context).acrylicBackgroundColor,
                       child: topCommandBar(controller, context),
                     ),
                     Expanded(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +9,7 @@ import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
+
 import 'package:front_end/Screen/Home_Screen.dart';
 import 'package:get/get.dart';
 
@@ -67,10 +69,10 @@ class TabController extends GetxController {
   }
 
   ///새로운 탭을 추가하는 함수, body와 탭 이름, 아이콘을 파라미터로 받는다 탭 이름은 안주면 NewTab으로 된다.
-  Tab addTab(final Widget body, final String? text, final Icon? icon) {
+  Tab addTab(Widget body, final String? text, final Icon? icon) {
     Tab? newTab;
     tabInfo.add(body as DefaultTabBody);
-    Key newKey = Key(tagNumber.toString());
+    Key newKey = ValueKey<int>(tagNumber);
     newTab = Tab(
       key: newKey,
       text: Text(
@@ -152,9 +154,9 @@ class TabController extends GetxController {
     final item = tabs.removeAt(oldIndex);
     tabs.insert(newIndex, item);
 
-    if (currentTabIndex == newIndex) {
+    if (currentTabIndex.value == newIndex) {
       currentTabIndex.value = oldIndex;
-    } else if (currentTabIndex == oldIndex) {
+    } else if (currentTabIndex.value == oldIndex) {
       currentTabIndex.value = newIndex;
     }
   }
@@ -180,7 +182,7 @@ class TabController extends GetxController {
 
   ///새로 만들 탭의 key값을 반환하는 함수
   String getNewTabKey() {
-    return Key(tagNumber.toString()).toString();
+    return ValueKey<int>(tagNumber).toString();
   }
 
   ///새탭을 만들경우 getNewTabKey를 아닐 경우 _getCurrentTabKey를 반환하는 함수

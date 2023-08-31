@@ -81,6 +81,10 @@ class DefaultTabBodyController extends GetxController {
         return FolderTreeViewExplore(
           tagName: tagName,
         );
+      case DashBoardType.none:
+        return FolderTreeViewExplore(
+          tagName: tagName,
+        );  
     }
   }
 }

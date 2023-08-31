@@ -29,4 +29,6 @@ enum DashBoardType {
 
   /// 검색창
   search,
+  ///아무것도 선택안되었을때
+  none
 }

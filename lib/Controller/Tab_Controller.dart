@@ -182,7 +182,7 @@ class TabController extends GetxController {
   void onNewPressed() {
     isNewTab = true;
     DefaultTabBody generatedTab = DefaultTabBody(
-      dashBoardType: DashBoardType.explore,
+      dashBoardType: DashBoardType.none,
     );
     Tab newTab = addTab(generatedTab, null, null);
 

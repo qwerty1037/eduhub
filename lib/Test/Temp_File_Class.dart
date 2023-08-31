@@ -45,6 +45,14 @@ class TempFileClass {
           ));
         }
       }
+    } else {
+      for (int i = 0; i < fileClass.length; i++) {
+        temp.add(Container(
+          padding: const EdgeInsets.all(8),
+          color: material.Colors.green[100],
+          child: fileClass[i].getImage(),
+        ));
+      }
     }
     return temp;
   }

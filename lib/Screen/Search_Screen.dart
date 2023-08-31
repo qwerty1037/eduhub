@@ -6,8 +6,7 @@ import 'package:get/get.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 
 class SearchScreen extends StatelessWidget {
-  final controller = Get.put(SearchScreenController(),
-      tag: Get.find<TabController>().getTabKey());
+  final controller = Get.put(SearchScreenController(), tag: Get.find<TabController>().getTabKey());
   final TempFileClass _tempFileClass = TempFileClass();
 
   SearchScreen({super.key});
@@ -70,8 +69,7 @@ class SearchScreen extends StatelessWidget {
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                           crossAxisCount: 2,
-                          children: _tempFileClass
-                              .getGridView(controller.getDifficulty()),
+                          children: _tempFileClass.getGridView(controller.getDifficulty()),
                         ),
                       ),
                     ],

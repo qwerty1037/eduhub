@@ -48,22 +48,20 @@ class _eventListenerState extends State<eventListener> with WindowListener {
       List<String> tabToSave = [];
       List<DefaultTabBody> bodyList = Get.find<TabController>().tabInfo;
       for (int i = 0; i < bodyList.length; i++) {
-        DefaultTabBodyController tabBodyController =
-            Get.find<DefaultTabBodyController>(tag: bodyList[i].tagName);
+        DefaultTabBodyController tabBodyController = Get.find<DefaultTabBodyController>(tag: bodyList[i].tagName);
         DashBoardType tabType = tabBodyController.dashBoardType;
 
         if (tabType == DashBoardType.explore) {
-          Container workingSpace =
-              tabBodyController.workingSpaceWidget.value as Container;
+          Container workingSpace = tabBodyController.workingSpaceWidget.value as Container;
           ProblemList folder = workingSpace.child as ProblemList;
           var folderId = folder.targetFolder.value["id"];
           tabToSave.add('{"type": "explore", "id": $folderId }');
         } else if (tabType == DashBoardType.search) {
-          String searchText =
-              Get.find<SearchScreenController>(tag: bodyList[i].tagName)
-                  .searchBarController
-                  .text;
-          tabToSave.add('{"type": "search", "text": $searchText }');
+          String searchText = Get.find<SearchScreenController>(tag: bodyList[i].tagName).searchBarController.text;
+          String searchDifficulty = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getDifficulty().toString();
+          String searchContent = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getContent();
+
+          tabToSave.add('{"type": "searchContent", "text": "${searchText}" , "difficulty" : "${searchDifficulty}", "content" : "${searchContent}"}');
 
           //searchscreen controller찾고 그 안의 searchBarController.text를 저장
         }

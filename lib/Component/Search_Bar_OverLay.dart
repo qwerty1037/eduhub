@@ -72,29 +72,21 @@ void createHighlightOverlay({
                         dashBoardType: DashBoardType.search,
                         workingSpace: SearchScreen(),
                       );
-                      Tab newTab = tabController.addTab(tabBody, "SearchScreen",
-                          const Icon(FluentIcons.search));
+                      Tab newTab = tabController.addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
                       tabController.tabs.add(newTab);
-                      tabController.currentTabIndex.value =
-                          tabController.tabs.length - 1;
-                      controller.searchBarController.text = "";
+                      tabController.currentTabIndex.value = tabController.tabs.length - 1;
+                      //controller.searchBarController.text = "";
                       overlayEntry?.remove();
                       tabController.isNewTab = false;
                     } else {
-                      controller.searchBarController.text = "";
+                      //controller.searchBarController.text = "";
                       overlayEntry?.remove();
-                      Get.find<DefaultTabBodyController>(
-                              tag: tabController.getTabKey())
-                          .deleteWorkingSpaceController();
+                      Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).deleteWorkingSpaceController();
 
-                      Get.find<DefaultTabBodyController>(
-                              tag: tabController.getTabKey())
-                          .changeWorkingSpace(SearchScreen());
+                      Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).changeWorkingSpace(SearchScreen());
 
-                      Tab currentTab = tabController
-                          .tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, "SearchScreen",
-                          const Icon(FluentIcons.search));
+                      Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+                      tabController.renameTab(currentTab, "SearchScreen", const Icon(FluentIcons.search));
                     }
                   },
                 ),

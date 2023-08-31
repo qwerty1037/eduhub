@@ -68,7 +68,7 @@ class TagManagementScreen extends StatelessWidget {
         width: double.infinity,
         alignment: Alignment.center,
         decoration: const BoxDecoration(
-          color: Colors.blueAccent,
+          color: Color(0xfff7630c),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         child: const Text(

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:front_end/Component/Default/Cookie.dart';
 
 enum httpContentType {
@@ -27,5 +28,6 @@ bool isHttpRequestSuccess(response) {
 
 /// [!isHttpRequestSuccess]
 bool isHttpRequestFailure(response) {
+  debugPrint(response.statusCode.toString());
   return !isHttpRequestSuccess(response);
 }

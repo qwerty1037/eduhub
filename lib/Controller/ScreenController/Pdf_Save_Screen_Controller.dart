@@ -43,7 +43,7 @@ class PdfSaveController extends GetxController {
     String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
 
-    final url = Uri.parse('http://$HOST/api/data/create_problem');
+    final url = Uri.parse('https://$HOST/api/data/create_problem');
     var request = http.MultipartRequest('POST', url);
     var multipartFileProblem = http.MultipartFile.fromBytes(
       'problem_image',
@@ -63,8 +63,8 @@ class PdfSaveController extends GetxController {
       "parent_database": selectedDirectoryID,
       "tags": jsonEncode(selectedTags),
       "level": difficultySliderValue.round(),
-      "problem_string": "\${${capturedFileNameProblem}}",
-      "answer_string": "\${${capturedFileNameAnswer}}",
+      "problem_string": "\${$capturedFileNameProblem}",
+      "answer_string": "\${$capturedFileNameAnswer}",
     };
 
     final Map<String, String> temp = {};

@@ -32,8 +32,7 @@ class TotalController extends GetxController {
     return null;
   }
 
-  Future<void> saveCookieToSecureStorage(
-      String uid, String accessToken, String refreshToken) async {
+  Future<void> saveCookieToSecureStorage(String uid, String accessToken, String refreshToken) async {
     const storage = FlutterSecureStorage();
 
     await storage.write(key: 'uid', value: uid);
@@ -46,7 +45,7 @@ class TotalController extends GetxController {
     super.onInit();
     _timer = Timer.periodic(const Duration(minutes: 29), (timer) async {
       if (isLoginSuccess) {
-        final url = Uri.parse('http://$HOST/api/auth/refresh');
+        final url = Uri.parse('https://$HOST/api/auth/refresh');
         final response = await http.post(
           url,
           headers: await defaultHeader(httpContentType.json),
@@ -76,8 +75,7 @@ class TotalController extends GetxController {
     update();
   }
 
-  m.ColorScheme customColorScheme =
-      m.ColorScheme.fromSeed(seedColor: Colors.red);
+  m.ColorScheme customColorScheme = m.ColorScheme.fromSeed(seedColor: Colors.red);
 
   final ResourceDictionary customResourceLight = const ResourceDictionary.raw(
     textFillColorPrimary: Color(0xe4000000),
@@ -100,13 +98,11 @@ class TotalController extends GetxController {
     controlStrongFillColorDisabled: Color(0x51000000),
     controlSolidFillColorDefault: Color(0xFFffffff),
     subtleFillColorTransparent: Color(0x00ffffff),
-    subtleFillColorSecondary:
-        Color(0x09000000), //Color(0xffe81123), //Colors.red.normal
+    subtleFillColorSecondary: Color(0x09000000), //Color(0xffe81123), //Colors.red.normal
     subtleFillColorTertiary: Color(0x06000000),
     subtleFillColorDisabled: Color(0x00ffffff),
     controlAltFillColorTransparent: Color(0x00ffffff),
-    controlAltFillColorSecondary:
-        Color(0x06000000), //Color(0xffffeb3b), //Colors.yellow.normal
+    controlAltFillColorSecondary: Color(0x06000000), //Color(0xffffeb3b), //Colors.yellow.normal
     controlAltFillColorTertiary: Color(0x0f000000),
     controlAltFillColorQuarternary: Color(0x18000000),
     controlAltFillColorDisabled: Color(0x00ffffff),
@@ -145,8 +141,7 @@ class TotalController extends GetxController {
     layerOnMicaBaseAltFillColorTransparent: Color(0x00000000),
     solidBackgroundFillColorBase: Color(0xFFf3f3f3),
     solidBackgroundFillColorSecondary: Color(0xFFeeeeee),
-    solidBackgroundFillColorTertiary:
-        Color(0xFFFAF9F8), //Colors.grey[10], // Default: Color(0xFFf9f9f9),
+    solidBackgroundFillColorTertiary: Color(0xFFFAF9F8), //Colors.grey[10], // Default: Color(0xFFf9f9f9),
     solidBackgroundFillColorQuarternary: Color(0xFFffffff),
     solidBackgroundFillColorTransparent: Color(0x00f3f3f3),
     solidBackgroundFillColorBaseAlt: Color(0xFFdadada),

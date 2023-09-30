@@ -88,7 +88,7 @@ class SearchScreenController extends GetxController {
       }
     }
 
-    final url = Uri.parse('http://$HOST/api/data/user_database');
+    final url = Uri.parse('https://$HOST/api/data/user_database');
     final response = await http.get(
       url,
       headers: await defaultHeader(httpContentType.json),

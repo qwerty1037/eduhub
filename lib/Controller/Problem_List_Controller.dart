@@ -71,7 +71,7 @@ class ProblemListController extends GetxController {
     currentPageProblems.clear();
 
     if (!isAllProblems.value) {
-      final problemUrl = Uri.parse('http://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
+      final problemUrl = Uri.parse('https://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
 
       final response = await http.get(
         problemUrl,
@@ -199,7 +199,7 @@ class ProblemListController extends GetxController {
 
   ///문제 리스트 중에 현재 페이지에 있는 리스트들의 자세한 데이터를 받아오는 함수
   Future<void> fetchPageData() async {
-    final url = Uri.parse('http://$HOST/api/data/problem/get_detail_problem_data');
+    final url = Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data');
     final Map<String, dynamic> requestBody = {
       "problem_list": problemList.sublist(startIndex, endIndex),
     };

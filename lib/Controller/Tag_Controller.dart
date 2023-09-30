@@ -39,7 +39,7 @@ class TagController extends GetxController {
 
   /// Tags를 Backend로 http request
   void sendTags() async {
-    final url = Uri.parse('http://$HOST/api/data/create_tag_list');
+    final url = Uri.parse('https://$HOST/api/data/create_tag_list');
 
     List<String> selectedTags = <String>[];
     for (int i = 0; i < inputedTagsList.length; i++) {
@@ -70,7 +70,7 @@ class TagController extends GetxController {
 
   void receiveTags() async {
     totalTagList = <Tag>[].obs;
-    final url = Uri.parse('http://$HOST/api/data/mytags');
+    final url = Uri.parse('https://$HOST/api/data/mytags');
     final response = await http.get(
       url,
       headers: await defaultHeader(httpContentType.json),

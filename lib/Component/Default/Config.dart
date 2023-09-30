@@ -12,7 +12,7 @@ const DEFAULT_UNABLE_COLOR = Colors.grey;
 const double DEFAULT_HEAD_FONT_SIZE = 40;
 const double DEFAULT_TEXT_FONT_SIZE = 25;
 const double DEFAULT_BUTTON_FONT_SIZE = 30;
-const String HOST = '175.124.93.223:3000';
+const String HOST = 'ec2-3-36-65-242.ap-northeast-2.compute.amazonaws.com/';
 
 //118.36.177.117 스터디라운지
 //175.124.93.223 원격연결
@@ -29,6 +29,7 @@ enum DashBoardType {
 
   /// 검색창
   search,
+
   ///아무것도 선택안되었을때
   none
 }

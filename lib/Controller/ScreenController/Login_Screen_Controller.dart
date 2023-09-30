@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -30,8 +31,7 @@ class loginScreenController extends GetxController {
   }
 
   ///쿠키를 안전한 보관소에 저장하는 함수
-  Future<void> saveCookieToSecureStorage(
-      String uid, String accessToken, String refreshToken) async {
+  Future<void> saveCookieToSecureStorage(String uid, String accessToken, String refreshToken) async {
     const storage = FlutterSecureStorage();
 
     await storage.write(key: 'uid', value: uid);
@@ -52,13 +52,10 @@ class loginScreenController extends GetxController {
 
   ///백엔드에 로그인을 요청하는 함수로 성공시 쿠키를 저장하고 loginSuccess를 실행한다
   Future<void> logInRequest(BuildContext context) async {
-    final url = Uri.parse('http://$HOST/api/auth/login');
-    final Map<String, dynamic> requestBody = {
-      "user_id": idController.text,
-      "user_password": passwordController.text
-    };
-    final headers = {"Content-type": "application/json"};
+    final url = Uri.parse('https://$HOST/api/auth/login');
 
+    final Map<String, dynamic> requestBody = {"user_id": idController.text, "user_password": passwordController.text};
+    final headers = {"Content-type": "application/json"};
     final response = await http.post(
       url,
       headers: headers,

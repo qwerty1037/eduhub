@@ -34,7 +34,7 @@ Button newFolderButton(BuildContext context, FolderController folderController, 
                     onPressed: () async {
                       Navigator.pop(context);
 
-                      final url = Uri.parse('http://$HOST/api/data/create_database');
+                      final url = Uri.parse('https://$HOST/api/data/create_database');
                       final Map<String, dynamic> requestBody = {"name": textcontroller.text, "parent_id": null};
 
                       final response = await http.post(

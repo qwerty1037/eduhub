@@ -22,16 +22,12 @@ class RegisterInfoController extends GetxController {
 
   ///채워야할 정보를 모두 채웠는지 확인하는 함수
   bool isCorrectFormat() {
-    return idController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
-        nameController.text.isNotEmpty &&
-        ageController.text.isNotEmpty &&
-        emailController.text.isNotEmpty;
+    return idController.text.isNotEmpty && passwordController.text.isNotEmpty && nameController.text.isNotEmpty && ageController.text.isNotEmpty && emailController.text.isNotEmpty;
   }
 
   ///입력한 정보를 백엔드에 보내는 함수
   Future<int> sendRegisterInfo() async {
-    final url = Uri.parse('http://$HOST/api/auth/register');
+    final url = Uri.parse('https://$HOST/api/auth/register');
     final Map<String, dynamic> requestBody = {
       "user_id": idController.text,
       "user_password": passwordController.text,

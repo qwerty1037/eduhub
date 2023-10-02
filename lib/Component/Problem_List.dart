@@ -9,91 +9,80 @@ import 'package:http/http.dart' as http;
 
 ///폴더에 속하는 문제 리스트를 보여주며 직속문제/아래모든문제를 볼 수 있다. 클릭시 오른쪽에 이미지가 뜨며 버튼 부분은 수정이 필요하다
 class ProblemList extends StatelessWidget {
-  ProblemList({super.key, required this.targetFolder, required this.folderName, required this.problems}) {
-    _problemListController = Get.put<ProblemListController>(ProblemListController(problems), tag: tag);
-  }
+  ProblemList({super.key, required this.targetFolder, required this.folderName, required this.problems, required this.problemListController});
   String folderName;
   TreeViewItem targetFolder;
   List<dynamic> problems;
 
   final tag = Get.find<TabController>().getTabKey();
-  late ProblemListController _problemListController;
+  ProblemListController problemListController;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Future.delayed(Duration.zero),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.none && snapshot.connectionState != ConnectionState.waiting) {
-            return Column(
+    return Column(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            //color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    //color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          folderName,
-                          style: const TextStyle(fontSize: 30),
-                        ),
-                        const SizedBox(
-                          width: 200,
-                        ),
-                        GetX<ProblemListController>(
-                            tag: tag,
-                            builder: (controller) {
-                              return ToggleSwitch(
-                                checked: controller.isAllProblems.value,
-                                onChanged: (info) async {
-                                  await controller.resetVariable(targetFolder, problems);
-                                  controller.isAllProblems.value = info;
-                                },
-                                content: const Text('하위 폴더 포함'),
-                              );
-                            })
-                      ],
-                    ),
-                  ),
+                Text(
+                  folderName,
+                  style: const TextStyle(fontSize: 30),
                 ),
-                Expanded(
-                  flex: 9,
-                  child: GetX<ProblemListController>(
-                      tag: tag,
-                      builder: (controller) {
-                        return Row(
+                const SizedBox(
+                  width: 200,
+                ),
+                GetX<ProblemListController>(
+                    tag: tag,
+                    builder: (controller) {
+                      return ToggleSwitch(
+                        checked: controller.isAllProblems.value,
+                        onChanged: (info) async {
+                          await controller.resetVariable(targetFolder, problems);
+                          controller.isAllProblems.value = info;
+                        },
+                        content: const Text('하위 폴더 포함'),
+                      );
+                    })
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 9,
+          child: GetX<ProblemListController>(
+              tag: tag,
+              builder: (controller) {
+                return Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        padding: const EdgeInsets.all(30),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              flex: 3,
-                              child: Container(
-                                padding: const EdgeInsets.all(30),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: twoColumnProblemList(controller),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: controller.pageButton,
-                                    )
-                                  ],
-                                ),
-                              ),
+                              child: twoColumnProblemList(controller),
                             ),
-                            Expanded(flex: 1, child: controller.problemImageViewer.value)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: controller.pageButton,
+                            )
                           ],
-                        );
-                      }),
-                ),
-              ],
-            );
-          } else {
-            debugPrint(snapshot.connectionState.toString());
-            return const SizedBox();
-          }
-        });
+                        ),
+                      ),
+                    ),
+                    Expanded(flex: 1, child: controller.problemImageViewer.value)
+                  ],
+                );
+              }),
+        ),
+      ],
+    );
   }
 
   GridView twoColumnProblemList(ProblemListController controller) {

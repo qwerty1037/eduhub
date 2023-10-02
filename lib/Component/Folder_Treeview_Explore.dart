@@ -49,7 +49,7 @@ class FolderTreeViewExplore extends StatelessWidget {
                     controller.selectedDirectoryID.value = item.value["id"];
                     controller.firstFolders.refresh();
                     await controller.getPath();
-                    //debugPrint("${controller.selectedDirectoryID.value}");
+
                     if (Get.find<TabController>().currentTabIndex.value == 0) {
                       controller.makeProblemListInNewTab(item);
                     } else {

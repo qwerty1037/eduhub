@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Problem_List.dart';
+import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
@@ -163,6 +164,7 @@ class FolderController extends GetxController {
       TabController tabController = Get.find<TabController>();
       tabController.isNewTab = true;
 
+      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: Get.find<TabController>().getTabKey());
       DefaultTabBody generatedTab = DefaultTabBody(
         key: GlobalObjectKey(tabController.tagNumber.toString()),
         dashBoardType: DashBoardType.explore,
@@ -170,6 +172,7 @@ class FolderController extends GetxController {
           targetFolder: item,
           folderName: item.value["name"],
           problems: problems,
+          problemListController: problemListController,
         ),
       );
 
@@ -197,10 +200,12 @@ class FolderController extends GetxController {
       await workingSpaceController.deleteWorkingSpaceController();
       final jsonResponse = jsonDecode(response.body);
       final problems = jsonResponse['problem_list'];
+      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: tagName);
       workingSpaceController.changeWorkingSpace(ProblemList(
         targetFolder: item,
         folderName: item.value["name"],
         problems: problems,
+        problemListController: problemListController,
       ));
       workingSpaceController.dashBoard.value = workingSpaceController.makeDashBoard(DashBoardType.explore);
     } else if (isHttpRequestFailure(response)) {

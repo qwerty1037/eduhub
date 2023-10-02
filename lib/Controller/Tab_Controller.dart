@@ -30,13 +30,11 @@ class TabController extends GetxController {
         icon: const Icon(FluentIcons.home),
         text: const SizedBox.shrink(),
         body: Obx(() => Container(
-              color: totalController.isDark.value == true
-                  ? Colors.grey[170]
-                  : Colors.grey[10],
+              color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
               child: HomeScreen(tabController: this),
             )),
         closeIcon: null,
-        onClosed: () {},
+        onClosed: null,
       ),
     );
   }
@@ -45,11 +43,8 @@ class TabController extends GetxController {
     super.onInit();
     const storage = FlutterSecureStorage();
 
-    if (await storage.read(key: 'uid') ==
-            await storage.read(key: 'saved_uid') &&
-        await storage.read(key: 'saved_tabs') != null) {
-      List<dynamic> tabToRestore =
-          jsonDecode(await storage.read(key: 'saved_tabs') as String);
+    if (await storage.read(key: 'uid') == await storage.read(key: 'saved_uid') && await storage.read(key: 'saved_tabs') != null) {
+      List<dynamic> tabToRestore = jsonDecode(await storage.read(key: 'saved_tabs') as String);
 
       FolderController folderController = Get.find<FolderController>();
       for (int i = 0; i < tabToRestore.length; i++) {
@@ -57,8 +52,7 @@ class TabController extends GetxController {
         if (type == "explore") {
           int folderId = tabToRestore[i]["id"];
           //아이디로 폴더 찾고,
-          TreeViewItem currentFolder =
-              folderController.findTreeViewItem(folderId);
+          TreeViewItem currentFolder = folderController.findTreeViewItem(folderId);
           folderController.makeProblemListInNewTab(currentFolder);
         } else if (type == "search") {
           String searchText = tabToRestore[i]["text"];
@@ -68,6 +62,7 @@ class TabController extends GetxController {
           isNewTab = true;
 
           DefaultTabBody tabBody = DefaultTabBody(
+            key: GlobalObjectKey(tagNumber.toString()),
             dashBoardType: DashBoardType.search,
             workingSpace: SearchScreen(
               text: searchText,
@@ -75,8 +70,7 @@ class TabController extends GetxController {
               content: searchContent,
             ),
           );
-          Tab newTab =
-              addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
+          Tab newTab = addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
           tabs.add(newTab);
           currentTabIndex.value++;
           isNewTab = false;
@@ -89,7 +83,7 @@ class TabController extends GetxController {
   Tab addTab(Widget body, final String? text, final Icon? icon) {
     Tab? newTab;
     tabInfo.add(body as DefaultTabBody);
-    Key newKey = ValueKey<int>(tagNumber);
+    Key newKey = GlobalObjectKey(tagNumber);
     newTab = Tab(
       key: newKey,
       text: Text(
@@ -100,9 +94,7 @@ class TabController extends GetxController {
             FluentIcons.file_template,
           ),
       body: Obx(() => Container(
-            color: totalController.isDark.value == true
-                ? Colors.grey[170]
-                : Colors.grey[10],
+            color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
             child: body,
           )),
       onClosed: () async {
@@ -112,14 +104,14 @@ class TabController extends GetxController {
 
         if (indexToDelete <= currentTabIndex.value) {
           currentTabIndex.value--;
+          if (currentTabIndex.value == 0) {
+            isNewTab = true;
+          }
         }
-        await Get.find<DefaultTabBodyController>(tag: newKey.toString())
-            .deleteWorkingSpaceController();
+
+        await Get.find<DefaultTabBodyController>(tag: newKey.toString()).deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
-        if (currentTabIndex.value == 0) {
-          isNewTab = true;
-        }
       },
     );
     tagNumber++;
@@ -145,11 +137,9 @@ class TabController extends GetxController {
           currentTabIndex.value--;
         }
 
-        await Get.find<DefaultTabBodyController>(tag: tab.key.toString())
-            .deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: tab.key.toString()).deleteWorkingSpaceController();
 
-        Get.delete<DefaultTabBodyController>(
-            tag: tab.key.toString(), force: true);
+        Get.delete<DefaultTabBodyController>(tag: tab.key.toString(), force: true);
         if (currentTabIndex.value == 0) {
           isNewTab = true;
         }
@@ -182,6 +172,7 @@ class TabController extends GetxController {
   void onNewPressed() {
     isNewTab = true;
     DefaultTabBody generatedTab = DefaultTabBody(
+      key: GlobalObjectKey(tagNumber.toString()),
       dashBoardType: DashBoardType.none,
     );
     Tab newTab = addTab(generatedTab, null, null);
@@ -199,7 +190,7 @@ class TabController extends GetxController {
 
   ///새로 만들 탭의 key값을 반환하는 함수
   String getNewTabKey() {
-    return ValueKey<int>(tagNumber).toString();
+    return GlobalObjectKey(tagNumber).toString();
   }
 
   ///새탭을 만들경우 getNewTabKey를 아닐 경우 _getCurrentTabKey를 반환하는 함수

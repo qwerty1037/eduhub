@@ -164,6 +164,7 @@ class FolderController extends GetxController {
       tabController.isNewTab = true;
 
       DefaultTabBody generatedTab = DefaultTabBody(
+        key: GlobalObjectKey(tabController.tagNumber.toString()),
         dashBoardType: DashBoardType.explore,
         workingSpace: ProblemList(
           targetFolder: item,

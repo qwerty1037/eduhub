@@ -21,9 +21,7 @@ class DefaultTabBody extends StatelessWidget {
     this.workingSpace,
   }) {
     tagName = tabController.getNewTabKey();
-    _defaultTabBodyController = Get.put(
-        DefaultTabBodyController(tagName, dashBoardType, workingSpace),
-        tag: tagName);
+    _defaultTabBodyController = Get.put(DefaultTabBodyController(tagName, dashBoardType, workingSpace), tag: tagName);
   }
   final DashBoardType dashBoardType;
   final Widget? workingSpace;
@@ -34,11 +32,12 @@ class DefaultTabBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint(tagName);
-    // return FutureBuilder(
-    //     future: Future.delayed(Duration.zero),
-    //     builder: ((context, snapshot) {
-    //       if (snapshot.connectionState != ConnectionState.waiting) {
+    debugPrint("======================");
+    debugPrint(tagName);
+    return FutureBuilder(
+        future: Future.delayed(Duration.zero),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.waiting) {
             return GetX<DefaultTabBodyController>(
               tag: tagName,
               builder: (controller) {
@@ -61,18 +60,10 @@ class DefaultTabBody extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              color: Get.find<TotalController>().isDark.value ==
-                                      true
-                                  ? Colors.grey[150]
-                                  : Colors.grey[30],
+                              color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
                               border: Border(
                                 left: BorderSide(
-                                  color: Get.find<TotalController>()
-                                              .isDark
-                                              .value ==
-                                          true
-                                      ? Colors.grey[130]
-                                      : Colors.grey[50],
+                                  color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
                                   width: 1,
                                 ),
                               ),
@@ -87,49 +78,39 @@ class DefaultTabBody extends StatelessWidget {
                 );
               },
             );
-           
-          //  else {
-          //   return Column(children: [
-          //     SizedBox(
-          //       width: MediaQuery.of(context).size.width,
-          //       height: 40,
-          //       //color: Colors.teal,
-          //       child: fakeScreen(),
-          //     ),
-          //     Expanded(
-          //       child: Row(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Expanded(
-          //             child: SizedBox(
-          //               width: MediaQuery.of(context).size.width / 6,
-          //               child: Get.find<HomeScreenController>().isFolderEmpty
-          //                   ? newFolderButton(
-          //                       context,
-          //                       Get.find<FolderController>(),
-          //                       Get.find<HomeScreenController>())
-          //                   : FolderTreeViewExplore(
-          //                       tagName: tagName,
-          //                     ),
-          //             ),
-          //           ),
-          //           Container(
-          //               decoration: const BoxDecoration(
-          //                   border: Border(
-          //                       left: BorderSide(
-          //                           color: Colors.black, width: 0.5))),
-          //               width: MediaQuery.of(context).size.width / 6 * 5,
-          //               child: const SizedBox())
-          //         ],
-          //       ),
-          //     ),
-          //   ]);
-        //   }
-        // }));
+          } else {
+            return Column(children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 40,
+                //color: Colors.teal,
+                child: fakeScreen(),
+              ),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 6,
+                        child: Get.find<HomeScreenController>().isFolderEmpty
+                            ? newFolderButton(context, Get.find<FolderController>(), Get.find<HomeScreenController>())
+                            : FolderTreeViewExplore(
+                                tagName: tagName,
+                              ),
+                      ),
+                    ),
+                    Container(
+                        decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))), width: MediaQuery.of(context).size.width / 6 * 5, child: const SizedBox())
+                  ],
+                ),
+              ),
+            ]);
+          }
+        }));
   }
 
-  Center topCommandBar(
-      DefaultTabBodyController controller, BuildContext context) {
+  Center topCommandBar(DefaultTabBodyController controller, BuildContext context) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
@@ -147,12 +128,9 @@ class DefaultTabBody extends StatelessWidget {
             controller.changeWorkingSpace(
               const PdfViewerScreen(),
             );
-            controller.dashBoard.value =
-                controller.makeDashBoard(DashBoardType.savePdf);
-            Tab currentTab =
-                tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(
-                currentTab, "문제 저장", const Icon(FluentIcons.save));
+            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.savePdf);
+            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(currentTab, "문제 저장", const Icon(FluentIcons.save));
           },
         ),
       ),
@@ -196,14 +174,9 @@ class DefaultTabBody extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () async {
-            createHighlightOverlay(
-                context: context,
-                controller:
-                    Get.put(SearchScreenController(), tag: controller.tagName),
-                tabController: tabController);
+            createHighlightOverlay(context: context, controller: Get.put(SearchScreenController(), tag: controller.tagName), tabController: tabController);
 
-            controller.dashBoard.value =
-                controller.makeDashBoard(DashBoardType.search);
+            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.search);
           },
         ),
       ),
@@ -221,12 +194,9 @@ class DefaultTabBody extends StatelessWidget {
           onPressed: () async {
             await controller.deleteWorkingSpaceController();
             controller.changeWorkingSpace(TagManagementScreen());
-            controller.dashBoard.value =
-                controller.makeDashBoard(DashBoardType.tagManagement);
-            Tab currentTab =
-                tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(
-                currentTab, "태그", const Icon(FluentIcons.tag));
+            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.tagManagement);
+            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(currentTab, "태그", const Icon(FluentIcons.tag));
           },
         ),
       ),
@@ -240,75 +210,75 @@ class DefaultTabBody extends StatelessWidget {
     );
   }
 
-  // Center fakeScreen() {
-  //   final fakeItems = <CommandBarItem>[
-  //     CommandBarBuilderItem(
-  //       builder: (context, mode, widget) => widget,
-  //       wrappedItem: CommandBarButton(
-  //         icon: const Icon(FluentIcons.save),
-  //         label: const Text("문제 저장",
-  //             style: TextStyle(
-  //               fontSize: 15,
-  //             )),
-  //         onPressed: () {},
-  //       ),
-  //     ),
-  //     CommandBarBuilderItem(
-  //       builder: (context, mode, widget) {
-  //         return widget;
-  //       },
-  //       wrappedItem: CommandBarButton(
-  //         icon: const Icon(FluentIcons.page),
-  //         label: const Text("시험지",
-  //             style: TextStyle(
-  //               fontSize: 15,
-  //             )),
-  //         onPressed: () {},
-  //       ),
-  //     ),
-  //     CommandBarBuilderItem(
-  //       builder: (context, mode, widget) {
-  //         return widget;
-  //       },
-  //       wrappedItem: CommandBarButton(
-  //         icon: const Icon(FluentIcons.page),
-  //         label: const Text("학생",
-  //             style: TextStyle(
-  //               fontSize: 15,
-  //             )),
-  //         onPressed: () {},
-  //       ),
-  //     ),
-  //     CommandBarBuilderItem(
-  //       builder: (context, mode, widget) => widget,
-  //       wrappedItem: CommandBarButton(
-  //         icon: const Icon(FluentIcons.search),
-  //         label: const Text("검색",
-  //             style: TextStyle(
-  //               fontSize: 15,
-  //             )),
-  //         onPressed: () {},
-  //       ),
-  //     ),
-  //     CommandBarBuilderItem(
-  //       builder: (context, mode, widget) {
-  //         return widget;
-  //       },
-  //       wrappedItem: CommandBarButton(
-  //         icon: const Icon(FluentIcons.tag),
-  //         label: const Text("태그",
-  //             style: TextStyle(
-  //               fontSize: 15,
-  //             )),
-  //         onPressed: () {},
-  //       ),
-  //     ),
-  //   ];
-  //   return Center(
-  //     child: CommandBar(
-  //       primaryItems: fakeItems,
-  //       overflowBehavior: CommandBarOverflowBehavior.noWrap,
-  //     ),
-  //   );
-  // }
+  Center fakeScreen() {
+    final fakeItems = <CommandBarItem>[
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => widget,
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.save),
+          label: const Text("문제 저장",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) {
+          return widget;
+        },
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.page),
+          label: const Text("시험지",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) {
+          return widget;
+        },
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.page),
+          label: const Text("학생",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) => widget,
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.search),
+          label: const Text("검색",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+      CommandBarBuilderItem(
+        builder: (context, mode, widget) {
+          return widget;
+        },
+        wrappedItem: CommandBarButton(
+          icon: const Icon(FluentIcons.tag),
+          label: const Text("태그",
+              style: TextStyle(
+                fontSize: 15,
+              )),
+          onPressed: () {},
+        ),
+      ),
+    ];
+    return Center(
+      child: CommandBar(
+        primaryItems: fakeItems,
+        overflowBehavior: CommandBarOverflowBehavior.noWrap,
+      ),
+    );
+  }
 }

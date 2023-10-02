@@ -12,26 +12,25 @@ class HomeTabView extends StatelessWidget {
       content: GetX<TabController>(
         builder: (controller) {
           return TabView(
-              minTabWidth: 0,
-              currentIndex: controller.currentTabIndex.value,
-              tabs: controller.tabs,
-              tabWidthBehavior: TabWidthBehavior.sizeToContent,
-              closeButtonVisibility: CloseButtonVisibilityMode.always,
-              onChanged: (index) {
-                controller.currentTabIndex.value = index;
-              },
-              onNewPressed: () {
-                controller.onNewPressed();
-              },
-              onReorder: null
-              // (oldIndex, newIndex) {
-              // if (oldIndex * newIndex > 0) {
-              //   controller.onReorder(oldIndex, newIndex);
-              // } else {
-              //   null;
-              // }
-              // },
-              );
+            minTabWidth: 0,
+            currentIndex: controller.currentTabIndex.value,
+            tabs: controller.tabs,
+            tabWidthBehavior: TabWidthBehavior.sizeToContent,
+            closeButtonVisibility: CloseButtonVisibilityMode.always,
+            onChanged: (index) {
+              controller.currentTabIndex.value = index;
+            },
+            onNewPressed: () {
+              controller.onNewPressed();
+            },
+            onReorder: (oldIndex, newIndex) {
+              if (oldIndex * newIndex > 0) {
+                controller.onReorder(oldIndex, newIndex);
+              } else {
+                null;
+              }
+            },
+          );
         },
       ),
     );

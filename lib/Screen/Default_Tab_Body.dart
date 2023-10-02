@@ -32,82 +32,46 @@ class DefaultTabBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("======================");
-    debugPrint(tagName);
-    return FutureBuilder(
-        future: Future.delayed(Duration.zero),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.waiting) {
-            return GetX<DefaultTabBodyController>(
-              tag: tagName,
-              builder: (controller) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 40,
-                      child: topCommandBar(controller, context),
+    return GetX<DefaultTabBodyController>(
+      tag: tagName,
+      builder: (controller) {
+        return Column(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 40,
+              child: topCommandBar(controller, context),
+            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 6,
+                      child: controller.dashBoard.value,
                     ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width / 6,
-                              child: controller.dashBoard.value,
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
-                              border: Border(
-                                left: BorderSide(
-                                  color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            width: MediaQuery.of(context).size.width / 6 * 5,
-                            child: controller.workingSpaceWidget.value,
-                          )
-                        ],
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+                      border: Border(
+                        left: BorderSide(
+                          color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                          width: 1,
+                        ),
                       ),
                     ),
-                  ],
-                );
-              },
-            );
-          } else {
-            return Column(children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                //color: Colors.teal,
-                child: fakeScreen(),
+                    width: MediaQuery.of(context).size.width / 6 * 5,
+                    child: controller.workingSpaceWidget.value,
+                  )
+                ],
               ),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width / 6,
-                        child: Get.find<HomeScreenController>().isFolderEmpty
-                            ? newFolderButton(context, Get.find<FolderController>(), Get.find<HomeScreenController>())
-                            : FolderTreeViewExplore(
-                                tagName: tagName,
-                              ),
-                      ),
-                    ),
-                    Container(
-                        decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.black, width: 0.5))), width: MediaQuery.of(context).size.width / 6 * 5, child: const SizedBox())
-                  ],
-                ),
-              ),
-            ]);
-          }
-        }));
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Center topCommandBar(DefaultTabBodyController controller, BuildContext context) {
@@ -205,78 +169,6 @@ class DefaultTabBody extends StatelessWidget {
     return Center(
       child: CommandBar(
         primaryItems: menuCommandBarItems,
-        overflowBehavior: CommandBarOverflowBehavior.noWrap,
-      ),
-    );
-  }
-
-  Center fakeScreen() {
-    final fakeItems = <CommandBarItem>[
-      CommandBarBuilderItem(
-        builder: (context, mode, widget) => widget,
-        wrappedItem: CommandBarButton(
-          icon: const Icon(FluentIcons.save),
-          label: const Text("문제 저장",
-              style: TextStyle(
-                fontSize: 15,
-              )),
-          onPressed: () {},
-        ),
-      ),
-      CommandBarBuilderItem(
-        builder: (context, mode, widget) {
-          return widget;
-        },
-        wrappedItem: CommandBarButton(
-          icon: const Icon(FluentIcons.page),
-          label: const Text("시험지",
-              style: TextStyle(
-                fontSize: 15,
-              )),
-          onPressed: () {},
-        ),
-      ),
-      CommandBarBuilderItem(
-        builder: (context, mode, widget) {
-          return widget;
-        },
-        wrappedItem: CommandBarButton(
-          icon: const Icon(FluentIcons.page),
-          label: const Text("학생",
-              style: TextStyle(
-                fontSize: 15,
-              )),
-          onPressed: () {},
-        ),
-      ),
-      CommandBarBuilderItem(
-        builder: (context, mode, widget) => widget,
-        wrappedItem: CommandBarButton(
-          icon: const Icon(FluentIcons.search),
-          label: const Text("검색",
-              style: TextStyle(
-                fontSize: 15,
-              )),
-          onPressed: () {},
-        ),
-      ),
-      CommandBarBuilderItem(
-        builder: (context, mode, widget) {
-          return widget;
-        },
-        wrappedItem: CommandBarButton(
-          icon: const Icon(FluentIcons.tag),
-          label: const Text("태그",
-              style: TextStyle(
-                fontSize: 15,
-              )),
-          onPressed: () {},
-        ),
-      ),
-    ];
-    return Center(
-      child: CommandBar(
-        primaryItems: fakeItems,
         overflowBehavior: CommandBarOverflowBehavior.noWrap,
       ),
     );

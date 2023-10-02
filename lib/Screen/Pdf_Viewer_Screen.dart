@@ -18,15 +18,19 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfViewerScreen> {
-  final controllerProblem = Get.put(PdfViewerScreenController(), tag: "Problem${Get.find<t.TabController>().getTabKey()}");
-  final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer${Get.find<t.TabController>().getTabKey()}");
+  final controllerProblem = Get.put(PdfViewerScreenController(),
+      tag: "Problem${Get.find<t.TabController>().getTabKey()}");
+  final controllerAnswer = Get.put(PdfViewerScreenController(),
+      tag: "Answer${Get.find<t.TabController>().getTabKey()}");
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Center(
         child: Container(
-          color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+          color: Get.find<TotalController>().isDark.value == true
+              ? Colors.grey[150]
+              : Colors.grey[30],
           child: Stack(
             children: [
               Row(
@@ -51,14 +55,21 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 return Align(
                   alignment: Alignment.bottomRight,
                   child: Visibility(
-                    visible: (controllerProblem.isCaptured.value == true && controllerAnswer.isCaptured.value == true),
+                    visible: (controllerProblem.isPdfInputed.value == true &&
+                        controllerAnswer.isPdfInputed.value == true),
                     child: IconButton(
                       onPressed: () {
-                        final DefaultTabBodyController defaultTabBodyController =
-                            Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
+                        //TODO: pdf압축 관련 screen띄우기, 새로운 저장 UI띄우기
+                        /*
+                        final DefaultTabBodyController
+                            defaultTabBodyController =
+                            Get.find<DefaultTabBodyController>(
+                                tag: Get.find<t.TabController>().getTabKey());
                         defaultTabBodyController.saveThisWorkingSpace();
-                        defaultTabBodyController.changeWorkingSpace(PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!));
-
+                        defaultTabBodyController.changeWorkingSpace(
+                            PdfSaveScreen(controllerProblem.getCapturedImage()!,
+                                controllerAnswer.getCapturedImage()!));
+                        */
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) => PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!)),
@@ -265,6 +276,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     controller.pickedFile!,
                   ),
                 ),
+                /*
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Visibility(
@@ -324,6 +336,8 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     ),
                   ),
                 ),
+                */
+                /*
                 Visibility(
                   visible: !controller.isCaptured(),
                   child: Align(
@@ -350,6 +364,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     ),
                   ),
                 ),
+                */
               ],
             ),
           ),

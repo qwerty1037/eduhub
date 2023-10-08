@@ -66,27 +66,26 @@ void createHighlightOverlay({
                   onEditingComplete: () {
                     //홈화면에서 눌렀을때
                     if (tabController.currentTabIndex.value == 0) {
+                      overlayEntry?.remove();
                       tabController.isNewTab = true;
 
                       DefaultTabBody tabBody = DefaultTabBody(
                         dashBoardType: DashBoardType.search,
                         workingSpace: SearchScreen(),
                       );
-                      Tab newTab = tabController.addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
+                      Tab newTab = tabController.addTab(tabBody, "검색", const Icon(FluentIcons.search));
                       tabController.tabs.add(newTab);
                       tabController.currentTabIndex.value = tabController.tabs.length - 1;
                       //controller.searchBarController.text = "";
-                      overlayEntry?.remove();
+
                       tabController.isNewTab = false;
                     } else {
                       //controller.searchBarController.text = "";
                       overlayEntry?.remove();
                       Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).deleteWorkingSpaceController();
-
                       Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).changeWorkingSpace(SearchScreen());
-
                       Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, "SearchScreen", const Icon(FluentIcons.search));
+                      tabController.renameTab(currentTab, "검색", const Icon(FluentIcons.search));
                     }
                   },
                 ),

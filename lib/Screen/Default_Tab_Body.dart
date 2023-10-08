@@ -9,6 +9,7 @@ import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dar
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Screen/Exam.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
 import 'package:get/get.dart';
@@ -104,12 +105,20 @@ class DefaultTabBody extends StatelessWidget {
           child: widget,
         ),
         wrappedItem: CommandBarButton(
-          icon: const Icon(FluentIcons.page),
+          icon: const Icon(FluentIcons.questionnaire),
           label: const Text("시험지",
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () async {
+            await controller.deleteWorkingSpaceController();
+            controller.changeWorkingSpace(
+              ExamScreen(),
+            );
+            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.exam);
+            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(currentTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
+          },
         ),
       ),
       CommandBarBuilderItem(

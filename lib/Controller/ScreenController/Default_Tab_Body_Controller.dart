@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Folder_TreeView_none.dart';
 import 'package:front_end/Component/Folder_Treeview_Explore.dart';
 import 'package:front_end/Component/Folder_Treeview_Save.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
@@ -66,6 +67,10 @@ class DefaultTabBodyController extends GetxController {
         );
       case DashBoardType.savePdf:
         return FolderTreeViewSave(
+          tagName: tagName,
+        );
+      case DashBoardType.exam:
+        return FolderTreeViewNone(
           tagName: tagName,
         );
       case DashBoardType.search:

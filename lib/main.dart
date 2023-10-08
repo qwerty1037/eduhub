@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget with WindowListener {
               brightness: Brightness.light,
               typography: const Typography.raw(body: TextStyle(color: Color(0xFF141212), fontWeight: FontWeight.bold)),
 
-              accentColor: Colors.orange,
+              accentColor: Colors.blue,
               activeColor: Colors.blue, //?
               //inactiveColor: Colors.green, //탭 버튼에서 +위에 마우스를 올렸을 때(Hovering) 나오는 십자가 색깔
               inactiveBackgroundColor: Colors.green, //?

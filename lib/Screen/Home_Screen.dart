@@ -12,6 +12,7 @@ import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
+import 'package:front_end/Screen/Exam.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
 import 'package:get/get.dart';
@@ -127,12 +128,22 @@ class HomeScreen extends StatelessWidget {
           child: widget,
         ),
         wrappedItem: CommandBarButton(
-          icon: const Icon(FluentIcons.page),
+          icon: const Icon(FluentIcons.questionnaire),
           label: const Text("시험지",
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () {
+            tabController.isNewTab = true;
+            DefaultTabBody generatedTab = DefaultTabBody(
+              dashBoardType: DashBoardType.exam,
+              workingSpace: ExamScreen(),
+            );
+            Tab newTab = tabController.addTab(generatedTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
+            tabController.tabs.add(newTab);
+            tabController.currentTabIndex.value = tabController.tabs.length - 1;
+            tabController.isNewTab = false;
+          },
         ),
       ),
       CommandBarBuilderItem(

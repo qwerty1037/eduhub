@@ -24,6 +24,9 @@ enum DashBoardType {
   /// pdf 저장
   savePdf,
 
+  /// 시험지 만들기
+  exam,
+
   /// tag 추가
   tagManagement,
 

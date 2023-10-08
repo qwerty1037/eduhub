@@ -21,6 +21,7 @@ class PdfViewerScreenController extends GetxController {
   Uint8List? capturedImage;
   RxBool isDragged = false.obs;
   RxBool isCaptured = false.obs;
+  RxInt pickedFileSize = 0.obs;
 
   ///Upload file into Application using FIlePicker.
   ///
@@ -30,12 +31,14 @@ class PdfViewerScreenController extends GetxController {
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
+
     if (result != null && result.files.isNotEmpty) {
       pickedFile = File(result.files.first.path!);
       String fileName = result.files.first.name;
       debugPrint(fileName);
       debugPrint(result.files.first.path!);
       pickedFileName.value = fileName;
+      pickedFileSize.value = await pickedFile!.length();
       isPdfInputed.value = true;
     } else {
       print("Upload Failed");
@@ -46,7 +49,7 @@ class PdfViewerScreenController extends GetxController {
   void onDragDone(
     detail,
     context,
-  ) {
+  ) async {
     debugPrint('onDragDone:');
     if (detail != null && detail.files.isNotEmpty) {
       String fileName = detail.files.first.name;
@@ -54,6 +57,7 @@ class PdfViewerScreenController extends GetxController {
       debugPrint(detail.files.first.path);
       pickedFileName.value = fileName;
       pickedFile = File(detail.files.first.path);
+      pickedFileSize.value = await pickedFile!.length();
       isPdfInputed.value = true;
     }
   }
@@ -95,7 +99,7 @@ class PdfViewerScreenController extends GetxController {
       print("Capture Failed");
     } else {
       // TODO: null이 입력되었을 때의 처리구문을 작성해야함
-      capturedImage = capturedData?.imageBytes;
+      capturedImage = capturedData.imageBytes;
       isCaptured.value = true;
     }
   }

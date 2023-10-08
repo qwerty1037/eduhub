@@ -17,9 +17,7 @@ class DefaultTabBodyController extends GetxController {
   DashBoardType dashBoardType;
 
   Rx<Widget> workingSpaceWidget = Container(
-    color: Get.find<TotalController>().isDark.value == true
-        ? Colors.grey[150]
-        : Colors.grey[30],
+    color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
   ).obs;
 
@@ -27,8 +25,7 @@ class DefaultTabBodyController extends GetxController {
 
   Widget? savedWorkingSpace;
 
-  DefaultTabBodyController(
-      this.tagName, this.dashBoardType, Widget? workingSpace) {
+  DefaultTabBodyController(this.tagName, this.dashBoardType, Widget? workingSpace) {
     if (workingSpace != null) {
       changeWorkingSpace(workingSpace);
     }
@@ -43,9 +40,7 @@ class DefaultTabBodyController extends GetxController {
   ///default tab body의 workingspace부분을 바꾸는 method
   void changeWorkingSpace(Widget newWorkingSpace) {
     workingSpaceWidget.value = Container(
-      color: Get.find<TotalController>().isDark.value == true
-          ? Colors.grey[150]
-          : Colors.grey[30],
+      color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
       child: newWorkingSpace,
     );
   }
@@ -84,7 +79,7 @@ class DefaultTabBodyController extends GetxController {
       case DashBoardType.none:
         return FolderTreeViewExplore(
           tagName: tagName,
-        );  
+        );
     }
   }
 }

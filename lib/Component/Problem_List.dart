@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' as flutter_material;
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
@@ -19,70 +20,77 @@ class ProblemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            //color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
+    return FutureBuilder(
+        future: Future.delayed(Duration.zero),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.none && snapshot.connectionState != ConnectionState.waiting) {
+            return Column(
               children: [
-                Text(
-                  folderName,
-                  style: const TextStyle(fontSize: 30),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          folderName,
+                          style: const TextStyle(fontSize: 30),
+                        ),
+                        const SizedBox(
+                          width: 200,
+                        ),
+                        GetX<ProblemListController>(
+                            tag: tag,
+                            builder: (controller) {
+                              return ToggleSwitch(
+                                checked: controller.isAllProblems.value,
+                                onChanged: (info) async {
+                                  await controller.resetVariable(targetFolder, problems);
+                                  controller.isAllProblems.value = info;
+                                },
+                                content: const Text('하위 폴더 포함'),
+                              );
+                            })
+                      ],
+                    ),
+                  ),
                 ),
-                const SizedBox(
-                  width: 200,
-                ),
-                GetX<ProblemListController>(
-                    tag: tag,
-                    builder: (controller) {
-                      return ToggleSwitch(
-                        checked: controller.isAllProblems.value,
-                        onChanged: (info) async {
-                          await controller.resetVariable(targetFolder, problems);
-                          controller.isAllProblems.value = info;
-                        },
-                        content: const Text('하위 폴더 포함'),
-                      );
-                    })
-              ],
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 9,
-          child: GetX<ProblemListController>(
-              tag: tag,
-              builder: (controller) {
-                return Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                        padding: const EdgeInsets.all(30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Expanded(
+                  flex: 9,
+                  child: GetX<ProblemListController>(
+                      tag: tag,
+                      builder: (controller) {
+                        return Row(
                           children: [
                             Expanded(
-                              child: twoColumnProblemList(controller),
+                              flex: 3,
+                              child: Container(
+                                padding: const EdgeInsets.all(30),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: twoColumnProblemList(controller),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: controller.pageButton,
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: controller.pageButton,
-                            )
+                            Expanded(flex: 1, child: controller.problemImageViewer.value)
                           ],
-                        ),
-                      ),
-                    ),
-                    Expanded(flex: 1, child: controller.problemImageViewer.value)
-                  ],
-                );
-              }),
-        ),
-      ],
-    );
+                        );
+                      }),
+                ),
+              ],
+            );
+          } else {
+            return const flutter_material.CircularProgressIndicator();
+          }
+        });
   }
 
   GridView twoColumnProblemList(ProblemListController controller) {

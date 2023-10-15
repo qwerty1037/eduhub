@@ -22,7 +22,7 @@ class FolderTreeViewExplore extends StatelessWidget {
       children: [
         const Align(
           alignment: Alignment.centerLeft,
-          child: Text("  ㅇㅇ님의 워크스페이스"),
+          child: Text("ㅇㅇ님의 워크스페이스"),
         ),
         GetX<FolderController>(
           builder: (controller) {

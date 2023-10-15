@@ -1,9 +1,14 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'dart:math';
 
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:http/http.dart' as http;
 import 'package:front_end/Controller/ExamController.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
+import 'package:front_end/Component/FolderData.dart';
 
 class ExamScreen extends StatelessWidget {
   ExamScreen({super.key});
@@ -65,60 +70,65 @@ class ExamScreen extends StatelessWidget {
                         }),
                         builder: (BuildContext context, List<Map<dynamic, dynamic>?> candidateData, List<dynamic> rejectedData) {
                           return Container(
-                            color: Colors.grey[100],
-                            height: 150,
-                            width: MediaQuery.of(context).size.width * 0.2 - 0.5,
-                            child: controller.folders.isEmpty
-                                ? const Center(child: Text("폴더 드래그"))
-                                : ListView.builder(
-                                    shrinkWrap: false,
-                                    itemCount: controller.folders.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      final List<FolderData> dataList = controller.folders.toList();
-                                      final FolderData item = dataList[index];
-                                      if (index != controller.folders.length - 1) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[40],
-                                              border: const Border(
-                                                bottom: BorderSide(
-                                                  color: Colors.black,
-                                                  width: 0.3,
+                              color: Colors.grey[100],
+                              height: 150,
+                              width: MediaQuery.of(context).size.width * 0.2 - 0.5,
+                              child: controller.folders.isEmpty
+                                  ? const Center(child: Text("폴더 드래그"))
+                                  : Obx(
+                                      () {
+                                        return ListView.builder(
+                                          shrinkWrap: false,
+                                          itemCount: controller.folders.length,
+                                          itemBuilder: (BuildContext context, int index) => Obx(() {
+                                            List<FolderData> dataList = controller.folders.toList();
+                                            FolderData item = dataList[index];
+
+                                            if (index != controller.folders.length - 1) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[40],
+                                                  border: const Border(
+                                                    bottom: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 0.3,
+                                                    ),
+                                                  ),
                                                 ),
-                                              )),
-                                          child: ListTile(
-                                            title: Text(item.name),
-                                            trailing: IconButton(
-                                              icon: const Icon(FluentIcons.chrome_close),
-                                              onPressed: () {
-                                                controller.folders.remove(item);
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                      } else {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[40],
-                                              ),
-                                              child: ListTile(
-                                                title: Text(item.name),
-                                                trailing: IconButton(
-                                                  icon: const Icon(FluentIcons.chrome_close),
-                                                  onPressed: () {
-                                                    controller.folders.remove(item);
-                                                  },
+                                                child: ListTile(
+                                                  title: Text(item.name),
+                                                  trailing: IconButton(
+                                                    icon: const Icon(FluentIcons.chrome_close),
+                                                    onPressed: () {
+                                                      controller.folders.remove(item);
+                                                    },
+                                                  ),
                                                 ),
-                                              ),
-                                            )
-                                          ],
+                                              );
+                                            } else {
+                                              return Column(
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.grey[40],
+                                                    ),
+                                                    child: ListTile(
+                                                      title: Text(item.name),
+                                                      trailing: IconButton(
+                                                        icon: const Icon(FluentIcons.chrome_close),
+                                                        onPressed: () {
+                                                          controller.folders.remove(item);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            }
+                                          }),
                                         );
-                                      }
-                                    },
-                                  ),
-                          );
+                                      },
+                                    ));
                         },
                       ),
                       Align(
@@ -185,7 +195,7 @@ class ExamScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.2 - 0.5,
                           height: 50,
                           child: Button(
-                              child: Center(child: controller.isFirestRequest.value ? const Text("필터 재설정") : const Text("필터 설정 완료")),
+                              child: Center(child: controller.isFilterFinished.value ? const Text("필터 재설정") : const Text("필터 설정 완료")),
                               onPressed: () {
                                 //난이도 관련처리
                                 if (controller.minlevelController.text != "" && controller.maxlevelController.text != "") {
@@ -204,17 +214,13 @@ class ExamScreen extends StatelessWidget {
                                       );
                                     });
                                   } else {
-                                    //서버에 조건 보내기, 서버에서 문제 개수와 문제 정보들 가져오기
-                                    controller.isFirestRequest.value = true;
-                                    controller.countController.text = controller.totalCount.value.toString();
+                                    controller.getfilteredProblem();
                                   }
                                 } else {
-                                  //서버에 조건 보내기, 서버에서 문제 개수와 문제 정보들 가져오기
-                                  controller.isFirestRequest.value = true;
-                                  controller.countController.text = controller.totalCount.value.toString();
+                                  controller.getfilteredProblem();
                                 }
                               })),
-                      controller.isFirestRequest.value
+                      controller.isFilterFinished.value
                           ? Column(
                               children: [
                                 const SizedBox(
@@ -243,12 +249,14 @@ class ExamScreen extends StatelessWidget {
                                         content: const Text("랜덤"),
                                         checked: controller.isRandom.value,
                                         onChanged: (checked) {
+                                          controller.problemToMakeExam.clear();
                                           controller.isRandom.value = true;
                                         }),
                                     RadioButton(
                                         content: const Text("직접 고르기"),
                                         checked: !controller.isRandom.value,
                                         onChanged: (checked) {
+                                          controller.problemToMakeExam.clear();
                                           controller.isRandom.value = false;
                                         }),
                                   ],
@@ -269,7 +277,7 @@ class ExamScreen extends StatelessWidget {
                                               displayInfoBar(context, builder: (context, close) {
                                                 return InfoBar(
                                                   title: const Text('오류 : '),
-                                                  content: const Text('가능한 문제보다 많이 선택하였습니다'),
+                                                  content: const Text('원하는 문제 개수가 가능한 문제보다 많습니다'),
                                                   action: IconButton(
                                                     icon: const Icon(FluentIcons.clear),
                                                     onPressed: close,
@@ -277,14 +285,44 @@ class ExamScreen extends StatelessWidget {
                                                   severity: InfoBarSeverity.error,
                                                 );
                                               });
+                                            } else if (!controller.isRandom.value && int.parse(controller.countController.text) != controller.selectedCount.value) {
+                                              displayInfoBar(context, builder: (context, close) {
+                                                return InfoBar(
+                                                  title: const Text('오류 : '),
+                                                  content: const Text('선택된 개수와 원하는 문제 개수가 다릅니다'),
+                                                  action: IconButton(
+                                                    icon: const Icon(FluentIcons.clear),
+                                                    onPressed: close,
+                                                  ),
+                                                  severity: InfoBarSeverity.error,
+                                                );
+                                              });
+                                            } else if (controller.isRandom.value) {
+                                              var copyProblemInfo = controller.uniqueProblemsToList.toList();
+                                              final random = Random();
+
+                                              for (int i = 0; i < int.parse(controller.countController.text); i++) {
+                                                int randomIndex = random.nextInt(copyProblemInfo.length);
+                                                controller.problemToMakeExam.add(copyProblemInfo[randomIndex]);
+
+                                                copyProblemInfo.removeAt(randomIndex); // 중복을 피하기 위해 해당 항목을 원본 리스트에서 제거
+                                              }
+                                              controller.makeExam();
                                             } else {
-                                              //랜덤시 서버 시험지 만들기 시험지 미리보기 ->, 직접 선택시 받은 문제 오른쪽에 띄워주기
-                                              //오른쪽에서 문제 다 선택후 완료 -> 시험지 미리보기
-                                              controller.isSettingFinished.value = true;
+                                              controller.makeExam();
                                             }
                                           } else {
-                                            //랜덤시 시험지 만들기, 직접 선택시 받은 문제 오른쪽에 띄워주기?
-                                            controller.isSettingFinished.value = true;
+                                            displayInfoBar(context, builder: (context, close) {
+                                              return InfoBar(
+                                                title: const Text('오류 : '),
+                                                content: const Text('원하는 문제 개수를 입력해주세요'),
+                                                action: IconButton(
+                                                  icon: const Icon(FluentIcons.clear),
+                                                  onPressed: close,
+                                                ),
+                                                severity: InfoBarSeverity.error,
+                                              );
+                                            });
                                           }
                                         }))
                               ],
@@ -299,11 +337,113 @@ class ExamScreen extends StatelessWidget {
               ),
               Expanded(
                   flex: 4,
-                  child: Container(
-                    child: Center(
-                      child: controller.isSettingFinished.value ? const Text("TODO: 문제 뽑기 만들기") : const Text("왼쪽 설정을 완료해주세요"),
-                    ),
+                  child: Center(
+                    child: controller.isFilterFinished.value
+                        ? (controller.isRandom.value
+                            ? const Text("랜덤 선택 예정입니다")
+                            : Row(
+                                children: [
+                                  Expanded(
+                                    flex: 4,
+                                    child: Container(padding: const EdgeInsets.all(30), child: FilteredProblemList(controller)),
+                                  ),
+                                  Container(
+                                    width: 0.5,
+                                    height: MediaQuery.of(context).size.height,
+                                    color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text("선택된 문제 개수: ${controller.selectedCount.value}개"),
+                                            const SizedBox(
+                                              height: 40,
+                                            ),
+                                            controller.problemImageViewer.value
+                                          ],
+                                        ),
+                                      ))
+                                ],
+                              ))
+                        : const Text("왼쪽 설정을 완료해주세요"),
                   )),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  GridView FilteredProblemList(ExamController controller) {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 7.0,
+      ),
+      itemCount: controller.uniqueProblems.length,
+      itemBuilder: (context, index) {
+        var problemElement = controller.uniqueProblemsDetail[index];
+        return FittedBox(
+          fit: BoxFit.fill,
+          child: Row(
+            children: [
+              Obx(() {
+                return Checkbox(
+                    checked: controller.isProblemSelected[index],
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.isProblemSelected[index] = value;
+                        if (value) {
+                          controller.problemToMakeExam.add(controller.uniqueProblemsToList[index]);
+                          controller.selectedCount.value++;
+                        } else {
+                          controller.problemToMakeExam.remove(controller.uniqueProblemsToList[index]);
+                          controller.selectedCount.value--;
+                        }
+                      }
+                    });
+              }),
+              const SizedBox(
+                width: 10,
+              ),
+              Button(
+                onPressed: () async {
+                  final url = Uri.parse('https://$HOST/api/data/image/${problemElement["problem_string"].toString().substring(2, problemElement["problem_string"].length - 1)}');
+                  final response = await http.get(
+                    url,
+                    headers: await defaultHeader(httpContentType.json),
+                  );
+                  if (response.statusCode ~/ 100 == 2) {
+                    controller.problemImageViewer.value = Container(
+                      child: Image.memory(
+                        response.bodyBytes,
+                        fit: BoxFit.contain,
+                      ),
+                    );
+                  } else {
+                    debugPrint(response.statusCode.toString());
+                    debugPrint("문제 이미지 불러오기 오류 발생");
+                  }
+                },
+                child: SizedBox(
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          problemElement["name"],
+                        ),
+                        Text(
+                          "난이도 : ${problemElement["level"]}",
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         );

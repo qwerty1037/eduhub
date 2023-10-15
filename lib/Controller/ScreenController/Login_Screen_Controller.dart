@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/Group_TreeView_Controller.dart';
 import 'package:front_end/Controller/Register_Info_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
@@ -32,7 +33,8 @@ class loginScreenController extends GetxController {
   }
 
   ///쿠키를 안전한 보관소에 저장하는 함수
-  Future<void> saveCookieToSecureStorage(String uid, String accessToken, String refreshToken) async {
+  Future<void> saveCookieToSecureStorage(
+      String uid, String accessToken, String refreshToken) async {
     await storage.write(key: 'uid', value: uid);
     await storage.write(key: 'access_token', value: accessToken);
     await storage.write(key: 'refresh_token', value: refreshToken);
@@ -42,7 +44,10 @@ class loginScreenController extends GetxController {
   void loginSuccess() async {
     TotalController totalController = Get.find<TotalController>();
     FolderController folderController = Get.find<FolderController>();
+    GroupTreeViewController groupController =
+        Get.find<GroupTreeViewController>();
     await folderController.receiveData();
+    await groupController.receiveData();
     totalController.reverseLoginState();
     totalController.update();
     Get.delete<loginScreenController>();
@@ -53,7 +58,10 @@ class loginScreenController extends GetxController {
   Future<void> logInRequest(BuildContext context) async {
     final url = Uri.parse('https://$HOST/api/auth/login');
 
-    final Map<String, dynamic> requestBody = {"user_id": idController.text, "user_password": passwordController.text};
+    final Map<String, dynamic> requestBody = {
+      "user_id": idController.text,
+      "user_password": passwordController.text
+    };
     final headers = {"Content-type": "application/json"};
     final response = await http.post(
       url,

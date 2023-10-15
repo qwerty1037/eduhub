@@ -13,6 +13,8 @@ import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Exam.dart';
+import 'package:front_end/Screen/Group_Management.dart';
+import 'package:front_end/Screen/Group_Waiting_Screen.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
 import 'package:get/get.dart';
@@ -35,7 +37,11 @@ class HomeScreen extends StatelessWidget {
           height: 40,
           //color: Colors.teal,
           child: Row(
-            children: [menuCommandBar(context, homeScreenController), const Spacer(), questionMarkButton(flyoutController: _flyoutController)],
+            children: [
+              menuCommandBar(context, homeScreenController),
+              const Spacer(),
+              questionMarkButton(flyoutController: _flyoutController)
+            ],
           ),
         ),
         Expanded(
@@ -48,7 +54,9 @@ class HomeScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
-                        color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                        color: Get.find<TotalController>().isDark.value == true
+                            ? Colors.grey[130]
+                            : Colors.grey[50],
                         width: 1,
                       ),
                     ),
@@ -66,7 +74,9 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Container(
-                  color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+                  color: Get.find<TotalController>().isDark.value == true
+                      ? Colors.grey[150]
+                      : Colors.grey[30],
                   child: m.Scaffold(
                     appBar: null,
                     body: SingleChildScrollView(
@@ -77,12 +87,19 @@ class HomeScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     border: Border(
                                   right: BorderSide(
-                                    color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                                    color: Get.find<TotalController>()
+                                                .isDark
+                                                .value ==
+                                            true
+                                        ? Colors.grey[130]
+                                        : Colors.grey[50],
                                     width: 1,
                                   ),
                                 )),
                                 child: const HomeCalendar())),
-                        const Expanded(flex: 1, child: Center(child: Text("연동 후 알림창 들어갈 부분")))
+                        const Expanded(
+                            flex: 1,
+                            child: Center(child: Text("연동 후 알림창 들어갈 부분")))
                       ]),
                     ),
                   ),
@@ -114,7 +131,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.savePdf,
               workingSpace: const PdfViewerScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "문제 저장", const Icon(FluentIcons.save));
+            Tab newTab = tabController.addTab(
+                generatedTab, "문제 저장", const Icon(FluentIcons.save));
 
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
@@ -139,7 +157,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.exam,
               workingSpace: ExamScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
+            Tab newTab = tabController.addTab(
+                generatedTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
@@ -157,7 +176,18 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () {
+            tabController.isNewTab = true;
+            DefaultTabBody generatedTab = DefaultTabBody(
+              dashBoardType: DashBoardType.group,
+              workingSpace: GroupWaitingScreen(),
+            );
+            Tab newTab = tabController.addTab(
+                generatedTab, "학생 관리", const Icon(FluentIcons.questionnaire));
+            tabController.tabs.add(newTab);
+            tabController.currentTabIndex.value = tabController.tabs.length - 1;
+            tabController.isNewTab = false;
+          },
         ),
       ),
       CommandBarBuilderItem(
@@ -172,7 +202,11 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {
-            createHighlightOverlay(context: context, controller: Get.put(SearchScreenController(), tag: tabController.getNewTabKey()), tabController: tabController);
+            createHighlightOverlay(
+                context: context,
+                controller: Get.put(SearchScreenController(),
+                    tag: tabController.getNewTabKey()),
+                tabController: tabController);
           },
         ),
       ),
@@ -194,7 +228,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.tagManagement,
               workingSpace: TagManagementScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "태그", const Icon(FluentIcons.tag));
+            Tab newTab = tabController.addTab(
+                generatedTab, "태그", const Icon(FluentIcons.tag));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
@@ -210,7 +245,8 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
+SingleChildScrollView leftDashboard(HomeScreenController homeScreenController,
+    BuildContext context, FolderController folderController) {
   return SingleChildScrollView(
     child: Column(
       children: [
@@ -233,7 +269,10 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
                                 title: const Center(child: Text("프로필 설정")),
                                 content: const Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [Center(child: Text("닉네임 변경")), Text("OOO님 들어갈 자리")],
+                                  children: [
+                                    Center(child: Text("닉네임 변경")),
+                                    Text("OOO님 들어갈 자리")
+                                  ],
                                 ),
                                 actions: [
                                   Button(
@@ -285,7 +324,9 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
         ),
         const SizedBox(height: 10),
         GetBuilder<HomeScreenController>(builder: (controller) {
-          return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : FolderTreeViewExplore();
+          return homeScreenController.isFolderEmpty
+              ? newFolderButton(context, folderController, homeScreenController)
+              : FolderTreeViewExplore();
         })
       ],
     ),

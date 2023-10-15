@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:front_end/Component/Event_Listener.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/Group_TreeView_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
@@ -23,7 +24,10 @@ void main() async {
     effect: WindowEffect.aero,
     color: const Color.fromARGB(50, 0, 0, 0),
   );
-  WindowOptions windowOptions = const WindowOptions(title: "바선생", minimumSize: Size(1000, 250), titleBarStyle: TitleBarStyle.normal);
+  WindowOptions windowOptions = const WindowOptions(
+      title: "바선생",
+      minimumSize: Size(1000, 250),
+      titleBarStyle: TitleBarStyle.normal);
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
@@ -31,6 +35,7 @@ void main() async {
   await initializeDateFormatting();
   Get.put(TotalController(), permanent: true);
   Get.put(FolderController());
+  Get.put(GroupTreeViewController());
   runApp(const MyApp());
 }
 
@@ -47,10 +52,13 @@ class MyApp extends StatelessWidget with WindowListener {
           Get.put(TagController());
           Get.put(TabController());
           return FluentApp(
-            themeMode: controller.isDark.value ? ThemeMode.dark : ThemeMode.light,
+            themeMode:
+                controller.isDark.value ? ThemeMode.dark : ThemeMode.light,
             theme: FluentThemeData(
               brightness: Brightness.light,
-              typography: const Typography.raw(body: TextStyle(color: Color(0xFF141212), fontWeight: FontWeight.bold)),
+              typography: const Typography.raw(
+                  body: TextStyle(
+                      color: Color(0xFF141212), fontWeight: FontWeight.bold)),
 
               accentColor: Colors.blue,
               activeColor: Colors.blue, //?
@@ -61,7 +69,8 @@ class MyApp extends StatelessWidget with WindowListener {
               micaBackgroundColor: Colors.black,
               //shadowColor: Colors.purple, //그림자 색깔
               //menuColor: Colors.red, //우클릭했을 때 나오는 메뉴 색깔을 결정
-              cardColor: Colors.grey[30], //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
+              cardColor: Colors.grey[
+                  30], //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
               selectionColor: Colors.magenta, //?
 
               /// buttonTheme: 버튼의 테마 조절, tabView의 탭에서 x가 버튼이고 그 이외의 색을 조절하려 했었는데 이것은 buttonTheme이 아님
@@ -95,7 +104,8 @@ class MyApp extends StatelessWidget with WindowListener {
                 }),
               )),
               */
-              scrollbarTheme: ScrollbarThemeData.standard(FluentThemeData.light()),
+              scrollbarTheme:
+                  ScrollbarThemeData.standard(FluentThemeData.light()),
 
               //chipTheme: ChipThemeData.standard(FluentThemeData.light()), //
 
@@ -103,7 +113,9 @@ class MyApp extends StatelessWidget with WindowListener {
               resources: Get.find<TotalController>().customResourceLight,
             ),
             darkTheme: FluentThemeData(
-                typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                typography: const Typography.raw(
+                    body: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
                 fontFamily: GoogleFonts.poppins().fontFamily,
                 scaffoldBackgroundColor: Colors.grey[160],
                 //menuColor: Colors.blue,
@@ -118,7 +130,8 @@ class MyApp extends StatelessWidget with WindowListener {
             theme: material.ThemeData(
               fontFamily: GoogleFonts.poppins().fontFamily,
               useMaterial3: true,
-              colorScheme: material.ColorScheme.fromSeed(seedColor: material.Colors.red),
+              colorScheme:
+                  material.ColorScheme.fromSeed(seedColor: material.Colors.red),
             ),
             debugShowCheckedModeBanner: false,
             home: LoginScreen(),

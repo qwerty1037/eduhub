@@ -34,5 +34,8 @@ enum DashBoardType {
   search,
 
   ///아무것도 선택안되었을때
-  none
+  none,
+
+  /// 그룹
+  group,
 }

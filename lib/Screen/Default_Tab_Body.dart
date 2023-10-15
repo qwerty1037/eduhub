@@ -10,6 +10,8 @@ import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Exam.dart';
+import 'package:front_end/Screen/Group_Management.dart';
+import 'package:front_end/Screen/Group_Waiting_Screen.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
 import 'package:front_end/Screen/Tag_Management_Screen.dart';
 import 'package:get/get.dart';
@@ -22,7 +24,9 @@ class DefaultTabBody extends StatelessWidget {
     this.workingSpace,
   }) {
     tagName = tabController.getNewTabKey();
-    _defaultTabBodyController = Get.put(DefaultTabBodyController(tagName, dashBoardType, workingSpace), tag: tagName);
+    _defaultTabBodyController = Get.put(
+        DefaultTabBodyController(tagName, dashBoardType, workingSpace),
+        tag: tagName);
   }
   final DashBoardType dashBoardType;
   final Widget? workingSpace;
@@ -55,10 +59,15 @@ class DefaultTabBody extends StatelessWidget {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+                      color: Get.find<TotalController>().isDark.value == true
+                          ? Colors.grey[150]
+                          : Colors.grey[30],
                       border: Border(
                         left: BorderSide(
-                          color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                          color:
+                              Get.find<TotalController>().isDark.value == true
+                                  ? Colors.grey[130]
+                                  : Colors.grey[50],
                           width: 1,
                         ),
                       ),
@@ -75,7 +84,8 @@ class DefaultTabBody extends StatelessWidget {
     );
   }
 
-  Center topCommandBar(DefaultTabBodyController controller, BuildContext context) {
+  Center topCommandBar(
+      DefaultTabBodyController controller, BuildContext context) {
     final menuCommandBarItems = <CommandBarItem>[
       CommandBarBuilderItem(
         builder: (context, mode, widget) => Tooltip(
@@ -93,9 +103,12 @@ class DefaultTabBody extends StatelessWidget {
             controller.changeWorkingSpace(
               const PdfViewerScreen(),
             );
-            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.savePdf);
-            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(currentTab, "문제 저장", const Icon(FluentIcons.save));
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.savePdf);
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(
+                currentTab, "문제 저장", const Icon(FluentIcons.save));
           },
         ),
       ),
@@ -115,9 +128,12 @@ class DefaultTabBody extends StatelessWidget {
             controller.changeWorkingSpace(
               ExamScreen(),
             );
-            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.exam);
-            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(currentTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.exam);
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(
+                currentTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
           },
         ),
       ),
@@ -132,7 +148,18 @@ class DefaultTabBody extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
               )),
-          onPressed: () {},
+          onPressed: () async {
+            await controller.deleteWorkingSpaceController();
+            controller.changeWorkingSpace(
+              GroupWaitingScreen(),
+            );
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.group);
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(
+                currentTab, "학생 관리", const Icon(FluentIcons.questionnaire));
+          },
         ),
       ),
       CommandBarBuilderItem(
@@ -147,9 +174,14 @@ class DefaultTabBody extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () async {
-            createHighlightOverlay(context: context, controller: Get.put(SearchScreenController(), tag: controller.tagName), tabController: tabController);
+            createHighlightOverlay(
+                context: context,
+                controller:
+                    Get.put(SearchScreenController(), tag: controller.tagName),
+                tabController: tabController);
 
-            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.search);
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.search);
           },
         ),
       ),
@@ -167,9 +199,12 @@ class DefaultTabBody extends StatelessWidget {
           onPressed: () async {
             await controller.deleteWorkingSpaceController();
             controller.changeWorkingSpace(TagManagementScreen());
-            controller.dashBoard.value = controller.makeDashBoard(DashBoardType.tagManagement);
-            Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-            tabController.renameTab(currentTab, "태그", const Icon(FluentIcons.tag));
+            controller.dashBoard.value =
+                controller.makeDashBoard(DashBoardType.tagManagement);
+            Tab currentTab =
+                tabController.tabs[tabController.currentTabIndex.value];
+            tabController.renameTab(
+                currentTab, "태그", const Icon(FluentIcons.tag));
           },
         ),
       ),

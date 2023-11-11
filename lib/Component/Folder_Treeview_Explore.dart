@@ -24,11 +24,12 @@ class FolderTreeViewExplore extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text("ㅇㅇ님의 워크스페이스"),
         ),
-        GetX<FolderController>(
-          builder: (controller) {
-            return FlyoutTarget(
-              controller: flyoutController,
-              child: TreeView(
+        FlyoutTarget(
+          controller: flyoutController,
+          child: GetX<FolderController>(
+            builder: (controller) {
+              return TreeView(
+                narrowSpacing: controller.temp_variable.value,
                 onSecondaryTap: (item, details) {
                   flyoutController.showFlyout(
                     position: details.globalPosition,
@@ -54,16 +55,19 @@ class FolderTreeViewExplore extends StatelessWidget {
                       controller.makeProblemListInNewTab(item);
                     } else {
                       final tabController = Get.find<TabController>();
-                      Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
-                      await controller.makeProblemListInCurrentTab(item, tagName!);
+                      Tab currentTab = tabController
+                          .tabs[tabController.currentTabIndex.value];
+                      tabController.renameTab(currentTab, item.value["name"],
+                          const Icon(FluentIcons.fabric_folder));
+                      await controller.makeProblemListInCurrentTab(
+                          item, tagName!);
                     }
                   }
                 },
                 items: controller.firstFolders,
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ],
     );

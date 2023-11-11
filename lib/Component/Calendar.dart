@@ -19,7 +19,8 @@ class HomeCalendar extends StatefulWidget {
 }
 
 class _HomeCalendarState extends State<HomeCalendar> {
-  DateTime selectedDay = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDay = DateTime.utc(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime focusedDay = DateTime.now();
   CalendarFormat format = CalendarFormat.month;
 
@@ -37,6 +38,7 @@ class _HomeCalendarState extends State<HomeCalendar> {
         return Column(
           children: [
             TableCalendar(
+              pageJumpingEnabled: controller.temp_variable.value,
               rangeSelectionMode: RangeSelectionMode.toggledOn,
               headerStyle: const HeaderStyle(titleCentered: true),
               calendarStyle: const CalendarStyle(
@@ -87,20 +89,27 @@ class _HomeCalendarState extends State<HomeCalendar> {
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
                           onPressed: () async {
-                            TextEditingController titleController = TextEditingController();
-                            TextEditingController hourController = TextEditingController();
-                            TextEditingController minuteController = TextEditingController();
+                            TextEditingController titleController =
+                                TextEditingController();
+                            TextEditingController hourController =
+                                TextEditingController();
+                            TextEditingController minuteController =
+                                TextEditingController();
                             await f.showDialog<String>(
                               barrierDismissible: true,
                               context: context,
                               builder: (context) => f.ContentDialog(
-                                title: Text("${selectedDay.month}월 ${selectedDay.day}일 일정 추가"),
+                                title: Text(
+                                    "${selectedDay.month}월 ${selectedDay.day}일 일정 추가"),
                                 content: SingleChildScrollView(
                                   child: SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.4,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.4,
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         const Text(
                                           "내용",
@@ -112,7 +121,8 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                         const Text("시(24H)"),
                                         DefaultTextBox(
                                           inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.digitsOnly // 숫자만 입력되도록 필터링
+                                            FilteringTextInputFormatter
+                                                .digitsOnly // 숫자만 입력되도록 필터링
                                           ],
                                           placeholder: "선택",
                                           controller: hourController,
@@ -120,7 +130,8 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                         const Text("분"),
                                         DefaultTextBox(
                                           inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.digitsOnly // 숫자만 입력되도록 필터링
+                                            FilteringTextInputFormatter
+                                                .digitsOnly // 숫자만 입력되도록 필터링
                                           ],
                                           placeholder: "선택",
                                           controller: minuteController,
@@ -135,12 +146,27 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                     onPressed: () {
                                       if (titleController.text != "") {
                                         setState(() {
-                                          if (homeScreenController.events[selectedDay] != null) {
-                                            homeScreenController.events[selectedDay]!
-                                                .add(CalendarEvent(text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text)));
+                                          if (homeScreenController
+                                                  .events[selectedDay] !=
+                                              null) {
+                                            homeScreenController
+                                                .events[selectedDay]!
+                                                .add(CalendarEvent(
+                                                    text: titleController.text,
+                                                    hour: int.parse(
+                                                        hourController.text),
+                                                    minute: int.parse(
+                                                        minuteController
+                                                            .text)));
                                           } else {
-                                            homeScreenController.events[selectedDay] = [
-                                              CalendarEvent(text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text))
+                                            homeScreenController
+                                                .events[selectedDay] = [
+                                              CalendarEvent(
+                                                  text: titleController.text,
+                                                  hour: int.parse(
+                                                      hourController.text),
+                                                  minute: int.parse(
+                                                      minuteController.text))
                                             ];
                                           }
                                         });
@@ -189,7 +215,9 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                     trailing: IconButton(
                                       icon: const Icon(f.FluentIcons.delete),
                                       onPressed: () {
-                                        homeScreenController.events[selectedDay]!.remove(e);
+                                        homeScreenController
+                                            .events[selectedDay]!
+                                            .remove(e);
                                         homeScreenController.events.refresh();
                                       },
                                     ),

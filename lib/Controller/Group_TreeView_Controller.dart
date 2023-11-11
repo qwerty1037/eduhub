@@ -24,6 +24,8 @@ class GroupTreeViewController extends GetxController {
   RxList<TreeViewItem> totalGroups = <TreeViewItem>[].obs;
   RxList<TreeViewItem> firstGroups = <TreeViewItem>[].obs;
 
+  RxBool temp_variable = false.obs;
+
   ///처음에 유저의 백엔드로부터 폴더 리스트를 받아와 보여줄 리스트를 구성
   Future<void> receiveData() async {
     makeGroupListInfo(temporaryGroupDB());

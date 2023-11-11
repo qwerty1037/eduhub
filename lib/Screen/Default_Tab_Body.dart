@@ -73,7 +73,7 @@ class DefaultTabBody extends StatelessWidget {
                       ),
                     ),
                     width: MediaQuery.of(context).size.width / 6 * 5,
-                    child: Obx(() => controller.workingSpaceWidget.value),
+                    child: controller.workingSpaceWidget.value,
                   )
                 ],
               ),

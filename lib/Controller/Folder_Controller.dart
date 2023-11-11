@@ -255,7 +255,8 @@ class FolderController extends GetxController {
           ),
         ),
         child: DragTarget(
-          builder: (BuildContext context, List<dynamic> candidateData, List<dynamic> rejectedData) {
+          builder: (BuildContext context, List<dynamic> candidateData,
+              List<dynamic> rejectedData) {
             return Text(name);
           },
           onWillAccept: (Map<dynamic, dynamic>? data) {
@@ -266,8 +267,12 @@ class FolderController extends GetxController {
             }
           },
           onAccept: (Map<String, dynamic> data) async {
-            final url = Uri.parse('https://$HOST/api/data/update_exam_database_directory');
-            final Map<String, dynamic> requestBody = {"target_database_id": data["id"], "destination_database_id": parent};
+            final url = Uri.parse(
+                'https://$HOST/api/data/update_exam_database_directory');
+            final Map<String, dynamic> requestBody = {
+              "target_database_id": data["id"],
+              "destination_database_id": parent
+            };
 
             final response = await http.post(
               url,
@@ -275,16 +280,21 @@ class FolderController extends GetxController {
               body: jsonEncode(requestBody),
             );
             if (isHttpRequestSuccess(response)) {
-              TreeViewItem targetFolder = totalExamFolders.firstWhere((element) => element.value["id"] == data["id"]);
-              TreeViewItem thisFolder = totalExamFolders.firstWhere((element) => element.value["id"] == id);
+              TreeViewItem targetFolder = totalExamFolders
+                  .firstWhere((element) => element.value["id"] == data["id"]);
+              TreeViewItem thisFolder = totalExamFolders
+                  .firstWhere((element) => element.value["id"] == id);
               thisFolder.children.add(targetFolder);
               thisFolder.expanded = true;
 
               if (data["parent"] != null) {
-                TreeViewItem parentItem = totalExamFolders.firstWhere((element) => element.value["id"] == data["parent"]);
-                parentItem.children.removeWhere((element) => element.value["id"] == data["id"]);
+                TreeViewItem parentItem = totalExamFolders.firstWhere(
+                    (element) => element.value["id"] == data["parent"]);
+                parentItem.children.removeWhere(
+                    (element) => element.value["id"] == data["id"]);
               } else {
-                firstExamFolders.removeWhere((element) => element.value["id"] == data["id"]);
+                firstExamFolders.removeWhere(
+                    (element) => element.value["id"] == data["id"]);
               }
               data["parent"] = id;
               firstExamFolders.refresh();

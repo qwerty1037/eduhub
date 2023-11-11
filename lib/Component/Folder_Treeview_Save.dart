@@ -49,7 +49,8 @@ class FolderTreeViewSave extends StatelessWidget {
                 onItemInvoked: (item, reason) async {
                   if (reason == TreeViewItemInvokeReason.pressed) {
                     controller.selectedDirectoryID.value = item.value["id"];
-
+                    controller.temp_variable.value = true;
+                    controller.temp_variable.value = false;
                     controller.firstFolders.refresh();
                     await controller.getPath();
                   }

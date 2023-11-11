@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'dart:io';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:win32/win32.dart';
 
 class PdfFile {
   Uint8List? capturedImage;
@@ -93,14 +95,29 @@ class PdfViewerScreenController extends GetxController {
   /// If capturedData is null,
   void capturePdf() async {
     deleteCapturedImage();
+    Directory directory = await getApplicationDocumentsDirectory();
 
     CapturedData? capturedData = await screenCapturer.capture(
       mode: CaptureMode.region, // screen, window
-      imagePath: "null",
+      imagePath: '${directory.path}/screen_capturer_example/Screenshots/a.png',
       copyToClipboard: true,
     );
+    await Future.delayed(Duration(seconds: 1));
+    var imageBytes = await screenCapturer.readImageFromClipboard();
     if (capturedData == null) {
-      print("Capture Failed");
+      if (imageBytes != null) {
+        capturedImage = imageBytes;
+        isCaptured.value = true;
+      } else {
+        await Future.delayed(Duration(seconds: 1));
+        imageBytes = await screenCapturer.readImageFromClipboard();
+        if (imageBytes != null) {
+          capturedImage = imageBytes;
+          isCaptured.value = true;
+        } else {
+          print("Capture Failed");
+        }
+      }
     } else {
       // TODO: null이 입력되었을 때의 처리구문을 작성해야함
       capturedImage = capturedData.imageBytes;
@@ -111,7 +128,7 @@ class PdfViewerScreenController extends GetxController {
   /// Delete capturedImage
   ///
   ///
-  void deleteCapturedImage() {
+  void deleteCapturedImage() async {
     isCaptured.value = false;
     capturedImage = null;
   }
@@ -145,10 +162,13 @@ class PdfViewerScreenController extends GetxController {
       final url = Uri.parse('https://$HOST/api/data/create_problem');
       var request = http.MultipartRequest('POST', url);
 
-      request.files.add(http.MultipartFile('pdf_file', pickedFile!.openRead(), pickedFileSize.value, filename: pickedFileName.value));
+      request.files.add(http.MultipartFile(
+          'pdf_file', pickedFile!.openRead(), pickedFileSize.value,
+          filename: pickedFileName.value));
 
       request.fields.addAll({
-        "parent_database": Get.find<FolderController>().selectedDirectoryID.value.toString(),
+        "parent_database":
+            Get.find<FolderController>().selectedDirectoryID.value.toString(),
       });
       request.headers.addAll(await defaultHeader(httpContentType.multipart));
 

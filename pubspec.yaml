@@ -45,7 +45,7 @@ dependencies:
   flutter_widget_from_html: ^0.10.1
 
   flutter_cache_manager: ^3.3.0
-  screen_capturer: ^0.1.6
+  screen_capturer: ^0.1.5
   korea_regexp: ^1.0.1
   textfield_tags: ^2.0.2
   win32: ^5.0.5
@@ -63,7 +63,7 @@ dependencies:
   localstorage: ^4.0.1+4
   url_launcher: ^6.1.14
   flutter_spinkit: ^5.2.0
-
+  syncfusion_flutter_pdf: ^22.2.12
 
 dev_dependencies:
   flutter_test:

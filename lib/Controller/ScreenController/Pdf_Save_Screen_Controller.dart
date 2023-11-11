@@ -76,7 +76,7 @@ class PdfSaveController extends GetxController {
 
     // Dispose the document.
     document2.dispose();
-
+    // final url = Uri.parse('https://tjmekdg.request.dreamhack.games');
     final url = Uri.parse('https://$HOST/api/data/create_problem');
     var request = http.MultipartRequest('POST', url);
     var multipartFileProblem = http.MultipartFile.fromBytes(
@@ -95,11 +95,12 @@ class PdfSaveController extends GetxController {
     final Map<String, dynamic> requestField = {
       "problem_name": problemNameController.text,
       "parent_database": selectedDirectoryID,
-      "tags": jsonEncode(selectedTags),
+      "tag": selectedTags.toString(),
       "level": difficultySliderValue.round(),
       "problem_string": "\${$capturedFileNameProblem}",
       "answer_string": "\${$capturedFileNameAnswer}",
     };
+    debugPrint(selectedTags.toString());
 
     final Map<String, String> temp = {};
     requestField.forEach((key, value) {

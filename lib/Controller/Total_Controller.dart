@@ -54,6 +54,8 @@ class TotalController extends GetxController {
         if (isHttpRequestSuccess(response)) {
           String? cookieList = response.headers["set-cookie"];
 
+          debugPrint(cookieList.toString());
+
           String? uid = getCookieValue(cookieList!, "uid");
           String? accessToken = getCookieValue(cookieList, "access_token");
           String? refreshToken = getCookieValue(cookieList, "refresh_token");

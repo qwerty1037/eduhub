@@ -4,8 +4,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Component/Exam_Folder_Treeview.dart';
+import 'package:front_end/Component/New_Folder_Button.dart';
 import 'package:front_end/Component/Tag_Model.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:get/get.dart';
 import 'package:korea_regexp/korea_regexp.dart';
@@ -32,6 +35,9 @@ class ExamController extends GetxController {
   RxList<bool> isProblemSelected = <bool>[].obs;
   RxInt selectedCount = 0.obs;
   List<dynamic> problemToMakeExam = [];
+  String tagName = "";
+  int? selectedFolder;
+  HomeScreenController homeScreenController = Get.find<HomeScreenController>();
 
   Rx<Widget> problemImageViewer = Container(
     decoration: const BoxDecoration(
@@ -45,7 +51,8 @@ class ExamController extends GetxController {
     child: const Center(child: Text("선택된 문제가 없습니다")),
   ).obs;
 
-  ExamController() {
+  ExamController(String name) {
+    tagName = name;
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
       tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
@@ -213,6 +220,7 @@ class ExamController extends GetxController {
 
   void makeExam(BuildContext context) {
     final examNameController = TextEditingController();
+
     showDialog(
         context: context,
         builder: (context) {
@@ -230,16 +238,16 @@ class ExamController extends GetxController {
               const SizedBox(
                 height: 15,
               ),
-              const Text("저장 위치"),
+              const Text("시험지를 저장할 폴더를 선택해주세요"),
               const SizedBox(
                 height: 15,
               ),
               Container(
-                child: Container(
-
-                    //TODO 시험지 폴더 들어갈 자리, 시험지 폴더 클릭시 저장 위치 변경
-                    ),
-              )
+                  child: homeScreenController.isExamFolderEmpty
+                      ? newExamFolderButton(context, Get.find<FolderController>(), homeScreenController)
+                      : ExamFolderTreeView(
+                          tagName: tagName,
+                        ))
             ]),
             actions: [
               Button(
@@ -252,11 +260,10 @@ class ExamController extends GetxController {
                   child: const Text('만들기'),
                   onPressed: () async {
                     //TODO 최종 시험지 만들기 endpoint 연결
+                    //현재 problemtomakeExam 에 문제 데이터들 있고 서버에 보내는건 바로 위 함수 http랑 비슷한 방식으로 하면 될듯.
                   }),
             ],
           );
         });
-    //TODO 시험지 이름, 저장 위치 설정 후 서버에 보내기
-    //현재 problemtomakeExam 에 문제 데이터들 있고 서버에 보내는건 바로 위 함수 http랑 비슷한 방식으로 하면 될듯.
   }
 }

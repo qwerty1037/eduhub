@@ -79,7 +79,6 @@ class ProblemListController extends GetxController {
       );
       if (isHttpRequestSuccess(response)) {
         final jsonResponse = jsonDecode(response.body);
-
         final totalProblems = jsonResponse['problem_list'];
         problemList.addAll(totalProblems);
         lastButton = (totalProblems.length - 1) ~/ itemsPerPage + 1;

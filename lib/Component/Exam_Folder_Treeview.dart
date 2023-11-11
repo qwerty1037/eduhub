@@ -1,7 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Exam_MenuFlyout.dart';
 import 'package:front_end/Component/FolderTreeView_MenuFlyout.dart';
+import 'package:front_end/Controller/ExamController.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 
@@ -53,9 +56,11 @@ class ExamFolderTreeView extends StatelessWidget {
                     controller.selectedExamDirectoryID.value = item.value["id"];
                     controller.firstExamFolders.refresh();
                     if (Get.find<TabController>().currentTabIndex.value == 0) {
-                      //TODO 시험지 뷰어 띄우기
+                      //TODO 새 탭에 시험지 뷰어 띄우기
                       debugPrint("뷰어 새 탭에 띄워주기");
                       // controller.makeProblemListInNewTab(item);
+                    } else if (tagName != null && Get.find<DefaultTabBodyController>(tag: tagName).dashBoardType == DashBoardType.exam) {
+                      Get.find<ExamController>(tag: tagName).selectedFolder = item.value["id"];
                     } else {
                       //TODO 학생 창에서 시험지 폴더 띄울경우 폴더 클릭시 필요한 작업
 

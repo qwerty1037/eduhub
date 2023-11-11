@@ -4,6 +4,7 @@ import 'package:front_end/Controller/ScreenController/Login_Screen_Controller.da
 import 'package:front_end/Controller/Register_Info_Controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///로그인 화면
 class LoginScreen extends StatelessWidget {
@@ -43,10 +44,7 @@ class LoginScreen extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(172, 68, 137, 255),
-                Color.fromARGB(119, 68, 137, 255)
-              ],
+              colors: [Color.fromARGB(172, 68, 137, 255), Color.fromARGB(119, 68, 137, 255)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -91,9 +89,7 @@ class LoginScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
       ),
-      color: Theme.of(context)
-          .colorScheme
-          .primaryContainer, //const Color.fromARGB(52, 117, 117, 117),
+      color: Theme.of(context).colorScheme.primaryContainer, //const Color.fromARGB(52, 117, 117, 117),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -140,8 +136,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  ElevatedButton loginTryButton(
-      loginScreenController loginController, BuildContext context) {
+  ElevatedButton loginTryButton(loginScreenController loginController, BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -305,10 +300,7 @@ class InquiryButton extends StatelessWidget {
       */
       child: Text(
         "문의하기",
-        style: Theme.of(context)
-            .textTheme
-            .labelLarge!
-            .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }
@@ -318,132 +310,24 @@ class RegisterInfoButton extends StatelessWidget {
   RegisterInfoButton({
     super.key,
   });
-  final RegisterInfoController _registerInfoController =
-      Get.put(RegisterInfoController());
+  final RegisterInfoController _registerInfoController = Get.put(RegisterInfoController());
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shadowColor: Colors.transparent,
-                title: const Text(
-                  "회원가입",
-                  textAlign: TextAlign.center,
-                ),
-                content: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                    ),
-                    child: GetBuilder<RegisterInfoController>(
-                      builder: (controller) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("아이디"),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            registerTextfield(controller.idController, false),
-                            ...betweenTextfield("비밀번호"),
-                            registerTextfield(
-                                controller.passwordController, true),
-                            ...betweenTextfield("비밀번호 확인"),
-                            registerTextfield(
-                                controller.checkPasswordController, true),
-                            ...betweenTextfield("이름"),
-                            registerTextfield(controller.nameController, false),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text("성별"),
-                            chooseSexButton(controller),
-                            ...betweenTextfield("나이"),
-                            registerTextfield(controller.ageController, false),
-                            ...betweenTextfield("이메일"),
-                            registerTextfield(
-                                controller.emailController, false),
-                            ...betweenTextfield("닉네임"),
-                            registerTextfield(
-                                controller.nicknameController, false),
-                            SizedBox(
-                              height: 20,
-                              child: controller.matchpassword
-                                  ? const Text("")
-                                  : const Text("비밀번호가 다릅니다"),
-                            ),
-                            SizedBox(
-                              height: 20,
-                              child: controller.formatCorrect
-                                  ? const Text("")
-                                  : const Text(
-                                      "입력이 완료되지 않았습니다",
-                                      style: TextStyle(fontSize: 10),
-                                    ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                actions: [
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            padding: const EdgeInsets.all(16.0),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Get.delete<RegisterInfoController>();
-                          },
-                          child: const Text("취소"),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              padding: const EdgeInsets.all(16.0)),
-                          onPressed: () {
-                            _registerInfoController.tryMakeId(context);
-                          },
-                          child: const Text("가입하기"),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              );
-            });
+      onPressed: () async {
+        //TODO : 웹 배포 이후 URL수정
+        final Uri url = Uri.parse('https://www.bateacher.com');
+        if (!await launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        )) {
+          throw Exception('Could not launch $url');
+        }
       },
-      /*
-      style: ButtonStyle(
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
-      ),
-      */
       child: Text(
         "회원가입",
-        style: Theme.of(context)
-            .textTheme
-            .labelLarge!
-            .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }

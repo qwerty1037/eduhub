@@ -1,6 +1,7 @@
 ///Screen: File_Drag_and_Drop.
 //import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:front_end/Component/Default/Default_Key_Text.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
@@ -22,7 +23,7 @@ class PdfViewerScreen extends StatefulWidget {
 
 class _PdfScreenState extends State<PdfViewerScreen> {
   final controllerProblem = Get.put(PdfViewerScreenController(), tag: "Problem${Get.find<t.TabController>().getTabKey()}");
-  final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer${Get.find<t.TabController>().getTabKey()}");
+  // final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer${Get.find<t.TabController>().getTabKey()}");
   final folderController = Get.find<FolderController>();
   @override
   Widget build(BuildContext context) {
@@ -35,22 +36,22 @@ class _PdfScreenState extends State<PdfViewerScreen> {
               Row(
                 children: [
                   Obx(() {
-                    return controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints, "문제");
+                    return controllerProblem.showProcess.value
+                        ? SpinKitWave(
+                            duration: const Duration(seconds: 40),
+                          )
+                        : (controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints, "문제"));
                   }),
-                  //추후 복구, 현재는 문제만
-                  // Obx(() {
-                  //   return controllerAnswer.isPdfInputed.value ? pdfViewerContainer(controllerAnswer, constraints) : selectPdfContainer(controllerAnswer, constraints, "정답");
-                  // }),
                 ],
               ),
               Obx(() {
                 return Align(
                   alignment: Alignment.bottomCenter,
                   child: Visibility(
-                    visible: (controllerProblem.isPdfInputed.value == true),
+                    visible: (controllerProblem.isPdfInputed.value),
                     child: Container(
                       width: constraints.maxWidth,
-                      height: constraints.maxHeight * 0.15,
+                      height: 100,
                       color: Colors.grey[30],
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,7 +61,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   children: [
                                     const Text("문제 저장 위치:  "),
@@ -71,7 +72,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   children: [
                                     Text("현재 파일 용량:  ${controllerProblem.pickedFileSize.value} bytes"),
@@ -95,35 +96,12 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             ],
                           ),
                           SizedBox(
-                              height: constraints.maxHeight * 0.15,
+                              height: 100,
                               child: Button(
-                                  child: const Align(child: Text("문제 만들기")),
                                   onPressed: () {
-                                    //pdf파일 서버에 보내는 엔드포인트 추가할 부분
-                                  })),
-                          // IconButton(
-                          //   onPressed: () {
-
-                          //     /*
-                          //     final DefaultTabBodyController
-                          //         defaultTabBodyController =
-                          //         Get.find<DefaultTabBodyController>(
-                          //             tag: Get.find<t.TabController>().getTabKey());
-                          //     defaultTabBodyController.saveThisWorkingSpace();
-                          //     defaultTabBodyController.changeWorkingSpace(
-                          //         PdfSaveScreen(controllerProblem.getCapturedImage()!,
-                          //             controllerAnswer.getCapturedImage()!));
-                          //     */
-                          //     // Navigator.push(
-                          //     //   context,
-                          //     //   MaterialPageRoute(builder: (context) => PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!)),
-                          //     // );
-                          //   },
-                          //   icon: const Icon(
-                          //     FluentIcons.save,
-                          //     //color: Colors.white,
-                          //   ),
-                          // ),
+                                    controllerProblem.makeProblemsFromPdf(context);
+                                  },
+                                  child: const Align(child: Text("문제 만들기")))),
                         ],
                       ),
                     ),
@@ -211,7 +189,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
   Widget pdfViewerContainer(PdfViewerScreenController controller, constraints) {
     return SizedBox(
       width: constraints.maxWidth,
-      height: constraints.maxHeight * 0.85,
+      height: constraints.maxHeight - 100,
       child: Column(
         children: [
           Container(

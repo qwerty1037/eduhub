@@ -21,10 +21,9 @@ class HomeCalendar extends StatefulWidget {
 class _HomeCalendarState extends State<HomeCalendar> {
   DateTime selectedDay = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime focusedDay = DateTime.now();
-
   CalendarFormat format = CalendarFormat.month;
 
-  ///추후에는 서버에서 데이터 받아오기
+  //추후에는 서버에서 데이터 받아오기
 
   HomeScreenController homeScreenController = Get.find<HomeScreenController>();
   List<CalendarEvent> _getEventsForDay(DateTime day) {
@@ -50,7 +49,7 @@ class _HomeCalendarState extends State<HomeCalendar> {
                 ),
               ),
               locale: 'ko_KR',
-              focusedDay: DateTime.now(),
+              focusedDay: focusedDay,
               firstDay: DateTime.utc(2023, 1, 1),
               lastDay: DateTime.utc(2024, 12, 30),
               daysOfWeekHeight: 20,
@@ -173,22 +172,31 @@ class _HomeCalendarState extends State<HomeCalendar> {
                           icon: const Icon(Icons.add))
                     ],
                   ),
-                  Column(
-                    children: homeScreenController.events[selectedDay] == null
-                        ? []
-                        : homeScreenController.events[selectedDay]!
-                            .map((e) => ListTile(
-                                  leading: e.hour == null
-                                      ? null
-                                      : e.minute == 0
-                                          ? Text("${e.hour}시")
-                                          : Text("${e.hour}시 ${e.minute}분"),
-                                  title: Text(
-                                    e.text,
-                                  ),
-                                ))
-                            .toList(),
-                  )
+                  Obx(() {
+                    return Column(
+                      children: homeScreenController.events[selectedDay] == null
+                          ? []
+                          : homeScreenController.events[selectedDay]!
+                              .map((e) => ListTile(
+                                    leading: e.hour == null
+                                        ? null
+                                        : e.minute == 0
+                                            ? Text("${e.hour}시")
+                                            : Text("${e.hour}시 ${e.minute}분"),
+                                    title: Text(
+                                      e.text,
+                                    ),
+                                    trailing: IconButton(
+                                      icon: const Icon(f.FluentIcons.delete),
+                                      onPressed: () {
+                                        homeScreenController.events[selectedDay]!.remove(e);
+                                        homeScreenController.events.refresh();
+                                      },
+                                    ),
+                                  ))
+                              .toList(),
+                    );
+                  })
                 ],
               ),
             )

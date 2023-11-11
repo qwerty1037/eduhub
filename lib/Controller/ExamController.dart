@@ -81,7 +81,7 @@ class ExamController extends GetxController {
     List<Widget> chips = [];
     if (tagValue.value == "") return chips;
     RegExp regExp = getRegExp(
-      tagValue.value, // != "" ? tagValue.value : " ",
+      tagValue.value,
       RegExpOptions(
         initialSearch: true,
         startsWith: false,

@@ -50,6 +50,9 @@ class FolderTreeViewExplore extends StatelessWidget {
                 onItemInvoked: (item, reason) async {
                   if (reason == TreeViewItemInvokeReason.pressed) {
                     controller.selectedDirectoryID.value = item.value["id"];
+                    controller.temp_variable.value = true;
+                    controller.temp_variable.value = false;
+
                     controller.firstFolders.refresh();
                     await controller.getPath();
 
@@ -57,9 +60,12 @@ class FolderTreeViewExplore extends StatelessWidget {
                       controller.makeProblemListInNewTab(item);
                     } else {
                       final tabController = Get.find<TabController>();
-                      Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
-                      await controller.makeProblemListInCurrentTab(item, tagName!);
+                      Tab currentTab = tabController
+                          .tabs[tabController.currentTabIndex.value];
+                      tabController.renameTab(currentTab, item.value["name"],
+                          const Icon(FluentIcons.fabric_folder));
+                      await controller.makeProblemListInCurrentTab(
+                          item, tagName!);
                     }
                   }
                 },

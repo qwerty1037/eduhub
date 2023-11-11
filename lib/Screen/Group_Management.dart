@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:front_end/Component/Exam_Viewer.dart';
 import 'package:front_end/Controller/Group_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
@@ -70,7 +72,12 @@ class GroupManagementScreen extends StatelessWidget {
                       fit: FlexFit.tight,
                       child: GroupMenu(
                         menuText: "설정",
-                        onTap: () {},
+                        onTap: () {
+                          DefaultTabBodyController workingSpaceController =
+                              Get.find<DefaultTabBodyController>(tag: tagName);
+                          workingSpaceController.changeWorkingSpace(
+                              ExamViewer(examPdfFile: "examPdfFile"));
+                        },
                       ),
                     ),
                   ],

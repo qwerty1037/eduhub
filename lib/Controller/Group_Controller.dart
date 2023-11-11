@@ -1,3 +1,5 @@
 import 'package:get/get.dart';
 
-class GroupController extends GetxController {}
+class GroupController extends GetxController {
+  void sendTask() {}
+}

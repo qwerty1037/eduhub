@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:korea_regexp/korea_regexp.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 /// Pdf 저장 스크린을 컨트롤하는 Controller
 class PdfSaveController extends GetxController {
@@ -26,7 +28,8 @@ class PdfSaveController extends GetxController {
   PdfSaveController() {
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
-      tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
+      tagsList.add(TagModel(tagController.totalTagList[i].name,
+          tagController.totalTagList[i].id!, false));
     }
   }
 
@@ -40,8 +43,39 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].ID);
       }
     }
-    String capturedFileNameProblem = '${problemNameController.text}_problem.jpeg';
-    String capturedFileNameAnswer = '${problemNameController.text}_answer.jpeg';
+    String capturedFileNameProblem =
+        '${problemNameController.text}_problem.pdf';
+    String capturedFileNameAnswer = '${problemNameController.text}_answer.pdf';
+
+    //Create a new PDF document.
+    final PdfDocument document = PdfDocument();
+    //Load the image using PdfBitmap.
+    final PdfBitmap image = PdfBitmap(capturedImageProblem);
+    //Draw the image to the PDF page.
+    document.pages
+        .add()
+        .graphics
+        .drawImage(image, const Rect.fromLTWH(0, 0, 500, 200));
+    // Save the document.
+    capturedImageProblem = Uint8List.fromList(await document.save());
+
+    // Dispose the document.
+    document.dispose();
+
+    //Create a new PDF document.
+    final PdfDocument document2 = PdfDocument();
+    //Load the image using PdfBitmap.
+    final PdfBitmap image2 = PdfBitmap(capturedImageAnswer);
+    //Draw the image to the PDF page.
+    document2.pages
+        .add()
+        .graphics
+        .drawImage(image2, const Rect.fromLTWH(0, 0, 500, 200));
+    // Save the document.
+    capturedImageAnswer = Uint8List.fromList(await document2.save());
+
+    // Dispose the document.
+    document2.dispose();
 
     final url = Uri.parse('https://$HOST/api/data/create_problem');
     var request = http.MultipartRequest('POST', url);
@@ -49,13 +83,13 @@ class PdfSaveController extends GetxController {
       'problem_image',
       capturedImageProblem,
       filename: capturedFileNameProblem,
-      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
     var multipartFileAnswer = http.MultipartFile.fromBytes(
       'problem_image',
       capturedImageAnswer,
       filename: capturedFileNameAnswer,
-      contentType: MediaType('image', 'jpeg'), // 이미지의 적절한 Content-Type을 설정해야 합니다.
+      contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
 
     final Map<String, dynamic> requestField = {

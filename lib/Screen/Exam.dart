@@ -12,7 +12,8 @@ import 'package:front_end/Component/FolderData.dart';
 
 class ExamScreen extends StatelessWidget {
   ExamScreen({super.key});
-  final examController = Get.put(ExamController(), tag: Get.find<TabController>().getTabKey());
+  final examController =
+      Get.put(ExamController(), tag: Get.find<TabController>().getTabKey());
   String tagName = Get.find<TabController>().getTabKey();
   @override
   Widget build(BuildContext context) {
@@ -65,14 +66,20 @@ class ExamScreen extends StatelessWidget {
                           }
                         },
                         onAccept: ((Map<dynamic, dynamic>? data) {
-                          FolderData addedFolder = FolderData(parent: data!["parent"], id: data["id"], name: data["name"]);
+                          FolderData addedFolder = FolderData(
+                              parent: data!["parent"],
+                              id: data["id"],
+                              name: data["name"]);
                           controller.folders.add(addedFolder);
                         }),
-                        builder: (BuildContext context, List<Map<dynamic, dynamic>?> candidateData, List<dynamic> rejectedData) {
+                        builder: (BuildContext context,
+                            List<Map<dynamic, dynamic>?> candidateData,
+                            List<dynamic> rejectedData) {
                           return Container(
                               color: Colors.grey[100],
                               height: 150,
-                              width: MediaQuery.of(context).size.width * 0.2 - 0.5,
+                              width:
+                                  MediaQuery.of(context).size.width * 0.2 - 0.5,
                               child: controller.folders.isEmpty
                                   ? const Center(child: Text("폴더 드래그"))
                                   : Obx(
@@ -80,11 +87,15 @@ class ExamScreen extends StatelessWidget {
                                         return ListView.builder(
                                           shrinkWrap: false,
                                           itemCount: controller.folders.length,
-                                          itemBuilder: (BuildContext context, int index) => Obx(() {
-                                            List<FolderData> dataList = controller.folders.toList();
+                                          itemBuilder: (BuildContext context,
+                                                  int index) =>
+                                              Obx(() {
+                                            List<FolderData> dataList =
+                                                controller.folders.toList();
                                             FolderData item = dataList[index];
 
-                                            if (index != controller.folders.length - 1) {
+                                            if (index !=
+                                                controller.folders.length - 1) {
                                               return Container(
                                                 decoration: BoxDecoration(
                                                   color: Colors.grey[40],
@@ -98,9 +109,11 @@ class ExamScreen extends StatelessWidget {
                                                 child: ListTile(
                                                   title: Text(item.name),
                                                   trailing: IconButton(
-                                                    icon: const Icon(FluentIcons.chrome_close),
+                                                    icon: const Icon(FluentIcons
+                                                        .chrome_close),
                                                     onPressed: () {
-                                                      controller.folders.remove(item);
+                                                      controller.folders
+                                                          .remove(item);
                                                     },
                                                   ),
                                                 ),
@@ -115,9 +128,12 @@ class ExamScreen extends StatelessWidget {
                                                     child: ListTile(
                                                       title: Text(item.name),
                                                       trailing: IconButton(
-                                                        icon: const Icon(FluentIcons.chrome_close),
+                                                        icon: const Icon(
+                                                            FluentIcons
+                                                                .chrome_close),
                                                         onPressed: () {
-                                                          controller.folders.remove(item);
+                                                          controller.folders
+                                                              .remove(item);
                                                         },
                                                       ),
                                                     ),
@@ -195,17 +211,27 @@ class ExamScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.2 - 0.5,
                           height: 50,
                           child: Button(
-                              child: Center(child: controller.isFilterFinished.value ? const Text("필터 재설정") : const Text("필터 설정 완료")),
+                              child: Center(
+                                  child: controller.isFilterFinished.value
+                                      ? const Text("필터 재설정")
+                                      : const Text("필터 설정 완료")),
                               onPressed: () {
                                 //난이도 관련처리
-                                if (controller.minlevelController.text != "" && controller.maxlevelController.text != "") {
-                                  int minlevel = int.parse(controller.minlevelController.text);
-                                  int maxlevel = int.parse(controller.maxlevelController.text);
-                                  if (minlevel > maxlevel || minlevel < 1 || maxlevel > 5) {
-                                    displayInfoBar(context, builder: (context, close) {
+                                if (controller.minlevelController.text != "" &&
+                                    controller.maxlevelController.text != "") {
+                                  int minlevel = int.parse(
+                                      controller.minlevelController.text);
+                                  int maxlevel = int.parse(
+                                      controller.maxlevelController.text);
+                                  if (minlevel > maxlevel ||
+                                      minlevel < 1 ||
+                                      maxlevel > 5) {
+                                    displayInfoBar(context,
+                                        builder: (context, close) {
                                       return InfoBar(
                                         title: const Text('오류 : '),
-                                        content: const Text('난이도 설정이 잘못되었습니다. '),
+                                        content:
+                                            const Text('난이도 설정이 잘못되었습니다. '),
                                         action: IconButton(
                                           icon: const Icon(FluentIcons.clear),
                                           onPressed: close,
@@ -226,7 +252,8 @@ class ExamScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Text("가능한 문제 개수 : ${controller.totalCount.value}개"),
+                                Text(
+                                    "가능한 문제 개수 : ${controller.totalCount.value}개"),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -243,7 +270,8 @@ class ExamScreen extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     RadioButton(
                                         content: const Text("랜덤"),
@@ -265,59 +293,96 @@ class ExamScreen extends StatelessWidget {
                                   height: 10,
                                 ),
                                 SizedBox(
-                                    width: MediaQuery.of(context).size.width * 0.2 - 0.5,
+                                    width: MediaQuery.of(context).size.width *
+                                            0.2 -
+                                        0.5,
                                     height: 50,
                                     child: Button(
-                                        child: const Center(child: Text("시험지 설정 완료")),
+                                        child: const Center(
+                                            child: Text("시험지 설정 완료")),
                                         onPressed: () {
                                           //난이도 관련처리
-                                          if (controller.countController.text != "") {
-                                            int targetCount = int.parse(controller.countController.text);
-                                            if (controller.totalCount.value < targetCount) {
-                                              displayInfoBar(context, builder: (context, close) {
+                                          if (controller.countController.text !=
+                                              "") {
+                                            int targetCount = int.parse(
+                                                controller
+                                                    .countController.text);
+                                            if (controller.totalCount.value <
+                                                targetCount) {
+                                              displayInfoBar(context,
+                                                  builder: (context, close) {
                                                 return InfoBar(
                                                   title: const Text('오류 : '),
-                                                  content: const Text('원하는 문제 개수가 가능한 문제보다 많습니다'),
+                                                  content: const Text(
+                                                      '원하는 문제 개수가 가능한 문제보다 많습니다'),
                                                   action: IconButton(
-                                                    icon: const Icon(FluentIcons.clear),
+                                                    icon: const Icon(
+                                                        FluentIcons.clear),
                                                     onPressed: close,
                                                   ),
-                                                  severity: InfoBarSeverity.error,
+                                                  severity:
+                                                      InfoBarSeverity.error,
                                                 );
                                               });
-                                            } else if (!controller.isRandom.value && int.parse(controller.countController.text) != controller.selectedCount.value) {
-                                              displayInfoBar(context, builder: (context, close) {
+                                            } else if (!controller
+                                                    .isRandom.value &&
+                                                int.parse(controller
+                                                        .countController
+                                                        .text) !=
+                                                    controller
+                                                        .selectedCount.value) {
+                                              displayInfoBar(context,
+                                                  builder: (context, close) {
                                                 return InfoBar(
                                                   title: const Text('오류 : '),
-                                                  content: const Text('선택된 개수와 원하는 문제 개수가 다릅니다'),
+                                                  content: const Text(
+                                                      '선택된 개수와 원하는 문제 개수가 다릅니다'),
                                                   action: IconButton(
-                                                    icon: const Icon(FluentIcons.clear),
+                                                    icon: const Icon(
+                                                        FluentIcons.clear),
                                                     onPressed: close,
                                                   ),
-                                                  severity: InfoBarSeverity.error,
+                                                  severity:
+                                                      InfoBarSeverity.error,
                                                 );
                                               });
-                                            } else if (controller.isRandom.value) {
-                                              var copyProblemInfo = controller.uniqueProblemsToList.toList();
+                                            } else if (controller
+                                                .isRandom.value) {
+                                              var copyProblemInfo = controller
+                                                  .uniqueProblemsToList
+                                                  .toList();
                                               final random = Random();
 
-                                              for (int i = 0; i < int.parse(controller.countController.text); i++) {
-                                                int randomIndex = random.nextInt(copyProblemInfo.length);
-                                                controller.problemToMakeExam.add(copyProblemInfo[randomIndex]);
+                                              for (int i = 0;
+                                                  i <
+                                                      int.parse(controller
+                                                          .countController
+                                                          .text);
+                                                  i++) {
+                                                int randomIndex =
+                                                    random.nextInt(
+                                                        copyProblemInfo.length);
+                                                controller.problemToMakeExam
+                                                    .add(copyProblemInfo[
+                                                        randomIndex]);
 
-                                                copyProblemInfo.removeAt(randomIndex); // 중복을 피하기 위해 해당 항목을 원본 리스트에서 제거
+                                                copyProblemInfo.removeAt(
+                                                    randomIndex); // 중복을 피하기 위해 해당 항목을 원본 리스트에서 제거
                                               }
-                                              controller.makeExam();
+                                              controller.makeExam(context);
                                             } else {
-                                              controller.makeExam();
+                                              controller.makeExam(context);
                                             }
                                           } else {
-                                            displayInfoBar(context, builder: (context, close) {
+                                            displayInfoBar(context,
+                                                builder: (context, close) {
                                               return InfoBar(
                                                 title: const Text('오류 : '),
-                                                content: const Text('원하는 문제 개수를 입력해주세요'),
+                                                content: const Text(
+                                                    '원하는 문제 개수를 입력해주세요'),
                                                 action: IconButton(
-                                                  icon: const Icon(FluentIcons.clear),
+                                                  icon: const Icon(
+                                                      FluentIcons.clear),
                                                   onPressed: close,
                                                 ),
                                                 severity: InfoBarSeverity.error,
@@ -333,7 +398,9 @@ class ExamScreen extends StatelessWidget {
               Container(
                 width: 0.5,
                 height: MediaQuery.of(context).size.height,
-                color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                color: Get.find<TotalController>().isDark.value == true
+                    ? Colors.grey[130]
+                    : Colors.grey[50],
               ),
               Expanded(
                   flex: 4,
@@ -345,20 +412,29 @@ class ExamScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     flex: 4,
-                                    child: Container(padding: const EdgeInsets.all(30), child: FilteredProblemList(controller)),
+                                    child: Container(
+                                        padding: const EdgeInsets.all(30),
+                                        child: FilteredProblemList(controller)),
                                   ),
                                   Container(
                                     width: 0.5,
                                     height: MediaQuery.of(context).size.height,
-                                    color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                                    color: Get.find<TotalController>()
+                                                .isDark
+                                                .value ==
+                                            true
+                                        ? Colors.grey[130]
+                                        : Colors.grey[50],
                                   ),
                                   Expanded(
                                       flex: 1,
                                       child: Center(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
-                                            Text("선택된 문제 개수: ${controller.selectedCount.value}개"),
+                                            Text(
+                                                "선택된 문제 개수: ${controller.selectedCount.value}개"),
                                             const SizedBox(
                                               height: 40,
                                             ),
@@ -397,10 +473,12 @@ class ExamScreen extends StatelessWidget {
                       if (value != null) {
                         controller.isProblemSelected[index] = value;
                         if (value) {
-                          controller.problemToMakeExam.add(controller.uniqueProblemsToList[index]);
+                          controller.problemToMakeExam
+                              .add(controller.uniqueProblemsToList[index]);
                           controller.selectedCount.value++;
                         } else {
-                          controller.problemToMakeExam.remove(controller.uniqueProblemsToList[index]);
+                          controller.problemToMakeExam
+                              .remove(controller.uniqueProblemsToList[index]);
                           controller.selectedCount.value--;
                         }
                       }
@@ -411,7 +489,8 @@ class ExamScreen extends StatelessWidget {
               ),
               Button(
                 onPressed: () async {
-                  final url = Uri.parse('https://$HOST/api/data/image/${problemElement["problem_string"].toString().substring(2, problemElement["problem_string"].length - 1)}');
+                  final url = Uri.parse(
+                      'https://$HOST/api/data/image/${problemElement["problem_string"].toString().substring(2, problemElement["problem_string"].length - 1)}');
                   final response = await http.get(
                     url,
                     headers: await defaultHeader(httpContentType.json),

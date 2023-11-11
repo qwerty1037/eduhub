@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/Component/Default/Default_Key_Text.dart';
+import 'package:front_end/Component/Default/Default_TextBox.dart';
 import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
@@ -11,46 +12,50 @@ class TagManagementScreen extends StatelessWidget {
   final tagController = Get.find<TagController>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(60, 20, 60, 20),
-        child: Column(
-          children: [
-            const DefaultKeyText(text: "추가하실 태그를 입력하세요"),
-            DefaultTextField(
-              hintText: "Insert Tags",
-              onEditingComplete: () {
-                if (tagController.tagsInputController.text != " ") {
-                  //TODO: 나중에 엄밀한 문자열 알고리즘 필요
-                  tagController.inputedTagsList.add(
-                    Tag(
-                      id: null,
-                      name: tagController.tagsInputController.text,
-                      problemCount: 0,
-                      ownerId: null,
-                    ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(60, 20, 60, 20),
+      child: Column(
+        children: [
+          const DefaultKeyText(text: "추가하실 태그를 입력하세요"),
+          DefaultTextBox(
+            placeholder: "Insert Tags",
+            onEditingComplete: () {
+              if (tagController.tagsInputController.text != " ") {
+                //TODO: 나중에 엄밀한 문자열 알고리즘 필요
+                tagController.inputedTagsList.add(
+                  Tag(
+                    id: null,
+                    name: tagController.tagsInputController.text,
+                    problemCount: 0,
+                    ownerId: null,
+                  ),
+                );
+                tagController.numberOfTags++;
+                tagController.tagsInputController.text = "";
+              }
+            },
+            controller: tagController.tagsInputController,
+          ),
+          const SizedBox(height: 20),
+          Obx(() {
+            return Align(
+              alignment: Alignment.centerLeft,
+              child: Wrap(
+                spacing: 8,
+                direction: Axis.horizontal,
+                children: tagController.inputedChipsList().map((element) {
+                  return Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    child: element,
                   );
-                  tagController.numberOfTags++;
-                  tagController.tagsInputController.text = "";
-                }
-              },
-              controller: tagController.tagsInputController,
-            ),
-            const SizedBox(height: 20),
-            Obx(() {
-              return Align(
-                alignment: Alignment.centerLeft,
-                child: Wrap(
-                  spacing: 8,
-                  direction: Axis.horizontal,
-                  children: tagController.inputedChipsList(),
-                ),
-              );
-            }),
-            const SizedBox(height: 20),
-            saveButtonField(),
-          ],
-        ),
+                }).toList(),
+              ),
+            );
+          }),
+          const SizedBox(height: 20),
+          saveButtonField(),
+        ],
       ),
     );
   }

@@ -28,6 +28,7 @@ class FolderTreeViewSave extends StatelessWidget {
             return FlyoutTarget(
               controller: flyoutController,
               child: TreeView(
+                narrowSpacing: controller.temp_variable.value,
                 onSecondaryTap: (item, details) {
                   flyoutController.showFlyout(
                     position: details.globalPosition,

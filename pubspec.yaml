@@ -62,7 +62,7 @@ dependencies:
   intl: ^0.18.1
   localstorage: ^4.0.1+4
   url_launcher: ^6.1.14
-
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:

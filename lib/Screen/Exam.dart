@@ -307,9 +307,9 @@ class ExamScreen extends StatelessWidget {
 
                                                 copyProblemInfo.removeAt(randomIndex); // 중복을 피하기 위해 해당 항목을 원본 리스트에서 제거
                                               }
-                                              controller.makeExam();
+                                              controller.makeExam(context);
                                             } else {
-                                              controller.makeExam();
+                                              controller.makeExam(context);
                                             }
                                           } else {
                                             displayInfoBar(context, builder: (context, close) {

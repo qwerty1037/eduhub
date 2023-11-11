@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:front_end/Component/Exam_MenuFlyout.dart';
 import 'package:front_end/Component/FolderTreeView_MenuFlyout.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
@@ -36,7 +37,7 @@ class ExamFolderTreeView extends StatelessWidget {
                   flyoutController.showFlyout(
                     position: details.globalPosition,
                     builder: (context) {
-                      return FolderTreeView_MenuFlyout(
+                      return ExamFolderMenuFlyout(
                         folderController: controller,
                         item: item,
                         details: details,
@@ -49,21 +50,20 @@ class ExamFolderTreeView extends StatelessWidget {
                 },
                 onItemInvoked: (item, reason) async {
                   if (reason == TreeViewItemInvokeReason.pressed) {
-                    controller.selectedDirectoryID.value = item.value["id"];
-                    controller.firstFolders.refresh();
-                    await controller.getPath();
-
+                    controller.selectedExamDirectoryID.value = item.value["id"];
+                    controller.firstExamFolders.refresh();
                     if (Get.find<TabController>().currentTabIndex.value == 0) {
-                      controller.makeProblemListInNewTab(item);
+                      //TODO 시험지 뷰어 띄우기
+                      debugPrint("뷰어 새 탭에 띄워주기");
+                      // controller.makeProblemListInNewTab(item);
                     } else {
-                      final tabController = Get.find<TabController>();
-                      Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
-                      await controller.makeProblemListInCurrentTab(item, tagName!);
+                      //TODO 학생 창에서 시험지 폴더 띄울경우 폴더 클릭시 필요한 작업
+
+                      debugPrint("홈 화면이 아닙니다");
                     }
                   }
                 },
-                items: controller.firstFolders,
+                items: controller.firstExamFolders,
               );
             },
           ),

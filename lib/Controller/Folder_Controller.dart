@@ -17,9 +17,14 @@ import 'package:fluent_ui/fluent_ui.dart';
 class FolderController extends GetxController {
   TotalController totalController = Get.find<TotalController>();
   RxInt selectedDirectoryID = 99999999999.obs;
+  RxInt selectedExamDirectoryID = 99999999999.obs;
   RxString selectedPath = "".obs;
   List<TreeViewItem> totalFolders = [];
   RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
+
+  List<TreeViewItem> totalExamFolders = [];
+  RxList<TreeViewItem> firstExamFolders = <TreeViewItem>[].obs;
+
   RxString nickName = "김선생".obs;
   RxBool temp_variable = false.obs;
 
@@ -37,6 +42,22 @@ class FolderController extends GetxController {
     } else if (isHttpRequestFailure(response)) {
       debugPrint("폴더 리스트 받기 오류 발생");
     }
+
+    final examUrl = Uri.parse('https://$HOST/api/data/user_exam_database');
+    final examResponse = await http.get(
+      examUrl,
+      headers: await defaultHeader(httpContentType.json),
+    );
+
+    if (isHttpRequestSuccess(examResponse)) {
+      final jsonResponse = jsonDecode(examResponse.body);
+      final examDatabaseFolder = jsonResponse['database_folders'];
+
+      makeExamFolderListInfo(examDatabaseFolder);
+    } else if (isHttpRequestFailure(response)) {
+      debugPrint("시험지 폴더 리스트 받기 오류 발생");
+    }
+
     //닉네임 받아오는 함수 백엔드 업데이트 후 TODO
     // final nickNameUrl = Uri.parse('https://$HOST/api/data/nickname');
     // final nickResponse = await http.get(
@@ -49,6 +70,37 @@ class FolderController extends GetxController {
     // } else if (isHttpRequestFailure(response)) {
     //   debugPrint("닉네임 받기 오류 발생");
     // }
+  }
+
+  void makeExamFolderListInfo(List<dynamic> data) {
+    final List<int> stack = [];
+    final List<TreeViewItem> folders = [];
+    List<TreeViewItem> rootFolders = [];
+    for (int i = 0; i < data.length; i++) {
+      final item = data[i];
+      final int id = item['id'];
+      final String name = item['name'];
+      final int? parentId = item['parent_id'];
+
+      while (stack.isNotEmpty && stack.last != parentId) {
+        stack.removeLast();
+      }
+
+      final folder = makeExamFolderItem(name, id, parentId);
+
+      if (stack.isNotEmpty) {
+        TreeViewItem parentFolder = folders.firstWhere((element) {
+          return element.value["id"] == parentId;
+        });
+        parentFolder.children.add(folder);
+      } else {
+        rootFolders.add(folder);
+      }
+      stack.add(id);
+      folders.add(folder);
+    }
+    totalExamFolders.addAll(folders);
+    firstExamFolders.addAll(rootFolders);
   }
 
   ///json 형태로 데이터가 들어올 때 보여줄 폴더들을 만드는 핵심 함수
@@ -156,6 +208,77 @@ class FolderController extends GetxController {
             } else if (isHttpRequestFailure(response)) {
               debugPrint("실패");
             }
+          },
+        ),
+      ),
+    );
+  }
+
+  TreeViewItem makeExamFolderItem(String name, int id, int? parent) {
+    return TreeViewItem(
+      backgroundColor: ButtonState.resolveWith((states) {
+        const res = ResourceDictionary.light();
+        if (selectedExamDirectoryID.value == id) {
+          return Colors.grey[80];
+        } else {
+          if (states.isPressing) return res.subtleFillColorTertiary;
+          if (states.isHovering) return res.subtleFillColorSecondary;
+          if (states.isDisabled) return res.controlAltFillColorDisabled;
+        }
+        return res.controlAltFillColorSecondary;
+      }), //selectedDirectoryID?.value == id ? ButtonState<Color>(Colors.white) : Colors.grey,
+      leading: const Icon(FluentIcons.fabric_folder),
+      expanded: false,
+      children: [],
+      value: {"parent": parent, "id": id, "name": name},
+      content: Draggable(
+        data: {"parent": parent, "id": id, "name": name},
+        feedback: Container(
+          color: Colors.grey.withOpacity(0.3),
+          width: 140,
+          height: 30,
+          child: Center(
+            child: Text(
+              name,
+              style: const TextStyle(color: Colors.black, fontSize: 12),
+            ),
+          ),
+        ),
+        child: DragTarget(
+          builder: (BuildContext context, List<dynamic> candidateData, List<dynamic> rejectedData) {
+            return Text(name);
+          },
+          onWillAccept: (Map<dynamic, dynamic>? data) {
+            if (data!["id"] != id && data["parent"] != id) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+          onAccept: (Map<String, dynamic> data) async {
+            final url = Uri.parse('https://$HOST/api/data/update_exam_database_directory');
+            final Map<String, dynamic> requestBody = {"target_database_id": data["id"], "destination_database_id": parent};
+
+            final response = await http.post(
+              url,
+              headers: await defaultHeader(httpContentType.json),
+              body: jsonEncode(requestBody),
+            );
+            if (isHttpRequestSuccess(response)) {
+              TreeViewItem targetFolder = totalExamFolders.firstWhere((element) => element.value["id"] == data["id"]);
+              TreeViewItem thisFolder = totalExamFolders.firstWhere((element) => element.value["id"] == id);
+              thisFolder.children.add(targetFolder);
+              thisFolder.expanded = true;
+
+              if (data["parent"] != null) {
+                TreeViewItem parentItem = totalExamFolders.firstWhere((element) => element.value["id"] == data["parent"]);
+                parentItem.children.removeWhere((element) => element.value["id"] == data["id"]);
+              } else {
+                firstExamFolders.removeWhere((element) => element.value["id"] == data["id"]);
+              }
+              data["parent"] = id;
+              firstExamFolders.refresh();
+            } else if (isHttpRequestFailure(response)) {}
           },
         ),
       ),

@@ -8,7 +8,7 @@ import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Test/Folder_Example_Data.dart';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluent_ui/fluent_ui.dart';
@@ -20,8 +20,9 @@ class FolderController extends GetxController {
   RxString selectedPath = "".obs;
   List<TreeViewItem> totalFolders = [];
   RxList<TreeViewItem> firstFolders = <TreeViewItem>[].obs;
+  RxString nickName = "김선생".obs;
 
-  ///처음에 유저의 백엔드로부터 폴더 리스트를 받아와 보여줄 리스트를 구성
+  ///처음에 유저의 백엔드로부터 폴더, 닉네임 등 받아와 보여줄 리스트를 구성
   Future<void> receiveData() async {
     final url = Uri.parse('https://$HOST/api/data/user_database');
     final response = await http.get(
@@ -35,6 +36,18 @@ class FolderController extends GetxController {
     } else if (isHttpRequestFailure(response)) {
       debugPrint("폴더 리스트 받기 오류 발생");
     }
+    //닉네임 받아오는 함수 백엔드 업데이트 후 TODO
+    // final nickNameUrl = Uri.parse('https://$HOST/api/data/nickname');
+    // final nickResponse = await http.get(
+    //   nickNameUrl,
+    //   headers: await defaultHeader(httpContentType.json),
+    // );
+    // if (isHttpRequestSuccess(nickResponse)) {
+    //   final jsonResponse = jsonDecode(nickResponse.body);
+    //   nickName.value = jsonResponse['nickName'];
+    // } else if (isHttpRequestFailure(response)) {
+    //   debugPrint("닉네임 받기 오류 발생");
+    // }
   }
 
   ///json 형태로 데이터가 들어올 때 보여줄 폴더들을 만드는 핵심 함수

@@ -44,7 +44,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
     return MenuFlyoutItem(
       text: const Text("폴더 삭제"),
       onPressed: () async {
-        final url = Uri.parse('https://$HOST/api/data/delete_exam_database');
+        final url = Uri.parse('https://$HOST/api/data/delete_database');
         final Map<String, dynamic> requestBody = {"delete_database_id": item.value["id"]};
         final response = await http.post(
           url,
@@ -54,12 +54,12 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
 
         if (isHttpRequestSuccess(response)) {
           if (item.value["parent"] != null) {
-            TreeViewItem deleteTargetParent = folderController.totalExamFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
+            TreeViewItem deleteTargetParent = folderController.totalFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
             deleteTargetParent.children.remove(item);
           } else {
-            folderController.firstExamFolders.removeWhere((element) => item == element);
+            folderController.firstFolders.removeWhere((element) => item == element);
           }
-          folderController.firstExamFolders.refresh();
+          folderController.firstFolders.refresh();
           displayInfoBar(
             context,
             builder: (context, close) {
@@ -125,7 +125,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
         );
 
         if (reNameController.text != "") {
-          final url = Uri.parse('https://$HOST/api/data/update_exam_database_directory');
+          final url = Uri.parse('https://$HOST/api/data/update_database_name');
           final Map<String, dynamic> requestBody = {"database_id": item.value["id"], "new_database_folder_name": reNameController.text};
           final response = await http.post(
             url,
@@ -137,17 +137,17 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
             TreeViewItem newFolder = controller.makeFolderItem(reNameController.text, item.value["id"], item.value["parent"]);
             newFolder.children.addAll(item.children.toList());
 
-            controller.totalExamFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
+            controller.totalFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
 
-            controller.totalExamFolders.add(newFolder);
+            controller.totalFolders.add(newFolder);
             if (item.value["parent"] != null) {
-              TreeViewItem parentFolder = controller.totalExamFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
+              TreeViewItem parentFolder = controller.totalFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
 
               parentFolder.children.remove(item);
               parentFolder.children.add(newFolder);
             }
 
-            folderController.firstExamFolders.refresh();
+            folderController.firstFolders.refresh();
           }
         }
       },
@@ -182,7 +182,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
                 FilledButton(
                   child: const Text('확인'),
                   onPressed: () async {
-                    final url = Uri.parse('https://$HOST/api/data/create_exam_database');
+                    final url = Uri.parse('https://$HOST/api/data/create_database');
                     final Map<String, dynamic> requestBody = {"name": newNameController.text, "parent_id": item.value["id"]};
 
                     final response = await http.post(
@@ -197,11 +197,11 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
                       final int newFolderId = jsonResponse['inserted_database'][0]["id"];
                       final int parentId = jsonResponse['inserted_database'][0]["parent_id"];
                       TreeViewItem newFolder = controller.makeFolderItem(newNameController.text, newFolderId, parentId);
-                      controller.totalExamFolders.add(newFolder);
-                      TreeViewItem parentFolder = controller.totalExamFolders.firstWhere((element) => element.value["id"] == parentId);
+                      controller.totalFolders.add(newFolder);
+                      TreeViewItem parentFolder = controller.totalFolders.firstWhere((element) => element.value["id"] == parentId);
                       parentFolder.children.add(newFolder);
 
-                      folderController.firstExamFolders.refresh();
+                      folderController.firstFolders.refresh();
                       newNameController.text = "";
                       displayInfoBar(
                         context,

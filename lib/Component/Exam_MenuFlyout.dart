@@ -44,7 +44,7 @@ class ExamFolderMenuFlyout extends StatelessWidget {
     return MenuFlyoutItem(
       text: const Text("폴더 삭제"),
       onPressed: () async {
-        final url = Uri.parse('https://$HOST/api/data/delete_ExamDatabase');
+        final url = Uri.parse('https://$HOST/api/data/delete_exam_Database');
         final Map<String, dynamic> requestBody = {"delete_database_id": item.value["id"]};
         final response = await http.post(
           url,

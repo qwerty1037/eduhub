@@ -95,19 +95,21 @@ class GroupMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(16),
-          color: Get.find<TotalController>().isDark.value == true
-              ? Colors.grey[130]
-              : Colors.grey[50],
-        ),
-        child: Center(
-          child: Text(
-            menuText,
-            style: const TextStyle(fontSize: 32),
+      child: Obx(
+        () => Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(16),
+            color: Get.find<TotalController>().isDark.value == true
+                ? Colors.grey[130]
+                : Colors.grey[50],
+          ),
+          child: Center(
+            child: Text(
+              menuText,
+              style: const TextStyle(fontSize: 32),
+            ),
           ),
         ),
       ),

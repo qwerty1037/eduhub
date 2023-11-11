@@ -20,10 +20,12 @@ class FolderTreeViewExplore extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text("ㅇㅇ님의 워크스페이스"),
-        ),
+        GetX<FolderController>(builder: (controller) {
+          return Align(
+            alignment: Alignment.center,
+            child: Text("${controller.nickName.value}의 문제 폴더"),
+          );
+        }),
         FlyoutTarget(
           controller: flyoutController,
           child: GetX<FolderController>(
@@ -55,12 +57,9 @@ class FolderTreeViewExplore extends StatelessWidget {
                       controller.makeProblemListInNewTab(item);
                     } else {
                       final tabController = Get.find<TabController>();
-                      Tab currentTab = tabController
-                          .tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, item.value["name"],
-                          const Icon(FluentIcons.fabric_folder));
-                      await controller.makeProblemListInCurrentTab(
-                          item, tagName!);
+                      Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+                      tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
+                      await controller.makeProblemListInCurrentTab(item, tagName!);
                     }
                   }
                 },

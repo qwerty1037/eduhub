@@ -211,7 +211,51 @@ class ExamController extends GetxController {
     }
   }
 
-  void makeExam() {
+  void makeExam(BuildContext context) {
+    final examNameController = TextEditingController();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return ContentDialog(
+            title: const Center(child: Text("시험지 만들기")),
+            content: Column(children: [
+              const Text("시험지 이름"),
+              const SizedBox(
+                height: 15,
+              ),
+              TextBox(
+                controller: examNameController,
+                placeholder: "시험지 이름을 입력해주세요",
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text("저장 위치"),
+              const SizedBox(
+                height: 15,
+              ),
+              Container(
+                child: Container(
+
+                    //TODO 시험지 폴더 들어갈 자리, 시험지 폴더 클릭시 저장 위치 변경
+                    ),
+              )
+            ]),
+            actions: [
+              Button(
+                child: const Text('취소'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FilledButton(
+                  child: const Text('만들기'),
+                  onPressed: () async {
+                    //TODO 최종 시험지 만들기 endpoint 연결
+                  }),
+            ],
+          );
+        });
     //TODO 시험지 이름, 저장 위치 설정 후 서버에 보내기
     //현재 problemtomakeExam 에 문제 데이터들 있고 서버에 보내는건 바로 위 함수 http랑 비슷한 방식으로 하면 될듯.
   }

@@ -19,10 +19,12 @@ class FolderTreeViewSave extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text("  ㅇㅇ님의 워크스페이스"),
-        ),
+        GetX<FolderController>(builder: (controller) {
+          return Align(
+            alignment: Alignment.center,
+            child: Text("${controller.nickName.value}의 문제 폴더"),
+          );
+        }),
         GetX<FolderController>(
           builder: (controller) {
             return FlyoutTarget(

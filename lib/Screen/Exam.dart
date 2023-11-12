@@ -3,12 +3,14 @@ import 'dart:math';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/Controller/ExamController.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Total_Controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/FolderData.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ExamScreen extends StatelessWidget {
   ExamScreen({super.key});
@@ -297,6 +299,18 @@ class ExamScreen extends StatelessWidget {
                                                   severity: InfoBarSeverity.error,
                                                 );
                                               });
+                                            } else if (Get.find<HomeScreenController>().isExamFolderEmpty) {
+                                              displayInfoBar(context, builder: (context, close) {
+                                                return InfoBar(
+                                                  title: const Text('시험지 폴더가 없습니다 : '),
+                                                  content: const Text('홈페이지에서 시험지 폴더를 먼저 만들어주세요'),
+                                                  action: IconButton(
+                                                    icon: const Icon(FluentIcons.clear),
+                                                    onPressed: close,
+                                                  ),
+                                                  severity: InfoBarSeverity.error,
+                                                );
+                                              });
                                             } else if (controller.isRandom.value) {
                                               var copyProblemInfo = controller.uniqueProblemsToList.toList();
                                               final random = Random();
@@ -344,8 +358,8 @@ class ExamScreen extends StatelessWidget {
                             : Row(
                                 children: [
                                   Expanded(
-                                    flex: 4,
-                                    child: Container(padding: const EdgeInsets.all(30), child: FilteredProblemList(controller)),
+                                    flex: 2,
+                                    child: Container(padding: const EdgeInsets.all(30), child: Center(child: FilteredProblemList(controller))),
                                   ),
                                   Container(
                                     width: 0.5,
@@ -353,16 +367,19 @@ class ExamScreen extends StatelessWidget {
                                     color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
                                   ),
                                   Expanded(
-                                      flex: 1,
-                                      child: Center(
+                                      flex: 3,
+                                      child: Container(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
                                             Text("선택된 문제 개수: ${controller.selectedCount.value}개"),
                                             const SizedBox(
-                                              height: 40,
+                                              height: 20,
                                             ),
-                                            controller.problemImageViewer.value
+                                            Expanded(child: Container(child: controller.problemImageViewer.value))
                                           ],
                                         ),
                                       ))
@@ -377,21 +394,19 @@ class ExamScreen extends StatelessWidget {
     );
   }
 
-  GridView FilteredProblemList(ExamController controller) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 7.0,
-      ),
+  ListView FilteredProblemList(ExamController controller) {
+    return ListView.builder(
       itemCount: controller.uniqueProblems.length,
       itemBuilder: (context, index) {
         var problemElement = controller.uniqueProblemsDetail[index];
-        return FittedBox(
-          fit: BoxFit.fill,
-          child: Row(
-            children: [
-              Obx(() {
-                return Checkbox(
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Obx(() {
+                  return Checkbox(
                     checked: controller.isProblemSelected[index],
                     onChanged: (value) {
                       if (value != null) {
@@ -404,32 +419,32 @@ class ExamScreen extends StatelessWidget {
                           controller.selectedCount.value--;
                         }
                       }
-                    });
-              }),
-              const SizedBox(
-                width: 10,
-              ),
-              Button(
-                onPressed: () async {
-                  final url = Uri.parse('https://$HOST/api/data/image/${problemElement["problem_string"].toString().substring(2, problemElement["problem_string"].length - 1)}');
-                  final response = await http.get(
-                    url,
-                    headers: await defaultHeader(httpContentType.json),
+                    },
                   );
-                  if (response.statusCode ~/ 100 == 2) {
-                    controller.problemImageViewer.value = Container(
-                      child: Image.memory(
-                        response.bodyBytes,
-                        fit: BoxFit.contain,
-                      ),
+                }),
+                const SizedBox(
+                  width: 10,
+                ),
+                Button(
+                  onPressed: () async {
+                    final url = Uri.parse('https://$HOST/api/data/problem-pdf/${problemElement["problem_string"].toString().substring(2, problemElement["problem_string"].length - 1)}');
+                    final response = await http.get(
+                      url,
+                      headers: await defaultHeader(httpContentType.json),
                     );
-                  } else {
-                    debugPrint(response.statusCode.toString());
-                    debugPrint("문제 이미지 불러오기 오류 발생");
-                  }
-                },
-                child: SizedBox(
-                  child: Center(
+                    if (response.statusCode ~/ 100 == 2) {
+                      controller.problemImageViewer.value = Container(
+                        child: SfPdfViewer.memory(
+                          response.bodyBytes,
+                        ),
+                      );
+                    } else {
+                      debugPrint(response.statusCode.toString());
+                      debugPrint("문제 이미지 불러오기 오류 발생");
+                    }
+                  },
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.15,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -438,14 +453,15 @@ class ExamScreen extends StatelessWidget {
                         ),
                         Text(
                           "난이도 : ${problemElement["level"]}",
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(height: 10), // 타일 사이의 간격을 조절할 수 있는 높이 추가
+          ],
         );
       },
     );

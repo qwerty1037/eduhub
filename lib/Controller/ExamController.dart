@@ -40,14 +40,6 @@ class ExamController extends GetxController {
   HomeScreenController homeScreenController = Get.find<HomeScreenController>();
 
   Rx<Widget> problemImageViewer = Container(
-    decoration: const BoxDecoration(
-      border: Border(
-        left: BorderSide(
-          color: Colors.black,
-          width: 0.5,
-        ),
-      ),
-    ),
     child: const Center(child: Text("선택된 문제가 없습니다")),
   ).obs;
 
@@ -211,7 +203,6 @@ class ExamController extends GetxController {
       final problemList = jsonResponse['problem_detail'];
       uniqueProblemsDetail.value = problemList;
       uniqueProblemsDetail.refresh();
-      debugPrint(problemList.toString());
     } else {
       debugPrint(response.statusCode.toString());
       debugPrint("현재 페이지 문제 받아오기 오류 발생");
@@ -253,6 +244,7 @@ class ExamController extends GetxController {
               Button(
                 child: const Text('취소'),
                 onPressed: () {
+                  problemToMakeExam.clear();
                   Navigator.pop(context);
                 },
               ),
@@ -261,6 +253,43 @@ class ExamController extends GetxController {
                   onPressed: () async {
                     //TODO 최종 시험지 만들기 endpoint 연결
                     //현재 problemtomakeExam 에 문제 데이터들 있고 서버에 보내는건 바로 위 함수 http랑 비슷한 방식으로 하면 될듯.
+                    if (selectedFolder != null && examNameController.text.isNotEmpty) {
+                      final url = Uri.parse('https://$HOST/api/data/create_exam');
+                      final Map<String, dynamic> requestBody = {
+                        "problem_list": problemToMakeExam,
+                        "name": examNameController.text,
+                        "parent_database": selectedFolder,
+                        "level": 3,
+                      };
+
+                      debugPrint(requestBody.toString());
+                      final response = await http.post(
+                        url,
+                        headers: await defaultHeader(httpContentType.json),
+                        body: jsonEncode(requestBody),
+                      );
+                      if (isHttpRequestSuccess(response)) {
+                        final jsonResponse = jsonDecode(response.body);
+
+                        debugPrint(jsonResponse.toString());
+                        problemToMakeExam.clear();
+                        Navigator.pop(context);
+                        displayInfoBar(context, builder: (context, close) {
+                          return InfoBar(
+                            title: const Text('성공 : '),
+                            content: const Text('시험지 생성이 완료되었습니다.'),
+                            action: IconButton(
+                              icon: const Icon(FluentIcons.clear),
+                              onPressed: close,
+                            ),
+                            severity: InfoBarSeverity.success,
+                          );
+                        });
+                      } else {
+                        debugPrint(response.statusCode.toString());
+                        debugPrint("현재 페이지 문제 받아오기 오류 발생");
+                      }
+                    }
                   }),
             ],
           );

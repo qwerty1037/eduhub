@@ -4,6 +4,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 ///폴더 삭제, 새폴더 만들기, 폴더 이름 바꾸기의 기능을 지원하는 위젯이다. FlyoutTarget내부의 하위 컴포넌트로 사용되어야 한다.
@@ -60,6 +62,9 @@ class ExamFolderMenuFlyout extends StatelessWidget {
             folderController.firstExamFolders.removeWhere((element) => item == element);
           }
           folderController.firstExamFolders.refresh();
+          if (folderController.firstExamFolders.isEmpty) {
+            Get.find<HomeScreenController>().isExamFolderEmpty = true;
+          }
           displayInfoBar(
             context,
             builder: (context, close) {

@@ -29,6 +29,9 @@ class ProblemListController extends GetxController {
   int lastButton = 1;
   List<Widget> pageButton = <Widget>[];
 
+  RxBool detail = false.obs;
+  RxList<int> bytes = <int>[].obs;
+
   ProblemListController(List<dynamic> data) {
     problemList = data.toList();
     startIndex = currentPage * itemsPerPage;

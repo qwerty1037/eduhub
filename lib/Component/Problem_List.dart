@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as flutter_material;
 import 'package:front_end/Component/Default/Config.dart';
@@ -33,58 +35,101 @@ class ProblemList extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
                       children: [
-                        Text(
-                          folderName,
-                          style: const TextStyle(fontSize: 30),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            folderName,
+                            style: const TextStyle(fontSize: 30),
+                          ),
                         ),
-                        const SizedBox(
-                          width: 200,
-                        ),
-                        GetX<ProblemListController>(
-                            tag: tag,
-                            builder: (controller) {
-                              return ToggleSwitch(
-                                checked: controller.isAllProblems.value,
-                                onChanged: (info) async {
-                                  await controller.resetVariable(targetFolder, problems);
-                                  controller.isAllProblems.value = info;
+                        Row(
+                          children: [
+                            GetX<ProblemListController>(
+                              tag: tag,
+                              builder: (controller) {
+                                return ToggleSwitch(
+                                  checked: controller.isAllProblems.value,
+                                  onChanged: (info) async {
+                                    await controller.resetVariable(targetFolder, problems);
+                                    controller.isAllProblems.value = info;
+                                  },
+                                  content: const Text('하위 폴더 포함'),
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              width: 50,
+                            ),
+                            Obx(
+                              () => Button(
+                                onPressed: () {
+                                  problemListController.detail.value ? problemListController.detail.value = false : problemListController.detail.value = true;
                                 },
-                                content: const Text('하위 폴더 포함'),
-                              );
-                            })
+                                child: Text(problemListController.detail.value ? "간략히 보기" : "자세히 보기"),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Button(
+                              onPressed: () {
+                                //TODO : Redirect to DBEditScreen
+                              },
+                              child: Text("수정하기"),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ),
                 Expanded(
                   flex: 9,
-                  child: GetX<ProblemListController>(
-                      tag: tag,
-                      builder: (controller) {
-                        return Row(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                padding: const EdgeInsets.all(30),
+                  child: Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: GetX<ProblemListController>(
+                        tag: tag,
+                        builder: (controller) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                flex: controller.detail.value ? 3 : 6,
+                                child: Container(
+                                  padding: const EdgeInsets.all(0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: twoColumnProblemList(controller),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: controller.pageButton,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: controller.detail.value ? 5 : 2,
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Expanded(
-                                      child: twoColumnProblemList(controller),
+                                    Expanded(child: SfPdfViewer.memory(Uint8List.fromList(controller.bytes))),
+                                    /*
+                                    Button(
+                                      onPressed: () {
+                                        controller.detail.value ? controller.detail.value = false : controller.detail.value = true;
+                                      },
+                                      child: Text(controller.detail.value ? "간략히 보기" : "자세히 보기"),
                                     ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: controller.pageButton,
-                                    )
+                                    */
                                   ],
                                 ),
                               ),
-                            ),
-                            Expanded(flex: 1, child: controller.problemImageViewer.value)
-                          ],
-                        );
-                      }),
+                            ],
+                          );
+                        }),
+                  ),
                 ),
               ],
             );
@@ -94,41 +139,44 @@ class ProblemList extends StatelessWidget {
         });
   }
 
-  GridView twoColumnProblemList(ProblemListController controller) {
-    return GridView.count(
-        crossAxisCount: 2,
-        childAspectRatio: 7,
-        children: controller.currentPageProblems.map((element) {
-          return Button(
-            onPressed: () async {
-              // final url = Uri.parse('https://mlpwpbr.request.dreamhack.games?reqparam=${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
-              final url = Uri.parse('https://$HOST/api/data/problem-pdf/${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
+  Widget twoColumnProblemList(ProblemListController controller) {
+    return Obx(
+      () => GridView.count(
+          crossAxisCount: controller.detail.value ? 1 : 2,
+          childAspectRatio: 7,
+          children: controller.currentPageProblems.map((element) {
+            return Button(
+              onPressed: () async {
+                // final url = Uri.parse('https://mlpwpbr.request.dreamhack.games?reqparam=${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
+                final url =
+                    Uri.parse('https://$HOST/api/data/problem-pdf/${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
 
-              final response = await http.get(
-                url,
-                headers: await defaultHeader(httpContentType.json),
-              );
-              if (response.statusCode ~/ 100 == 2) {
-                controller.problemImageViewer.value = Container(
-                  child: SfPdfViewer.memory(
-                    response.bodyBytes,
-                  ),
+                final response = await http.get(
+                  url,
+                  headers: await defaultHeader(httpContentType.json),
                 );
-              } else {
-                debugPrint(response.statusCode.toString());
-                debugPrint("문제 이미지 불러오기 오류 발생");
-              }
-            },
-            child: SizedBox(
-              height: 100,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text(element["name"]), Text("난이도 : ${element["level"]}")],
+                if (response.statusCode ~/ 100 == 2) {
+                  debugPrint(response.statusCode.toString());
+                  controller.bytes.value = response.bodyBytes;
+                  controller.bytes.refresh();
+                  debugPrint("${response.bodyBytes}");
+                  // debugPrint("${controller.bytes}");
+                } else {
+                  debugPrint(response.statusCode.toString());
+                  debugPrint("문제 이미지 불러오기 오류 발생");
+                }
+              },
+              child: SizedBox(
+                height: 100,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [Text(element["name"]), Text("난이도 : ${element["level"]}")],
+                  ),
                 ),
               ),
-            ),
-          );
-        }).toList());
+            );
+          }).toList()),
+    );
   }
 }

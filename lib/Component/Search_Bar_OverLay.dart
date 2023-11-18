@@ -66,26 +66,49 @@ void createHighlightOverlay({
                   onEditingComplete: () {
                     //홈화면에서 눌렀을때
                     if (tabController.currentTabIndex.value == 0) {
+                      // overlayEntry?.remove();
+                      // tabController.isNewTab = true;
+
+                      // DefaultTabBody tabBody = DefaultTabBody(
+                      //   dashBoardType: DashBoardType.search,
+                      //   workingSpace: SearchScreen(),
+                      // );
+                      // Tab newTab = tabController.addTab(tabBody, "검색", const Icon(FluentIcons.search));
+                      // tabController.tabs.add(newTab);
+                      // tabController.currentTabIndex.value = tabController.tabs.length - 1;
+                      // tabController.isNewTab = false;
+                      controller.searchBarController.text = "";
                       overlayEntry?.remove();
-                      tabController.isNewTab = true;
-
-                      DefaultTabBody tabBody = DefaultTabBody(
-                        dashBoardType: DashBoardType.search,
-                        workingSpace: SearchScreen(),
-                      );
-                      Tab newTab = tabController.addTab(tabBody, "검색", const Icon(FluentIcons.search));
-                      tabController.tabs.add(newTab);
-                      tabController.currentTabIndex.value = tabController.tabs.length - 1;
-                      //controller.searchBarController.text = "";
-
-                      tabController.isNewTab = false;
+                      displayInfoBar(context, builder: (context, close) {
+                        return InfoBar(
+                          title: const Text("검색기능:"),
+                          content: const Text("준비중인 서비스 입니다"),
+                          action: IconButton(
+                            icon: const Icon(FluentIcons.clear),
+                            onPressed: close,
+                          ),
+                          severity: InfoBarSeverity.warning,
+                        );
+                      });
                     } else {
-                      //controller.searchBarController.text = "";
+                      // overlayEntry?.remove();
+                      // Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).deleteWorkingSpaceController();
+                      // Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).changeWorkingSpace(SearchScreen());
+                      // Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+                      // tabController.renameTab(currentTab, "검색", const Icon(FluentIcons.search));
+                      controller.searchBarController.text = "";
                       overlayEntry?.remove();
-                      Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).deleteWorkingSpaceController();
-                      Get.find<DefaultTabBodyController>(tag: tabController.getTabKey()).changeWorkingSpace(SearchScreen());
-                      Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-                      tabController.renameTab(currentTab, "검색", const Icon(FluentIcons.search));
+                      displayInfoBar(context, builder: (context, close) {
+                        return InfoBar(
+                          title: const Text("검색기능:"),
+                          content: const Text("준비중인 서비스 입니다"),
+                          action: IconButton(
+                            icon: const Icon(FluentIcons.clear),
+                            onPressed: close,
+                          ),
+                          severity: InfoBarSeverity.warning,
+                        );
+                      });
                     }
                   },
                 ),

@@ -331,11 +331,11 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
         ),
         const SizedBox(height: 10),
         GetBuilder<HomeScreenController>(builder: (controller) {
-          return homeScreenController.isFolderEmpty ? newFolderButton(context, folderController, homeScreenController) : FolderTreeViewExplore();
+          return FolderTreeViewExplore();
         }),
         const SizedBox(height: 20),
         GetBuilder<HomeScreenController>(builder: (controller) {
-          return homeScreenController.isExamFolderEmpty ? newExamFolderButton(context, folderController, homeScreenController) : ExamFolderTreeView();
+          return ExamFolderTreeView();
         })
       ],
     ),

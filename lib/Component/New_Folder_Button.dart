@@ -5,9 +5,12 @@ import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-Button newFolderButton(BuildContext context, FolderController folderController, HomeScreenController controller) {
+Button newFolderButton(BuildContext context) {
+  final folderController = Get.find<FolderController>();
+  final homeScreenController = Get.find<HomeScreenController>();
   return Button(
       child: const Text("새 문제 폴더 만들기"),
       onPressed: () async {
@@ -52,7 +55,7 @@ Button newFolderButton(BuildContext context, FolderController folderController, 
                         folderController.totalFolders.add(newFolder);
                         folderController.firstFolders.add(newFolder);
                         folderController.update();
-                        controller.isFolderEmpty = false;
+                        homeScreenController.isFolderEmpty = false;
                         textcontroller.text = "";
                         displayInfoBar(
                           context,
@@ -91,7 +94,9 @@ Button newFolderButton(BuildContext context, FolderController folderController, 
       });
 }
 
-Button newExamFolderButton(BuildContext context, FolderController folderController, HomeScreenController controller) {
+Button newExamFolderButton(BuildContext context) {
+  final folderController = Get.find<FolderController>();
+  final homeScreenController = Get.find<HomeScreenController>();
   return Button(
       child: const Text("새 시험지 폴더 만들기"),
       onPressed: () async {
@@ -136,7 +141,7 @@ Button newExamFolderButton(BuildContext context, FolderController folderControll
                         folderController.totalExamFolders.add(newFolder);
                         folderController.firstExamFolders.add(newFolder);
                         folderController.update();
-                        controller.isExamFolderEmpty = false;
+                        homeScreenController.isExamFolderEmpty = false;
                         textcontroller.text = "";
                         displayInfoBar(
                           context,

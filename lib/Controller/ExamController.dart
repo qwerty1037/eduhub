@@ -234,11 +234,9 @@ class ExamController extends GetxController {
                 height: 15,
               ),
               Container(
-                  child: homeScreenController.isExamFolderEmpty
-                      ? newExamFolderButton(context, Get.find<FolderController>(), homeScreenController)
-                      : ExamFolderTreeView(
-                          tagName: tagName,
-                        ))
+                  child: ExamFolderTreeView(
+                tagName: tagName,
+              ))
             ]),
             actions: [
               Button(

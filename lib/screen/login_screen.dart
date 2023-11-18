@@ -316,7 +316,6 @@ class RegisterInfoButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        //TODO : 웹 배포 이후 URL수정
         final Uri url = Uri.parse('https://bateacher.com');
         if (!await launchUrl(
           url,

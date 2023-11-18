@@ -13,12 +13,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 ///폴더에 속하는 문제 리스트를 보여주며 직속문제/아래모든문제를 볼 수 있다. 클릭시 오른쪽에 이미지가 뜨며 버튼 부분은 수정이 필요하다
 class ExamList extends StatelessWidget {
-  ExamList(
-      {super.key,
-      required this.targetFolder,
-      required this.folderName,
-      required this.problems,
-      required this.problemListController});
+  ExamList({super.key, required this.targetFolder, required this.folderName, required this.problems, required this.problemListController});
   String folderName;
   TreeViewItem targetFolder;
   List<dynamic> problems;
@@ -31,8 +26,7 @@ class ExamList extends StatelessWidget {
     return FutureBuilder(
         future: Future.delayed(Duration.zero),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.none &&
-              snapshot.connectionState != ConnectionState.waiting) {
+          if (snapshot.connectionState != ConnectionState.none && snapshot.connectionState != ConnectionState.waiting) {
             return Column(
               children: [
                 Expanded(
@@ -54,8 +48,7 @@ class ExamList extends StatelessWidget {
                               return ToggleSwitch(
                                 checked: controller.isAllProblems.value,
                                 onChanged: (info) async {
-                                  await controller.resetVariable(
-                                      targetFolder, problems);
+                                  await controller.resetVariable(targetFolder, problems);
                                   controller.isAllProblems.value = info;
                                 },
                                 content: const Text('하위 폴더 포함'),
@@ -77,24 +70,20 @@ class ExamList extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(30),
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: twoColumnExamList(controller),
                                     ),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: controller.pageButton,
                                     )
                                   ],
                                 ),
                               ),
                             ),
-                            Expanded(
-                                flex: 1,
-                                child: controller.problemImageViewer.value)
+                            Expanded(flex: 1, child: controller.problemImageViewer.value)
                           ],
                         );
                       }),
@@ -136,20 +125,16 @@ class ExamList extends StatelessWidget {
                 debugPrint("시험지 불러오기 오류 발생");
               }
               */
-              DefaultTabBodyController workingSpaceController =
-                  Get.find<DefaultTabBodyController>(tag: tag);
-              workingSpaceController
-                  .changeWorkingSpace(ExamViewer(examPdfFile: "examPdfFile"));
+              DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tag);
+              workingSpaceController.saveThisWorkingSpace();
+              workingSpaceController.changeWorkingSpace(ExamViewer(examPdfFile: "examPdfFile"));
             },
             child: SizedBox(
               height: 100,
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(element["name"]),
-                    Text("난이도 : ${element["level"]}")
-                  ],
+                  children: [Text(element["name"]), Text("난이도 : ${element["level"]}")],
                 ),
               ),
             ),

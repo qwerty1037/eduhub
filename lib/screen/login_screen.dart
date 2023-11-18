@@ -237,48 +237,48 @@ class LoginScreen extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(
-                offset: Offset(0, 2),
-                blurRadius: 5,
-                color: Color.fromARGB(255, 46, 46, 46),
-              )
-            ],
-            color: Colors.black87,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 46, 46, 46),
-                maxRadius: 15,
-                child: Icon(
-                  Icons.play_arrow,
-                  color: Colors.white,
-                  size: 15.0,
-                ),
-              ),
-              const SizedBox(
-                width: 8.0,
-              ),
-              Text(
-                "유튜브 보기",
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(
-                width: 8.0,
-              ),
-            ],
-          ),
-        )
+        // Container(
+        //   padding: const EdgeInsets.all(4),
+        //   decoration: BoxDecoration(
+        //     boxShadow: const [
+        //       BoxShadow(
+        //         offset: Offset(0, 2),
+        //         blurRadius: 5,
+        //         color: Color.fromARGB(255, 46, 46, 46),
+        //       )
+        //     ],
+        //     color: Colors.black87,
+        //     borderRadius: BorderRadius.circular(30),
+        //   ),
+        //   child: Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       const CircleAvatar(
+        //         backgroundColor: Color.fromARGB(255, 46, 46, 46),
+        //         maxRadius: 15,
+        //         child: Icon(
+        //           Icons.play_arrow,
+        //           color: Colors.white,
+        //           size: 15.0,
+        //         ),
+        //       ),
+        //       const SizedBox(
+        //         width: 8.0,
+        //       ),
+        //       Text(
+        //         "유튜브 보기",
+        //         style: GoogleFonts.poppins(
+        //           color: Colors.white,
+        //           fontSize: 12.0,
+        //           fontWeight: FontWeight.w600,
+        //         ),
+        //       ),
+        //       const SizedBox(
+        //         width: 8.0,
+        //       ),
+        //     ],
+        //   ),
+        // )
       ],
     );
   }
@@ -317,7 +317,7 @@ class RegisterInfoButton extends StatelessWidget {
     return TextButton(
       onPressed: () async {
         //TODO : 웹 배포 이후 URL수정
-        final Uri url = Uri.parse('https://www.bateacher.com');
+        final Uri url = Uri.parse('https://bateacher.com');
         if (!await launchUrl(
           url,
           mode: LaunchMode.externalApplication,

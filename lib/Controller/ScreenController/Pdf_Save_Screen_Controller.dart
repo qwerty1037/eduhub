@@ -18,6 +18,8 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 class PdfSaveController extends GetxController {
   late Uint8List capturedImageProblem;
   late Uint8List capturedImageAnswer;
+  var capturedImageProblemPdf;
+  var capturedImageAnswerPdf;
   RxList<TagModel> tagsList = <TagModel>[].obs;
   RxBool isImagePreviewButtonTapped = false.obs;
   RxDouble difficultySliderValue = 0.0.obs;
@@ -28,8 +30,7 @@ class PdfSaveController extends GetxController {
   PdfSaveController() {
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
-      tagsList.add(TagModel(tagController.totalTagList[i].name,
-          tagController.totalTagList[i].id!, false));
+      tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
     }
   }
 
@@ -43,8 +44,7 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].ID);
       }
     }
-    String capturedFileNameProblem =
-        '${problemNameController.text}_problem.pdf';
+    String capturedFileNameProblem = '${problemNameController.text}_problem.pdf';
     String capturedFileNameAnswer = '${problemNameController.text}_answer.pdf';
 
     //Create a new PDF document.
@@ -52,42 +52,39 @@ class PdfSaveController extends GetxController {
     //Load the image using PdfBitmap.
     final PdfBitmap image = PdfBitmap(capturedImageProblem);
     //Draw the image to the PDF page.
-    document.pages
-        .add()
-        .graphics
-        .drawImage(image, const Rect.fromLTWH(0, 0, 500, 200));
-    // Save the document.
-    capturedImageProblem = Uint8List.fromList(await document.save());
-
-    // Dispose the document.
-    document.dispose();
+    document.pages.add().graphics.drawImage(image, const Rect.fromLTWH(0, 0, 500, 200));
 
     //Create a new PDF document.
     final PdfDocument document2 = PdfDocument();
     //Load the image using PdfBitmap.
     final PdfBitmap image2 = PdfBitmap(capturedImageAnswer);
     //Draw the image to the PDF page.
-    document2.pages
-        .add()
-        .graphics
-        .drawImage(image2, const Rect.fromLTWH(0, 0, 500, 200));
-    // Save the document.
-    capturedImageAnswer = Uint8List.fromList(await document2.save());
+    document2.pages.add().graphics.drawImage(image2, const Rect.fromLTWH(0, 0, 500, 200));
 
+    // Save the document.
+    capturedImageProblemPdf = await document.save() as List<int>;
+    capturedImageAnswerPdf = await document2.save() as List<int>;
+
+    // capturedImageProblem = Uint8List.fromList(await document.save());
+    // capturedImageAnswer = Uint8List.fromList(await document2.save());
+
+    debugPrint("${await document.save()}");
     // Dispose the document.
+    document.dispose();
     document2.dispose();
-    // final url = Uri.parse('https://tjmekdg.request.dreamhack.games');
+
+    // final url = Uri.parse('https://uwkedrf.request.dreamhack.games');
     final url = Uri.parse('https://$HOST/api/data/create_problem');
     var request = http.MultipartRequest('POST', url);
     var multipartFileProblem = http.MultipartFile.fromBytes(
       'problem_image',
-      capturedImageProblem,
+      capturedImageProblemPdf,
       filename: capturedFileNameProblem,
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
     var multipartFileAnswer = http.MultipartFile.fromBytes(
       'problem_image',
-      capturedImageAnswer,
+      capturedImageAnswerPdf,
       filename: capturedFileNameAnswer,
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
@@ -112,9 +109,7 @@ class PdfSaveController extends GetxController {
     request.fields.addAll(temp);
 
     request.headers.addAll(await defaultHeader(httpContentType.multipart));
-    debugPrint(request.toString());
     final response = await request.send();
-    debugPrint("${response.request}");
     debugPrint("${response.statusCode}");
     return response.statusCode;
   }

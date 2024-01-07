@@ -13,76 +13,37 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 ///폴더에 속하는 문제 리스트를 보여주며 직속문제/아래모든문제를 볼 수 있다. 클릭시 오른쪽에 이미지가 뜨며 버튼 부분은 수정이 필요하다
 class ProblemList extends StatelessWidget {
-  ProblemList({super.key, required this.targetFolder, required this.folderName, required this.problems, required this.problemListController});
+  ProblemList(
+      {super.key,
+      required this.targetFolder,
+      required this.folderName,
+      required this.problems,
+      required this.problemListController});
   String folderName;
   TreeViewItem targetFolder;
   List<dynamic> problems;
 
   final tag = Get.find<TabController>().getTabKey();
   ProblemListController problemListController;
+  final List<int> pdfHeader = [37, 80, 68, 70]; // PDF 파일 헤더
+  final List<int> jpegHeader = [255, 216]; // JPEG 파일 헤더
+  final List<int> pngHeader = [137, 80, 78, 71, 13, 10, 26, 10]; // PNG 파일 헤더
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: Future.delayed(Duration.zero),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.none && snapshot.connectionState != ConnectionState.waiting) {
+          if (snapshot.connectionState != ConnectionState.none &&
+              snapshot.connectionState != ConnectionState.waiting) {
             return Column(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            folderName,
-                            style: const TextStyle(fontSize: 30),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            GetX<ProblemListController>(
-                              tag: tag,
-                              builder: (controller) {
-                                return ToggleSwitch(
-                                  checked: controller.isAllProblems.value,
-                                  onChanged: (info) async {
-                                    await controller.resetVariable(targetFolder, problems);
-                                    controller.isAllProblems.value = info;
-                                  },
-                                  content: const Text('하위 폴더 포함'),
-                                );
-                              },
-                            ),
-                            const SizedBox(
-                              width: 50,
-                            ),
-                            Obx(
-                              () => Button(
-                                onPressed: () {
-                                  problemListController.detail.value ? problemListController.detail.value = false : problemListController.detail.value = true;
-                                },
-                                child: Text(problemListController.detail.value ? "간략히 보기" : "자세히 보기"),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            Button(
-                              onPressed: () {
-                                //TODO : Redirect to DBEditScreen
-                              },
-                              child: Text("수정하기"),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                TopBar(
+                    folderName: folderName,
+                    tag: tag,
+                    targetFolder: targetFolder,
+                    problems: problems,
+                    problemListController: problemListController),
                 Expanded(
                   flex: 9,
                   child: Padding(
@@ -93,39 +54,26 @@ class ProblemList extends StatelessWidget {
                           return Row(
                             children: [
                               Expanded(
-                                flex: controller.detail.value ? 3 : 6,
+                                flex: controller.isOneColumn.value ? 3 : 6,
                                 child: Container(
                                   padding: const EdgeInsets.all(0),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
-                                        child: twoColumnProblemList(controller),
+                                        child: columnProblemList(controller),
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: controller.pageButton,
                                       )
                                     ],
                                   ),
                                 ),
                               ),
-                              Expanded(
-                                flex: controller.detail.value ? 5 : 2,
-                                child: Column(
-                                  children: [
-                                    Expanded(child: SfPdfViewer.memory(Uint8List.fromList(controller.bytes))),
-                                    /*
-                                    Button(
-                                      onPressed: () {
-                                        controller.detail.value ? controller.detail.value = false : controller.detail.value = true;
-                                      },
-                                      child: Text(controller.detail.value ? "간략히 보기" : "자세히 보기"),
-                                    ),
-                                    */
-                                  ],
-                                ),
-                              ),
+                              ProblemViewer(controller: controller),
                             ],
                           );
                         }),
@@ -139,17 +87,16 @@ class ProblemList extends StatelessWidget {
         });
   }
 
-  Widget twoColumnProblemList(ProblemListController controller) {
+  Widget columnProblemList(ProblemListController controller) {
     return Obx(
       () => GridView.count(
-          crossAxisCount: controller.detail.value ? 1 : 2,
+          crossAxisCount: controller.isOneColumn.value ? 1 : 2,
           childAspectRatio: 7,
           children: controller.currentPageProblems.map((element) {
             return Button(
               onPressed: () async {
-                // final url = Uri.parse('https://mlpwpbr.request.dreamhack.games?reqparam=${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
-                final url =
-                    Uri.parse('https://$HOST/api/data/problem-pdf/${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
+                final url = Uri.parse(
+                    'https://$HOST/api/data/problem-pdf/${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
 
                 final response = await http.get(
                   url,
@@ -157,11 +104,24 @@ class ProblemList extends StatelessWidget {
                 );
                 if (response.statusCode ~/ 100 == 2) {
                   debugPrint(response.statusCode.toString());
+                  debugPrint(response.bodyBytes.toString());
                   controller.bytes.value = response.bodyBytes;
+
+                  if (controller.bytes.length >= 4 &&
+                      List<int>.from(controller.bytes.take(4)) == pdfHeader) {
+                    controller.problemFileType.value = fileType.pdf;
+                  } else if (controller.bytes.length >= 2 &&
+                      List<int>.from(controller.bytes.take(2)) == jpegHeader) {
+                    controller.problemFileType.value = fileType.jpg;
+                  } else if (controller.bytes.length >= 8 &&
+                      List<int>.from(controller.bytes.take(8)) == pngHeader) {
+                    controller.problemFileType.value = fileType.png;
+                  } else {
+                    debugPrint("pdf, jpg, png 형태의 파일이 아닙니다 (problem list)");
+                  }
                   controller.bytes.refresh();
-                  debugPrint("${response.bodyBytes}");
-                  // debugPrint("${controller.bytes}");
                 } else {
+                  controller.problemFileType.value = fileType.empty;
                   debugPrint(response.statusCode.toString());
                   debugPrint("문제 이미지 불러오기 오류 발생");
                 }
@@ -171,12 +131,133 @@ class ProblemList extends StatelessWidget {
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text(element["name"]), Text("난이도 : ${element["level"]}")],
+                    children: [
+                      Text(element["name"]),
+                      Text("난이도 : ${element["level"]}")
+                    ],
                   ),
                 ),
               ),
             );
           }).toList()),
+    );
+  }
+}
+
+class ProblemViewer extends StatelessWidget {
+  ProblemViewer({super.key, required this.controller});
+
+  ProblemListController controller;
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: controller.isOneColumn.value ? 5 : 2,
+      child: Column(
+        children: [
+          controller.problemFileType.value == fileType.empty
+              ? Expanded(
+                  child: Center(
+                  child: Text("왼쪽에서 문제를 클릭해주세요"),
+                ))
+              : controller.problemFileType.value == fileType.pdf
+                  ? Expanded(
+                      child: SfPdfViewer.memory(
+                          Uint8List.fromList(controller.bytes)))
+                  : Expanded(
+                      child: Image.memory(Uint8List.fromList(controller.bytes)))
+        ],
+      ),
+    );
+  }
+}
+
+class TopBar extends StatelessWidget {
+  const TopBar({
+    super.key,
+    required this.folderName,
+    required this.tag,
+    required this.targetFolder,
+    required this.problems,
+    required this.problemListController,
+  });
+
+  final String folderName;
+  final String tag;
+  final TreeViewItem targetFolder;
+  final List problems;
+  final ProblemListController problemListController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: Container(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text(
+                folderName,
+                style: const TextStyle(fontSize: 30),
+              ),
+            ),
+            Row(
+              children: [
+                GetX<ProblemListController>(
+                  tag: tag,
+                  builder: (controller) {
+                    return ToggleSwitch(
+                      checked: controller.isAllProblems.value,
+                      onChanged: (info) async {
+                        await controller.resetVariable(targetFolder, problems);
+                        controller.isAllProblems.value = info;
+                      },
+                      content: const Text('하위 폴더 포함'),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  width: 50,
+                ),
+                Obx(
+                  () => Button(
+                    onPressed: () {
+                      problemListController.isOneColumn.value
+                          ? problemListController.isOneColumn.value = false
+                          : problemListController.isOneColumn.value = true;
+                    },
+                    child: Text(problemListController.isOneColumn.value
+                        ? "간략히 보기"
+                        : "자세히 보기"),
+                  ),
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                Button(
+                  onPressed: () {
+                    displayInfoBar(
+                      context,
+                      builder: (context, close) {
+                        return InfoBar(
+                          title: Text('수정하기:'),
+                          content: Text(
+                            '현재 준비 중인 기능입니다',
+                          ),
+                          severity: InfoBarSeverity.info,
+                        );
+                      },
+                    );
+                    //TODO : Redirect to DBEditScreen
+                  },
+                  child: Text("수정하기"),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -148,15 +148,17 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                         Navigator.pop(context);
                                       } else {
                                         Navigator.pop(context);
-                                        f.showSnackbar(
-                                            context,
-                                            const f.InfoBar(
+                                        f.displayInfoBar(
+
+                                            context,builder:(context, close) {
+                                              return f.InfoBar(
                                               title: Text('일정 미입력:'),
                                               content: Text(
                                                 '일정 내용이 입력되지 않았습니다',
                                               ),
                                               severity: f.InfoBarSeverity.info,
-                                            ));
+                                            );
+                                            },);
                                       }
                                     },
                                   ),

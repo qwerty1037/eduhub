@@ -39,4 +39,7 @@ enum DashBoardType {
 
   /// 그룹
   group,
+
+  /// 시험지 explore
+  examExplore
 }

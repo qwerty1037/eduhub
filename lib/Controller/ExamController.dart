@@ -47,7 +47,8 @@ class ExamController extends GetxController {
     tagName = name;
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
-      tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
+      tagsList.add(TagModel(tagController.totalTagList[i].name,
+          tagController.totalTagList[i].id!, false));
     }
   }
 
@@ -124,7 +125,8 @@ class ExamController extends GetxController {
     problemId.clear();
     if (folders.isNotEmpty) {
       for (var item in folders) {
-        final problemUrl = Uri.parse('https://$HOST/api/data/problem/database_all/${item.id}');
+        final problemUrl =
+            Uri.parse('https://$HOST/api/data/problem/database_all/${item.id}');
 
         final response = await http.get(
           problemUrl,
@@ -139,7 +141,8 @@ class ExamController extends GetxController {
       }
     } else {
       for (var item in Get.find<FolderController>().firstFolders) {
-        final problemUrl = Uri.parse('https://$HOST/api/data/problem/database_all/${item.value["id"]}');
+        final problemUrl = Uri.parse(
+            'https://$HOST/api/data/problem/database_all/${item.value["id"]}');
 
         final response = await http.get(
           problemUrl,
@@ -169,9 +172,13 @@ class ExamController extends GetxController {
       final key = item["id"];
       if (!uniqueKeys.contains(key)) {
         var level = item["level"];
-        if ((minlevelController.text.isNotEmpty && maxlevelController.text.isNotEmpty && int.parse(minlevelController.text) <= level && int.parse(maxlevelController.text) >= level) ||
+        if ((minlevelController.text.isNotEmpty &&
+                maxlevelController.text.isNotEmpty &&
+                int.parse(minlevelController.text) <= level &&
+                int.parse(maxlevelController.text) >= level) ||
             minlevelController.text.isEmpty) {
-          bool? alltagsContained = targetTags.every((element) => item["tags"].contains(element));
+          bool? alltagsContained =
+              targetTags.every((element) => item["tags"].contains(element));
           if (targetTags.isEmpty || alltagsContained) {
             uniqueProblems.add({"id": item["id"], "uuid": item["uuid"]});
             uniqueKeys.add(key);
@@ -188,11 +195,13 @@ class ExamController extends GetxController {
 
   Future<void> fetchProblemDetail() async {
     uniqueProblemsToList = uniqueProblems.toList();
-    final url = Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data');
+    final url =
+        Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data');
     final Map<String, dynamic> requestBody = {
       "problem_list": uniqueProblemsToList,
     };
-    isProblemSelected.value = List.generate(uniqueProblems.length, (index) => false);
+    isProblemSelected.value =
+        List.generate(uniqueProblems.length, (index) => false);
     final response = await http.post(
       url,
       headers: await defaultHeader(httpContentType.json),
@@ -249,10 +258,10 @@ class ExamController extends GetxController {
               FilledButton(
                   child: const Text('만들기'),
                   onPressed: () async {
-                    //TODO 최종 시험지 만들기 endpoint 연결
-                    //현재 problemtomakeExam 에 문제 데이터들 있고 서버에 보내는건 바로 위 함수 http랑 비슷한 방식으로 하면 될듯.
-                    if (selectedFolder != null && examNameController.text.isNotEmpty) {
-                      final url = Uri.parse('https://$HOST/api/data/create_exam');
+                    if (selectedFolder != null &&
+                        examNameController.text.isNotEmpty) {
+                      final url =
+                          Uri.parse('https://$HOST/api/data/create_exam');
                       final Map<String, dynamic> requestBody = {
                         "problem_list": problemToMakeExam,
                         "name": examNameController.text,
@@ -283,10 +292,51 @@ class ExamController extends GetxController {
                             severity: InfoBarSeverity.success,
                           );
                         });
+                        final examUrl = Uri.parse(
+                            'https://$HOST/api/data/user_exam_database');
+                        final examResponse = await http.get(
+                          examUrl,
+                          headers: await defaultHeader(httpContentType.json),
+                        );
+
+                        if (isHttpRequestSuccess(examResponse)) {
+                          final jsonResponse = jsonDecode(examResponse.body);
+                          final examDatabaseFolder =
+                              jsonResponse['database_folders'];
+                          Get.find<FolderController>()
+                              .makeExamFolderListInfo(examDatabaseFolder);
+                        } else if (isHttpRequestFailure(response)) {
+                          debugPrint("시험지 폴더 리스트 받기 오류 발생");
+                        }
                       } else {
+                        displayInfoBar(context, builder: (context, close) {
+                          return InfoBar(
+                            title: const Text('오류 : '),
+                            content: const Text(
+                                '시험지 생성 과정에서 오류가 발생하였습니다. 관리자에게 문의바랍니다.'),
+                            action: IconButton(
+                              icon: const Icon(FluentIcons.clear),
+                              onPressed: close,
+                            ),
+                            severity: InfoBarSeverity.error,
+                          );
+                        });
                         debugPrint(response.statusCode.toString());
                         debugPrint("현재 페이지 문제 받아오기 오류 발생");
                       }
+                    } else {
+                      displayInfoBar(context, builder: (context, close) {
+                        return InfoBar(
+                          title: const Text('경고 : '),
+                          content: const Text(
+                              '시험지 이름 또는 저장할 시험지 폴더가 완료되지 않았습니다. 다시 시도해주세요.'),
+                          action: IconButton(
+                            icon: const Icon(FluentIcons.clear),
+                            onPressed: close,
+                          ),
+                          severity: InfoBarSeverity.warning,
+                        );
+                      });
                     }
                   }),
             ],

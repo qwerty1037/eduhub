@@ -58,18 +58,31 @@ class ExamFolderTreeView extends StatelessWidget {
                         },
                         onItemInvoked: (item, reason) async {
                           if (reason == TreeViewItemInvokeReason.pressed) {
-                            controller.selectedExamDirectoryID.value = item.value["id"];
+                            controller.selectedExamDirectoryID.value =
+                                item.value["id"];
                             controller.firstExamFolders.refresh();
-                            if (Get.find<TabController>().currentTabIndex.value == 0) {
-                              //TODO 새 탭에 시험지 뷰어 띄우기
-                              debugPrint("뷰어 새 탭에 띄워주기");
-                              // controller.makeProblemListInNewTab(item);
-                            } else if (tagName != null && Get.find<DefaultTabBodyController>(tag: tagName).dashBoardType == DashBoardType.exam) {
-                              Get.find<ExamController>(tag: tagName).selectedFolder = item.value["id"];
+                            if (Get.find<TabController>()
+                                    .currentTabIndex
+                                    .value ==
+                                0) {
+                              controller.examViewerInNewTab(item);
+                            } else if (tagName != null &&
+                                Get.find<DefaultTabBodyController>(tag: tagName)
+                                        .dashBoardType ==
+                                    DashBoardType.exam) {
+                              Get.find<ExamController>(tag: tagName)
+                                  .selectedFolder = item.value["id"];
                             } else {
-                              //TODO 학생 창에서 시험지 폴더 띄울경우 폴더 클릭시 필요한 작업
-
-                              debugPrint("홈 화면이 아닙니다");
+                              //학생 창에서 시험지 폴더 클릭할 경우 폴더 클릭시 필요한 작업
+                              final tabController = Get.find<TabController>();
+                              Tab currentTab = tabController
+                                  .tabs[tabController.currentTabIndex.value];
+                              tabController.renameTab(
+                                  currentTab,
+                                  item.value["name"],
+                                  const Icon(FluentIcons.text_document));
+                              await controller.makeExamViewerInCurrentTab(
+                                  item, tagName!);
                             }
                           }
                         },

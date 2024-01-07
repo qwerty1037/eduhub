@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Exam_Folder_Treeview.dart';
 import 'package:front_end/Component/Folder_TreeView_none.dart';
 import 'package:front_end/Component/Folder_Treeview_Explore.dart';
 import 'package:front_end/Component/Folder_Treeview_Save.dart';
@@ -106,6 +107,8 @@ class DefaultTabBodyController extends GetxController {
         return FolderTreeViewExplore(
           tagName: tagName,
         );
+      case DashBoardType.examExplore:
+        return ExamFolderTreeView();
       case DashBoardType.group:
         return Group(
           tagName: tagName,

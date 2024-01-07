@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/ExamProblem_List.dart';
 import 'package:front_end/Component/Problem_List.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
@@ -347,6 +348,47 @@ class FolderController extends GetxController {
     }
   }
 
+  Future<void> examViewerInNewTab(TreeViewItem item) async {
+    final problemUrl = Uri.parse(
+        'https://$HOST/api/data/get_exam_database/${item.value["id"]}');
+
+    final response = await http.get(
+      problemUrl,
+      headers: await defaultHeader(httpContentType.json),
+    );
+    if (isHttpRequestSuccess(response)) {
+      final jsonResponse = jsonDecode(response.body);
+
+      final problems = jsonResponse['problem_list'];
+
+      TabController tabController = Get.find<TabController>();
+      tabController.isNewTab = true;
+
+      ProblemListController problemListController = Get.put(
+          ProblemListController(problems),
+          tag: Get.find<TabController>().getTabKey());
+      DefaultTabBody generatedTab = DefaultTabBody(
+        key: GlobalObjectKey(tabController.tagNumber.toString()),
+        dashBoardType: DashBoardType.examExplore,
+        workingSpace: ExamProblemList(
+          targetFolder: item,
+          folderName: item.value["name"],
+          problems: problems,
+          problemListController: problemListController,
+        ),
+      );
+
+      Tab newTab = tabController.addTab(generatedTab, item.value["name"],
+          const Icon(FluentIcons.text_document));
+      tabController.tabs.add(newTab);
+      tabController.currentTabIndex.value = tabController.tabs.length - 1;
+      tabController.isNewTab = false;
+    } else if (isHttpRequestFailure(response)) {
+      debugPrint(response.statusCode.toString());
+      debugPrint("폴더 직속 문제 받기 오류 발생");
+    }
+  }
+
   ///특정 폴더를 클릭했을 때 현재 탭에서 폴더에 속하는 문제 리스트들을 보여주는 함수
   Future<void> makeProblemListInCurrentTab(
       TreeViewItem item, String tagName) async {
@@ -354,7 +396,7 @@ class FolderController extends GetxController {
         Get.find<DefaultTabBodyController>(tag: tagName);
 
     final problemUrl = Uri.parse(
-        'https://$HOST/api/data/problem/database/${item.value["id"]}');
+        'https://$HOST/api/data/get_exam_database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,
@@ -374,6 +416,38 @@ class FolderController extends GetxController {
       ));
       workingSpaceController.dashBoard.value =
           workingSpaceController.makeDashBoard(DashBoardType.explore);
+    } else if (isHttpRequestFailure(response)) {
+      debugPrint(response.statusCode.toString());
+      debugPrint("폴더 직속 문제 받기 오류 발생");
+    }
+  }
+
+  Future<void> makeExamViewerInCurrentTab(
+      TreeViewItem item, String tagName) async {
+    DefaultTabBodyController workingSpaceController =
+        Get.find<DefaultTabBodyController>(tag: tagName);
+
+    final problemUrl = Uri.parse(
+        'https://$HOST/api/data/problem/database/${item.value["id"]}');
+
+    final response = await http.get(
+      problemUrl,
+      headers: await defaultHeader(httpContentType.json),
+    );
+    if (isHttpRequestSuccess(response)) {
+      await workingSpaceController.deleteWorkingSpaceController();
+      final jsonResponse = jsonDecode(response.body);
+      final problems = jsonResponse['problem_list'];
+      ProblemListController problemListController =
+          Get.put(ProblemListController(problems), tag: tagName);
+      workingSpaceController.changeWorkingSpace(ExamProblemList(
+        targetFolder: item,
+        folderName: item.value["name"],
+        problems: problems,
+        problemListController: problemListController,
+      ));
+      workingSpaceController.dashBoard.value =
+          workingSpaceController.makeDashBoard(DashBoardType.examExplore);
     } else if (isHttpRequestFailure(response)) {
       debugPrint(response.statusCode.toString());
       debugPrint("폴더 직속 문제 받기 오류 발생");

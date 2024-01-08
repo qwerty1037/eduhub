@@ -52,8 +52,8 @@ Button newFolderButton(BuildContext context) {
                         final int newFolderId = jsonResponse['inserted_database'][0]["id"];
 
                         TreeViewItem newFolder = folderController.makeExamFolderItem(textcontroller.text, newFolderId, null);
-                        folderController.totalFolders.add(newFolder);
-                        folderController.firstFolders.add(newFolder);
+                        folderController.totalProblemFolders.add(newFolder);
+                        folderController.rootProblemFolders.add(newFolder);
                         folderController.update();
                         homeScreenController.isFolderEmpty = false;
                         textcontroller.text = "";
@@ -139,7 +139,7 @@ Button newExamFolderButton(BuildContext context) {
 
                         TreeViewItem newFolder = folderController.makeExamFolderItem(textcontroller.text, newFolderId, null);
                         folderController.totalExamFolders.add(newFolder);
-                        folderController.firstExamFolders.add(newFolder);
+                        folderController.rootExamFolders.add(newFolder);
                         folderController.update();
                         homeScreenController.isExamFolderEmpty = false;
                         textcontroller.text = "";

@@ -1,65 +1,46 @@
-import 'dart:async';
+//inactiveColor: Colors.green, //탭 버튼에서 +위에 마우스를 올렸을 때(Hovering) 나오는 십자가 색깔
+ //acrylicBackgroundColor: Colors.red, //?
+  // inactiveBackgroundColor: Colors.green, //?
+  //shadowColor: Colors.purple, //그림자 색깔
+              //menuColor: Colors.red, //우클릭했을 때 나오는 메뉴 색깔을 결정
+              // selectionColor: Colors.magenta, //?
+              
 
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as m;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/Cookie.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
-
-///개별 아이디에 상관없이 데스크톱 전반적으로 사용되는 컨트롤러. 단 한번만 호출되며 앱을 끄기 전까지 삭제 되지 않는다.
-class TotalController extends GetxController {
-  bool isLogin = false;
-  //위젯 중 obx로만 색이 변경되는 경우가 있어서 Rx로 처리
-  RxBool isDark = false.obs;
-  late Timer _refreshTokenTimer;
-
-  ///로그인 되어 있을 경우 29분 마다 refresh 토큰을 재발급 받는 타이머 추가
-  @override
-  void onInit() async {
-    super.onInit();
-    _refreshTokenTimer = Timer.periodic(const Duration(minutes: 29), (timer) async {
-      if (isLogin) {
-        final url = Uri.parse('https://$HOST/api/auth/refresh');
-        final response = await http.post(
-          url,
-          headers: await defaultHeader(httpContentType.json),
-        );
-
-        if (isHttpRequestSuccess(response)) {
-          String? cookieList = response.headers["set-cookie"];
-
-          debugPrint(cookieList.toString());
-
-          String? uid = extractCookieValue(cookieList!, "uid");
-          String? accessToken = extractCookieValue(cookieList, "access_token");
-          String? refreshToken = extractCookieValue(cookieList, "refresh_token");
-          if (uid == null || accessToken == null || refreshToken == null) {
-            debugPrint("refresh 토큰 받기 도중 변환 실패");
-          } else {
-            await saveCookieToSecureStorage(uid, accessToken, refreshToken);
-          }
-        } else {
-          debugPrint("refresh 토큰 받기 오류 발생(서버연결x)");
-        }
-      }
-    });
-  }
-
-  void login() {
-    isLogin = true;
-    update();
-  }
-
-  void logout() {
-    isLogin = false;
-    update();
-  }
-
-  ///fluent ui light 기본 색상
-  final ResourceDictionary customResourceLight = const ResourceDictionary.raw(
+              /// buttonTheme: 버튼의 테마 조절, tabView의 탭에서 x가 버튼이고 그 이외의 색을 조절하려 했었는데 이것은 buttonTheme이 아님
+              ///
+              /// 어지간하면 widget theme은 안건드리는 것이 좋아보임
+              /*
+              buttonTheme: ButtonThemeData.all(ButtonStyle().copyWith(
+                foregroundColor: ButtonState.resolveWith((states) {
+                  final res = FluentThemeData.light().resources;
+                  if (states.isPressing) {
+                    return res.textFillColorTertiary;
+                  } else if (states.isHovering) {
+                    return res.textFillColorSecondary;
+                  } else if (states.isDisabled) {
+                    return res.textFillColorDisabled;
+                  }
+                  return res.textFillColorPrimary;
+                }),
+                backgroundColor: ButtonState.resolveWith((states) {
+                  final res = FluentThemeData.light().resources;
+                  if (states.isPressing) {
+                    return res.controlFillColorTertiary;
+                  } else if (states.isHovering) {
+                    return res.controlFillColorSecondary;
+                  } else if (states.isDisabled) {
+                    return res.controlFillColorDisabled;
+                  }
+                  //return Colors.red;
+                  //return res.subtleFillColorTransparent;
+                  //return res.controlFillColorDefault;
+                }),
+              )),
+              */
+              //chipTheme: ChipThemeData.standard(FluentThemeData.light()), //
+              
+  /*
+  final ResourceDictionary customRes = const ResourceDictionary.raw(
     textFillColorPrimary: Color(0xe4000000),
     textFillColorSecondary: Color(0x9e000000),
     textFillColorTertiary: Color(0x72000000),
@@ -80,11 +61,11 @@ class TotalController extends GetxController {
     controlStrongFillColorDisabled: Color(0x51000000),
     controlSolidFillColorDefault: Color(0xFFffffff),
     subtleFillColorTransparent: Color(0x00ffffff),
-    subtleFillColorSecondary: Color(0x09000000), //Color(0xffe81123), //Colors.red.normal
+    subtleFillColorSecondary: Color(0xffe81123), //Colors.red.normal
     subtleFillColorTertiary: Color(0x06000000),
     subtleFillColorDisabled: Color(0x00ffffff),
     controlAltFillColorTransparent: Color(0x00ffffff),
-    controlAltFillColorSecondary: Color(0x06000000), //Color(0xffffeb3b), //Colors.yellow.normal
+    controlAltFillColorSecondary: Color(0xffffeb3b), //Colors.yellow.normal
     controlAltFillColorTertiary: Color(0x0f000000),
     controlAltFillColorQuarternary: Color(0x18000000),
     controlAltFillColorDisabled: Color(0x00ffffff),
@@ -123,7 +104,7 @@ class TotalController extends GetxController {
     layerOnMicaBaseAltFillColorTransparent: Color(0x00000000),
     solidBackgroundFillColorBase: Color(0xFFf3f3f3),
     solidBackgroundFillColorSecondary: Color(0xFFeeeeee),
-    solidBackgroundFillColorTertiary: Color(0xFFFAF9F8), //Colors.grey[10], // Default: Color(0xFFf9f9f9),
+    solidBackgroundFillColorTertiary: Color(0xFFf9f9f9),
     solidBackgroundFillColorQuarternary: Color(0xFFffffff),
     solidBackgroundFillColorTransparent: Color(0x00f3f3f3),
     solidBackgroundFillColorBaseAlt: Color(0xFFdadada),
@@ -140,4 +121,4 @@ class TotalController extends GetxController {
     systemFillColorSolidAttentionBackground: Color(0xFFf7f7f7),
     systemFillColorSolidNeutralBackground: Color(0xFFf3f3f3),
   );
-}
+  */

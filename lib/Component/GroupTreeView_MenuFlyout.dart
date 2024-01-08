@@ -40,15 +40,12 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
   /// MenuFlyoutItem that delete folder
   ///
   /// when clicked, http request to delete folder
-  MenuFlyoutItem _menuFlyoutItemDeleteGroup(BuildContext context,
-      TreeViewItem item, GroupTreeViewController groupController) {
+  MenuFlyoutItem _menuFlyoutItemDeleteGroup(BuildContext context, TreeViewItem item, GroupTreeViewController groupController) {
     return MenuFlyoutItem(
       text: const Text("그룹 삭제"),
       onPressed: () async {
         final url = Uri.parse('https://$HOST/api/data/delete_group');
-        final Map<String, dynamic> requestBody = {
-          "delete_group_id": item.value["id"]
-        };
+        final Map<String, dynamic> requestBody = {"delete_group_id": item.value["id"]};
         final response = await http.post(
           url,
           headers: await defaultHeader(httpContentType.json),
@@ -71,9 +68,7 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
               );
             },
           );
-        }
-
-        if (isHttpRequestFailure(response)) {
+        } else {
           displayInfoBar(
             context,
             builder: (context, close) {
@@ -96,8 +91,7 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
   /// MenuFlyoutItem that rename folder
   ///
   /// when clicked, http request to rename folder
-  MenuFlyoutItem _menuFlyoutItemRenameGroup(
-      context, item, details, controller) {
+  MenuFlyoutItem _menuFlyoutItemRenameGroup(context, item, details, controller) {
     return MenuFlyoutItem(
       text: const Text("이름 바꾸기"),
       onPressed: () async {
@@ -125,10 +119,7 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
 
         if (reNameController.text != "") {
           final url = Uri.parse('https://$HOST/api/data/update_group_name');
-          final Map<String, dynamic> requestBody = {
-            "database_id": item.value["id"],
-            "new_database_group_name": reNameController.text
-          };
+          final Map<String, dynamic> requestBody = {"database_id": item.value["id"], "new_database_group_name": reNameController.text};
           final response = await http.post(
             url,
             headers: await defaultHeader(httpContentType.json),
@@ -136,14 +127,10 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
           );
 
           if (isHttpRequestSuccess(response)) {
-            TreeViewItem newFolder = controller.makeFolderItem(
-                reNameController.text,
-                item.value["id"],
-                item.value["studentsId"]);
+            TreeViewItem newFolder = controller.makeFolderItem(reNameController.text, item.value["id"], item.value["studentsId"]);
             //newFolder.children.addAll(item.children.toList());
 
-            controller.totalFolders.removeWhere(
-                (element) => item.value["id"] == element.value["id"]);
+            controller.totalFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
 
             controller.totalFolders.add(newFolder);
 
@@ -157,8 +144,7 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
   /// MenuFlyoutItem that make new folder
   ///
   /// When clicked, create a window for naming the new folder. Then http request to create a new folder
-  MenuFlyoutItem _menuFlyoutItemNewGroup(
-      context, item, GroupTreeViewController controller) {
+  MenuFlyoutItem _menuFlyoutItemNewGroup(context, item, GroupTreeViewController controller) {
     return MenuFlyoutItem(
       text: const Text("새 그룹"),
       onPressed: () async {
@@ -183,8 +169,7 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
                 FilledButton(
                   child: const Text('확인'),
                   onPressed: () async {
-                    final url =
-                        Uri.parse('https://$HOST/api/data/create_group');
+                    final url = Uri.parse('https://$HOST/api/data/create_group');
                     final Map<String, dynamic> requestBody = {
                       "name": newNameController.text,
                     };
@@ -198,10 +183,8 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
                     if (isHttpRequestSuccess(response)) {
                       final jsonResponse = jsonDecode(response.body);
 
-                      final int newFolderId =
-                          jsonResponse['inserted_database'][0]["id"];
-                      TreeViewItem newGroup = controller.makeGroupItem(
-                          newNameController.text, newFolderId, null);
+                      final int newFolderId = jsonResponse['inserted_database'][0]["id"];
+                      TreeViewItem newGroup = controller.makeGroupItem(newNameController.text, newFolderId, null);
                       controller.totalGroups.add(newGroup);
 
                       groupController.totalGroups.refresh();
@@ -219,9 +202,7 @@ class GroupTreeView_MenuFlyout extends StatelessWidget {
                           );
                         },
                       );
-                    }
-
-                    if (isHttpRequestFailure(response)) {
+                    } else {
                       displayInfoBar(
                         context,
                         builder: (context, close) {

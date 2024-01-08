@@ -40,7 +40,7 @@ class SaveBoxScreen extends StatelessWidget {
       minScale: 0.5,
       maxScale: 3.0,
       child: Image.file(
-        File("C:\\Users\\JungHyun Han\\Desktop\\data\\image1.png"),
+        File("assets/gpt api 자료 조사.pdf"),
       ),
     );
   }

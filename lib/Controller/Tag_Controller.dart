@@ -62,7 +62,7 @@ class TagController extends GetxController {
     print(response.statusCode);
     if (isHttpRequestSuccess(response)) {
       debugPrint("태그 전송 성공");
-    } else if (isHttpRequestFailure(response)) {
+    } else {
       debugPrint("태그 전송 실패");
     }
     receiveTags();

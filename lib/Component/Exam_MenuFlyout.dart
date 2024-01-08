@@ -59,10 +59,10 @@ class ExamFolderMenuFlyout extends StatelessWidget {
             TreeViewItem deleteTargetParent = folderController.totalExamFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
             deleteTargetParent.children.remove(item);
           } else {
-            folderController.firstExamFolders.removeWhere((element) => item == element);
+            folderController.rootExamFolders.removeWhere((element) => item == element);
           }
-          folderController.firstExamFolders.refresh();
-          if (folderController.firstExamFolders.isEmpty) {
+          folderController.rootExamFolders.refresh();
+          if (folderController.rootExamFolders.isEmpty) {
             Get.find<HomeScreenController>().isExamFolderEmpty = true;
           }
           displayInfoBar(
@@ -78,9 +78,7 @@ class ExamFolderMenuFlyout extends StatelessWidget {
               );
             },
           );
-        }
-
-        if (isHttpRequestFailure(response)) {
+        } else {
           displayInfoBar(
             context,
             builder: (context, close) {
@@ -152,7 +150,7 @@ class ExamFolderMenuFlyout extends StatelessWidget {
               parentFolder.children.add(newFolder);
             }
 
-            folderController.firstExamFolders.refresh();
+            folderController.rootExamFolders.refresh();
           }
         }
       },
@@ -206,7 +204,7 @@ class ExamFolderMenuFlyout extends StatelessWidget {
                       TreeViewItem parentFolder = controller.totalExamFolders.firstWhere((element) => element.value["id"] == parentId);
                       parentFolder.children.add(newFolder);
 
-                      folderController.firstExamFolders.refresh();
+                      folderController.rootExamFolders.refresh();
                       newNameController.text = "";
                       displayInfoBar(
                         context,
@@ -221,9 +219,7 @@ class ExamFolderMenuFlyout extends StatelessWidget {
                           );
                         },
                       );
-                    }
-
-                    if (isHttpRequestFailure(response)) {
+                    } else {
                       displayInfoBar(
                         context,
                         builder: (context, close) {

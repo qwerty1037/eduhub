@@ -35,7 +35,6 @@ class FolderTreeViewNone extends StatelessWidget {
                     return FlyoutTarget(
                       controller: flyoutController,
                       child: TreeView(
-                        narrowSpacing: controller.temp_variable.value,
                         onSecondaryTap: (item, details) {
                           flyoutController.showFlyout(
                             position: details.globalPosition,
@@ -52,7 +51,7 @@ class FolderTreeViewNone extends StatelessWidget {
                           );
                         },
                         onItemInvoked: (item, reason) async {},
-                        items: controller.firstFolders,
+                        items: controller.rootProblemFolders,
                       ),
                     );
                   },

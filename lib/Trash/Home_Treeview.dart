@@ -17,7 +17,7 @@ class HomeTreeView extends StatelessWidget {
         return FlyoutTarget(
           controller: flyoutController,
           child: TreeView(
-            items: folderController.firstFolders,
+            items: folderController.rootProblemFolders,
             onSecondaryTap: (item, details) {
               flyoutController.showFlyout(
                 position: details.globalPosition,

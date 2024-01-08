@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
 
-import 'src/rect.dart';
 import 'package:flutter/material.dart';
+import 'package:front_end/Test/rect.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TransformationController ctrl = TransformationController();
   Image image = Image.file(
-    File("C:\\Users\\JungHyun Han\\Desktop\\data\\image1.png"),
+    File("assets/gpt api 자료 조사.pdf"),
   );
   double? imageWidth;
   double? imageHeight;
@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Text(ctrl.value.toString()),
-          Text("Image Width = ${_getSize()?.width}, Height = ${_getSize()?.height}"),
+          Text("Image Width = ${_getSize().width}, Height = ${_getSize().height}"),
           IconButton(
             onPressed: () {
               ctrl.value = Matrix4.identity();

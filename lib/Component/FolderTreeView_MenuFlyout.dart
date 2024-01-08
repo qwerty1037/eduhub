@@ -56,13 +56,13 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
 
         if (isHttpRequestSuccess(response)) {
           if (item.value["parent"] != null) {
-            TreeViewItem deleteTargetParent = folderController.totalFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
+            TreeViewItem deleteTargetParent = folderController.totalProblemFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
             deleteTargetParent.children.remove(item);
           } else {
-            folderController.firstFolders.removeWhere((element) => item == element);
+            folderController.rootProblemFolders.removeWhere((element) => item == element);
           }
-          folderController.firstFolders.refresh();
-          if (folderController.firstFolders.isEmpty) {
+          folderController.rootProblemFolders.refresh();
+          if (folderController.rootProblemFolders.isEmpty) {
             Get.find<HomeScreenController>().isFolderEmpty = true;
           }
           displayInfoBar(
@@ -78,9 +78,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
               );
             },
           );
-        }
-
-        if (isHttpRequestFailure(response)) {
+        } else {
           displayInfoBar(
             context,
             builder: (context, close) {
@@ -142,17 +140,17 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
             TreeViewItem newFolder = controller.makeFolderItem(reNameController.text, item.value["id"], item.value["parent"]);
             newFolder.children.addAll(item.children.toList());
 
-            controller.totalFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
+            controller.totalProblemFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
 
-            controller.totalFolders.add(newFolder);
+            controller.totalProblemFolders.add(newFolder);
             if (item.value["parent"] != null) {
-              TreeViewItem parentFolder = controller.totalFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
+              TreeViewItem parentFolder = controller.totalProblemFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
 
               parentFolder.children.remove(item);
               parentFolder.children.add(newFolder);
             }
 
-            folderController.firstFolders.refresh();
+            folderController.rootProblemFolders.refresh();
           }
         }
       },
@@ -202,11 +200,11 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
                       final int newFolderId = jsonResponse['inserted_database'][0]["id"];
                       final int parentId = jsonResponse['inserted_database'][0]["parent_id"];
                       TreeViewItem newFolder = controller.makeFolderItem(newNameController.text, newFolderId, parentId);
-                      controller.totalFolders.add(newFolder);
-                      TreeViewItem parentFolder = controller.totalFolders.firstWhere((element) => element.value["id"] == parentId);
+                      controller.totalProblemFolders.add(newFolder);
+                      TreeViewItem parentFolder = controller.totalProblemFolders.firstWhere((element) => element.value["id"] == parentId);
                       parentFolder.children.add(newFolder);
 
-                      folderController.firstFolders.refresh();
+                      folderController.rootProblemFolders.refresh();
                       newNameController.text = "";
                       displayInfoBar(
                         context,
@@ -221,9 +219,7 @@ class FolderTreeView_MenuFlyout extends StatelessWidget {
                           );
                         },
                       );
-                    }
-
-                    if (isHttpRequestFailure(response)) {
+                    } else {
                       displayInfoBar(
                         context,
                         builder: (context, close) {

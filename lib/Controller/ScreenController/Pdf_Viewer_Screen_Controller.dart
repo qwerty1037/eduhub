@@ -102,14 +102,14 @@ class PdfViewerScreenController extends GetxController {
       imagePath: '${directory.path}/screen_capturer_example/Screenshots/a.png',
       copyToClipboard: true,
     );
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     var imageBytes = await screenCapturer.readImageFromClipboard();
     if (capturedData == null) {
       if (imageBytes != null) {
         capturedImage = imageBytes;
         isCaptured.value = true;
       } else {
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1));
         imageBytes = await screenCapturer.readImageFromClipboard();
         if (imageBytes != null) {
           capturedImage = imageBytes;
@@ -162,13 +162,10 @@ class PdfViewerScreenController extends GetxController {
       final url = Uri.parse('https://$HOST/api/data/create_problem');
       var request = http.MultipartRequest('POST', url);
 
-      request.files.add(http.MultipartFile(
-          'pdf_file', pickedFile!.openRead(), pickedFileSize.value,
-          filename: pickedFileName.value));
+      request.files.add(http.MultipartFile('pdf_file', pickedFile!.openRead(), pickedFileSize.value, filename: pickedFileName.value));
 
       request.fields.addAll({
-        "parent_database":
-            Get.find<FolderController>().selectedDirectoryID.value.toString(),
+        "parent_database": Get.find<FolderController>().selectedProblemDirectoryId.value.toString(),
       });
       request.headers.addAll(await defaultHeader(httpContentType.multipart));
 

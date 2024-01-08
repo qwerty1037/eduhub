@@ -82,9 +82,9 @@ class SearchScreenController extends GetxController {
   void backend() async {
     final folderController = Get.find<FolderController>();
     List<int> searchedFolderId = [];
-    for (int i = 0; i < folderController.totalFolders.length; i++) {
-      if (searchBarController.text == folderController.totalFolders[i].value["name"]) {
-        searchedFolderId.add(folderController.totalFolders[i].value["id"]);
+    for (int i = 0; i < folderController.totalProblemFolders.length; i++) {
+      if (searchBarController.text == folderController.totalProblemFolders[i].value["name"]) {
+        searchedFolderId.add(folderController.totalProblemFolders[i].value["id"]);
       }
     }
 

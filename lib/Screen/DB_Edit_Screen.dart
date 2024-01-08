@@ -257,7 +257,7 @@ class DBEditScreen extends StatelessWidget {
   Widget saveButtonField() {
     return TextButton(
       onPressed: () {
-        controller.sendProblemInfo(folderController.selectedDirectoryID.value);
+        controller.sendProblemInfo(folderController.selectedProblemDirectoryId.value);
       },
       child: Container(
         height: 50,

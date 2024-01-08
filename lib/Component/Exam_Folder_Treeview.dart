@@ -40,7 +40,6 @@ class ExamFolderTreeView extends StatelessWidget {
                   child: GetX<FolderController>(
                     builder: (controller) {
                       return TreeView(
-                        narrowSpacing: controller.temp_variable.value,
                         onSecondaryTap: (item, details) {
                           flyoutController.showFlyout(
                             position: details.globalPosition,
@@ -58,35 +57,22 @@ class ExamFolderTreeView extends StatelessWidget {
                         },
                         onItemInvoked: (item, reason) async {
                           if (reason == TreeViewItemInvokeReason.pressed) {
-                            controller.selectedExamDirectoryID.value =
-                                item.value["id"];
-                            controller.firstExamFolders.refresh();
-                            if (Get.find<TabController>()
-                                    .currentTabIndex
-                                    .value ==
-                                0) {
+                            controller.selectedExamDirectoryID.value = item.value["id"];
+                            controller.rootExamFolders.refresh();
+                            if (Get.find<TabController>().currentTabIndex.value == 0) {
                               controller.examViewerInNewTab(item);
-                            } else if (tagName != null &&
-                                Get.find<DefaultTabBodyController>(tag: tagName)
-                                        .dashBoardType ==
-                                    DashBoardType.exam) {
-                              Get.find<ExamController>(tag: tagName)
-                                  .selectedFolder = item.value["id"];
+                            } else if (tagName != null && Get.find<DefaultTabBodyController>(tag: tagName).dashBoardType == DashBoardType.exam) {
+                              Get.find<ExamController>(tag: tagName).selectedFolder = item.value["id"];
                             } else {
                               //학생 창에서 시험지 폴더 클릭할 경우 폴더 클릭시 필요한 작업
                               final tabController = Get.find<TabController>();
-                              Tab currentTab = tabController
-                                  .tabs[tabController.currentTabIndex.value];
-                              tabController.renameTab(
-                                  currentTab,
-                                  item.value["name"],
-                                  const Icon(FluentIcons.text_document));
-                              await controller.makeExamViewerInCurrentTab(
-                                  item, tagName!);
+                              Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+                              tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.text_document));
+                              await controller.makeExamViewerInCurrentTab(item, tagName!);
                             }
                           }
                         },
-                        items: controller.firstExamFolders,
+                        items: controller.rootExamFolders,
                       );
                     },
                   ),

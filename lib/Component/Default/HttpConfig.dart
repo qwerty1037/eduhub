@@ -25,9 +25,3 @@ Future<Map<String, String>> defaultHeader(httpContentType type) async {
 bool isHttpRequestSuccess(response) {
   return response.statusCode ~/ 100 == 2;
 }
-
-/// [!isHttpRequestSuccess]
-bool isHttpRequestFailure(response) {
-  debugPrint(response.statusCode.toString());
-  return !isHttpRequestSuccess(response);
-}

@@ -69,15 +69,13 @@ class ProblemListController extends GetxController {
   }
 
   ///폴더 직속문제 보기 / 폴더 아래 모든 문제 보기 버튼을 클릭했을때 내부 데이터를 새로 초기화하는 함수
-  Future<void> resetVariable(
-      TreeViewItem targetFolder, List<dynamic> problems) async {
+  Future<void> resetVariable(TreeViewItem targetFolder, List<dynamic> problems) async {
     problemList.clear();
     pageButton.clear();
     currentPageProblems.clear();
 
     if (!isAllProblems.value) {
-      final problemUrl = Uri.parse(
-          'https://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
+      final problemUrl = Uri.parse('https://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
 
       final response = await http.get(
         problemUrl,
@@ -110,7 +108,7 @@ class ProblemListController extends GetxController {
           ),
         );
         await fetchPageData();
-      } else if (isHttpRequestFailure(response)) {
+      } else {
         debugPrint(response.statusCode.toString());
         debugPrint("폴더 전체 문제 받기 오류 발생");
       }
@@ -170,9 +168,7 @@ class ProblemListController extends GetxController {
       Button newButton = Button(
         child: Text(
           i.toString(),
-          style: TextStyle(
-              fontWeight:
-                  currentPage == i ? FontWeight.bold : FontWeight.normal),
+          style: TextStyle(fontWeight: currentPage == i ? FontWeight.bold : FontWeight.normal),
         ),
         onPressed: () async {
           changePage(i);
@@ -206,8 +202,7 @@ class ProblemListController extends GetxController {
 
   ///문제 리스트 중에 현재 페이지에 있는 리스트들의 자세한 데이터를 받아오는 함수
   Future<void> fetchPageData() async {
-    final url =
-        Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data');
+    final url = Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data');
     final Map<String, dynamic> requestBody = {
       "problem_list": problemList.sublist(startIndex, endIndex),
     };

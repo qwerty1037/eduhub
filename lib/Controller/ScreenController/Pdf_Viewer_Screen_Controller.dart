@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +11,7 @@ import 'dart:io';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdfx/pdfx.dart';
 import 'package:win32/win32.dart';
 
 class PdfFile {
@@ -22,12 +24,21 @@ class PdfViewerScreenController extends GetxController {
   Color uploadingColor = material.Colors.blue[100]!;
   RxBool isPdfInputed = false.obs;
   File? pickedFile;
+  List pickedPdfImageList = <Uint8List>[];
+
   RxString pickedFileName = "".obs;
   Uint8List? capturedImage;
   RxBool isDragged = false.obs;
   RxBool isCaptured = false.obs;
   RxInt pickedFileSize = 0.obs;
   RxBool showProcess = false.obs;
+
+  RxInt tempInt = 0.obs;
+
+  RxList transformableBoxList = <Widget>[].obs;
+  int transformableBoxNumber = 0;
+  RxList rectList = <Rect>[].obs;
+  var ctrlList = <TransformationController>[];
 
   ///Upload file into Application using FIlePicker.
   ///
@@ -64,6 +75,20 @@ class PdfViewerScreenController extends GetxController {
       pickedFileName.value = fileName;
       pickedFile = File(detail.files.first.path);
       pickedFileSize.value = await pickedFile!.length();
+
+      final pdf = await PdfDocument.openFile(detail.files.first.path);
+      // final size = await pdf.getPage(1).;
+      final pageNum = pdf.pagesCount;
+      for (int i = 1; i <= pageNum; i++) {
+        PdfPage page = await pdf.getPage(i);
+        PdfPageImage? pageImage = await page.render(
+          width: page.width,
+          height: page.height,
+        );
+        Uint8List rawImage = pageImage!.bytes;
+        pickedPdfImageList.add(rawImage);
+      }
+
       isPdfInputed.value = true;
     }
   }
@@ -102,14 +127,14 @@ class PdfViewerScreenController extends GetxController {
       imagePath: '${directory.path}/screen_capturer_example/Screenshots/a.png',
       copyToClipboard: true,
     );
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
     var imageBytes = await screenCapturer.readImageFromClipboard();
     if (capturedData == null) {
       if (imageBytes != null) {
         capturedImage = imageBytes;
         isCaptured.value = true;
       } else {
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(Duration(seconds: 1));
         imageBytes = await screenCapturer.readImageFromClipboard();
         if (imageBytes != null) {
           capturedImage = imageBytes;
@@ -228,5 +253,32 @@ class PdfViewerScreenController extends GetxController {
         );
       });
     }
+  }
+
+  void generateBox(Size renderSize) {
+    Rect tRect = Offset(renderSize.width * 0.2, renderSize.height * 0.2) & Size(renderSize.width * 0.4, renderSize.height * 0.4);
+    rectList.add(tRect);
+
+    TransformableBox tempBox = TransformableBox(
+      contentBuilder: (content, rect, flip) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: Colors.red,
+            ),
+            color: Colors.red.withOpacity(0.5),
+          ),
+        );
+      },
+      rect: tRect,
+      onChanged: (result, event) {
+        tRect = result.rect;
+        rectList.refresh();
+        tempInt.value++;
+      },
+    );
+    transformableBoxList.add(tempBox);
+    transformableBoxList.refresh();
   }
 }

@@ -4,7 +4,7 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Pdf_Save_Screen.dart';
 import 'package:get/get.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -19,15 +19,18 @@ class PdfViewerScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfViewerScreen> {
-  final controllerProblem = Get.put(PdfViewerScreenController(), tag: "Problem${Get.find<t.TabController>().getTabKey()}");
-  final controllerAnswer = Get.put(PdfViewerScreenController(), tag: "Answer${Get.find<t.TabController>().getTabKey()}");
+  final controllerProblem = Get.put(PdfViewerScreenController(),
+      tag: "Problem${Get.find<t.TabController>().getTabKey()}");
+  final controllerAnswer = Get.put(PdfViewerScreenController(),
+      tag: "Answer${Get.find<t.TabController>().getTabKey()}");
   Size renderSize = Size.zero;
 
   @override
   void initState() {
     super.initState();
     renderSize = _getSize();
-    rect1 = Offset(renderSize.width * 0.2, renderSize.height * 0.2) & Size(renderSize.width * 0.6, renderSize.height * 0.6);
+    rect1 = Offset(renderSize.width * 0.2, renderSize.height * 0.2) &
+        Size(renderSize.width * 0.6, renderSize.height * 0.6);
   }
 
   @override
@@ -35,7 +38,9 @@ class _PdfScreenState extends State<PdfViewerScreen> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Center(
         child: Container(
-          color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+          color: Get.find<DesktopController>().isDark.value == true
+              ? Colors.grey[150]
+              : Colors.grey[30],
           child: Stack(
             children: [
               Row(
@@ -51,13 +56,18 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 return Align(
                   alignment: Alignment.bottomRight,
                   child: Visibility(
-                    visible: (controllerProblem.isCaptured.value == true && controllerAnswer.isCaptured.value == true),
+                    visible: (controllerProblem.isCaptured.value == true &&
+                        controllerAnswer.isCaptured.value == true),
                     child: IconButton(
                       onPressed: () {
-                        final DefaultTabBodyController defaultTabBodyController =
-                            Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
+                        final DefaultTabBodyController
+                            defaultTabBodyController =
+                            Get.find<DefaultTabBodyController>(
+                                tag: Get.find<t.TabController>().getTabKey());
                         defaultTabBodyController.saveThisWorkingSpace();
-                        defaultTabBodyController.changeWorkingSpace(PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!));
+                        defaultTabBodyController.changeWorkingSpace(
+                            PdfSaveScreen(controllerProblem.getCapturedImage()!,
+                                controllerAnswer.getCapturedImage()!));
 
                         // Navigator.push(
                         //   context,
@@ -188,7 +198,8 @@ class _PdfScreenState extends State<PdfViewerScreen> {
 
   Size _getSize() {
     if (_containerKey.currentContext != null) {
-      final RenderBox renderBox = _containerKey.currentContext!.findRenderObject() as RenderBox;
+      final RenderBox renderBox =
+          _containerKey.currentContext!.findRenderObject() as RenderBox;
       Size size = renderBox.size;
       return size;
     }
@@ -197,7 +208,8 @@ class _PdfScreenState extends State<PdfViewerScreen> {
 
   Offset _getOffset() {
     if (_containerKey.currentContext != null) {
-      final RenderBox renderBox = _containerKey.currentContext!.findRenderObject() as RenderBox;
+      final RenderBox renderBox =
+          _containerKey.currentContext!.findRenderObject() as RenderBox;
       Offset offset = renderBox.localToGlobal(Offset.zero);
       return offset;
     }
@@ -298,7 +310,8 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                           child: Stack(
                             children: [
                               SizedBox(
-                                child: Image.memory(controller.pickedPdfImageList[1]),
+                                child: Image.memory(
+                                    controller.pickedPdfImageList[1]),
                               ),
                               ...controllerProblem.rectList.map((element) {
                                 return TransformableBox(

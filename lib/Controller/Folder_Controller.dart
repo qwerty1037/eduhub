@@ -6,7 +6,7 @@ import 'package:front_end/Component/Problem_List.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 
@@ -16,7 +16,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 ///폴더 관련 데이터를 처리하는 컨트롤러
 class FolderController extends GetxController {
-  TotalController totalController = Get.find<TotalController>();
+  DesktopController desktopController = Get.find<DesktopController>();
   RxInt selectedProblemDirectoryId = 99999999999.obs;
   RxInt selectedExamDirectoryID = 99999999999.obs;
   RxString selectedPath = "".obs; // 일단 보류. 정확한 용도 파악 후 주석 재작성
@@ -25,7 +25,6 @@ class FolderController extends GetxController {
   List<TreeViewItem> totalExamFolders = [];
   RxList<TreeViewItem> rootExamFolders = <TreeViewItem>[].obs;
   RxString nickName = "김선생".obs; //임시적으로 넣은 이름.  TODO 연동후 삭제 예정
-  //여기까지 리팩토링. totalcontroller랑 여기까지 했음.
 
   ///처음에 유저의 백엔드로부터 폴더, 닉네임 등 받아와 보여줄 리스트를 구성
   Future<void> receiveData() async {
@@ -57,7 +56,7 @@ class FolderController extends GetxController {
       debugPrint("시험지 폴더 리스트 받기 오류 발생");
     }
 
-    //닉네임 받아오는 함수 백엔드 업데이트 후 TODO
+    //TODO 닉네임 받아오는 함수 백엔드 업데이트 후
     // final nickNameUrl = Uri.parse('https://$HOST/api/data/nickname');
     // final nickResponse = await http.get(
     //   nickNameUrl,
@@ -135,7 +134,8 @@ class FolderController extends GetxController {
   }
 
   TreeViewItem findTreeViewItem(int id) {
-    return totalProblemFolders.firstWhere((element) => element.value["id"] == id);
+    return totalProblemFolders
+        .firstWhere((element) => element.value["id"] == id);
   }
 
   ///폴더의 이름, id, parent를 받아 새로운 TreeViewItem을 반환한다.
@@ -143,7 +143,8 @@ class FolderController extends GetxController {
     return TreeViewItem(
       backgroundColor: ButtonState.resolveWith((states) {
         const res = ResourceDictionary.light();
-        if (Get.find<FolderController>().selectedProblemDirectoryId.value == id) {
+        if (Get.find<FolderController>().selectedProblemDirectoryId.value ==
+            id) {
           return Colors.grey[80];
         } else {
           if (states.isPressing) return res.subtleFillColorTertiary;
@@ -170,7 +171,8 @@ class FolderController extends GetxController {
           ),
         ),
         child: DragTarget(
-          builder: (BuildContext context, List<dynamic> candidateData, List<dynamic> rejectedData) {
+          builder: (BuildContext context, List<dynamic> candidateData,
+              List<dynamic> rejectedData) {
             return Text(name);
           },
           onWillAccept: (Map<dynamic, dynamic>? data) {
@@ -181,8 +183,12 @@ class FolderController extends GetxController {
             }
           },
           onAccept: (Map<String, dynamic> data) async {
-            final url = Uri.parse('https://$HOST/api/data/update_database_directory');
-            final Map<String, dynamic> requestBody = {"target_database_id": data["id"], "destination_database_id": parent};
+            final url =
+                Uri.parse('https://$HOST/api/data/update_database_directory');
+            final Map<String, dynamic> requestBody = {
+              "target_database_id": data["id"],
+              "destination_database_id": parent
+            };
 
             final response = await http.post(
               url,
@@ -190,16 +196,21 @@ class FolderController extends GetxController {
               body: jsonEncode(requestBody),
             );
             if (isHttpRequestSuccess(response)) {
-              TreeViewItem targetFolder = totalProblemFolders.firstWhere((element) => element.value["id"] == data["id"]);
-              TreeViewItem thisFolder = totalProblemFolders.firstWhere((element) => element.value["id"] == id);
+              TreeViewItem targetFolder = totalProblemFolders
+                  .firstWhere((element) => element.value["id"] == data["id"]);
+              TreeViewItem thisFolder = totalProblemFolders
+                  .firstWhere((element) => element.value["id"] == id);
               thisFolder.children.add(targetFolder);
               thisFolder.expanded = true;
 
               if (data["parent"] != null) {
-                TreeViewItem parentItem = totalProblemFolders.firstWhere((element) => element.value["id"] == data["parent"]);
-                parentItem.children.removeWhere((element) => element.value["id"] == data["id"]);
+                TreeViewItem parentItem = totalProblemFolders.firstWhere(
+                    (element) => element.value["id"] == data["parent"]);
+                parentItem.children.removeWhere(
+                    (element) => element.value["id"] == data["id"]);
               } else {
-                rootProblemFolders.removeWhere((element) => element.value["id"] == data["id"]);
+                rootProblemFolders.removeWhere(
+                    (element) => element.value["id"] == data["id"]);
               }
               data["parent"] = id;
               rootProblemFolders.refresh();
@@ -244,7 +255,8 @@ class FolderController extends GetxController {
           ),
         ),
         child: DragTarget(
-          builder: (BuildContext context, List<dynamic> candidateData, List<dynamic> rejectedData) {
+          builder: (BuildContext context, List<dynamic> candidateData,
+              List<dynamic> rejectedData) {
             return Text(name);
           },
           onWillAccept: (Map<dynamic, dynamic>? data) {
@@ -255,8 +267,12 @@ class FolderController extends GetxController {
             }
           },
           onAccept: (Map<String, dynamic> data) async {
-            final url = Uri.parse('https://$HOST/api/data/update_exam_database_directory');
-            final Map<String, dynamic> requestBody = {"target_database_id": data["id"], "destination_database_id": parent};
+            final url = Uri.parse(
+                'https://$HOST/api/data/update_exam_database_directory');
+            final Map<String, dynamic> requestBody = {
+              "target_database_id": data["id"],
+              "destination_database_id": parent
+            };
 
             final response = await http.post(
               url,
@@ -264,16 +280,21 @@ class FolderController extends GetxController {
               body: jsonEncode(requestBody),
             );
             if (isHttpRequestSuccess(response)) {
-              TreeViewItem targetFolder = totalExamFolders.firstWhere((element) => element.value["id"] == data["id"]);
-              TreeViewItem thisFolder = totalExamFolders.firstWhere((element) => element.value["id"] == id);
+              TreeViewItem targetFolder = totalExamFolders
+                  .firstWhere((element) => element.value["id"] == data["id"]);
+              TreeViewItem thisFolder = totalExamFolders
+                  .firstWhere((element) => element.value["id"] == id);
               thisFolder.children.add(targetFolder);
               thisFolder.expanded = true;
 
               if (data["parent"] != null) {
-                TreeViewItem parentItem = totalExamFolders.firstWhere((element) => element.value["id"] == data["parent"]);
-                parentItem.children.removeWhere((element) => element.value["id"] == data["id"]);
+                TreeViewItem parentItem = totalExamFolders.firstWhere(
+                    (element) => element.value["id"] == data["parent"]);
+                parentItem.children.removeWhere(
+                    (element) => element.value["id"] == data["id"]);
               } else {
-                rootExamFolders.removeWhere((element) => element.value["id"] == data["id"]);
+                rootExamFolders.removeWhere(
+                    (element) => element.value["id"] == data["id"]);
               }
               data["parent"] = id;
               rootExamFolders.refresh();
@@ -288,7 +309,8 @@ class FolderController extends GetxController {
 
   /// 특정 폴더를 클릭했을 때 해당하는 문제 내용을 백엔드로부터 받고 새로운탭을 열면서 보여주는 함수
   Future<void> makeProblemListInNewTab(TreeViewItem item) async {
-    final problemUrl = Uri.parse('https://$HOST/api/data/problem/database/${item.value["id"]}');
+    final problemUrl = Uri.parse(
+        'https://$HOST/api/data/problem/database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,
@@ -302,7 +324,9 @@ class FolderController extends GetxController {
       TabController tabController = Get.find<TabController>();
       tabController.isNewTab = true;
 
-      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: Get.find<TabController>().getTabKey());
+      ProblemListController problemListController = Get.put(
+          ProblemListController(problems),
+          tag: Get.find<TabController>().getTabKey());
       DefaultTabBody generatedTab = DefaultTabBody(
         key: GlobalObjectKey(tabController.tagNumber.toString()),
         dashBoardType: DashBoardType.explore,
@@ -314,7 +338,8 @@ class FolderController extends GetxController {
         ),
       );
 
-      Tab newTab = tabController.addTab(generatedTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
+      Tab newTab = tabController.addTab(generatedTab, item.value["name"],
+          const Icon(FluentIcons.fabric_folder));
       tabController.tabs.add(newTab);
       tabController.currentTabIndex.value = tabController.tabs.length - 1;
       tabController.isNewTab = false;
@@ -325,7 +350,8 @@ class FolderController extends GetxController {
   }
 
   Future<void> examViewerInNewTab(TreeViewItem item) async {
-    final problemUrl = Uri.parse('https://$HOST/api/data/get_exam_database/${item.value["id"]}');
+    final problemUrl = Uri.parse(
+        'https://$HOST/api/data/get_exam_database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,
@@ -339,7 +365,9 @@ class FolderController extends GetxController {
       TabController tabController = Get.find<TabController>();
       tabController.isNewTab = true;
 
-      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: Get.find<TabController>().getTabKey());
+      ProblemListController problemListController = Get.put(
+          ProblemListController(problems),
+          tag: Get.find<TabController>().getTabKey());
       DefaultTabBody generatedTab = DefaultTabBody(
         key: GlobalObjectKey(tabController.tagNumber.toString()),
         dashBoardType: DashBoardType.examExplore,
@@ -351,7 +379,8 @@ class FolderController extends GetxController {
         ),
       );
 
-      Tab newTab = tabController.addTab(generatedTab, item.value["name"], const Icon(FluentIcons.text_document));
+      Tab newTab = tabController.addTab(generatedTab, item.value["name"],
+          const Icon(FluentIcons.text_document));
       tabController.tabs.add(newTab);
       tabController.currentTabIndex.value = tabController.tabs.length - 1;
       tabController.isNewTab = false;
@@ -362,10 +391,13 @@ class FolderController extends GetxController {
   }
 
   ///특정 폴더를 클릭했을 때 현재 탭에서 폴더에 속하는 문제 리스트들을 보여주는 함수
-  Future<void> makeProblemListInCurrentTab(TreeViewItem item, String tagName) async {
-    DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
+  Future<void> makeProblemListInCurrentTab(
+      TreeViewItem item, String tagName) async {
+    DefaultTabBodyController workingSpaceController =
+        Get.find<DefaultTabBodyController>(tag: tagName);
 
-    final problemUrl = Uri.parse('https://$HOST/api/data/get_exam_database/${item.value["id"]}');
+    final problemUrl = Uri.parse(
+        'https://$HOST/api/data/get_exam_database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,
@@ -375,24 +407,29 @@ class FolderController extends GetxController {
       await workingSpaceController.deleteWorkingSpaceController();
       final jsonResponse = jsonDecode(response.body);
       final problems = jsonResponse['problem_list'];
-      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: tagName);
+      ProblemListController problemListController =
+          Get.put(ProblemListController(problems), tag: tagName);
       workingSpaceController.changeWorkingSpace(ProblemList(
         targetFolder: item,
         folderName: item.value["name"],
         problems: problems,
         problemListController: problemListController,
       ));
-      workingSpaceController.dashBoard.value = workingSpaceController.makeDashBoard(DashBoardType.explore);
+      workingSpaceController.dashBoard.value =
+          workingSpaceController.makeDashBoard(DashBoardType.explore);
     } else {
       debugPrint(response.statusCode.toString());
       debugPrint("폴더 직속 문제 받기 오류 발생");
     }
   }
 
-  Future<void> makeExamViewerInCurrentTab(TreeViewItem item, String tagName) async {
-    DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
+  Future<void> makeExamViewerInCurrentTab(
+      TreeViewItem item, String tagName) async {
+    DefaultTabBodyController workingSpaceController =
+        Get.find<DefaultTabBodyController>(tag: tagName);
 
-    final problemUrl = Uri.parse('https://$HOST/api/data/problem/database/${item.value["id"]}');
+    final problemUrl = Uri.parse(
+        'https://$HOST/api/data/problem/database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,
@@ -402,14 +439,16 @@ class FolderController extends GetxController {
       await workingSpaceController.deleteWorkingSpaceController();
       final jsonResponse = jsonDecode(response.body);
       final problems = jsonResponse['problem_list'];
-      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: tagName);
+      ProblemListController problemListController =
+          Get.put(ProblemListController(problems), tag: tagName);
       workingSpaceController.changeWorkingSpace(ExamProblemList(
         targetFolder: item,
         folderName: item.value["name"],
         problems: problems,
         problemListController: problemListController,
       ));
-      workingSpaceController.dashBoard.value = workingSpaceController.makeDashBoard(DashBoardType.examExplore);
+      workingSpaceController.dashBoard.value =
+          workingSpaceController.makeDashBoard(DashBoardType.examExplore);
     } else {
       debugPrint(response.statusCode.toString());
       debugPrint("폴더 직속 문제 받기 오류 발생");
@@ -417,7 +456,8 @@ class FolderController extends GetxController {
   }
 
   Future<void> getPath() async {
-    final url = Uri.parse('https://$HOST/api/data/get_database/${selectedProblemDirectoryId.value}');
+    final url = Uri.parse(
+        'https://$HOST/api/data/get_database/${selectedProblemDirectoryId.value}');
     final response = await http.get(
       url,
       headers: await defaultHeader(httpContentType.json),

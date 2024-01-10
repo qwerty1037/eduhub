@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 const DEFAULT_DARK_COLOR = Color(0xFF000000);
 const DEFAULT_TAB_COLOR = Colors.grey;
-// Color(0xFF363943);
-
 const DEFAULT_LIGHT_COLOR = Color(0xFFFFFFFF);
 const DEFAULT_TEXT_COLOR = Colors.black;
 const DEFAULT_TEXT_ALERT_COLOR = Colors.red;
@@ -14,9 +12,6 @@ const double DEFAULT_TEXT_FONT_SIZE = 25;
 const double DEFAULT_BUTTON_FONT_SIZE = 30;
 
 const String HOST = 'ec2-3-36-65-242.ap-northeast-2.compute.amazonaws.com';
-
-//118.36.177.117 스터디라운지
-//175.124.93.223 원격연결
 
 enum DashBoardType {
   /// 파일 탐색

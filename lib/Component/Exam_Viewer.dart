@@ -2,14 +2,15 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ExamViewer extends StatelessWidget {
   ExamViewer({
     super.key,
     required this.examPdfFile,
   });
-  final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
+  final DefaultTabBodyController _defaultTabBodyController =
+      Get.find<DefaultTabBodyController>(
+          tag: Get.find<t.TabController>().getTabKey());
 
   final examPdfFile;
 
@@ -47,7 +48,8 @@ class ExamViewer extends StatelessWidget {
                     FluentIcons.chrome_close,
                   ),
                   onPressed: () {
-                    _defaultTabBodyController.changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
+                    _defaultTabBodyController.changeWorkingSpace(
+                        _defaultTabBodyController.savedWorkingSpace!);
                   },
                 ),
               ),

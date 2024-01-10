@@ -8,7 +8,7 @@ import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controlle
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Exam.dart';
 import 'package:front_end/Screen/Group_Management.dart';
 import 'package:front_end/Screen/Group_Waiting_Screen.dart';
@@ -59,13 +59,13 @@ class DefaultTabBody extends StatelessWidget {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Get.find<TotalController>().isDark.value == true
+                      color: Get.find<DesktopController>().isDark.value == true
                           ? Colors.grey[150]
                           : Colors.grey[30],
                       border: Border(
                         left: BorderSide(
                           color:
-                              Get.find<TotalController>().isDark.value == true
+                              Get.find<DesktopController>().isDark.value == true
                                   ? Colors.grey[130]
                                   : Colors.grey[50],
                           width: 1,

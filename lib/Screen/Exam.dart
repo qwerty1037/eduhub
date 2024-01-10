@@ -7,7 +7,7 @@ import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dar
 import 'package:http/http.dart' as http;
 import 'package:front_end/Controller/ExamController.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/FolderData.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -33,7 +33,7 @@ class ExamScreen extends StatelessWidget {
               Container(
                 width: 0.5,
                 height: MediaQuery.of(context).size.height,
-                color: Get.find<TotalController>().isDark.value == true
+                color: Get.find<DesktopController>().isDark.value == true
                     ? Colors.grey[130]
                     : Colors.grey[50],
               ),
@@ -56,7 +56,7 @@ class ExamScreen extends StatelessWidget {
                                   Container(
                                     width: 0.5,
                                     height: MediaQuery.of(context).size.height,
-                                    color: Get.find<TotalController>()
+                                    color: Get.find<DesktopController>()
                                                 .isDark
                                                 .value ==
                                             true

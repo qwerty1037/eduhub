@@ -6,7 +6,7 @@ import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Default/Cookie.dart';
+import 'package:front_end/Component/Cookie.dart';
 
 enum httpContentType {
   json,

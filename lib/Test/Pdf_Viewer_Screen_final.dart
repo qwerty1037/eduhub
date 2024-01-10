@@ -6,7 +6,7 @@ import 'package:front_end/Component/Default/Default_Key_Text.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Pdf_Save_Screen.dart';
 import 'package:get/get.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -32,7 +32,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Center(
         child: Container(
-          color: Get.find<TotalController>().isDark.value == true
+          color: Get.find<DesktopController>().isDark.value == true
               ? Colors.grey[150]
               : Colors.grey[30],
           child: Stack(

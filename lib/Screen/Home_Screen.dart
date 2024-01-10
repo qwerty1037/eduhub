@@ -14,7 +14,7 @@ import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Screen/Exam.dart';
 import 'package:front_end/Screen/Group_Management.dart';
@@ -41,7 +41,11 @@ class HomeScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: 40,
           child: Row(
-            children: [menuCommandBar(context, homeScreenController), const Spacer(), questionMarkButton(flyoutController: _flyoutController)],
+            children: [
+              menuCommandBar(context, homeScreenController),
+              const Spacer(),
+              questionMarkButton(flyoutController: _flyoutController)
+            ],
           ),
         ),
         Expanded(
@@ -54,7 +58,10 @@ class HomeScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
-                        color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                        color:
+                            Get.find<DesktopController>().isDark.value == true
+                                ? Colors.grey[130]
+                                : Colors.grey[50],
                         width: 1,
                       ),
                     ),
@@ -72,7 +79,9 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Container(
-                  color: Get.find<TotalController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+                  color: Get.find<DesktopController>().isDark.value == true
+                      ? Colors.grey[150]
+                      : Colors.grey[30],
                   child: m.Scaffold(
                     appBar: null,
                     body: SingleChildScrollView(
@@ -83,12 +92,19 @@ class HomeScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     border: Border(
                                   right: BorderSide(
-                                    color: Get.find<TotalController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                                    color: Get.find<DesktopController>()
+                                                .isDark
+                                                .value ==
+                                            true
+                                        ? Colors.grey[130]
+                                        : Colors.grey[50],
                                     width: 1,
                                   ),
                                 )),
                                 child: const HomeCalendar())),
-                        const Expanded(flex: 1, child: Center(child: Text("연동 후 알림창 들어갈 부분")))
+                        const Expanded(
+                            flex: 1,
+                            child: Center(child: Text("연동 후 알림창 들어갈 부분")))
                       ]),
                     ),
                   ),
@@ -120,7 +136,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.savePdf,
               workingSpace: const PdfViewerScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "문제 저장", const Icon(FluentIcons.save));
+            Tab newTab = tabController.addTab(
+                generatedTab, "문제 저장", const Icon(FluentIcons.save));
 
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
@@ -145,7 +162,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.exam,
               workingSpace: ExamScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
+            Tab newTab = tabController.addTab(
+                generatedTab, "시험지 만들기", const Icon(FluentIcons.questionnaire));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
@@ -169,7 +187,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.group,
               workingSpace: const GroupWaitingScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "학생 관리", const Icon(FluentIcons.questionnaire));
+            Tab newTab = tabController.addTab(
+                generatedTab, "학생 관리", const Icon(FluentIcons.questionnaire));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
@@ -188,7 +207,11 @@ class HomeScreen extends StatelessWidget {
                 fontSize: 15,
               )),
           onPressed: () {
-            createHighlightOverlay(context: context, controller: Get.put(SearchScreenController(), tag: tabController.getNewTabKey()), tabController: tabController);
+            createHighlightOverlay(
+                context: context,
+                controller: Get.put(SearchScreenController(),
+                    tag: tabController.getNewTabKey()),
+                tabController: tabController);
           },
         ),
       ),
@@ -210,7 +233,8 @@ class HomeScreen extends StatelessWidget {
               dashBoardType: DashBoardType.tagManagement,
               workingSpace: TagManagementScreen(),
             );
-            Tab newTab = tabController.addTab(generatedTab, "태그", const Icon(FluentIcons.tag));
+            Tab newTab = tabController.addTab(
+                generatedTab, "태그", const Icon(FluentIcons.tag));
             tabController.tabs.add(newTab);
             tabController.currentTabIndex.value = tabController.tabs.length - 1;
             tabController.isNewTab = false;
@@ -226,7 +250,8 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, BuildContext context, FolderController folderController) {
+SingleChildScrollView leftDashboard(HomeScreenController homeScreenController,
+    BuildContext context, FolderController folderController) {
   return SingleChildScrollView(
     child: Column(
       children: [
@@ -243,7 +268,8 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
                       child: const Icon(FluentIcons.settings),
                       onTap: () {
                         final nickNameController = TextEditingController();
-                        nickNameController.text = folderController.nickName.value;
+                        nickNameController.text =
+                            folderController.nickName.value;
                         showDialog(
                             context: context,
                             builder: (context) {
@@ -264,11 +290,16 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
                                       child: const Text('변경하기'),
                                       onPressed: () async {
                                         //TODO 닉네임 변경
-                                        final url = Uri.parse('https://$HOST/api/data/update_nickname');
-                                        final Map<String, dynamic> requestBody = {
-                                          "user_nickname": nickNameController.text,
+                                        final url = Uri.parse(
+                                            'https://$HOST/api/data/update_nickname');
+                                        final Map<String, dynamic> requestBody =
+                                            {
+                                          "user_nickname":
+                                              nickNameController.text,
                                         };
-                                        final headers = {"Content-type": "application/json"};
+                                        final headers = {
+                                          "Content-type": "application/json"
+                                        };
 
                                         final response = await http.post(
                                           url,
@@ -276,16 +307,20 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
                                           body: jsonEncode(requestBody),
                                         );
                                         if (isHttpRequestSuccess(response)) {
-                                          folderController.nickName.value = nickNameController.text;
+                                          folderController.nickName.value =
+                                              nickNameController.text;
                                           Navigator.pop(context);
                                         } else {
                                           Navigator.pop(context);
-                                          displayInfoBar(context, builder: (context, close) {
+                                          displayInfoBar(context,
+                                              builder: (context, close) {
                                             return InfoBar(
                                               title: const Text("닉네임 변경 실패:"),
-                                              content: const Text("닉네임 변경에 실패했습니다"),
+                                              content:
+                                                  const Text("닉네임 변경에 실패했습니다"),
                                               action: IconButton(
-                                                icon: const Icon(FluentIcons.clear),
+                                                icon: const Icon(
+                                                    FluentIcons.clear),
                                                 onPressed: close,
                                               ),
                                               severity: InfoBarSeverity.error,
@@ -316,7 +351,7 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text("다크 모드"),
-            GetBuilder<TotalController>(
+            GetBuilder<DesktopController>(
               builder: (controller) {
                 return ToggleSwitch(
                   checked: controller.isDark.value,

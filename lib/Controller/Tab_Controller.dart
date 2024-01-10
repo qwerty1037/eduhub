@@ -7,7 +7,7 @@ import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Search_Bar_Overlay.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 
 import 'package:front_end/Screen/Home_Screen.dart';
@@ -22,7 +22,7 @@ class TabController extends GetxController {
 
   int tagNumber = 0;
   bool isNewTab = true;
-  TotalController totalController = Get.find<TotalController>();
+  DesktopController totalController = Get.find<DesktopController>();
 
   TabController() {
     tabs.add(
@@ -30,7 +30,9 @@ class TabController extends GetxController {
         icon: const Icon(FluentIcons.home),
         text: const SizedBox.shrink(),
         body: Obx(() => Container(
-              color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
+              color: totalController.isDark.value == true
+                  ? Colors.grey[170]
+                  : Colors.grey[10],
               child: HomeScreen(tabController: this),
             )),
         closeIcon: null,
@@ -43,8 +45,11 @@ class TabController extends GetxController {
     super.onInit();
     const storage = FlutterSecureStorage();
 
-    if (await storage.read(key: 'uid') == await storage.read(key: 'saved_uid') && await storage.read(key: 'saved_tabs') != null) {
-      List<dynamic> tabToRestore = jsonDecode(await storage.read(key: 'saved_tabs') as String);
+    if (await storage.read(key: 'uid') ==
+            await storage.read(key: 'saved_uid') &&
+        await storage.read(key: 'saved_tabs') != null) {
+      List<dynamic> tabToRestore =
+          jsonDecode(await storage.read(key: 'saved_tabs') as String);
 
       FolderController folderController = Get.find<FolderController>();
       for (int i = 0; i < tabToRestore.length; i++) {
@@ -52,7 +57,8 @@ class TabController extends GetxController {
         if (type == "explore") {
           int folderId = tabToRestore[i]["id"];
           //아이디로 폴더 찾고,
-          TreeViewItem currentFolder = folderController.findTreeViewItem(folderId);
+          TreeViewItem currentFolder =
+              folderController.findTreeViewItem(folderId);
           folderController.makeProblemListInNewTab(currentFolder);
         } else if (type == "search") {
           String searchText = tabToRestore[i]["text"];
@@ -70,7 +76,8 @@ class TabController extends GetxController {
               content: searchContent,
             ),
           );
-          Tab newTab = addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
+          Tab newTab =
+              addTab(tabBody, "SearchScreen", const Icon(FluentIcons.search));
           tabs.add(newTab);
           currentTabIndex.value++;
           isNewTab = false;
@@ -94,7 +101,9 @@ class TabController extends GetxController {
             FluentIcons.file_template,
           ),
       body: Obx(() => Container(
-            color: totalController.isDark.value == true ? Colors.grey[170] : Colors.grey[10],
+            color: totalController.isDark.value == true
+                ? Colors.grey[170]
+                : Colors.grey[10],
             child: body,
           )),
       onClosed: () async {
@@ -109,7 +118,8 @@ class TabController extends GetxController {
           }
         }
 
-        await Get.find<DefaultTabBodyController>(tag: newKey.toString()).deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: newKey.toString())
+            .deleteWorkingSpaceController();
 
         Get.delete<DefaultTabBodyController>(tag: newKey.toString());
       },
@@ -137,9 +147,11 @@ class TabController extends GetxController {
           currentTabIndex.value--;
         }
 
-        await Get.find<DefaultTabBodyController>(tag: tab.key.toString()).deleteWorkingSpaceController();
+        await Get.find<DefaultTabBodyController>(tag: tab.key.toString())
+            .deleteWorkingSpaceController();
 
-        Get.delete<DefaultTabBodyController>(tag: tab.key.toString(), force: true);
+        Get.delete<DefaultTabBodyController>(
+            tag: tab.key.toString(), force: true);
         if (currentTabIndex.value == 0) {
           isNewTab = true;
         }

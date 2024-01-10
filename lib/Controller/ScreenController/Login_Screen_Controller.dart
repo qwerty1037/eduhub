@@ -8,7 +8,7 @@ import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/Group_TreeView_Controller.dart';
 import 'package:front_end/Controller/Register_Info_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,7 +33,8 @@ class loginScreenController extends GetxController {
   }
 
   ///쿠키를 안전한 보관소에 저장하는 함수
-  Future<void> saveCookieToSecureStorage(String uid, String accessToken, String refreshToken) async {
+  Future<void> saveCookieToSecureStorage(
+      String uid, String accessToken, String refreshToken) async {
     await storage.write(key: 'uid', value: uid);
     await storage.write(key: 'access_token', value: accessToken);
     await storage.write(key: 'refresh_token', value: refreshToken);
@@ -41,9 +42,10 @@ class loginScreenController extends GetxController {
 
   ///로그인 성공시 적용되는 로직으로 초기 데이터를 받아오고 탭뷰를 띄워주며 현재 컨트롤러 인스턴스를 삭제
   void loginSuccess() async {
-    TotalController totalController = Get.find<TotalController>();
+    DesktopController totalController = Get.find<DesktopController>();
     FolderController folderController = Get.find<FolderController>();
-    GroupTreeViewController groupController = Get.find<GroupTreeViewController>();
+    GroupTreeViewController groupController =
+        Get.find<GroupTreeViewController>();
     await folderController.receiveData();
     await groupController.receiveData();
     totalController.login();
@@ -56,7 +58,10 @@ class loginScreenController extends GetxController {
   Future<void> logInRequest(BuildContext context) async {
     final url = Uri.parse('https://$HOST/api/auth/login');
 
-    final Map<String, dynamic> requestBody = {"user_id": idController.text, "user_password": passwordController.text};
+    final Map<String, dynamic> requestBody = {
+      "user_id": idController.text,
+      "user_password": passwordController.text
+    };
     final headers = {"Content-type": "application/json"};
     final response = await http.post(
       url,

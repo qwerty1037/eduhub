@@ -10,7 +10,7 @@ import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controll
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Group.dart';
 
 import 'package:get/get.dart';
@@ -21,14 +21,14 @@ class DefaultTabBodyController extends GetxController {
   DashBoardType dashBoardType;
 
   Rx<Widget> workingSpaceWidget = Obx(() => Container(
-        color: Get.find<TotalController>().isDark.value == true
+        color: Get.find<DesktopController>().isDark.value == true
             ? Colors.grey[150]
             : Colors.grey[30],
         child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
       )).obs;
 
   Widget realWorkingSpaceWidget = Container(
-    color: Get.find<TotalController>().isDark.value == true
+    color: Get.find<DesktopController>().isDark.value == true
         ? Colors.grey[150]
         : Colors.grey[30],
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
@@ -54,13 +54,13 @@ class DefaultTabBodyController extends GetxController {
   ///default tab body의 workingspace부분을 바꾸는 method
   void changeWorkingSpace(Widget newWorkingSpace) {
     workingSpaceWidget.value = Obx(() => Container(
-          color: Get.find<TotalController>().isDark.value == true
+          color: Get.find<DesktopController>().isDark.value == true
               ? Colors.grey[150]
               : Colors.grey[30],
           child: newWorkingSpace,
         ));
     realWorkingSpaceWidget = Container(
-      color: Get.find<TotalController>().isDark.value == true
+      color: Get.find<DesktopController>().isDark.value == true
           ? Colors.grey[150]
           : Colors.grey[30],
       child: newWorkingSpace,

@@ -39,7 +39,7 @@ dependencies:
 
   get: ^4.6.5
   desktop_drop: ^0.4.1
-  syncfusion_flutter_pdfviewer: ^22.1.37
+  
   flutter_pdfview: ^1.2.7
   image_gallery_saver: ^1.7.1
   flutter_widget_from_html: ^0.10.1
@@ -63,9 +63,15 @@ dependencies:
   localstorage: ^4.0.1+4
   url_launcher: ^6.1.14
   flutter_spinkit: ^5.2.0
-  syncfusion_flutter_pdf: ^22.2.12
+  
   flutter_box_transform: ^0.4.2
-  pdfx: ^2.4.0
+  pdfx: 
+    git:
+      url: 'https://github.com/ScerIO/packages.flutter'
+      ref: '4be9de9ffed5398fd7d5f44bbb07dcd3d3f1711b'
+      path: packages/pdfx
+  syncfusion_flutter_pdfviewer: ^24.1.45
+  syncfusion_flutter_pdf: ^24.1.45
 
 dev_dependencies:
   flutter_test:

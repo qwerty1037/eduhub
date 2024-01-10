@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Problem_List.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Controller/Group_Controller.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Total_Controller.dart';
+import 'package:front_end/Controller/Desktop_Controller.dart';
 import 'package:front_end/Screen/Default_Tab_Body.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
 import 'package:front_end/Screen/Group_Management.dart';
@@ -18,7 +19,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 ///폴더 관련 데이터를 처리하는 컨트롤러
 class GroupTreeViewController extends GetxController {
-  TotalController totalController = Get.find<TotalController>();
+  DesktopController desktopController = Get.find<DesktopController>();
   RxInt selectedGroupID = 99999999999.obs;
   RxString selectedPath = "".obs;
   RxList<TreeViewItem> totalGroups = <TreeViewItem>[].obs;

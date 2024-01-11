@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Frame.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Component/frame.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
 import 'package:get/get.dart';
@@ -13,7 +13,7 @@ import 'package:front_end/Controller/Tab_Controller.dart' as t;
 class PdfSaveScreen extends StatelessWidget {
   final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
   final controller = Get.put(PdfSaveController(), tag: Get.find<t.TabController>().getTabKey());
-  final FolderController folderController = Get.find<FolderController>();
+  final UserDataController userDataController = Get.find<UserDataController>();
   late File pdfFile;
   late List<Frame> frameList;
 

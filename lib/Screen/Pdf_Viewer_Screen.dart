@@ -2,7 +2,7 @@
 //import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
-import 'package:front_end/Component/Frame.dart';
+import 'package:front_end/Component/frame.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/Desktop_Controller.dart';

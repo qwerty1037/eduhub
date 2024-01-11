@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Component/Frame.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Component/frame.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Tag_Model.dart';

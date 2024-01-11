@@ -59,7 +59,7 @@ class ExamFolderTreeView extends StatelessWidget {
                             controller.selectedExamDirectoryID.value = item.value["id"];
                             controller.rootExamFolders.refresh();
                             if (Get.find<TabController>().currentTabIndex.value == 0) {
-                              controller.examViewerInNewTab(item);
+                              controller.examViewerInNewTab(item, context);
                             } else if (tagName != null && Get.find<DefaultTabBodyController>(tag: tagName).dashBoardType == DashBoardType.exam) {
                               Get.find<ExamController>(tag: tagName).selectedFolder = item.value["id"];
                             } else {

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:flutter/material.dart' as flutter_material;
 import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/choose_exam.dart';
 import 'package:front_end/Component/exam_problem_list.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/problem_list.dart';
-import 'package:front_end/Controller/Problem_List_Controller.dart';
+import 'package:front_end/Controller/problem_list_controller.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 
@@ -305,33 +307,41 @@ class UserDataController extends GetxController {
   }
 
   /// 시험지 폴더를 클릭했을 때 시험지들의 구체적인 내용을 서버로부터 받고 새 탭에서 보여주는 함수. TODO: 시험지 서버와 연동, 디버깅 필요
-  Future<void> examViewerInNewTab(TreeViewItem item) async {
-    final problemUrl = Uri.parse('https://$HOST/api/data/get_exam_database/${item.value["id"]}');
+  Future<void> examViewerInNewTab(TreeViewItem item, BuildContext context) async {
+    //시험지들을 받아오는 부분 TODO: 서버에서 시험지 폴더에서 시험지 리스트 정보 받기 디버깅 필요
+    final examUrl = Uri.parse('https://$HOST/api/data/get_exam_database/${item.value["id"]}');
     final response = await http.get(
-      problemUrl,
+      examUrl,
       headers: await defaultHeader(httpContentType.json),
     );
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
-      final problems = jsonResponse['exam_list'];
-      TabController tabController = Get.find<TabController>();
-      tabController.isNewTab = true;
-      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: Get.find<TabController>().getTabKey());
-      DefaultTabBody generatedTab = DefaultTabBody(
-        key: GlobalObjectKey(tabController.tagNumber.toString()),
-        dashBoardType: DashBoardType.examExplore,
-        workingSpace: ExamProblemList(
-          targetFolder: item,
-          folderName: item.value["name"],
-          problems: problems,
-          problemListController: problemListController,
-        ),
-      );
+      final exams = jsonResponse['exam_list'];
 
-      Tab newTab = tabController.addTab(generatedTab, item.value["name"], const Icon(FluentIcons.text_document));
-      tabController.tabs.add(newTab);
-      tabController.currentTabIndex.value = tabController.tabs.length - 1;
-      tabController.isNewTab = false;
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return FutureBuilder(
+                future: Future.delayed(Duration.zero),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.none && snapshot.connectionState != ConnectionState.waiting) {
+                    return ContentDialog(
+                      title: const Text("시험지를 선택해주세요"),
+                      content: ChooseExam(exams: exams, item: item),
+                      actions: [
+                        Button(
+                          child: const Text("취소"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const flutter_material.CircularProgressIndicator();
+                  }
+                });
+          });
     } else {
       debugPrint(response.statusCode.toString());
       debugPrint("examViewerInNewTab 오류 발생(user data controller)");

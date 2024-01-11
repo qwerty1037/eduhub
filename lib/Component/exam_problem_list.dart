@@ -4,13 +4,13 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as flutter_material;
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
-import 'package:front_end/Controller/Problem_List_Controller.dart';
+import 'package:front_end/Controller/problem_list_controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-///폴더에 속하는 문제 리스트를 보여주며 직속문제/아래모든문제를 볼 수 있다. 클릭시 오른쪽에 이미지가 뜨며 버튼 부분은 수정이 필요하다
+///시험지에 속하는 문제 리스트를 보여준다. 클릭시 오른쪽에 이미지가 뜬다.
 class ExamProblemList extends StatelessWidget {
   ExamProblemList({super.key, required this.targetFolder, required this.folderName, required this.problems, required this.problemListController});
   String folderName;

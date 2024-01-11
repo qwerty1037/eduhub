@@ -35,7 +35,6 @@ class PdfViewerScreenController extends GetxController {
   RxInt tempInt = 0.obs;
   int pageNum = 0;
   RxList transformableBoxList = <Widget>[].obs;
-  int transformableBoxNumber = 0;
   RxList rectList = <Rect>[].obs;
   var ctrlList = <TransformationController>[];
   int boxIndex = 0;

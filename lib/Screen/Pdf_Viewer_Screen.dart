@@ -2,6 +2,7 @@
 //import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
+import 'package:front_end/Component/frame.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
@@ -46,6 +47,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   }),
                 ],
               ),
+              /*
               Obx(() {
                 return Align(
                   alignment: Alignment.bottomRight,
@@ -70,6 +72,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                   ),
                 );
               }),
+              */
             ],
           ),
         ),
@@ -222,17 +225,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       width: 1,
                       //color: Colors.black,
                     ),
-                    //color: Colors.black,
-                    /*
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                    */
                   ),
                   child: Stack(
                     children: [
@@ -253,17 +245,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: OutlinedButton(
-                          /*
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                            ),
-                          ),
-                          */
                           onPressed: () {
                             controller.exitPdf();
                           },
@@ -298,8 +279,8 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               SizedBox(
                                 child: Image.memory(controller.pickedPdfImageList[controller.pageIndex.value]),
                               ),
-                              ...controllerProblem.rectList.map((element) {
-                                return TransformableBox(
+                              for (int idx = 0; idx < controller.rectList.length; idx++) ...[
+                                TransformableBox(
                                   contentBuilder: (content, rect, flip) {
                                     return GestureDetector(
                                       onTap: () {
@@ -318,32 +299,19 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                                       ),
                                     );
                                   },
-                                  rect: element,
+                                  rect: controller.rectList[idx],
                                   onChanged: (result, event) {
                                     setState(() {
-                                      element = result.rect;
+                                      controller.rectList[idx] = result.rect;
+                                      controller.rectList.refresh();
                                     });
                                   },
-                                );
-                              }),
-                              /*
-                              Visibility(
-                                child: Text("${controllerProblem.tempInt.value}"),
-                                visible: false,
-                              ),
-                              */
+                                ),
+                              ]
                             ],
                           ),
                         ),
                       ),
-                      /*
-                      SizedBox(
-                        child: SfPdfViewer.file(
-                          controller.pickedFile!,
-                          pageLayoutMode: PdfPageLayoutMode.single,
-                        ),
-                      ),
-                      */
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: Visibility(
@@ -378,17 +346,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: IconButton(
-                                    /*
-                                    style: ButtonStyle(
-                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
-                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(18.0),
-                                        ),
-                                      ),
-                                    ),
-                                    */
                                     onPressed: () async {
                                       controller.deleteCapturedImage();
                                     },
@@ -408,23 +365,11 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: IconButton(
-                            /*
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.black26),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                              ),
-                            ),
-                            */
                             onPressed: () async {
                               controller.capturePdf();
                             },
                             icon: const Icon(
                               FluentIcons.camera,
-                              //scolor: Colors.white,
                             ),
                           ),
                         ),
@@ -446,14 +391,14 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       child: const Text("박스 생성"),
                       onPressed: () {
                         renderSize = _getSize();
-                        controllerProblem.generateBox(renderSize);
+                        controller.generateBox(renderSize);
                         setState(() {});
                       },
                     ),
                     Button(
                       child: const Text("박스 삭제"),
                       onPressed: () {
-                        controllerProblem.deleteBox();
+                        controller.deleteBox();
                         setState(() {});
                       },
                     ),
@@ -483,6 +428,37 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     ),
                   ],
                 ),
+                Button(
+                  child: Text("1차 프레임 저장"),
+                  onPressed: () {
+                    if (controller.transformableBoxList.isEmpty) {
+                      showEmptyDialog(context);
+                      setState(() {});
+                    } else {
+                      List<Frame> frameList = [];
+                      for (int pageIdx = 0; pageIdx < controller.pageNum; pageIdx++) {
+                        for (Rect element in controller.rectList.cast()) {
+                          Offset topLeft = element.topLeft;
+                          Offset bottomRight = element.bottomRight;
+                          double minX = topLeft.dx / renderSize.width;
+                          double minY = topLeft.dy / renderSize.height;
+                          double maxX = bottomRight.dx / renderSize.width;
+                          double maxY = bottomRight.dy / renderSize.height;
+                          Frame tempFrame = Frame(page: pageIdx, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
+                          frameList.add(tempFrame);
+                          debugPrint("pageIdx: $pageIdx, minX: $minX, minY: $minY, maxX: $maxX, maxY: $maxY");
+                        }
+                      }
+
+                      final DefaultTabBodyController defaultTabBodyController =
+                          Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
+                      defaultTabBodyController.saveThisWorkingSpace();
+                      defaultTabBodyController.changeWorkingSpace(
+                        PdfSaveScreen(controller.pickedFile!, frameList),
+                      );
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -490,4 +466,22 @@ class _PdfScreenState extends State<PdfViewerScreen> {
       ),
     );
   }
+}
+
+void showEmptyDialog(BuildContext context) async {
+  final result = await showDialog<String>(
+    context: context,
+    builder: (context) => ContentDialog(
+      title: const Text('1차 프레임을 설정해주세요'),
+      content: const Text(
+        '문제의 열을 따라 1차 프레임을 설정해주세요.',
+      ),
+      actions: [
+        FilledButton(
+          child: const Text('확인'),
+          onPressed: () => Navigator.pop(context, 'User canceled dialog'),
+        ),
+      ],
+    ),
+  );
 }

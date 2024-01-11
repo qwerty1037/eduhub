@@ -3,7 +3,7 @@ import 'package:front_end/Component/exam_viewer.dart';
 import 'package:front_end/Controller/group_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
+import 'package:front_end/Controller/desktop_Controller.dart';
 import 'package:get/get.dart';
 
 class GroupManagementScreen extends StatelessWidget {

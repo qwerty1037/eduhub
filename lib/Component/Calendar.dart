@@ -9,6 +9,7 @@ import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dar
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+//TODO: 여러 기기 호환이 필요할 경우 추후에는 서버에서 데이터 받아오기(현재는 로컬 컴퓨터에만 저장)
 class HomeCalendar extends StatefulWidget {
   const HomeCalendar({
     super.key,
@@ -22,8 +23,6 @@ class _HomeCalendarState extends State<HomeCalendar> {
   DateTime selectedDay = DateTime.utc(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime focusedDay = DateTime.now();
   CalendarFormat format = CalendarFormat.month;
-
-  //추후에는 서버에서 데이터 받아오기
 
   HomeScreenController homeScreenController = Get.find<HomeScreenController>();
   List<CalendarEvent> _getEventsForDay(DateTime day) {

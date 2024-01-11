@@ -6,7 +6,7 @@ import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/Group_TreeView_Controller.dart';
 import 'package:front_end/Controller/Register_Info_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
+import 'package:front_end/Controller/desktop_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 

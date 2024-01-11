@@ -80,7 +80,7 @@ class ExamController extends GetxController {
     if (tagValue.value == "") return chips;
     RegExp regExp = getRegExp(
       tagValue.value,
-      const RegExpOptions(
+      RegExpOptions(
         initialSearch: true,
         startsWith: false,
         endsWith: false,
@@ -168,7 +168,10 @@ class ExamController extends GetxController {
       final key = item["id"];
       if (!uniqueKeys.contains(key)) {
         var level = item["level"];
-        if ((minlevelController.text.isNotEmpty && maxlevelController.text.isNotEmpty && int.parse(minlevelController.text) <= level && int.parse(maxlevelController.text) >= level) ||
+        if ((minlevelController.text.isNotEmpty &&
+                maxlevelController.text.isNotEmpty &&
+                int.parse(minlevelController.text) <= level &&
+                int.parse(maxlevelController.text) >= level) ||
             minlevelController.text.isEmpty) {
           bool? alltagsContained = targetTags.every((element) => item["tags"].contains(element));
           if (targetTags.isEmpty || alltagsContained) {

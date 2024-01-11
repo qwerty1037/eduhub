@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
@@ -221,7 +223,7 @@ class PdfSaveController extends GetxController {
     if (tagTextFieldValue.value == "") return chips;
     RegExp regExp = getRegExp(
       tagTextFieldValue.value, // != "" ? tagTextFieldValue.value : " ",
-      const RegExpOptions(
+      RegExpOptions(
         initialSearch: true,
         startsWith: false,
         endsWith: false,

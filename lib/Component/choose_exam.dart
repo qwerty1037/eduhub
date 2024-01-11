@@ -5,7 +5,7 @@ import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Component/exam_problem_list.dart';
 import 'package:front_end/Controller/problem_list_controller.dart';
 
-import 'package:front_end/Controller/tab_controller.dart';
+import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/problem_list.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

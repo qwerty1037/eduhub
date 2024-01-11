@@ -33,12 +33,13 @@ class PdfViewerScreenController extends GetxController {
   RxBool showProcess = false.obs;
 
   RxInt tempInt = 0.obs;
-
+  int pageNum = 0;
   RxList transformableBoxList = <Widget>[].obs;
   int transformableBoxNumber = 0;
   RxList rectList = <Rect>[].obs;
   var ctrlList = <TransformationController>[];
   int boxIndex = 0;
+  RxInt pageIndex = 1.obs;
 
   ///Upload file into Application using FIlePicker.
   ///
@@ -78,7 +79,7 @@ class PdfViewerScreenController extends GetxController {
 
       final pdf = await PdfDocument.openFile(detail.files.first.path);
       // final size = await pdf.getPage(1).;
-      final pageNum = pdf.pagesCount;
+      pageNum = pdf.pagesCount;
       for (int i = 1; i <= pageNum; i++) {
         PdfPage page = await pdf.getPage(i);
         PdfPageImage? pageImage = await page.render(
@@ -299,7 +300,7 @@ class PdfViewerScreenController extends GetxController {
       Offset bottomRight = element.bottomRight;
     }
 
-/*
+    /*
     var bytePdf = await pickedFile?.readAsBytes();
     var request = http.MultipartRequest('POST', url);
     var formDataProblem = http.MultipartFile.fromBytes(
@@ -316,7 +317,6 @@ class PdfViewerScreenController extends GetxController {
       "level": difficultySliderValue.round(),
       "frame_list": 
     };
-  
-  */
+    */
   }
 }

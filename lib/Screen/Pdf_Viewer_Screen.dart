@@ -295,16 +295,16 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                           child: Stack(
                             children: [
                               SizedBox(
-                                child: Image.memory(controller.pickedPdfImageList[1]),
+                                child: Image.memory(controller.pickedPdfImageList[controller.pageIndex.value]),
                               ),
                               ...controllerProblem.rectList.map((element) {
                                 return TransformableBox(
                                   contentBuilder: (content, rect, flip) {
                                     return GestureDetector(
                                       onTap: () {
-                                        int idx = controllerProblem.boxIndex;
+                                        int idx = controller.boxIndex;
                                         debugPrint("$idx");
-                                        debugPrint("${controllerProblem.rectList.length}");
+                                        debugPrint("${controller.rectList.length}");
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -454,6 +454,30 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       onPressed: () {
                         controllerProblem.deleteBox();
                         setState(() {});
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Button(
+                      child: const Text("이전 페이지"),
+                      onPressed: () {
+                        if (controller.pageIndex.value == 0) {
+                          //TODO: 첫 페이지 알림
+                        } else {
+                          controller.pageIndex.value--;
+                        }
+                      },
+                    ),
+                    Button(
+                      child: const Text("다음 페이지"),
+                      onPressed: () {
+                        if (controller.pageIndex.value == controller.pageNum - 1) {
+                          //TODO: 마지막 페이지 알림
+                        } else {
+                          controller.pageIndex.value++;
+                        }
                       },
                     ),
                   ],

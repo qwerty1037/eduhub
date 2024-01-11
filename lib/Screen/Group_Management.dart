@@ -1,14 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Exam_Viewer.dart';
-import 'package:front_end/Controller/Group_Controller.dart';
+import 'package:front_end/Component/exam_viewer.dart';
+import 'package:front_end/Controller/group_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:get/get.dart';
 
 class GroupManagementScreen extends StatelessWidget {
-  GroupManagementScreen(
-      {super.key, required this.item, required this.controller});
+  GroupManagementScreen({super.key, required this.item, required this.controller});
   final TreeViewItem item;
   final GroupController controller;
   String tagName = Get.find<TabController>().getTabKey();
@@ -73,10 +72,8 @@ class GroupManagementScreen extends StatelessWidget {
                       child: GroupMenu(
                         menuText: "설정",
                         onTap: () {
-                          DefaultTabBodyController workingSpaceController =
-                              Get.find<DefaultTabBodyController>(tag: tagName);
-                          workingSpaceController.changeWorkingSpace(
-                              ExamViewer(examPdfFile: "examPdfFile"));
+                          DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
+                          workingSpaceController.changeWorkingSpace(ExamViewer(examPdfFile: "examPdfFile"));
                         },
                       ),
                     ),
@@ -93,8 +90,7 @@ class GroupManagementScreen extends StatelessWidget {
 }
 
 class GroupMenu extends StatelessWidget {
-  const GroupMenu({Key? key, required this.menuText, required this.onTap})
-      : super(key: key);
+  const GroupMenu({Key? key, required this.menuText, required this.onTap}) : super(key: key);
   final String menuText;
   final VoidCallback onTap;
 
@@ -108,9 +104,7 @@ class GroupMenu extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(16),
-            color: Get.find<DesktopController>().isDark.value == true
-                ? Colors.grey[130]
-                : Colors.grey[50],
+            color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
           ),
           child: Center(
             child: Text(

@@ -1,22 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart' as material;
 import 'package:file_picker/file_picker.dart';
-import 'package:front_end/Component/Default/Config.dart';
+import 'package:front_end/Component/Default/config.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
-import 'package:win32/win32.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:http_parser/http_parser.dart';
 
 class PdfFile {
   Uint8List? capturedImage;
@@ -132,14 +127,14 @@ class PdfViewerScreenController extends GetxController {
       imagePath: '${directory.path}/screen_capturer_example/Screenshots/a.png',
       copyToClipboard: true,
     );
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     var imageBytes = await screenCapturer.readImageFromClipboard();
     if (capturedData == null) {
       if (imageBytes != null) {
         capturedImage = imageBytes;
         isCaptured.value = true;
       } else {
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1));
         imageBytes = await screenCapturer.readImageFromClipboard();
         if (imageBytes != null) {
           capturedImage = imageBytes;
@@ -178,7 +173,7 @@ class PdfViewerScreenController extends GetxController {
   }
 
   bool checkPdfCondition() {
-    final folderController = Get.find<FolderController>();
+    final folderController = Get.find<UserDataController>();
     return pickedFile != null && folderController.selectedPath.value.isNotEmpty;
   }
 
@@ -186,7 +181,7 @@ class PdfViewerScreenController extends GetxController {
     //
     //pickedfile을 서버에 보내기
     //보내야 하는건 저장할 위치 이름과 파일, 끝나면 서버처리 확인하는 엔드포인트(로딩) -> 끝나면 폴더 업데이트 추가
-    final folderController = Get.find<FolderController>();
+    final folderController = Get.find<UserDataController>();
 
     if (checkPdfCondition()) {
       final url = Uri.parse('https://$HOST/api/data/create_problem');
@@ -195,7 +190,7 @@ class PdfViewerScreenController extends GetxController {
       request.files.add(http.MultipartFile('pdf_file', pickedFile!.openRead(), pickedFileSize.value, filename: pickedFileName.value));
 
       request.fields.addAll({
-        "parent_database": Get.find<FolderController>().selectedProblemDirectoryId.value.toString(),
+        "parent_database": Get.find<UserDataController>().selectedProblemDirectoryId.value.toString(),
       });
       request.headers.addAll(await defaultHeader(httpContentType.multipart));
 

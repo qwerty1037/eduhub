@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Format of title of TextField
-///
-/// 텍스트필드의 제목 양식
-class DefaultKeyText extends StatelessWidget {
+// TODO 다크모드에서 글자색 바뀌는지 확인
+class DefaultTitle extends StatelessWidget {
   final String text;
-  const DefaultKeyText({
+  const DefaultTitle({
     super.key,
     required this.text,
   });

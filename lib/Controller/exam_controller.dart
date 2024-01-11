@@ -2,18 +2,17 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Component/Exam_Folder_Treeview.dart';
-import 'package:front_end/Component/New_Folder_Button.dart';
-import 'package:front_end/Component/Tag_Model.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Component/exam_folder_treeview.dart';
+import 'package:front_end/Component/Class/tag_model.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
+import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:get/get.dart';
 import 'package:korea_regexp/korea_regexp.dart';
 import 'package:http/http.dart' as http;
-import 'package:front_end/Component/FolderData.dart';
+import 'package:front_end/Component/Class/folder_data.dart';
 
 class ExamController extends GetxController {
   RxInt totalCount = 0.obs;
@@ -81,7 +80,7 @@ class ExamController extends GetxController {
     if (tagValue.value == "") return chips;
     RegExp regExp = getRegExp(
       tagValue.value,
-      RegExpOptions(
+      const RegExpOptions(
         initialSearch: true,
         startsWith: false,
         endsWith: false,
@@ -138,7 +137,7 @@ class ExamController extends GetxController {
         }
       }
     } else {
-      for (var item in Get.find<FolderController>().rootProblemFolders) {
+      for (var item in Get.find<UserDataController>().rootProblemFolders) {
         final problemUrl = Uri.parse('https://$HOST/api/data/problem/database_all/${item.value["id"]}');
 
         final response = await http.get(
@@ -290,7 +289,7 @@ class ExamController extends GetxController {
                         if (isHttpRequestSuccess(examResponse)) {
                           final jsonResponse = jsonDecode(examResponse.body);
                           final examDatabaseFolder = jsonResponse['database_folders'];
-                          Get.find<FolderController>().makeExamFolderListInfo(examDatabaseFolder);
+                          Get.find<UserDataController>().folderUpdateFromJson(examDatabaseFolder, true);
                         } else {
                           debugPrint("시험지 폴더 리스트 받기 오류 발생");
                         }

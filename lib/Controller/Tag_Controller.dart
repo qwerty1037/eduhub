@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,8 +13,57 @@ class TagController extends GetxController {
   int numberOfTags = 0;
   RxList<Tag> inputedTagsList = <Tag>[].obs;
   RxList<Tag> totalTagList = <Tag>[].obs;
-
   TagController() {
+    receiveTags();
+  }
+
+  void receiveTags() async {
+    totalTagList = <Tag>[].obs;
+    final url = Uri.parse('https://$HOST/api/data/mytags');
+    final response = await http.get(
+      url,
+      headers: await defaultHeader(httpContentType.json),
+    );
+    final tempTagList = jsonDecode(response.body)["tags"];
+    for (int i = 0; i < tempTagList.length; i++) {
+      Tag tempTag = Tag(
+        id: tempTagList[i]["id"],
+        name: tempTagList[i]["name"],
+        ownerId: tempTagList[i]["owner_id"],
+        problemCount: tempTagList[i]["problem_count"],
+      );
+      debugPrint(tempTag.id.toString());
+      debugPrint(tempTag.name.toString());
+      debugPrint(tempTag.ownerId.toString());
+      debugPrint(tempTag.problemCount.toString());
+      totalTagList.add(tempTag);
+    }
+    totalTagList.refresh();
+  }
+
+  /// 새 태그를 만드는 함수
+  void sendTags() async {
+    final url = Uri.parse('https://$HOST/api/data/create_tag_list');
+
+    List<String> selectedTags = <String>[];
+    for (int i = 0; i < inputedTagsList.length; i++) {
+      selectedTags.add(inputedTagsList[i].name);
+    }
+    final Map<String, dynamic> requestBody = {
+      "tag_name_list": selectedTags,
+    };
+
+    final response = await http.post(
+      url,
+      headers: await defaultHeader(httpContentType.json),
+      body: jsonEncode(requestBody),
+    );
+
+    if (isHttpRequestSuccess(response)) {
+      debugPrint("태그 전송 성공");
+    } else {
+      debugPrint("태그 전송 실패");
+    }
     receiveTags();
   }
 
@@ -35,56 +84,5 @@ class TagController extends GetxController {
       chips.add(item);
     }
     return chips;
-  }
-
-  /// Tags를 Backend로 http request
-  void sendTags() async {
-    final url = Uri.parse('https://$HOST/api/data/create_tag_list');
-
-    List<String> selectedTags = <String>[];
-    for (int i = 0; i < inputedTagsList.length; i++) {
-      selectedTags.add(inputedTagsList[i].name);
-    }
-    /*
-    for (int i = 0; i < selectedTags.length; i++) {
-      print(selectedTags[i]);
-    }
-*/
-    final Map<String, dynamic> requestBody = {
-      "tag_name_list": selectedTags,
-    };
-
-    final response = await http.post(
-      url,
-      headers: await defaultHeader(httpContentType.json),
-      body: jsonEncode(requestBody),
-    );
-    print(response.statusCode);
-    if (isHttpRequestSuccess(response)) {
-      debugPrint("태그 전송 성공");
-    } else {
-      debugPrint("태그 전송 실패");
-    }
-    receiveTags();
-  }
-
-  void receiveTags() async {
-    totalTagList = <Tag>[].obs;
-    final url = Uri.parse('https://$HOST/api/data/mytags');
-    final response = await http.get(
-      url,
-      headers: await defaultHeader(httpContentType.json),
-    );
-    final tempTagList = jsonDecode(response.body)["tags"];
-    for (int i = 0; i < tempTagList.length; i++) {
-      Tag tempTag = Tag(
-        id: tempTagList[i]["id"],
-        name: tempTagList[i]["name"],
-        ownerId: tempTagList[i]["owner_id"],
-        problemCount: tempTagList[i]["problem_count"],
-      );
-      totalTagList.add(tempTag);
-    }
-    totalTagList.refresh();
   }
 }

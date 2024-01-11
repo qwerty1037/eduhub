@@ -5,8 +5,9 @@ import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:front_end/Component/frame.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
-import 'package:front_end/Screen/Pdf_Save_Screen.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
+
+import 'package:front_end/Screen/pdf_save_screen.dart';
 import 'package:get/get.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -36,15 +37,13 @@ class _PdfScreenState extends State<PdfViewerScreen> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Center(
         child: Container(
-          color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+          color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
           child: Stack(
             children: [
               Row(
                 children: [
                   Obx(() {
-                    return controllerProblem.isPdfInputed.value
-                        ? pdfViewerContainer(controllerProblem, constraints)
-                        : selectPdfContainer(controllerProblem, constraints);
+                    return controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints);
                   }),
                 ],
               ),
@@ -56,8 +55,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     visible: (controllerProblem.isCaptured.value == true && controllerAnswer.isCaptured.value == true),
                     child: IconButton(
                       onPressed: () {
-                        final DefaultTabBodyController defaultTabBodyController =
-                            Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
+                        final DefaultTabBodyController defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
                         defaultTabBodyController.saveThisWorkingSpace();
                         defaultTabBodyController.changeWorkingSpace(PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!));
 
@@ -390,7 +388,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 Row(
                   children: [
                     Button(
-                      child: Text("박스 생성"),
+                      child: const Text("박스 생성"),
                       onPressed: () {
                         renderSize = _getSize();
                         controller.generateBox(renderSize);
@@ -398,7 +396,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       },
                     ),
                     Button(
-                      child: Text("박스 삭제"),
+                      child: const Text("박스 삭제"),
                       onPressed: () {
                         controller.deleteBox();
                         setState(() {});
@@ -409,7 +407,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 Row(
                   children: [
                     Button(
-                      child: Text("이전 페이지"),
+                      child: const Text("이전 페이지"),
                       onPressed: () {
                         if (controller.pageIndex.value == 0) {
                           //TODO: 첫 페이지 알림
@@ -419,7 +417,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       },
                     ),
                     Button(
-                      child: Text("다음 페이지"),
+                      child: const Text("다음 페이지"),
                       onPressed: () {
                         if (controller.pageIndex.value == controller.pageNum - 1) {
                           //TODO: 마지막 페이지 알림

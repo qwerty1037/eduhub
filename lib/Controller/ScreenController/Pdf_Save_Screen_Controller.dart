@@ -1,17 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Component/frame.dart';
+
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:front_end/Component/Tag_Model.dart';
+import 'package:front_end/Component/Class/tag_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:korea_regexp/korea_regexp.dart';
-import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
@@ -66,8 +64,8 @@ class PdfSaveController extends GetxController {
     document2.pages.add().graphics.drawImage(image2, const Rect.fromLTWH(0, 0, 500, 200));
 
     // Save the document.
-    capturedImageProblemPdf = await document.save() as List<int>;
-    capturedImageAnswerPdf = await document2.save() as List<int>;
+    capturedImageProblemPdf = await document.save();
+    capturedImageAnswerPdf = await document2.save();
 
     // capturedImageProblem = Uint8List.fromList(await document.save());
     // capturedImageAnswer = Uint8List.fromList(await document2.save());
@@ -223,7 +221,7 @@ class PdfSaveController extends GetxController {
     if (tagTextFieldValue.value == "") return chips;
     RegExp regExp = getRegExp(
       tagTextFieldValue.value, // != "" ? tagTextFieldValue.value : " ",
-      RegExpOptions(
+      const RegExpOptions(
         initialSearch: true,
         startsWith: false,
         endsWith: false,

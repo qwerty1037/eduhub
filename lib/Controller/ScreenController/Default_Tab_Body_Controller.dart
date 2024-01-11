@@ -1,16 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Exam_Folder_Treeview.dart';
-import 'package:front_end/Component/Folder_TreeView_none.dart';
-import 'package:front_end/Component/Folder_Treeview_Explore.dart';
-import 'package:front_end/Component/Folder_Treeview_Save.dart';
-import 'package:front_end/Controller/ExamController.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/exam_folder_treeview.dart';
+import 'package:front_end/Component/folder_treeView_none.dart';
+import 'package:front_end/Component/folder_treeview_explore.dart';
+import 'package:front_end/Component/folder_treeview_save.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
-import 'package:front_end/Controller/Problem_List_Controller.dart';
+import 'package:front_end/Controller/problem_list_controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
+import 'package:front_end/Controller/exam_controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/Group.dart';
 
 import 'package:get/get.dart';
@@ -21,16 +21,12 @@ class DefaultTabBodyController extends GetxController {
   DashBoardType dashBoardType;
 
   Rx<Widget> workingSpaceWidget = Obx(() => Container(
-        color: Get.find<DesktopController>().isDark.value == true
-            ? Colors.grey[150]
-            : Colors.grey[30],
+        color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
         child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
       )).obs;
 
   Widget realWorkingSpaceWidget = Container(
-    color: Get.find<DesktopController>().isDark.value == true
-        ? Colors.grey[150]
-        : Colors.grey[30],
+    color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
     child: const Center(child: Text("폴더 또는 기능을 선택해주세요")),
   );
 
@@ -38,8 +34,7 @@ class DefaultTabBodyController extends GetxController {
 
   Widget? savedWorkingSpace;
 
-  DefaultTabBodyController(
-      this.tagName, this.dashBoardType, Widget? workingSpace) {
+  DefaultTabBodyController(this.tagName, this.dashBoardType, Widget? workingSpace) {
     if (workingSpace != null) {
       changeWorkingSpace(workingSpace);
     }
@@ -54,15 +49,11 @@ class DefaultTabBodyController extends GetxController {
   ///default tab body의 workingspace부분을 바꾸는 method
   void changeWorkingSpace(Widget newWorkingSpace) {
     workingSpaceWidget.value = Obx(() => Container(
-          color: Get.find<DesktopController>().isDark.value == true
-              ? Colors.grey[150]
-              : Colors.grey[30],
+          color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
           child: newWorkingSpace,
         ));
     realWorkingSpaceWidget = Container(
-      color: Get.find<DesktopController>().isDark.value == true
-          ? Colors.grey[150]
-          : Colors.grey[30],
+      color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
       child: newWorkingSpace,
     );
   }

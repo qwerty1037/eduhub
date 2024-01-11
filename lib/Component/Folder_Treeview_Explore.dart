@@ -1,7 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/FolderTreeView_MenuFlyout.dart';
+
 import 'package:front_end/Component/New_Folder_Button.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Component/folder_treeview_menuflyout.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,7 @@ class FolderTreeViewExplore extends StatelessWidget {
           ? newFolderButton(context)
           : Column(
               children: [
-                GetX<FolderController>(builder: (controller) {
+                GetX<UserDataController>(builder: (controller) {
                   return Align(
                     alignment: Alignment.center,
                     child: Text("${controller.nickName.value}의 문제 폴더"),
@@ -33,14 +34,14 @@ class FolderTreeViewExplore extends StatelessWidget {
                 }),
                 FlyoutTarget(
                   controller: flyoutController,
-                  child: GetX<FolderController>(
+                  child: GetX<UserDataController>(
                     builder: (controller) {
                       return TreeView(
                         onSecondaryTap: (item, details) {
                           flyoutController.showFlyout(
                             position: details.globalPosition,
                             builder: (context) {
-                              return FolderTreeView_MenuFlyout(
+                              return FolderTreeViewMenuFlyout(
                                 folderController: controller,
                                 item: item,
                                 details: details,

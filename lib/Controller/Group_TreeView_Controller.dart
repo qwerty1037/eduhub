@@ -1,25 +1,21 @@
 import 'dart:convert';
 
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Problem_List.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
-import 'package:front_end/Controller/Group_Controller.dart';
-import 'package:front_end/Controller/Problem_List_Controller.dart';
+import 'package:front_end/Component/Default/config.dart';
+
+import 'package:front_end/Controller/group_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
-import 'package:front_end/Screen/Default_Tab_Body.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/Group_Management.dart';
-import 'package:front_end/Test/Folder_Example_Data.dart';
-import 'package:front_end/Test/Temporary_GroupDatabase.dart';
+import 'package:front_end/Test/temporary_group_database.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluent_ui/fluent_ui.dart';
 
-///폴더 관련 데이터를 처리하는 컨트롤러
+///그룹 관련 컨트롤러 TODO: 백엔드와 연동전 user_data_controller 페이지에 통합 시키기
+///
 class GroupTreeViewController extends GetxController {
-  DesktopController desktopController = Get.find<DesktopController>();
+  UserDesktopController desktopController = Get.find<UserDesktopController>();
   RxInt selectedGroupID = 99999999999.obs;
   RxString selectedPath = "".obs;
   RxList<TreeViewItem> totalGroups = <TreeViewItem>[].obs;
@@ -90,10 +86,8 @@ class GroupTreeViewController extends GetxController {
   }
 
   ///특정 폴더를 클릭했을 때 현재 탭에서 폴더에 속하는 문제 리스트들을 보여주는 함수
-  Future<void> makeGroupListInCurrentTab(
-      TreeViewItem item, String tagName) async {
-    DefaultTabBodyController workingSpaceController =
-        Get.find<DefaultTabBodyController>(tag: tagName);
+  Future<void> makeGroupListInCurrentTab(TreeViewItem item, String tagName) async {
+    DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
 
     await workingSpaceController.deleteWorkingSpaceController();
     GroupController groupController = Get.put(GroupController(), tag: tagName);
@@ -101,13 +95,11 @@ class GroupTreeViewController extends GetxController {
       item: item,
       controller: groupController,
     ));
-    workingSpaceController.dashBoard.value =
-        workingSpaceController.makeDashBoard(DashBoardType.group);
+    workingSpaceController.dashBoard.value = workingSpaceController.makeDashBoard(DashBoardType.group);
   }
 
   Future<void> getPath() async {
-    final url = Uri.parse(
-        'https://$HOST/api/data/get_database/${selectedGroupID.value}');
+    final url = Uri.parse('https://$HOST/api/data/get_database/${selectedGroupID.value}');
     final response = await http.get(
       url,
       headers: await defaultHeader(httpContentType.json),

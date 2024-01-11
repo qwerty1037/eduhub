@@ -3,7 +3,7 @@ import 'package:front_end/Component/exam_viewer.dart';
 import 'package:front_end/Controller/group_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/desktop_Controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:get/get.dart';
 
 class GroupManagementScreen extends StatelessWidget {
@@ -104,7 +104,7 @@ class GroupMenu extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(16),
-            color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+            color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
           ),
           child: Center(
             child: Text(

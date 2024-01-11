@@ -2,8 +2,8 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:front_end/Controller/ScreenController/pdf_viewer_screen_controller.dart';
-import 'package:front_end/Controller/desktop_controller.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:get/get.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -28,7 +28,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Center(
         child: Container(
-          color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+          color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
           child: Stack(
             children: [
               Row(

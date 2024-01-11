@@ -5,8 +5,9 @@ import 'package:front_end/Component/event_listener.dart';
 import 'package:front_end/Controller/group_treeview_controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
-import 'package:front_end/Controller/desktop_controller.dart';
+
 import 'package:front_end/Controller/user_data_controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/home_tabview.dart';
 import 'package:front_end/Screen/Login_Screen.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ void main() async {
     await windowManager.focus();
   });
   await initializeDateFormatting(); // 기억안남. 아마 달력 부분 일듯
-  Get.put(DesktopController(), permanent: true);
+  Get.put(UserDesktopController(), permanent: true);
   Get.put(UserDataController()); // 로그인 후 사용됌, 로그아웃시 소멸 및 초기화
   Get.put(GroupTreeViewController()); // 연동전 UserDataController로 이동 필요(기능 미완성이라 안 옮겨놓음)
   runApp(const MyApp());
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DesktopController>(
+    return GetBuilder<UserDesktopController>(
       builder: (controller) {
         if (controller.isLogin) {
           //로직상 한번만 호출되서 괜찮음
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget with WindowListener {
               cardColor: Colors.grey[30], //tag의 배경색이 이것으로 결정, fluent theme위에 있는 material.scaffold의 기본 색깔
               scrollbarTheme: ScrollbarThemeData.standard(FluentThemeData.light()),
               fontFamily: GoogleFonts.poppins().fontFamily,
-              resources: Get.find<DesktopController>().customResourceLight,
+              resources: Get.find<UserDesktopController>().customResourceLight,
             ),
             darkTheme: FluentThemeData(
                 typography: const Typography.raw(body: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),

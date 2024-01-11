@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/exam_problem_list.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/problem_list.dart';
 import 'package:front_end/Controller/Problem_List_Controller.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/desktop_controller.dart';
+
 import 'package:front_end/Component/Default/default_tab_body.dart';
 import 'package:front_end/Component/Default/http_config.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 ///서버에 저장된 유저 데이터 관련 컨트롤러
 class UserDataController extends GetxController {
-  DesktopController desktopController = Get.find<DesktopController>();
+  UserDesktopController desktopController = Get.find<UserDesktopController>();
   RxInt selectedProblemDirectoryId = 99999999999.obs; // TO DO 아이디 숫자 절대 불가능한 숫자인지 확인
   RxInt selectedExamDirectoryID = 99999999999.obs; // TO DO 아이디 숫자 절대 불가능한 숫자인지 확인
   RxString selectedPath = "".obs; // TO DO 일단 보류. 정확한 용도 파악 후 이름 수정 및 주석 수정

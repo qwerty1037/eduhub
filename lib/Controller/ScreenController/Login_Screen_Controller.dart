@@ -6,7 +6,7 @@ import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/Group_TreeView_Controller.dart';
 import 'package:front_end/Controller/Register_Info_Controller.dart';
-import 'package:front_end/Controller/desktop_Controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,7 +39,7 @@ class loginScreenController extends GetxController {
 
   ///로그인 성공시 적용되는 로직으로 초기 데이터를 받아오고 탭뷰를 띄워주며 현재 컨트롤러 인스턴스를 삭제
   void loginSuccess() async {
-    DesktopController totalController = Get.find<DesktopController>();
+    UserDesktopController totalController = Get.find<UserDesktopController>();
     UserDataController folderController = Get.find<UserDataController>();
     GroupTreeViewController groupController = Get.find<GroupTreeViewController>();
     await folderController.receiveData();

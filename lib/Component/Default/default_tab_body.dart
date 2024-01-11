@@ -4,7 +4,7 @@ import 'package:front_end/Component/Search_Bar_Overlay.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/desktop_Controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/Exam.dart';
 import 'package:front_end/Screen/Group_Waiting_Screen.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
@@ -51,10 +51,10 @@ class DefaultTabBody extends StatelessWidget {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+                      color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
                       border: Border(
                         left: BorderSide(
-                          color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                          color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
                           width: 1,
                         ),
                       ),

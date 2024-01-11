@@ -2,12 +2,10 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/Default_Tab_Body.dart';
 import 'package:front_end/Component/Default/config.dart';
-
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:front_end/Screen/problem_list.dart';
-
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:front_end/Component/Default/config.dart';
-import 'package:front_end/Controller/desktop_controller.dart';
+
 import 'package:front_end/Controller/group_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/Group_Management.dart';
 import 'package:front_end/Test/temporary_group_database.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 ///그룹 관련 컨트롤러 TODO: 백엔드와 연동전 user_data_controller 페이지에 통합 시키기
 ///
 class GroupTreeViewController extends GetxController {
-  DesktopController desktopController = Get.find<DesktopController>();
+  UserDesktopController desktopController = Get.find<UserDesktopController>();
   RxInt selectedGroupID = 99999999999.obs;
   RxString selectedPath = "".obs;
   RxList<TreeViewItem> totalGroups = <TreeViewItem>[].obs;

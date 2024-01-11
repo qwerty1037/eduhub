@@ -4,10 +4,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/Controller/exam_controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/desktop_controller.dart';
+
 import 'package:get/get.dart';
 import 'package:front_end/Component/Class/folder_data.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -31,7 +32,7 @@ class ExamScreen extends StatelessWidget {
               Container(
                 width: 0.5,
                 height: MediaQuery.of(context).size.height,
-                color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
               ),
               Expanded(
                   flex: 4,
@@ -48,7 +49,7 @@ class ExamScreen extends StatelessWidget {
                                   Container(
                                     width: 0.5,
                                     height: MediaQuery.of(context).size.height,
-                                    color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                                    color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
                                   ),
                                   Expanded(
                                       flex: 3,

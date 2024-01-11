@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/config.dart';
-import 'package:front_end/Controller/desktop_controller.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Component/Default/default_tab_body.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/Home_Screen.dart';
 import 'package:front_end/Screen/Search_Screen.dart';
 import 'package:get/get.dart';
@@ -18,7 +18,7 @@ class TabController extends GetxController {
 
   int tagNumber = 0;
   bool isNewTab = true;
-  DesktopController allController = Get.find<DesktopController>();
+  UserDesktopController allController = Get.find<UserDesktopController>();
 
   TabController() {
     tabs.add(

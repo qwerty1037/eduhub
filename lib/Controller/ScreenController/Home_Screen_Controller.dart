@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/problem_list.dart';
 import 'package:front_end/Component/Class/calendar_event.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
@@ -8,7 +9,6 @@ import 'package:front_end/Controller/Group_TreeView_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/desktop_Controller.dart';
 import 'package:front_end/Component/Default/default_tab_body.dart';
 import 'package:get/get.dart';
 import 'package:localstorage/localstorage.dart';
@@ -101,11 +101,11 @@ class HomeScreenController extends GetxController {
     await storage.delete(key: "uid");
     await storage.delete(key: "access_token");
     await storage.delete(key: "refresh_token");
-    final DesktopController previousDesktopController = Get.find<DesktopController>();
-    previousDesktopController.isLogin = false;
+    final UserDesktopController previousUserDesktopController = Get.find<UserDesktopController>();
+    previousUserDesktopController.isLogin = false;
     Get.deleteAll();
     Get.put(UserDataController());
     Get.put(GroupTreeViewController());
-    previousDesktopController.update();
+    previousUserDesktopController.update();
   }
 }

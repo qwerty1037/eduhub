@@ -12,8 +12,8 @@ import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/desktop_Controller.dart';
 import 'package:front_end/Component/Default/default_tab_body.dart';
+import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/Exam.dart';
 import 'package:front_end/Screen/group_waiting_screen.dart';
 import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
-                        color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                        color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
                         width: 1,
                       ),
                     ),
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: Container(
-                  color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
+                  color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
                   child: m.Scaffold(
                     appBar: null,
                     body: SingleChildScrollView(
@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     border: Border(
                                   right: BorderSide(
-                                    color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
+                                    color: Get.find<UserDesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
                                     width: 1,
                                   ),
                                 )),
@@ -312,7 +312,7 @@ SingleChildScrollView leftDashboard(HomeScreenController homeScreenController, B
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text("다크 모드"),
-            GetBuilder<DesktopController>(
+            GetBuilder<UserDesktopController>(
               builder: (controller) {
                 return ToggleSwitch(
                   checked: controller.isDark.value,

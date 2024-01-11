@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:front_end/Component/Frame.dart';
 import 'package:front_end/Controller/Folder_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
 import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
@@ -12,14 +14,12 @@ class PdfSaveScreen extends StatelessWidget {
   final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
   final controller = Get.put(PdfSaveController(), tag: Get.find<t.TabController>().getTabKey());
   final FolderController folderController = Get.find<FolderController>();
-  late Uint8List problemImage;
-  late Uint8List answerImage;
+  late File pdfFile;
+  late List<Frame> frameList;
 
   @override
-  PdfSaveScreen(Uint8List image1, Uint8List image2, {super.key}) {
-    problemImage = image1;
-    answerImage = image2;
-    controller.getImage(image1, image2);
+  PdfSaveScreen(this.pdfFile, this.frameList, {super.key}) {
+    controller.getPdfRectList(pdfFile, frameList);
   }
 
   @override
@@ -257,7 +257,7 @@ class PdfSaveScreen extends StatelessWidget {
   Widget saveButtonField() {
     return TextButton(
       onPressed: () {
-        controller.sendProblemInfo(folderController.selectedProblemDirectoryId.value);
+        controller.sendFirstFrameInfo(folderController.selectedProblemDirectoryId.value);
       },
       child: Container(
         height: 50,

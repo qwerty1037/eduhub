@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:front_end/Component/Default/Config.dart';
 import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Component/Frame.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Tag_Model.dart';
@@ -20,6 +21,9 @@ class PdfSaveController extends GetxController {
   late Uint8List capturedImageAnswer;
   var capturedImageProblemPdf;
   var capturedImageAnswerPdf;
+  late File pdfFile;
+  late List<Frame> frameList;
+
   RxList<TagModel> tagsList = <TagModel>[].obs;
   RxBool isImagePreviewButtonTapped = false.obs;
   RxDouble difficultySliderValue = 0.0.obs;
@@ -118,6 +122,58 @@ class PdfSaveController extends GetxController {
   void getImage(Uint8List image1, Uint8List image2) {
     capturedImageProblem = image1;
     capturedImageAnswer = image2;
+  }
+
+  void getPdfRectList(File pdfFile, List<Frame> frameList) {
+    this.pdfFile = pdfFile;
+    this.frameList = frameList;
+  }
+
+  Future<int> sendFirstFrameInfo(int selectedDirectoryID) async {
+    List<int> selectedTags = <int>[];
+    for (int i = 0; i < tagsList.length; i++) {
+      if (tagsList[i].isSelected == true) {
+        selectedTags.add(tagsList[i].ID);
+      }
+    }
+    String capturedFileNameProblem = '${problemNameController.text}_problem.pdf';
+
+    List<int> pdfBytes = await pdfFile.readAsBytes();
+
+    // final url = Uri.parse('https://uwkedrf.request.dreamhack.games');
+    final url = Uri.parse('https://$HOST/api/data/parse_pdf');
+    var request = http.MultipartRequest('POST', url);
+    var multipartFileProblem = http.MultipartFile.fromBytes(
+      'source_document',
+      pdfBytes,
+      filename: capturedFileNameProblem,
+      contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
+    );
+
+    var temp = [];
+    for (int i = 0; i < frameList.length; i++) {
+      final Map<String, dynamic> tmp = {
+        "page": frameList[i].page,
+        "minX": double.parse(frameList[i].minX.toStringAsFixed(8)),
+        "minY": double.parse(frameList[i].minY.toStringAsFixed(8)),
+        "maxX": double.parse(frameList[i].maxX.toStringAsFixed(8)),
+        "maxY": double.parse(frameList[i].maxY.toStringAsFixed(8)),
+      };
+      temp.add(tmp);
+    }
+
+    final Map<String, String> requestField = {
+      "frame_list": jsonEncode(temp),
+    };
+    debugPrint(jsonEncode(temp));
+
+    request.files.add(multipartFileProblem);
+    request.fields.addAll(requestField);
+
+    request.headers.addAll(await defaultHeader(httpContentType.multipart));
+    final response = await request.send();
+    debugPrint("${response.statusCode}");
+    return response.statusCode;
   }
 
   /// When ImagePreviewButton is Tapped, It will switch "-보기", "-숨기기"

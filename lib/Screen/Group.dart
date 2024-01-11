@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/GroupTreeView_MenuFlyout.dart';
+import 'package:front_end/Component/group_treeview_menuflyout.dart';
 import 'package:front_end/Controller/Group_TreeView_Controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
@@ -34,7 +34,7 @@ class Group extends StatelessWidget {
                   flyoutController.showFlyout(
                     position: details.globalPosition,
                     builder: (context) {
-                      return GroupTreeView_MenuFlyout(
+                      return GroupTreeViewMenuFlyout(
                         groupController: controller,
                         item: item,
                         details: details,
@@ -51,10 +51,8 @@ class Group extends StatelessWidget {
                     controller.totalGroups.refresh();
 
                     final tabController = Get.find<TabController>();
-                    Tab currentTab =
-                        tabController.tabs[tabController.currentTabIndex.value];
-                    tabController.renameTab(currentTab, item.value["name"],
-                        const Icon(FluentIcons.fabric_folder));
+                    Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+                    tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
                     await controller.makeGroupListInCurrentTab(item, tagName!);
                   }
                 },

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Default/Default_Key_Text.dart';
-import 'package:front_end/Component/Default/Default_TextBox.dart';
-import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
+import 'package:front_end/Component/Default/default_title.dart';
+import 'package:front_end/Component/Default/default_text_box.dart';
 import 'package:front_end/Controller/Tag_Controller.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';
-import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class TagManagementScreen extends StatelessWidget {
   TagManagementScreen({super.key});
@@ -16,7 +14,7 @@ class TagManagementScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(60, 20, 60, 20),
       child: Column(
         children: [
-          const DefaultKeyText(text: "추가하실 태그를 입력하세요"),
+          const DefaultTitle(text: "추가하실 태그를 입력하세요"),
           DefaultTextBox(
             placeholder: "Insert Tags",
             onEditingComplete: () {

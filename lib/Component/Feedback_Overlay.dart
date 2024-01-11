@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/Default_Key_Text.dart';
-import 'package:front_end/Component/Default/Default_TextBox.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/default_title.dart';
+import 'package:front_end/Component/Default/default_text_box.dart';
 
-import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Controller/Feedback_Controller.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
@@ -80,7 +80,7 @@ void createFeedbackOverlay({
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: Column(
                               children: [
-                                const DefaultKeyText(text: "제목"),
+                                const DefaultTitle(text: "제목"),
                                 SizedBox(
                                   height: 50,
                                   child: DefaultTextBox(
@@ -92,7 +92,7 @@ void createFeedbackOverlay({
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const DefaultKeyText(text: "평가 및 건의 내용"),
+                                const DefaultTitle(text: "평가 및 건의 내용"),
                                 Scrollbar(
                                     child: SizedBox(
                                   height: 50,

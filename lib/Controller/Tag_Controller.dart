@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Test/Temp_Tag.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

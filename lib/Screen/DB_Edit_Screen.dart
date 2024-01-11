@@ -1,17 +1,17 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller.dart';
+import 'package:front_end/Controller/ScreenController/pdf_save_screen_controller.dart';
 import 'package:get/get.dart';
-import 'package:front_end/Component/Default/Default_Text_FIeld.dart';
-import 'package:front_end/Component/Default/Default_Key_Text.dart';
+import 'package:front_end/Component/Default/default_text_field.dart';
+import 'package:front_end/Component/Default/default_title.dart';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 
 class DBEditScreen extends StatelessWidget {
   final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
   final controller = Get.put(PdfSaveController(), tag: Get.find<t.TabController>().getTabKey());
-  final FolderController folderController = Get.find<FolderController>();
+  final UserDataController folderController = Get.find<UserDataController>();
   late Uint8List problemImage;
   late Uint8List answerImage;
 
@@ -62,7 +62,7 @@ class DBEditScreen extends StatelessWidget {
   Widget problemNameInputField() {
     return Column(
       children: [
-        const DefaultKeyText(text: "문제명"),
+        const DefaultTitle(text: "문제명"),
         DefaultTextField(
           labelText: null,
           hintText: '문제명을 입력하세요',
@@ -75,9 +75,9 @@ class DBEditScreen extends StatelessWidget {
   Widget directroyInputField() {
     return Column(
       children: [
-        const DefaultKeyText(text: "디렉토리"),
-        const DefaultKeyText(text: "왼쪽 대시보드에서 저장할 폴더를 클릭하세요"),
-        Obx(() => DefaultKeyText(text: folderController.selectedPath.value)),
+        const DefaultTitle(text: "디렉토리"),
+        const DefaultTitle(text: "왼쪽 대시보드에서 저장할 폴더를 클릭하세요"),
+        Obx(() => DefaultTitle(text: folderController.selectedPath.value)),
       ],
     );
   }
@@ -147,7 +147,7 @@ class DBEditScreen extends StatelessWidget {
       children: [
         Stack(
           children: [
-            const DefaultKeyText(text: "난이도"),
+            const DefaultTitle(text: "난이도"),
             Align(
               alignment: Alignment.center,
               child: Obx(

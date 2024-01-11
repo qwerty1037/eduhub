@@ -1,22 +1,20 @@
 import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
 import 'package:http/http.dart' as http;
-import 'package:front_end/Controller/ExamController.dart';
+import 'package:front_end/Controller/exam_controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
+import 'package:front_end/Controller/desktop_controller.dart';
 import 'package:get/get.dart';
-import 'package:front_end/Component/FolderData.dart';
+import 'package:front_end/Component/Class/folder_data.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ExamScreen extends StatelessWidget {
   ExamScreen({super.key});
-  final examController = Get.put(
-      ExamController(Get.find<TabController>().getTabKey()),
-      tag: Get.find<TabController>().getTabKey());
+  final examController = Get.put(ExamController(Get.find<TabController>().getTabKey()), tag: Get.find<TabController>().getTabKey());
   String tagName = Get.find<TabController>().getTabKey();
   @override
   Widget build(BuildContext context) {
@@ -33,9 +31,7 @@ class ExamScreen extends StatelessWidget {
               Container(
                 width: 0.5,
                 height: MediaQuery.of(context).size.height,
-                color: Get.find<DesktopController>().isDark.value == true
-                    ? Colors.grey[130]
-                    : Colors.grey[50],
+                color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
               ),
               Expanded(
                   flex: 4,
@@ -47,42 +43,27 @@ class ExamScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     flex: 2,
-                                    child: Container(
-                                        padding: const EdgeInsets.all(30),
-                                        child: Center(
-                                            child: FilteredProblemList(
-                                                controller))),
+                                    child: Container(padding: const EdgeInsets.all(30), child: Center(child: FilteredProblemList(controller))),
                                   ),
                                   Container(
                                     width: 0.5,
                                     height: MediaQuery.of(context).size.height,
-                                    color: Get.find<DesktopController>()
-                                                .isDark
-                                                .value ==
-                                            true
-                                        ? Colors.grey[130]
-                                        : Colors.grey[50],
+                                    color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[130] : Colors.grey[50],
                                   ),
                                   Expanded(
                                       flex: 3,
                                       child: Container(
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            Text(
-                                                "선택된 문제 개수: ${controller.selectedCount.value}개"),
+                                            Text("선택된 문제 개수: ${controller.selectedCount.value}개"),
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            Expanded(
-                                                child: Container(
-                                                    child: controller
-                                                        .problemImageViewer
-                                                        .value))
+                                            Expanded(child: Container(child: controller.problemImageViewer.value))
                                           ],
                                         ),
                                       ))
@@ -115,12 +96,10 @@ class ExamScreen extends StatelessWidget {
                       if (value != null) {
                         controller.isProblemSelected[index] = value;
                         if (value) {
-                          controller.problemToMakeExam
-                              .add(controller.uniqueProblemsToList[index]);
+                          controller.problemToMakeExam.add(controller.uniqueProblemsToList[index]);
                           controller.selectedCount.value++;
                         } else {
-                          controller.problemToMakeExam
-                              .remove(controller.uniqueProblemsToList[index]);
+                          controller.problemToMakeExam.remove(controller.uniqueProblemsToList[index]);
                           controller.selectedCount.value--;
                         }
                       }
@@ -132,8 +111,7 @@ class ExamScreen extends StatelessWidget {
                 ),
                 Button(
                   onPressed: () async {
-                    final url = Uri.parse(
-                        'https://$HOST/api/data/problem-pdf/${problemElement["problem_string"].toString().substring(2, problemElement["problem_string"].length - 1)}');
+                    final url = Uri.parse('https://$HOST/api/data/problem-pdf/${problemElement["problem_string"].toString().substring(2, problemElement["problem_string"].length - 1)}');
                     final response = await http.get(
                       url,
                       headers: await defaultHeader(httpContentType.json),
@@ -207,15 +185,10 @@ class examFilter extends StatelessWidget {
                 }
               },
               onAccept: ((Map<dynamic, dynamic>? data) {
-                FolderData addedFolder = FolderData(
-                    parent: data!["parent"],
-                    id: data["id"],
-                    name: data["name"]);
+                FolderData addedFolder = FolderData(parent: data!["parent"], id: data["id"], name: data["name"]);
                 controller.folders.add(addedFolder);
               }),
-              builder: (BuildContext context,
-                  List<Map<dynamic, dynamic>?> candidateData,
-                  List<dynamic> rejectedData) {
+              builder: (BuildContext context, List<Map<dynamic, dynamic>?> candidateData, List<dynamic> rejectedData) {
                 return Container(
                     color: Colors.grey[100],
                     height: 150,
@@ -227,11 +200,8 @@ class examFilter extends StatelessWidget {
                               return ListView.builder(
                                 shrinkWrap: false,
                                 itemCount: controller.folders.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) =>
-                                        Obx(() {
-                                  List<FolderData> dataList =
-                                      controller.folders.toList();
+                                itemBuilder: (BuildContext context, int index) => Obx(() {
+                                  List<FolderData> dataList = controller.folders.toList();
                                   FolderData item = dataList[index];
 
                                   if (index != controller.folders.length - 1) {
@@ -248,8 +218,7 @@ class examFilter extends StatelessWidget {
                                       child: ListTile(
                                         title: Text(item.name),
                                         trailing: IconButton(
-                                          icon: const Icon(
-                                              FluentIcons.chrome_close),
+                                          icon: const Icon(FluentIcons.chrome_close),
                                           onPressed: () {
                                             controller.folders.remove(item);
                                           },
@@ -266,8 +235,7 @@ class examFilter extends StatelessWidget {
                                           child: ListTile(
                                             title: Text(item.name),
                                             trailing: IconButton(
-                                              icon: const Icon(
-                                                  FluentIcons.chrome_close),
+                                              icon: const Icon(FluentIcons.chrome_close),
                                               onPressed: () {
                                                 controller.folders.remove(item);
                                               },
@@ -345,21 +313,13 @@ class examFilter extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.2 - 0.5,
                 height: 50,
                 child: Button(
-                    child: Center(
-                        child: controller.isFilterFinished.value
-                            ? const Text("필터 재설정")
-                            : const Text("필터 설정 완료")),
+                    child: Center(child: controller.isFilterFinished.value ? const Text("필터 재설정") : const Text("필터 설정 완료")),
                     onPressed: () {
                       //난이도 관련처리
-                      if (controller.minlevelController.text != "" &&
-                          controller.maxlevelController.text != "") {
-                        int minlevel =
-                            int.parse(controller.minlevelController.text);
-                        int maxlevel =
-                            int.parse(controller.maxlevelController.text);
-                        if (minlevel > maxlevel ||
-                            minlevel < 1 ||
-                            maxlevel > 5) {
+                      if (controller.minlevelController.text != "" && controller.maxlevelController.text != "") {
+                        int minlevel = int.parse(controller.minlevelController.text);
+                        int maxlevel = int.parse(controller.maxlevelController.text);
+                        if (minlevel > maxlevel || minlevel < 1 || maxlevel > 5) {
                           displayInfoBar(context, builder: (context, close) {
                             return InfoBar(
                               title: const Text('오류 : '),
@@ -430,16 +390,12 @@ class examFilter extends StatelessWidget {
                               onPressed: () {
                                 //난이도 관련처리
                                 if (controller.countController.text != "") {
-                                  int targetCount = int.parse(
-                                      controller.countController.text);
-                                  if (controller.totalCount.value <
-                                      targetCount) {
-                                    displayInfoBar(context,
-                                        builder: (context, close) {
+                                  int targetCount = int.parse(controller.countController.text);
+                                  if (controller.totalCount.value < targetCount) {
+                                    displayInfoBar(context, builder: (context, close) {
                                       return InfoBar(
                                         title: const Text('오류 : '),
-                                        content: const Text(
-                                            '원하는 문제 개수가 가능한 문제보다 많습니다'),
+                                        content: const Text('원하는 문제 개수가 가능한 문제보다 많습니다'),
                                         action: IconButton(
                                           icon: const Icon(FluentIcons.clear),
                                           onPressed: close,
@@ -447,16 +403,11 @@ class examFilter extends StatelessWidget {
                                         severity: InfoBarSeverity.error,
                                       );
                                     });
-                                  } else if (!controller.isRandom.value &&
-                                      int.parse(controller
-                                              .countController.text) !=
-                                          controller.selectedCount.value) {
-                                    displayInfoBar(context,
-                                        builder: (context, close) {
+                                  } else if (!controller.isRandom.value && int.parse(controller.countController.text) != controller.selectedCount.value) {
+                                    displayInfoBar(context, builder: (context, close) {
                                       return InfoBar(
                                         title: const Text('오류 : '),
-                                        content: const Text(
-                                            '선택된 개수와 원하는 문제 개수가 다릅니다'),
+                                        content: const Text('선택된 개수와 원하는 문제 개수가 다릅니다'),
                                         action: IconButton(
                                           icon: const Icon(FluentIcons.clear),
                                           onPressed: close,
@@ -464,14 +415,11 @@ class examFilter extends StatelessWidget {
                                         severity: InfoBarSeverity.error,
                                       );
                                     });
-                                  } else if (Get.find<HomeScreenController>()
-                                      .isExamFolderEmpty) {
-                                    displayInfoBar(context,
-                                        builder: (context, close) {
+                                  } else if (Get.find<HomeScreenController>().isExamFolderEmpty) {
+                                    displayInfoBar(context, builder: (context, close) {
                                       return InfoBar(
                                         title: const Text('시험지 폴더가 없습니다 : '),
-                                        content: const Text(
-                                            '홈페이지에서 시험지 폴더를 먼저 만들어주세요'),
+                                        content: const Text('홈페이지에서 시험지 폴더를 먼저 만들어주세요'),
                                         action: IconButton(
                                           icon: const Icon(FluentIcons.clear),
                                           onPressed: close,
@@ -480,31 +428,21 @@ class examFilter extends StatelessWidget {
                                       );
                                     });
                                   } else if (controller.isRandom.value) {
-                                    var copyProblemInfo = controller
-                                        .uniqueProblemsToList
-                                        .toList();
+                                    var copyProblemInfo = controller.uniqueProblemsToList.toList();
                                     final random = Random();
 
-                                    for (int i = 0;
-                                        i <
-                                            int.parse(controller
-                                                .countController.text);
-                                        i++) {
-                                      int randomIndex = random
-                                          .nextInt(copyProblemInfo.length);
-                                      controller.problemToMakeExam
-                                          .add(copyProblemInfo[randomIndex]);
+                                    for (int i = 0; i < int.parse(controller.countController.text); i++) {
+                                      int randomIndex = random.nextInt(copyProblemInfo.length);
+                                      controller.problemToMakeExam.add(copyProblemInfo[randomIndex]);
 
-                                      copyProblemInfo.removeAt(
-                                          randomIndex); // 중복을 피하기 위해 해당 항목을 원본 리스트에서 제거
+                                      copyProblemInfo.removeAt(randomIndex); // 중복을 피하기 위해 해당 항목을 원본 리스트에서 제거
                                     }
                                     controller.makeExam(context);
                                   } else {
                                     controller.makeExam(context);
                                   }
                                 } else {
-                                  displayInfoBar(context,
-                                      builder: (context, close) {
+                                  displayInfoBar(context, builder: (context, close) {
                                     return InfoBar(
                                       title: const Text('오류 : '),
                                       content: const Text('원하는 문제 개수를 입력해주세요'),

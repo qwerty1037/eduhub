@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -12,14 +12,14 @@ import 'package:http/http.dart' as http;
 class ExamFolderMenuFlyout extends StatelessWidget {
   const ExamFolderMenuFlyout({
     super.key,
-    required this.folderController,
+    required this.userDataController,
     required this.item,
     required this.details,
     required this.reNameController,
     required this.newNameController,
     required this.flyoutController,
   });
-  final FolderController folderController;
+  final UserDataController userDataController;
   final TreeViewItem item;
   final TapDownDetails details;
   final TextEditingController reNameController;
@@ -30,11 +30,11 @@ class ExamFolderMenuFlyout extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuFlyout(
       items: [
-        _menuFlyoutItemDeleteFolder(context, item, folderController),
+        _menuFlyoutItemDeleteFolder(context, item, userDataController),
         const MenuFlyoutSeparator(),
-        _menuFlyoutItemRenameFolder(context, item, details, folderController),
+        _menuFlyoutItemRenameFolder(context, item, details, userDataController),
         const MenuFlyoutSeparator(),
-        _menuFlyoutItemNewFolder(context, item, folderController),
+        _menuFlyoutItemNewFolder(context, item, userDataController),
       ],
     );
   }
@@ -42,7 +42,7 @@ class ExamFolderMenuFlyout extends StatelessWidget {
   /// MenuFlyoutItem that delete folder
   ///
   /// when clicked, http request to delete folder
-  MenuFlyoutItem _menuFlyoutItemDeleteFolder(BuildContext context, TreeViewItem item, FolderController folderController) {
+  MenuFlyoutItem _menuFlyoutItemDeleteFolder(BuildContext context, TreeViewItem item, UserDataController userDataController) {
     return MenuFlyoutItem(
       text: const Text("폴더 삭제"),
       onPressed: () async {
@@ -56,13 +56,13 @@ class ExamFolderMenuFlyout extends StatelessWidget {
 
         if (isHttpRequestSuccess(response)) {
           if (item.value["parent"] != null) {
-            TreeViewItem deleteTargetParent = folderController.totalExamFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
+            TreeViewItem deleteTargetParent = userDataController.allExamFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
             deleteTargetParent.children.remove(item);
           } else {
-            folderController.rootExamFolders.removeWhere((element) => item == element);
+            userDataController.rootExamFolders.removeWhere((element) => item == element);
           }
-          folderController.rootExamFolders.refresh();
-          if (folderController.rootExamFolders.isEmpty) {
+          userDataController.rootExamFolders.refresh();
+          if (userDataController.rootExamFolders.isEmpty) {
             Get.find<HomeScreenController>().isExamFolderEmpty = true;
           }
           displayInfoBar(
@@ -140,17 +140,17 @@ class ExamFolderMenuFlyout extends StatelessWidget {
             TreeViewItem newFolder = controller.makeExamFolderItem(reNameController.text, item.value["id"], item.value["parent"]);
             newFolder.children.addAll(item.children.toList());
 
-            controller.totalExamFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
+            controller.allExamFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
 
-            controller.totalExamFolders.add(newFolder);
+            controller.allExamFolders.add(newFolder);
             if (item.value["parent"] != null) {
-              TreeViewItem parentFolder = controller.totalExamFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
+              TreeViewItem parentFolder = controller.allExamFolders.firstWhere((element) => item.value["parent"] == element.value["id"]);
 
               parentFolder.children.remove(item);
               parentFolder.children.add(newFolder);
             }
 
-            folderController.rootExamFolders.refresh();
+            userDataController.rootExamFolders.refresh();
           }
         }
       },
@@ -200,11 +200,11 @@ class ExamFolderMenuFlyout extends StatelessWidget {
                       final int newFolderId = jsonResponse['inserted_database'][0]["id"];
                       final int parentId = jsonResponse['inserted_database'][0]["parent_id"];
                       TreeViewItem newFolder = controller.makeExamFolderItem(newNameController.text, newFolderId, parentId);
-                      controller.totalExamFolders.add(newFolder);
-                      TreeViewItem parentFolder = controller.totalExamFolders.firstWhere((element) => element.value["id"] == parentId);
+                      controller.allExamFolders.add(newFolder);
+                      TreeViewItem parentFolder = controller.allExamFolders.firstWhere((element) => element.value["id"] == parentId);
                       parentFolder.children.add(newFolder);
 
-                      folderController.rootExamFolders.refresh();
+                      userDataController.rootExamFolders.refresh();
                       newNameController.text = "";
                       displayInfoBar(
                         context,

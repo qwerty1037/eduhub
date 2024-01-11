@@ -1,13 +1,9 @@
 ///Screen: File_Drag_and_Drop.
-//import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:front_end/Component/Default/Default_Key_Text.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
-import 'package:front_end/Controller/Desktop_Controller.dart';
-import 'package:front_end/Screen/Pdf_Save_Screen.dart';
+import 'package:front_end/Controller/ScreenController/pdf_viewer_screen_controller.dart';
+import 'package:front_end/Controller/desktop_controller.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:get/get.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -26,15 +22,13 @@ class _PdfScreenState extends State<PdfViewerScreen> {
       //     tag: "Problem${Get.find<t.TabController>().getTabKey()}");
       // final controllerAnswer = Get.put(PdfViewerScreenController(),
       tag: "Answer${Get.find<t.TabController>().getTabKey()}");
-  final folderController = Get.find<FolderController>();
+  final userDataController = Get.find<UserDataController>();
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Center(
         child: Container(
-          color: Get.find<DesktopController>().isDark.value == true
-              ? Colors.grey[150]
-              : Colors.grey[30],
+          color: Get.find<DesktopController>().isDark.value == true ? Colors.grey[150] : Colors.grey[30],
           child: Stack(
             children: [
               Row(
@@ -44,10 +38,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         ? SpinKitWave(
                             duration: const Duration(seconds: 40),
                           )
-                        : (controllerProblem.isPdfInputed.value
-                            ? pdfViewerContainer(controllerProblem, constraints)
-                            : selectPdfContainer(
-                                controllerProblem, constraints, "문제"));
+                        : (controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints, "문제"));
                   }),
                 ],
               ),
@@ -68,43 +59,33 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   children: [
                                     const Text("문제 저장 위치:  "),
-                                    folderController.selectedPath.value == ""
-                                        ? Text("왼쪽 대시보드에서 문제 저장할 폴더를 클릭하세요",
-                                            style: TextStyle(
-                                                color: controllerProblem
-                                                    .defaultColor))
-                                        : Text(
-                                            folderController.selectedPath.value)
+                                    userDataController.selectedPath.value == ""
+                                        ? Text("왼쪽 대시보드에서 문제 저장할 폴더를 클릭하세요", style: TextStyle(color: controllerProblem.defaultColor))
+                                        : Text(userDataController.selectedPath.value)
                                   ],
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   children: [
-                                    Text(
-                                        "현재 파일 용량:  ${controllerProblem.pickedFileSize.value} bytes"),
+                                    Text("현재 파일 용량:  ${controllerProblem.pickedFileSize.value} bytes"),
                                     const SizedBox(
                                       width: 20,
                                     ),
                                     Button(
                                         child: const Text("PDF 압축하기"),
                                         onPressed: () async {
-                                          final Uri url = Uri.parse(
-                                              'https://www.adobe.com/kr/acrobat/online/compress-pdf.html');
+                                          final Uri url = Uri.parse('https://www.adobe.com/kr/acrobat/online/compress-pdf.html');
                                           if (!await launchUrl(
                                             url,
-                                            mode:
-                                                LaunchMode.externalApplication,
+                                            mode: LaunchMode.externalApplication,
                                           )) {
-                                            throw Exception(
-                                                'Could not launch $url');
+                                            throw Exception('Could not launch $url');
                                           }
                                         })
                                   ],
@@ -116,8 +97,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               height: 100,
                               child: Button(
                                   onPressed: () {
-                                    controllerProblem
-                                        .makeProblemsFromPdf(context);
+                                    controllerProblem.makeProblemsFromPdf(context);
                                   },
                                   child: const Align(child: Text("문제 만들기")))),
                         ],
@@ -133,8 +113,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
     );
   }
 
-  Widget selectPdfContainer(
-      PdfViewerScreenController controller, constraints, String keyword) {
+  Widget selectPdfContainer(PdfViewerScreenController controller, constraints, String keyword) {
     return SizedBox(
       width: constraints.maxWidth,
       height: constraints.maxHeight,

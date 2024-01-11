@@ -309,8 +309,9 @@ class InquiryButton extends StatelessWidget {
 class RegisterInfoButton extends StatelessWidget {
   RegisterInfoButton({
     super.key,
-  });
-  final RegisterInfoController _registerInfoController = Get.put(RegisterInfoController());
+  }) {
+    Get.put(RegisterInfoController());
+  }
 
   @override
   Widget build(BuildContext context) {

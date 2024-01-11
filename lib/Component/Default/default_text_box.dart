@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
 
 /// Format of TextBox

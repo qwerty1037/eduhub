@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Component/Cookie.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -80,11 +79,11 @@ class SearchScreenController extends GetxController {
   }
 
   void backend() async {
-    final folderController = Get.find<FolderController>();
+    final folderController = Get.find<UserDataController>();
     List<int> searchedFolderId = [];
-    for (int i = 0; i < folderController.totalProblemFolders.length; i++) {
-      if (searchBarController.text == folderController.totalProblemFolders[i].value["name"]) {
-        searchedFolderId.add(folderController.totalProblemFolders[i].value["id"]);
+    for (int i = 0; i < folderController.allProblemFolders.length; i++) {
+      if (searchBarController.text == folderController.allProblemFolders[i].value["name"]) {
+        searchedFolderId.add(folderController.allProblemFolders[i].value["id"]);
       }
     }
 
@@ -96,7 +95,7 @@ class SearchScreenController extends GetxController {
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
       final databaseFolder = jsonResponse['database_folders'];
-      folderController.makeFolderListInfo(databaseFolder);
+      folderController.makeFolderListInfo(databaseFolder, false);
     } else {
       debugPrint("폴더 리스트 받기 오류 발생");
     }

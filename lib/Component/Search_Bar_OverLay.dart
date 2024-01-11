@@ -1,14 +1,9 @@
 import 'package:flutter/services.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/Default_TextBox.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Component/Default/default_text_box.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
-import 'package:front_end/Screen/Default_Tab_Body.dart';
-import 'package:front_end/Screen/Search_Screen.dart';
 import 'dart:ui';
 import 'package:front_end/Controller/Tab_Controller.dart' as t;
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:get/get.dart';
 
 /// Create Overlay of SearchBar
 void createHighlightOverlay({

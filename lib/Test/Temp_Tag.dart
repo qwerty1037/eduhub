@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 List<String> tags = [
   "수학1",
   "수학2",

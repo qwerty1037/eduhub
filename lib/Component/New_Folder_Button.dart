@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/Default/Config.dart';
-import 'package:front_end/Component/Default/HttpConfig.dart';
-import 'package:front_end/Controller/Folder_Controller.dart';
+import 'package:front_end/Component/Default/config.dart';
+import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 Button newFolderButton(BuildContext context) {
-  final folderController = Get.find<FolderController>();
+  final folderController = Get.find<UserDataController>();
   final homeScreenController = Get.find<HomeScreenController>();
   return Button(
       child: const Text("새 문제 폴더 만들기"),
@@ -52,7 +52,7 @@ Button newFolderButton(BuildContext context) {
                         final int newFolderId = jsonResponse['inserted_database'][0]["id"];
 
                         TreeViewItem newFolder = folderController.makeExamFolderItem(textcontroller.text, newFolderId, null);
-                        folderController.totalProblemFolders.add(newFolder);
+                        folderController.allProblemFolders.add(newFolder);
                         folderController.rootProblemFolders.add(newFolder);
                         folderController.update();
                         homeScreenController.isFolderEmpty = false;
@@ -95,7 +95,7 @@ Button newFolderButton(BuildContext context) {
 }
 
 Button newExamFolderButton(BuildContext context) {
-  final folderController = Get.find<FolderController>();
+  final folderController = Get.find<UserDataController>();
   final homeScreenController = Get.find<HomeScreenController>();
   return Button(
       child: const Text("새 시험지 폴더 만들기"),
@@ -138,7 +138,7 @@ Button newExamFolderButton(BuildContext context) {
                         final int newFolderId = jsonResponse['inserted_database'][0]["id"];
 
                         TreeViewItem newFolder = folderController.makeExamFolderItem(textcontroller.text, newFolderId, null);
-                        folderController.totalExamFolders.add(newFolder);
+                        folderController.allExamFolders.add(newFolder);
                         folderController.rootExamFolders.add(newFolder);
                         folderController.update();
                         homeScreenController.isExamFolderEmpty = false;

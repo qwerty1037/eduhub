@@ -63,11 +63,11 @@ class ExamFolderTreeView extends StatelessWidget {
                             } else if (tagName != null && Get.find<DefaultTabBodyController>(tag: tagName).dashBoardType == DashBoardType.exam) {
                               Get.find<ExamController>(tag: tagName).selectedFolder = item.value["id"];
                             } else {
-                              //학생 창에서 시험지 폴더 클릭할 경우 폴더 클릭시 필요한 작업
-                              final tabController = Get.find<TabController>();
-                              Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-                              tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.text_document));
-                              await controller.makeExamViewerInCurrentTab(item, tagName!);
+                              //학생 창에서 시험지 폴더 클릭할 경우 폴더 클릭시 필요한 작업 TODO: 필요없을시 삭제 예정
+                              // final tabController = Get.find<TabController>();
+                              // Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
+                              // tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.text_document));
+                              // await controller.makeExamViewerInCurrentTab(item, tagName!);
                             }
                           }
                         },

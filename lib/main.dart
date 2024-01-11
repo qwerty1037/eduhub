@@ -29,8 +29,8 @@ void main() async {
   });
   await initializeDateFormatting(); // 기억안남. 아마 달력 부분 일듯
   Get.put(DesktopController(), permanent: true);
-  Get.put(UserDataController());
-  Get.put(GroupTreeViewController());
+  Get.put(UserDataController()); // 로그인 후 사용됌, 로그아웃시 소멸 및 초기화
+  Get.put(GroupTreeViewController()); // 연동전 UserDataController로 이동 필요(기능 미완성이라 안 옮겨놓음)
   runApp(const MyApp());
 }
 
@@ -43,7 +43,6 @@ class MyApp extends StatelessWidget with WindowListener {
       builder: (controller) {
         if (controller.isLogin) {
           //로직상 한번만 호출되서 괜찮음
-
           Get.put(TagController());
           Get.put(TabController());
           return FluentApp(

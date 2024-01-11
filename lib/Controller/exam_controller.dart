@@ -289,7 +289,7 @@ class ExamController extends GetxController {
                         if (isHttpRequestSuccess(examResponse)) {
                           final jsonResponse = jsonDecode(examResponse.body);
                           final examDatabaseFolder = jsonResponse['database_folders'];
-                          Get.find<UserDataController>().makeFolderListInfo(examDatabaseFolder, true);
+                          Get.find<UserDataController>().folderUpdateFromJson(examDatabaseFolder, true);
                         } else {
                           debugPrint("시험지 폴더 리스트 받기 오류 발생");
                         }

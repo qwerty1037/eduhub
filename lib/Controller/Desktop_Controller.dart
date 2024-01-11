@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/cookie.dart';
@@ -9,7 +8,7 @@ import 'package:get/get.dart';
 
 ///개별 아이디에 상관없이 데스크톱 전반적으로 사용되는 컨트롤러. 단 한번만 호출되며 앱을 끄기 전까지 삭제 되지 않는다.
 class DesktopController extends GetxController {
-  bool isLogin = false;
+  bool isLogin = true;
   //위젯 중 obx로만 색이 변경되는 경우가 있어서 Rx로 처리
   RxBool isDark = false.obs;
 

@@ -11,7 +11,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluent_ui/fluent_ui.dart';
 
-///폴더 관련 데이터를 처리하는 컨트롤러
+///그룹 관련 컨트롤러 TODO: 백엔드와 연동전 user_data_controller 페이지에 통합 시키기
+///
 class GroupTreeViewController extends GetxController {
   DesktopController desktopController = Get.find<DesktopController>();
   RxInt selectedGroupID = 99999999999.obs;

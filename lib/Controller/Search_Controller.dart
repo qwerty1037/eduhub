@@ -95,7 +95,7 @@ class SearchScreenController extends GetxController {
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
       final databaseFolder = jsonResponse['database_folders'];
-      folderController.makeFolderListInfo(databaseFolder, false);
+      folderController.folderUpdateFromJson(databaseFolder, false);
     } else {
       debugPrint("폴더 리스트 받기 오류 발생");
     }

@@ -34,13 +34,13 @@ class UserDataController extends GetxController {
     );
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
-      final databaseFolder = jsonResponse['database_folders'];
-      makeFolderListInfo(databaseFolder, false);
+      final problemFolderJson = jsonResponse['database_folders'];
+      folderUpdateFromJson(problemFolderJson, false);
     } else {
-      debugPrint("폴더 리스트 받기 오류 발생");
+      debugPrint("receive data 폴더 리스트 받기 오류 발생(user dadta controller)");
     }
 
-    //시험지 폴더 받아오기
+    //TODO: 시험지 폴더 받아오기 디버깅 필요
     final examUrl = Uri.parse('https://$HOST/api/data/user_exam_database');
     final examResponse = await http.get(
       examUrl,
@@ -48,10 +48,10 @@ class UserDataController extends GetxController {
     );
     if (isHttpRequestSuccess(examResponse)) {
       final jsonResponse = jsonDecode(examResponse.body);
-      final examDatabaseFolder = jsonResponse['database_folders'];
-      makeFolderListInfo(examDatabaseFolder, true);
+      final examFolderFolder = jsonResponse['database_folders'];
+      folderUpdateFromJson(examFolderFolder, true);
     } else {
-      debugPrint("시험지 폴더 리스트 받기 오류 발생");
+      debugPrint("receive data 시험지 폴더 리스트 받기 오류 발생(user data controller)");
     }
 
     //TODO 닉네임 받아오기 함수 백엔드 업데이트 후 살리기
@@ -68,8 +68,8 @@ class UserDataController extends GetxController {
     // }
   }
 
-  ///json 형태로 데이터가 들어올 때 문제 폴더나 시험지 폴더 만드는 함수
-  void makeFolderListInfo(List<dynamic> data, bool isExam) {
+  ///json 형태로 데이터가 들어올 때 문제 폴더나 시험지 폴더 만드는 함수, 로직이 폴더 계층화 구현과 json 을 폴더 형태로 바꾸는게 섞여있음. TODO: 시간 나면 로직 분리
+  void folderUpdateFromJson(List<dynamic> data, bool isExam) {
     final List<int> stack = [];
     final List<TreeViewItem> folders = [];
     List<TreeViewItem> rootFolders = [];
@@ -86,7 +86,7 @@ class UserDataController extends GetxController {
       if (isExam) {
         folder = makeExamFolderItem(name, id, parentId);
       } else {
-        folder = makeFolderItem(name, id, parentId);
+        folder = makeProblemFolderItem(name, id, parentId);
       }
 
       if (stack.isNotEmpty) {
@@ -101,23 +101,22 @@ class UserDataController extends GetxController {
       folders.add(folder);
     }
     if (isExam) {
+      allExamFolders.clear();
+      rootExamFolders.clear();
       allExamFolders.addAll(folders);
       rootExamFolders.addAll(rootFolders);
     } else {
+      allProblemFolders.clear();
+      rootProblemFolders.clear();
       allProblemFolders.addAll(folders);
       rootProblemFolders.addAll(rootFolders);
     }
   }
 
-  /// id로부터 개별 문제 폴더 객체를 가져오는 함수
-  TreeViewItem getElementProblemFolder(int id) {
-    return allProblemFolders.firstWhere((element) => element.value["id"] == id);
-  }
-
-  /// 폴더의 이름, id, parent를 받아 새로운 TreeViewItem를 만드는 함수
-  TreeViewItem makeFolderItem(String name, int id, int? parent) {
+  /// 문제 폴더의 이름, id, parent를 받아 새로운 TreeViewItem를 만드는 함수
+  TreeViewItem makeProblemFolderItem(String name, int id, int? parent) {
     return TreeViewItem(
-      //폴더 클릭했을 때 색깔 변동 관련 부분
+      //문제 폴더 클릭했을 때 색깔 변동 관련 부분
       backgroundColor: ButtonState.resolveWith((states) {
         const res = ResourceDictionary.light();
         if (Get.find<UserDataController>().selectedProblemDirectoryId.value == id) {
@@ -133,6 +132,7 @@ class UserDataController extends GetxController {
       expanded: false,
       children: [],
       value: {"parent": parent, "id": id, "name": name},
+      //드래그 자체를 가능하게 하는 부분
       content: Draggable(
         data: {"parent": parent, "id": id, "name": name},
         feedback: Container(
@@ -146,7 +146,7 @@ class UserDataController extends GetxController {
             ),
           ),
         ),
-        //유저가 드래그시 폴더끼리 위치 변경이 가능하도록 하는 부분
+        //유저가 드래그해서 가져다 놓을시 폴더끼리 위치 변경이 가능하도록 하는 부분
         child: DragTarget(
           builder: (BuildContext context, List<dynamic> candidateData, List<dynamic> rejectedData) {
             return Text(name);
@@ -181,9 +181,9 @@ class UserDataController extends GetxController {
               }
               data["parent"] = id;
               rootProblemFolders.refresh();
-              debugPrint("성공");
             } else {
-              debugPrint("실패");
+              debugPrint(response.statusCode.toString());
+              debugPrint("makeProblemFolderItem 실패(UserDataController)");
             }
           },
         ),
@@ -191,7 +191,7 @@ class UserDataController extends GetxController {
     );
   }
 
-  /// 시험지 의 이름, id, parent를 받아 새로운 TreeViewItem를 만드는 함수
+  /// 시험지 폴더의 이름, id, parent를 받아 새로운 TreeViewItem를 만드는 함수. 위 함수와 비슷한 기능 보유
   TreeViewItem makeExamFolderItem(String name, int id, int? parent) {
     return TreeViewItem(
       backgroundColor: ButtonState.resolveWith((states) {
@@ -204,7 +204,7 @@ class UserDataController extends GetxController {
           if (states.isDisabled) return res.controlAltFillColorDisabled;
         }
         return res.controlAltFillColorSecondary;
-      }), //selectedProblemDirectoryId?.value == id ? ButtonState<Color>(Colors.white) : Colors.grey,
+      }),
       leading: const Icon(FluentIcons.fabric_folder),
       expanded: false,
       children: [],
@@ -257,7 +257,7 @@ class UserDataController extends GetxController {
               data["parent"] = id;
               rootExamFolders.refresh();
             } else {
-              debugPrint("시험지 폴더 업데이트 실패(UserDataController)");
+              debugPrint("makeExamFolderItem 실패(UserDataController)");
             }
           },
         ),
@@ -299,25 +299,22 @@ class UserDataController extends GetxController {
       tabController.isNewTab = false;
     } else {
       debugPrint(response.statusCode.toString());
-      debugPrint("폴더 직속 문제 받기 오류 발생");
+      debugPrint("makeProblemListInNewTab 오류 발생(user data controller)");
     }
   }
 
+  /// 시험지 폴더를 클릭했을 때 시험지들의 구체적인 내용을 서버로부터 받고 새 탭에서 보여주는 함수. TODO: 시험지 서버와 연동, 디버깅 필요
   Future<void> examViewerInNewTab(TreeViewItem item) async {
     final problemUrl = Uri.parse('https://$HOST/api/data/get_exam_database/${item.value["id"]}');
-
     final response = await http.get(
       problemUrl,
       headers: await defaultHeader(httpContentType.json),
     );
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
-
-      final problems = jsonResponse['problem_list'];
-
+      final problems = jsonResponse['exam_list'];
       TabController tabController = Get.find<TabController>();
       tabController.isNewTab = true;
-
       ProblemListController problemListController = Get.put(ProblemListController(problems), tag: Get.find<TabController>().getTabKey());
       DefaultTabBody generatedTab = DefaultTabBody(
         key: GlobalObjectKey(tabController.tagNumber.toString()),
@@ -336,7 +333,7 @@ class UserDataController extends GetxController {
       tabController.isNewTab = false;
     } else {
       debugPrint(response.statusCode.toString());
-      debugPrint("폴더 직속 문제 받기 오류 발생");
+      debugPrint("examViewerInNewTab 오류 발생(user data controller)");
     }
   }
 
@@ -364,35 +361,13 @@ class UserDataController extends GetxController {
       workingSpaceController.dashBoard.value = workingSpaceController.makeDashBoard(DashBoardType.explore);
     } else {
       debugPrint(response.statusCode.toString());
-      debugPrint("폴더 직속 문제 받기 오류 발생");
+      debugPrint("makeProblemListInCurrentTab 오류 발생(user data controller)");
     }
   }
 
-  Future<void> makeExamViewerInCurrentTab(TreeViewItem item, String tagName) async {
-    DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
-
-    final problemUrl = Uri.parse('https://$HOST/api/data/problem/database/${item.value["id"]}');
-
-    final response = await http.get(
-      problemUrl,
-      headers: await defaultHeader(httpContentType.json),
-    );
-    if (isHttpRequestSuccess(response)) {
-      await workingSpaceController.deleteWorkingSpaceController();
-      final jsonResponse = jsonDecode(response.body);
-      final problems = jsonResponse['problem_list'];
-      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: tagName);
-      workingSpaceController.changeWorkingSpace(ExamProblemList(
-        targetFolder: item,
-        folderName: item.value["name"],
-        problems: problems,
-        problemListController: problemListController,
-      ));
-      workingSpaceController.dashBoard.value = workingSpaceController.makeDashBoard(DashBoardType.examExplore);
-    } else {
-      debugPrint(response.statusCode.toString());
-      debugPrint("폴더 직속 문제 받기 오류 발생");
-    }
+  /// id로부터 개별 문제 폴더 객체를 가져오는 함수
+  TreeViewItem getElementProblemFolder(int id) {
+    return allProblemFolders.firstWhere((element) => element.value["id"] == id);
   }
 
   Future<void> getPath() async {
@@ -401,7 +376,12 @@ class UserDataController extends GetxController {
       url,
       headers: await defaultHeader(httpContentType.json),
     );
-    final jsonResponse = jsonDecode(response.body);
-    selectedPath.value = jsonResponse["database"]["path"];
+    if (!isHttpRequestSuccess(response)) {
+      final jsonResponse = jsonDecode(response.body);
+      selectedPath.value = jsonResponse["database"]["path"];
+    } else {
+      debugPrint(response.statusCode.toString());
+      debugPrint("getPath함수 오류(user data controller)");
+    }
   }
 }

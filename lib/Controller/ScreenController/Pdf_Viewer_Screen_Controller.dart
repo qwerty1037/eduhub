@@ -299,14 +299,12 @@ class PdfViewerScreenController extends GetxController {
   void sendFrame() async {
     final url = Uri.parse('https://$HOST/api/data/create_problem');
 
-    for(Rect element in rectList){
+    for (Rect element in rectList) {
       Offset topLeft = element.topLeft;
       Offset bottomRight = element.bottomRight;
-
     }
 
-
-
+/*
     var bytePdf = await pickedFile?.readAsBytes();
     var request = http.MultipartRequest('POST', url);
     var formDataProblem = http.MultipartFile.fromBytes(
@@ -316,9 +314,6 @@ class PdfViewerScreenController extends GetxController {
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
 
-
-
-
     final Map<String, dynamic> requestField = {
       "problem_name": problemNameController.text,
       "parent_database": selectedDirectoryID,
@@ -326,7 +321,7 @@ class PdfViewerScreenController extends GetxController {
       "level": difficultySliderValue.round(),
       "frame_list": 
     };
+  
+  */
   }
 }
-
-class Frame

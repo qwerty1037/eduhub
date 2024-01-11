@@ -316,13 +316,20 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               ...controllerProblem.rectList.map((element) {
                                 return TransformableBox(
                                   contentBuilder: (content, rect, flip) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 1,
-                                          color: Colors.red,
+                                    return GestureDetector(
+                                      onTap: () {
+                                        int idx = controllerProblem.boxIndex;
+                                        debugPrint("${idx}");
+                                        debugPrint("${controllerProblem.rectList.length}");
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 1,
+                                            color: Colors.red,
+                                          ),
+                                          color: Colors.red.withOpacity(0.5),
                                         ),
-                                        color: Colors.red.withOpacity(0.5),
                                       ),
                                     );
                                   },
@@ -455,11 +462,15 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       onPressed: () {
                         renderSize = _getSize();
                         controllerProblem.generateBox(renderSize);
+                        setState(() {});
                       },
                     ),
                     Button(
                       child: Text("박스 삭제"),
-                      onPressed: () {},
+                      onPressed: () {
+                        controllerProblem.deleteBox();
+                        setState(() {});
+                      },
                     ),
                   ],
                 ),

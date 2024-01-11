@@ -13,6 +13,10 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:win32/win32.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:http_parser/http_parser.dart';
 
 class PdfFile {
   Uint8List? capturedImage;
@@ -39,6 +43,7 @@ class PdfViewerScreenController extends GetxController {
   int transformableBoxNumber = 0;
   RxList rectList = <Rect>[].obs;
   var ctrlList = <TransformationController>[];
+  int boxIndex = 0;
 
   ///Upload file into Application using FIlePicker.
   ///
@@ -258,6 +263,7 @@ class PdfViewerScreenController extends GetxController {
   void generateBox(Size renderSize) {
     Rect tRect = Offset(renderSize.width * 0.2, renderSize.height * 0.2) & Size(renderSize.width * 0.4, renderSize.height * 0.4);
     rectList.add(tRect);
+    boxIndex++;
 
     TransformableBox tempBox = TransformableBox(
       contentBuilder: (content, rect, flip) {
@@ -281,4 +287,46 @@ class PdfViewerScreenController extends GetxController {
     transformableBoxList.add(tempBox);
     transformableBoxList.refresh();
   }
+
+  void deleteBox() {
+    transformableBoxList = [].obs;
+    transformableBoxList.refresh();
+    boxIndex = 0;
+    rectList = [].obs;
+    rectList.refresh();
+  }
+
+  void sendFrame() async {
+    final url = Uri.parse('https://$HOST/api/data/create_problem');
+
+    for(Rect element in rectList){
+      Offset topLeft = element.topLeft;
+      Offset bottomRight = element.bottomRight;
+
+    }
+
+
+
+    var bytePdf = await pickedFile?.readAsBytes();
+    var request = http.MultipartRequest('POST', url);
+    var formDataProblem = http.MultipartFile.fromBytes(
+      'source_document',
+      bytePdf!,
+      filename: capturedFileNameProblem,
+      contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
+    );
+
+
+
+
+    final Map<String, dynamic> requestField = {
+      "problem_name": problemNameController.text,
+      "parent_database": selectedDirectoryID,
+      "tag": selectedTags.toString(),
+      "level": difficultySliderValue.round(),
+      "frame_list": 
+    };
+  }
 }
+
+class Frame

@@ -352,7 +352,7 @@ class UserDataController extends GetxController {
   Future<void> makeProblemListInCurrentTab(TreeViewItem item, String tagName) async {
     DefaultTabBodyController workingSpaceController = Get.find<DefaultTabBodyController>(tag: tagName);
 
-    final problemUrl = Uri.parse('https://$HOST/api/data/get_exam_database/${item.value["id"]}');
+    final problemUrl = Uri.parse('https://$HOST/api/data/database/${item.value["id"]}');
 
     final response = await http.get(
       problemUrl,

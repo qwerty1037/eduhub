@@ -52,8 +52,8 @@ class PdfSaveController extends GetxController {
 
     List<int> pdfBytes = await pdfFile.readAsBytes();
 
-    final url = Uri.parse('https://xloeuur.request.dreamhack.games');
-    // final url = Uri.parse('https://$HOST/api/data/split_pdf');
+    // final url = Uri.parse('https://xloeuur.request.dreamhack.games');
+    final url = Uri.parse('https://$HOST/api/data/split_pdf');
     var request = http.MultipartRequest('POST', url);
     var multipartFileProblem = http.MultipartFile.fromBytes(
       'source_document',

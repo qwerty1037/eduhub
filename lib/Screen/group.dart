@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/group_treeview_menuflyout.dart';
-import 'package:front_end/Controller/Group_TreeView_Controller.dart';
+import 'package:front_end/Controller/group_treeview_controller.dart';
 import 'package:front_end/Controller/Tab_Controller.dart';
 import 'package:get/get.dart';
 

@@ -173,6 +173,10 @@ class PdfSaveController extends GetxController {
     request.headers.addAll(await defaultHeader(httpContentType.multipart));
     final response = await request.send();
     debugPrint("${response.statusCode}");
+
+    var responseBody = await response.stream.bytesToString();
+    debugPrint(responseBody);
+
     return response.statusCode;
   }
 

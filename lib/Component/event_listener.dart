@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:front_end/Component/Default/default_Tab_Body.dart';
+import 'package:front_end/Component/Default/default_tab_body.dart';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Controller/search_controller.dart';
@@ -44,7 +44,7 @@ class _eventListenerState extends State<eventListener> with WindowListener {
       storage.write(key: 'saved_uid', value: await storage.read(key: 'uid'));
       await storage.delete(key: 'saved_tabs');
       List<String> tabToSave = [];
-      List<DefaultTabBody> bodyList = Get.find<FluentTabController>().tabInfo as List<DefaultTabBody>;
+      List<DefaultTabBody> bodyList = Get.find<FluentTabController>().tabInfo;
       for (int i = 0; i < bodyList.length; i++) {
         DefaultTabBodyController tabBodyController = Get.find<DefaultTabBodyController>(tag: bodyList[i].tagName);
         DashBoardType tabType = tabBodyController.dashBoardType;

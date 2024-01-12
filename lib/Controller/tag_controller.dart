@@ -32,10 +32,7 @@ class TagController extends GetxController {
         ownerId: tempTagList[i]["owner_id"],
         problemCount: tempTagList[i]["problem_count"],
       );
-      debugPrint(tempTag.id.toString());
-      debugPrint(tempTag.name.toString());
-      debugPrint(tempTag.ownerId.toString());
-      debugPrint(tempTag.problemCount.toString());
+
       totalTagList.add(tempTag);
     }
     totalTagList.refresh();

@@ -42,7 +42,9 @@ class _PdfScreenState extends State<PdfViewerScreen> {
               Row(
                 children: [
                   Obx(() {
-                    return controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints);
+                    return controllerProblem.isPdfInputed.value
+                        ? pdfViewerContainer(controllerProblem, constraints)
+                        : selectPdfContainer(controllerProblem, constraints);
                   }),
                 ],
               ),
@@ -468,7 +470,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       )
                     : Button(
                         child: const Text("DB 저장"),
-                        onPressed: () {
+                        onPressed: () async {
                           setState(() {
                             renderSize = _getSize();
                           });
@@ -503,13 +505,16 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               }
                             }
                             for (var element in controller.secondFrameList) {
-                              debugPrint("pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");
+                              debugPrint(
+                                  "pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");
                             }
+                            List<int> byte = await controller.pickedFile!.readAsBytes();
 
-                            final DefaultTabBodyController defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
+                            final DefaultTabBodyController defaultTabBodyController =
+                                Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
                             defaultTabBodyController.saveThisWorkingSpace();
                             defaultTabBodyController.changeWorkingSpace(
-                              PdfSaveScreen(controller.pickedFile!, controller.secondFrameList),
+                              PdfSaveScreen(byte, controller.secondFrameList),
                             );
                           }
                         },

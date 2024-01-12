@@ -14,7 +14,7 @@ class PdfSaveScreen extends StatelessWidget {
   final controller = Get.put(PdfSaveController(), tag: Get.find<FluentTabController>().getTabKey());
   final UserDataController userDataController = Get.find<UserDataController>();
 
-  late File pdfFile;
+  late List<int> pdfFile;
   late List<Frame> frameList;
 
   @override

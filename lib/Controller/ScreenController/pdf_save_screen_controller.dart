@@ -19,7 +19,7 @@ class PdfSaveController extends GetxController {
   late Uint8List capturedImageAnswer;
   var capturedImageProblemPdf;
   var capturedImageAnswerPdf;
-  late File pdfFile;
+  late List<int> pdfFile;
   late List<Frame> frameList;
 
   RxList<TagModel> tagsList = <TagModel>[].obs;
@@ -46,9 +46,7 @@ class PdfSaveController extends GetxController {
         selectedTags.add(tagsList[i].ID);
       }
     }
-    String capturedFileNameProblem = '${problemNameController.text}_problem.pdf';
-
-    List<int> pdfBytes = await pdfFile.readAsBytes();
+    List<int> pdfBytes = pdfFile;
 
     // final url = Uri.parse('https://xloeuur.request.dreamhack.games');
     final url = Uri.parse('https://$HOST/api/data/split_pdf');
@@ -56,9 +54,10 @@ class PdfSaveController extends GetxController {
     var multipartFileProblem = http.MultipartFile.fromBytes(
       'source_document',
       pdfBytes,
-      filename: '${problemNameController.text}_problem.pdf',
+      filename: 'file',
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
+    debugPrint("$pdfBytes");
 
     var temp = [];
     for (int i = 0; i < frameList.length; i++) {
@@ -95,7 +94,7 @@ class PdfSaveController extends GetxController {
     capturedImageAnswer = image2;
   }
 
-  void getPdfRectList(File pdfFile, List<Frame> frameList) {
+  void getPdfRectList(List<int> pdfFile, List<Frame> frameList) {
     this.pdfFile = pdfFile;
     this.frameList = frameList;
   }

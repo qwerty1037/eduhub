@@ -18,5 +18,4 @@ class Tag {
   String name;
   int problemCount;
   int? ownerId;
-  //id: number, name: string, problemCount: number, ownerId: number
 }

@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
-import 'package:front_end/Component/event_listener.dart';
+import 'package:front_end/Component/window_event_listener.dart';
 import 'package:front_end/Controller/group_treeview_controller.dart';
 import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Controller/tag_controller.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget with WindowListener {
     return GetBuilder<UserDesktopController>(
       builder: (controller) {
         if (controller.isLogin) {
-          //로직상 한번만 호출되서 괜찮음
+          //로그인 할때만 build
           Get.put(TagController());
           Get.put(FluentTabController());
           return FluentApp(
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget with WindowListener {
                 accentColor: Colors.orange,
                 brightness: Brightness.dark),
             debugShowCheckedModeBanner: false,
-            home: const eventListener(child: HomeTabView()),
+            home: const WindowEventListener(child: HomeTabView()),
           );
         } else {
           return material.MaterialApp(

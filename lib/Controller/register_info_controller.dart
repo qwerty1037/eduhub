@@ -20,33 +20,6 @@ class RegisterInfoController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController nicknameController = TextEditingController();
 
-  ///채워야할 정보를 모두 채웠는지 확인하는 함수
-  bool isCorrectFormat() {
-    return idController.text.isNotEmpty && passwordController.text.isNotEmpty && nameController.text.isNotEmpty && ageController.text.isNotEmpty && emailController.text.isNotEmpty;
-  }
-
-  ///입력한 정보를 백엔드에 보내는 함수
-  Future<int> sendRegisterInfo() async {
-    final url = Uri.parse('https://$HOST/api/auth/register');
-    final Map<String, dynamic> requestBody = {
-      "user_id": idController.text,
-      "user_password": passwordController.text,
-      "user_email": emailController.text,
-      "user_nickname": nicknameController.text,
-      "real_name": nameController.text,
-      "gender": selectedGender == 0 ? true : false,
-      "age": int.parse(ageController.text),
-    };
-    final headers = {"Content-type": "application/json"};
-
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: jsonEncode(requestBody),
-    );
-    return response.statusCode;
-  }
-
   ///유저가 회원가입 시도시 회원가입이 가능한 형태인지 검증한 후 가능한 형태시 다른 함수에 넘겨줌
   Future<void> tryMakeId(BuildContext context) async {
     matchpassword = true;
@@ -76,5 +49,31 @@ class RegisterInfoController extends GetxController {
         update();
       }
     }
+  }
+
+  ///입력한 정보를 백엔드에 보내는 함수
+  Future<int> sendRegisterInfo() async {
+    final url = Uri.parse('https://$HOST/api/auth/register');
+    final Map<String, dynamic> requestBody = {
+      "user_id": idController.text,
+      "user_password": passwordController.text,
+      "user_email": emailController.text,
+      "user_nickname": nicknameController.text,
+      "real_name": nameController.text,
+      "gender": selectedGender == 0 ? true : false,
+      "age": int.parse(ageController.text),
+    };
+    final headers = {"Content-type": "application/json"};
+
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(requestBody),
+    );
+    return response.statusCode;
+  }
+
+  bool isCorrectFormat() {
+    return idController.text.isNotEmpty && passwordController.text.isNotEmpty && nameController.text.isNotEmpty && ageController.text.isNotEmpty && emailController.text.isNotEmpty;
   }
 }

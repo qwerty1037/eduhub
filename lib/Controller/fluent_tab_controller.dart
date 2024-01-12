@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 class FluentTabController extends GetxController {
   RxInt currentTabIndex = (0).obs;
   RxList<Tab> tabs = <Tab>[].obs;
-  List<DefaultTabBody> tabInfo = <DefaultTabBody>[];
+  List<DefaultTabBody> tabInfo = <DefaultTabBody>[]; //앱을 끌 때 저장할 탭 정보들
 
   int tagNumber = 0;
   bool isNewTab = true;
@@ -77,9 +77,9 @@ class FluentTabController extends GetxController {
   }
 
   ///새로운 탭을 추가하는 함수, body와 탭 이름, 아이콘을 파라미터로 받는다 탭 이름은 안주면 NewTab으로 된다.
-  Tab addTab(Widget body, final String? text, final Icon? icon) {
+  Tab addTab(DefaultTabBody body, final String? text, final Icon? icon) {
     Tab? newTab;
-    tabInfo.add(body as DefaultTabBody);
+    tabInfo.add(body);
     Key newKey = GlobalObjectKey(tagNumber);
     newTab = Tab(
       key: newKey,

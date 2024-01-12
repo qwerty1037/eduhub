@@ -137,7 +137,7 @@ class FolderTreeViewMenuFlyout extends StatelessWidget {
           );
 
           if (isHttpRequestSuccess(response)) {
-            TreeViewItem newFolder = controller.makeFolderItem(reNameController.text, item.value["id"], item.value["parent"]);
+            TreeViewItem newFolder = controller.makeProblemFolderItem(reNameController.text, item.value["id"], item.value["parent"]);
             newFolder.children.addAll(item.children.toList());
 
             controller.allProblemFolders.removeWhere((element) => item.value["id"] == element.value["id"]);
@@ -160,7 +160,7 @@ class FolderTreeViewMenuFlyout extends StatelessWidget {
   /// MenuFlyoutItem that make new folder
   ///
   /// When clicked, create a window for naming the new folder. Then http request to create a new folder
-  MenuFlyoutItem _menuFlyoutItemNewFolder(context, item, controller) {
+  MenuFlyoutItem _menuFlyoutItemNewFolder(BuildContext context, item, UserDataController controller) {
     return MenuFlyoutItem(
       text: const Text("새폴더"),
       onPressed: () async {
@@ -199,7 +199,7 @@ class FolderTreeViewMenuFlyout extends StatelessWidget {
 
                       final int newFolderId = jsonResponse['inserted_database'][0]["id"];
                       final int parentId = jsonResponse['inserted_database'][0]["parent_id"];
-                      TreeViewItem newFolder = controller.makeFolderItem(newNameController.text, newFolderId, parentId);
+                      TreeViewItem newFolder = controller.makeProblemFolderItem(newNameController.text, newFolderId, parentId);
                       controller.allProblemFolders.add(newFolder);
                       TreeViewItem parentFolder = controller.allProblemFolders.firstWhere((element) => element.value["id"] == parentId);
                       parentFolder.children.add(newFolder);

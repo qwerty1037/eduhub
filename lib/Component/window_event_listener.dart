@@ -9,21 +9,20 @@ import 'package:front_end/Screen/problem_list.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 
-class eventListener extends StatefulWidget {
-  const eventListener({super.key, required this.child});
+class WindowEventListener extends StatefulWidget {
+  const WindowEventListener({super.key, required this.child});
   final Widget child;
 
   @override
-  State<eventListener> createState() => _eventListenerState();
+  State<WindowEventListener> createState() => _WindowEventListenerState();
 }
 
-class _eventListenerState extends State<eventListener> with WindowListener {
+class _WindowEventListenerState extends State<WindowEventListener> with WindowListener {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     windowManager.addListener(this);
-    _init();
+    delayTimeToSaveData;
   }
 
   @override
@@ -32,40 +31,45 @@ class _eventListenerState extends State<eventListener> with WindowListener {
     super.dispose();
   }
 
-  void _init() async {
+  void delayTimeToSaveData() async {
     await windowManager.setPreventClose(true);
   }
 
+  ///앱을 종료할 때 로컬에 마지막 접속 아이디, 탭들을 저장하는 함수
   @override
   void onWindowClose() async {
     bool isPreventClose = await windowManager.isPreventClose();
     if (isPreventClose) {
       const storage = FlutterSecureStorage();
       storage.write(key: 'saved_uid', value: await storage.read(key: 'uid'));
+
+      //기존에 저장되었던 탭 삭제
       await storage.delete(key: 'saved_tabs');
       List<String> tabToSave = [];
-      List<DefaultTabBody> bodyList = Get.find<FluentTabController>().tabInfo;
-      for (int i = 0; i < bodyList.length; i++) {
-        DefaultTabBodyController tabBodyController = Get.find<DefaultTabBodyController>(tag: bodyList[i].tagName);
-        DashBoardType tabType = tabBodyController.dashBoardType;
+      List<DefaultTabBody> tabInfoList = Get.find<FluentTabController>().tabInfo;
 
-        if (tabType == DashBoardType.explore) {
+      for (int i = 0; i < tabInfoList.length; i++) {
+        DefaultTabBodyController tabBodyController = Get.find<DefaultTabBodyController>(tag: tabInfoList[i].tagName);
+        DashBoardType dashBoardType = tabBodyController.dashBoardType;
+
+        //FIXME //TODO: 기능 확장시 업데이트 필요
+
+        //ProblemList 탭 저장
+        if (dashBoardType == DashBoardType.explore) {
           Container workingSpace = tabBodyController.realWorkingSpaceWidget as Container;
-          ProblemList folder = workingSpace.child as ProblemList;
-          var folderId = folder.targetFolder.value["id"];
+          ProblemList problemList = workingSpace.child as ProblemList; // 혹시 DashBoardType.explore가 사용되는 다른 기능이 생길 경우 업데이트
+          var folderId = problemList.targetFolder.value["id"];
           tabToSave.add('{"type": "explore", "id": $folderId }');
-        } else if (tabType == DashBoardType.search) {
-          String searchText = Get.find<SearchScreenController>(tag: bodyList[i].tagName).searchBarController.text;
-          String searchDifficulty = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getDifficulty().toString();
-          String searchContent = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getContent();
-
+        }
+        //SearchScreen 탭 저장
+        else if (dashBoardType == DashBoardType.search) {
+          String searchText = Get.find<SearchScreenController>(tag: tabInfoList[i].tagName).searchBarController.text;
+          String searchDifficulty = Get.find<SearchScreenController>(tag: tabInfoList[i].tagName).getDifficulty().toString();
+          String searchContent = Get.find<SearchScreenController>(tag: tabInfoList[i].tagName).getContent();
           tabToSave.add('{"type": "search", "text": "$searchText" , "difficulty" : "$searchDifficulty", "content" : "$searchContent"}');
-
-          //searchscreen controller찾고 그 안의 searchBarController.text를 저장
         }
       }
       storage.write(key: 'saved_tabs', value: tabToSave.toString());
-
       await storage.delete(key: 'uid');
       await storage.delete(key: 'access_token');
       await storage.delete(key: 'refresh_token');

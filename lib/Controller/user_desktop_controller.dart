@@ -23,22 +23,19 @@ class UserDesktopController extends GetxController {
           url,
           headers: await defaultHeader(httpContentType.json),
         );
-
         if (isHttpRequestSuccess(response)) {
           String? cookieList = response.headers["set-cookie"];
-
           debugPrint(cookieList.toString());
-
           String? uid = extractCookieValue(cookieList!, "uid");
           String? accessToken = extractCookieValue(cookieList, "access_token");
           String? refreshToken = extractCookieValue(cookieList, "refresh_token");
           if (uid == null || accessToken == null || refreshToken == null) {
-            debugPrint("refresh 토큰 받기 도중 변환 실패");
+            debugPrint("refresh 토큰 받기 변환 실패(UserDesktopController)");
           } else {
             await saveCookieToSecureStorage(uid, accessToken, refreshToken);
           }
         } else {
-          debugPrint("refresh 토큰 받기 오류 발생(서버연결x)");
+          debugPrint("refresh 토큰 받기 오류 발생(UserDesktopController)");
         }
       }
     });

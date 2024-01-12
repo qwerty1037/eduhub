@@ -387,7 +387,7 @@ class UserDataController extends GetxController {
       url,
       headers: await defaultHeader(httpContentType.json),
     );
-    if (!isHttpRequestSuccess(response)) {
+    if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
       selectedPath.value = jsonResponse["database"]["path"];
     } else {

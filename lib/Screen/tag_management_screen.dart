@@ -52,7 +52,7 @@ class TagManagementScreen extends StatelessWidget {
             );
           }),
           const SizedBox(height: 20),
-          saveButtonField(),
+          TagSaveButton(),
         ],
       ),
     );
@@ -61,7 +61,7 @@ class TagManagementScreen extends StatelessWidget {
   /// Button that saves inputed Tags
   ///
   /// When button clicked, http requests to backend
-  Widget saveButtonField() {
+  Widget TagSaveButton() {
     return TextButton(
       onPressed: () {
         tagController.sendTags();

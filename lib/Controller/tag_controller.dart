@@ -7,7 +7,8 @@ import 'package:front_end/Test/temp_tag.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-/// Controller of tag input Screen
+/// 태그 관련 컨트롤러
+/// REVIEW 태그 불러오는 부분 userdata 컨트롤러에 넣는 것과 태그를 구분하는 것 중 어느 것이 나은가?
 class TagController extends GetxController {
   TextEditingController tagsInputController = TextEditingController();
   int numberOfTags = 0;
@@ -17,6 +18,7 @@ class TagController extends GetxController {
     receiveTags();
   }
 
+  ///내 태그들을 서버로부터 받아오는 함수
   void receiveTags() async {
     totalTagList = <Tag>[].obs;
     final url = Uri.parse('https://$HOST/api/data/mytags');
@@ -24,21 +26,26 @@ class TagController extends GetxController {
       url,
       headers: await defaultHeader(httpContentType.json),
     );
-    final tempTagList = jsonDecode(response.body)["tags"];
-    for (int i = 0; i < tempTagList.length; i++) {
-      Tag tempTag = Tag(
-        id: tempTagList[i]["id"],
-        name: tempTagList[i]["name"],
-        ownerId: tempTagList[i]["owner_id"],
-        problemCount: tempTagList[i]["problem_count"],
-      );
 
-      totalTagList.add(tempTag);
+    if (isHttpRequestSuccess(response)) {
+      final tempTagList = jsonDecode(response.body)["tags"];
+      for (int i = 0; i < tempTagList.length; i++) {
+        Tag tempTag = Tag(
+          id: tempTagList[i]["id"],
+          name: tempTagList[i]["name"],
+          ownerId: tempTagList[i]["owner_id"],
+          problemCount: tempTagList[i]["problem_count"],
+        );
+
+        totalTagList.add(tempTag);
+      }
+      totalTagList.refresh();
+    } else {
+      debugPrint(" 태그 받아오기 실패(tag_controller)");
     }
-    totalTagList.refresh();
   }
 
-  /// 새 태그를 만드는 함수
+  /// 새 태그를 서버에 보내는 함수
   void sendTags() async {
     final url = Uri.parse('https://$HOST/api/data/create_tag_list');
 
@@ -56,10 +63,10 @@ class TagController extends GetxController {
       body: jsonEncode(requestBody),
     );
 
+//TODO 아래에 태그 생성, 실패 여부 유저에게 알려주는 부분 만들어야함
     if (isHttpRequestSuccess(response)) {
-      debugPrint("태그 전송 성공");
     } else {
-      debugPrint("태그 전송 실패");
+      debugPrint("태그 생성 실패(tag_controller)");
     }
     receiveTags();
   }
@@ -67,7 +74,6 @@ class TagController extends GetxController {
   /// 입력된 칩 리스트 반환
   List<Widget> inputedChipsList() {
     List<Widget> chips = [];
-
     for (int i = 0; i < inputedTagsList.length; i++) {
       Widget item = Chip(
         label: Text(inputedTagsList[i].name),

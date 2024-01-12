@@ -8,7 +8,7 @@ import 'package:front_end/Controller/ScreenController/Pdf_Save_Screen_Controller
 import 'package:front_end/Controller/ScreenController/Pdf_Viewer_Screen_Controller.dart';
 import 'package:front_end/Controller/problem_list_controller.dart';
 import 'package:front_end/Controller/Search_Controller.dart';
-import 'package:front_end/Controller/Tag_Controller.dart';
+import 'package:front_end/Controller/tag_controller.dart';
 import 'package:front_end/Controller/exam_controller.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/Group.dart';

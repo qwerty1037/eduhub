@@ -257,7 +257,7 @@ class PdfSaveScreen extends StatelessWidget {
   Widget saveButtonField() {
     return TextButton(
       onPressed: () {
-        controller.sendFirstFrameInfo(userDataController.selectedProblemDirectoryId.value);
+        controller.sendProblemInfo(userDataController.selectedProblemDirectoryId.value);
       },
       child: Container(
         height: 50,

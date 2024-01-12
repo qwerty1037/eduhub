@@ -5,7 +5,7 @@ import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Component/frame.dart';
 
-import 'package:front_end/Controller/Tag_Controller.dart';
+import 'package:front_end/Controller/tag_controller.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Class/tag_model.dart';
 import 'package:get/get.dart';
@@ -49,104 +49,16 @@ class PdfSaveController extends GetxController {
       }
     }
     String capturedFileNameProblem = '${problemNameController.text}_problem.pdf';
-    String capturedFileNameAnswer = '${problemNameController.text}_answer.pdf';
-
-    //Create a new PDF document.
-    final PdfDocument document = PdfDocument();
-    //Load the image using PdfBitmap.
-    final PdfBitmap image = PdfBitmap(capturedImageProblem);
-    //Draw the image to the PDF page.
-    document.pages.add().graphics.drawImage(image, const Rect.fromLTWH(0, 0, 500, 200));
-
-    //Create a new PDF document.
-    final PdfDocument document2 = PdfDocument();
-    //Load the image using PdfBitmap.
-    final PdfBitmap image2 = PdfBitmap(capturedImageAnswer);
-    //Draw the image to the PDF page.
-    document2.pages.add().graphics.drawImage(image2, const Rect.fromLTWH(0, 0, 500, 200));
-
-    // Save the document.
-    capturedImageProblemPdf = await document.save();
-    capturedImageAnswerPdf = await document2.save();
-
-    // capturedImageProblem = Uint8List.fromList(await document.save());
-    // capturedImageAnswer = Uint8List.fromList(await document2.save());
-
-    debugPrint("${await document.save()}");
-    // Dispose the document.
-    document.dispose();
-    document2.dispose();
-
-    // final url = Uri.parse('https://uwkedrf.request.dreamhack.games');
-    final url = Uri.parse('https://$HOST/api/data/create_problem');
-    var request = http.MultipartRequest('POST', url);
-    var multipartFileProblem = http.MultipartFile.fromBytes(
-      'problem_image',
-      capturedImageProblemPdf,
-      filename: capturedFileNameProblem,
-      contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
-    );
-    var multipartFileAnswer = http.MultipartFile.fromBytes(
-      'problem_image',
-      capturedImageAnswerPdf,
-      filename: capturedFileNameAnswer,
-      contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
-    );
-
-    final Map<String, dynamic> requestField = {
-      "problem_name": problemNameController.text,
-      "parent_database": selectedDirectoryID,
-      "tag": selectedTags.toString(),
-      "level": difficultySliderValue.round(),
-      "problem_string": "\${$capturedFileNameProblem}",
-      "answer_string": "\${$capturedFileNameAnswer}",
-    };
-    debugPrint(selectedTags.toString());
-
-    final Map<String, String> temp = {};
-    requestField.forEach((key, value) {
-      temp.addAll(Map.fromEntries([MapEntry(key, value.toString())]));
-    });
-
-    request.files.add(multipartFileProblem);
-    request.files.add(multipartFileAnswer);
-    request.fields.addAll(temp);
-
-    request.headers.addAll(await defaultHeader(httpContentType.multipart));
-    final response = await request.send();
-    debugPrint("${response.statusCode}");
-    return response.statusCode;
-  }
-
-  /// Get Problem, Answer image as Uint8List
-  void getImage(Uint8List image1, Uint8List image2) {
-    capturedImageProblem = image1;
-    capturedImageAnswer = image2;
-  }
-
-  void getPdfRectList(File pdfFile, List<Frame> frameList) {
-    this.pdfFile = pdfFile;
-    this.frameList = frameList;
-  }
-
-  Future<int> sendFirstFrameInfo(int selectedDirectoryID) async {
-    List<int> selectedTags = <int>[];
-    for (int i = 0; i < tagsList.length; i++) {
-      if (tagsList[i].isSelected == true) {
-        selectedTags.add(tagsList[i].ID);
-      }
-    }
-    String capturedFileNameProblem = '${problemNameController.text}_problem.pdf';
 
     List<int> pdfBytes = await pdfFile.readAsBytes();
 
-    // final url = Uri.parse('https://uwkedrf.request.dreamhack.games');
-    final url = Uri.parse('https://$HOST/api/data/parse_pdf');
+    final url = Uri.parse('https://xloeuur.request.dreamhack.games');
+    // final url = Uri.parse('https://$HOST/api/data/split_pdf');
     var request = http.MultipartRequest('POST', url);
     var multipartFileProblem = http.MultipartFile.fromBytes(
       'source_document',
       pdfBytes,
-      filename: capturedFileNameProblem,
+      filename: "pdf_file",
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
 
@@ -163,21 +75,31 @@ class PdfSaveController extends GetxController {
     }
 
     final Map<String, String> requestField = {
+      "problem_name": problemNameController.text,
+      "parent_database_id": selectedDirectoryID.toString(),
+      "tag_id_list": jsonEncode(selectedTags),
       "frame_list": jsonEncode(temp),
     };
-    debugPrint(jsonEncode(temp));
 
     request.files.add(multipartFileProblem);
     request.fields.addAll(requestField);
 
+    debugPrint("http Ready");
     request.headers.addAll(await defaultHeader(httpContentType.multipart));
     final response = await request.send();
     debugPrint("${response.statusCode}");
-
-    var responseBody = await response.stream.bytesToString();
-    debugPrint(responseBody);
-
     return response.statusCode;
+  }
+
+  /// Get Problem, Answer image as Uint8List
+  void getImage(Uint8List image1, Uint8List image2) {
+    capturedImageProblem = image1;
+    capturedImageAnswer = image2;
+  }
+
+  void getPdfRectList(File pdfFile, List<Frame> frameList) {
+    this.pdfFile = pdfFile;
+    this.frameList = frameList;
   }
 
   /// When ImagePreviewButton is Tapped, It will switch "-보기", "-숨기기"

@@ -29,7 +29,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
   void initState() {
     super.initState();
     renderSize = _getSize();
-    rect1 = Offset(renderSize.width * 0.2, renderSize.height * 0.2) & Size(renderSize.width * 0.6, renderSize.height * 0.6);
   }
 
   @override
@@ -43,36 +42,12 @@ class _PdfScreenState extends State<PdfViewerScreen> {
               Row(
                 children: [
                   Obx(() {
-                    return controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints);
+                    return controllerProblem.isPdfInputed.value
+                        ? pdfViewerContainer(controllerProblem, constraints)
+                        : selectPdfContainer(controllerProblem, constraints);
                   }),
                 ],
               ),
-              /*
-              Obx(() {
-                return Align(
-                  alignment: Alignment.bottomRight,
-                  child: Visibility(
-                    visible: (controllerProblem.isCaptured.value == true && controllerAnswer.isCaptured.value == true),
-                    child: IconButton(
-                      onPressed: () {
-                        final DefaultTabBodyController defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.FluentTabController>().getTabKey());
-                        defaultTabBodyController.saveThisWorkingSpace();
-                        defaultTabBodyController.changeWorkingSpace(PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!));
-
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => PdfSaveScreen(controllerProblem.getCapturedImage()!, controllerAnswer.getCapturedImage()!)),
-                        // );
-                      },
-                      icon: const Icon(
-                        FluentIcons.save,
-                        //color: Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              */
             ],
           ),
         ),
@@ -205,9 +180,9 @@ class _PdfScreenState extends State<PdfViewerScreen> {
     return Offset.zero;
   }
 
-  Rect rect1 = Rect.zero;
   final GlobalKey _containerKey = GlobalKey();
-  TransformationController ctrl = TransformationController();
+  int selectedBoxIndex = 99999;
+  bool firstFrameFinished = false;
 
   Widget pdfViewerContainer(PdfViewerScreenController controller, constraints) {
     return SizedBox(
@@ -267,7 +242,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       Obx(
                         () => InteractiveViewer(
                           key: _containerKey,
-                          transformationController: ctrl,
                           interactionEndFrictionCoefficient: double.infinity,
                           onInteractionUpdate: (details) {
                             setState(() {});
@@ -284,17 +258,18 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                                   contentBuilder: (content, rect, flip) {
                                     return GestureDetector(
                                       onTap: () {
-                                        int idx = controller.boxIndex;
-                                        debugPrint("$idx");
-                                        debugPrint("${controller.rectList.length}");
+                                        selectedBoxIndex = idx;
+                                        debugPrint("selected index : $idx");
+                                        debugPrint("total box length: ${controller.rectList.length}");
+                                        setState(() {});
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                             width: 1,
-                                            color: Colors.red,
+                                            color: (selectedBoxIndex == idx) ? Colors.red : Colors.red.withOpacity(0.9),
                                           ),
-                                          color: Colors.red.withOpacity(0.5),
+                                          color: (selectedBoxIndex == idx) ? Colors.red.withOpacity(0.5) : Colors.red.withOpacity(0.1),
                                         ),
                                       ),
                                     );
@@ -304,73 +279,17 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                                     setState(() {
                                       controller.rectList[idx] = result.rect;
                                       controller.rectList.refresh();
+                                      if (firstFrameFinished) {
+                                        controller.pageRectList[controller.pageIndex.value] = <Rect>[];
+                                        for (var element in controller.rectList) {
+                                          controller.pageRectList[controller.pageIndex.value].add(element);
+                                        }
+                                      }
                                     });
                                   },
                                 ),
                               ]
                             ],
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Visibility(
-                          visible: controller.isCaptured(),
-                          child: SizedBox(
-                            height: 250,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1,
-                                      //color: Colors.black,
-                                    ),
-                                    //color: Colors.black,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: controller.isCaptured()
-                                      ? Image.memory(
-                                          controller.getCapturedImage()!,
-                                        )
-                                      : const SizedBox(),
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: IconButton(
-                                    onPressed: () async {
-                                      controller.deleteCapturedImage();
-                                    },
-                                    icon: const Icon(
-                                      FluentIcons.chrome_close,
-                                      //color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: !controller.isCaptured(),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: IconButton(
-                            onPressed: () async {
-                              controller.capturePdf();
-                            },
-                            icon: const Icon(
-                              FluentIcons.camera,
-                            ),
                           ),
                         ),
                       ),
@@ -382,9 +301,10 @@ class _PdfScreenState extends State<PdfViewerScreen> {
           ),
           SizedBox(
             width: constraints.maxWidth / 2,
-            height: constraints.maxHeight / 2,
+            height: constraints.maxHeight,
             child: Column(
               children: [
+                firstFrameFinished ? Text("페이지별 문제 박스를 확인해주세요") : Text("문제의 열에 맞게 프레임을 설정해주세요"),
                 Row(
                   children: [
                     Button(
@@ -398,7 +318,12 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     Button(
                       child: const Text("박스 삭제"),
                       onPressed: () {
-                        controller.deleteBox();
+                        if (selectedBoxIndex == 99999) {
+                        } else {
+                          controller.deleteBox(selectedBoxIndex);
+                          selectedBoxIndex = 99999;
+                        }
+
                         setState(() {});
                       },
                     ),
@@ -412,7 +337,41 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         if (controller.pageIndex.value == 0) {
                           //TODO: 첫 페이지 알림
                         } else {
+                          if (firstFrameFinished) {
+                            var toRemove = [];
+                            for (var element in controller.secondFrameList) {
+                              if (controller.pageIndex.value == element.page) {
+                                toRemove.add(element);
+                              }
+                            }
+                            controller.secondFrameList.removeWhere((e) => toRemove.contains(e));
+
+                            for (var element in controller.pageRectList[controller.pageIndex.value]) {
+                              Offset topLeft = element.topLeft;
+                              Offset bottomRight = element.bottomRight;
+                              double minX = topLeft.dx / renderSize.width;
+                              double minY = topLeft.dy / renderSize.height;
+                              double maxX = bottomRight.dx / renderSize.width;
+                              double maxY = bottomRight.dy / renderSize.height;
+                              Frame tempFrame = Frame(page: controller.pageIndex.value, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
+                              controller.secondFrameList.add(tempFrame);
+                            }
+                          }
                           controller.pageIndex.value--;
+                          if (firstFrameFinished) {
+                            controller.rectList = <Rect>[].obs;
+                            for (var element in controller.secondFrameList) {
+                              if (controller.pageIndex.value == element.page) {
+                                double dx = element.minX;
+                                double dy = element.minY;
+                                double width = element.maxX - element.minX;
+                                double height = element.maxY - element.minY;
+                                Rect tRect = Offset(renderSize.width * dx, renderSize.height * dy) & Size(renderSize.width * width, renderSize.height * height);
+                                controller.rectList.add(tRect);
+                              }
+                            }
+                          }
+                          setState(() {});
                         }
                       },
                     ),
@@ -422,42 +381,130 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         if (controller.pageIndex.value == controller.pageNum - 1) {
                           //TODO: 마지막 페이지 알림
                         } else {
+                          if (firstFrameFinished) {
+                            var toRemove = [];
+                            for (var element in controller.secondFrameList) {
+                              if (controller.pageIndex.value == element.page) {
+                                toRemove.add(element);
+                              }
+                            }
+                            controller.secondFrameList.removeWhere((e) => toRemove.contains(e));
+                            for (var element in controller.pageRectList[controller.pageIndex.value]) {
+                              Offset topLeft = element.topLeft;
+                              Offset bottomRight = element.bottomRight;
+                              double minX = topLeft.dx / renderSize.width;
+                              double minY = topLeft.dy / renderSize.height;
+                              double maxX = bottomRight.dx / renderSize.width;
+                              double maxY = bottomRight.dy / renderSize.height;
+                              Frame tempFrame = Frame(page: controller.pageIndex.value, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
+                              controller.secondFrameList.add(tempFrame);
+                            }
+                          }
                           controller.pageIndex.value++;
+                          if (firstFrameFinished) {
+                            controller.rectList = <Rect>[].obs;
+                            for (var element in controller.secondFrameList) {
+                              if (controller.pageIndex.value == element.page) {
+                                double dx = element.minX;
+                                double dy = element.minY;
+                                double width = element.maxX - element.minX;
+                                double height = element.maxY - element.minY;
+                                Rect tRect = Offset(renderSize.width * dx, renderSize.height * dy) & Size(renderSize.width * width, renderSize.height * height);
+                                controller.rectList.add(tRect);
+                              }
+                            }
+                          }
+                          setState(() {});
                         }
                       },
                     ),
                   ],
                 ),
-                Button(
-                  child: const Text("1차 프레임 저장"),
-                  onPressed: () {
-                    if (controller.transformableBoxList.isEmpty) {
-                      showEmptyDialog(context);
-                      setState(() {});
-                    } else {
-                      List<Frame> frameList = [];
-                      for (int pageIdx = 0; pageIdx < controller.pageNum; pageIdx++) {
-                        for (Rect element in controller.rectList.cast()) {
-                          Offset topLeft = element.topLeft;
-                          Offset bottomRight = element.bottomRight;
-                          double minX = topLeft.dx / renderSize.width;
-                          double minY = topLeft.dy / renderSize.height;
-                          double maxX = bottomRight.dx / renderSize.width;
-                          double maxY = bottomRight.dy / renderSize.height;
-                          Frame tempFrame = Frame(page: pageIdx, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
-                          frameList.add(tempFrame);
-                          debugPrint("pageIdx: $pageIdx, minX: $minX, minY: $minY, maxX: $maxX, maxY: $maxY");
-                        }
-                      }
+                !firstFrameFinished
+                    ? Button(
+                        child: Text("1차 프레임 저장"),
+                        onPressed: () async {
+                          setState(() {
+                            renderSize = _getSize();
+                          });
+                          if (controller.rectList.isEmpty) {
+                            showEmptyDialog(context);
+                            setState(() {});
+                          } else {
+                            List<Frame> frameList = [];
+                            for (int pageIdx = 0; pageIdx < controller.pageNum; pageIdx++) {
+                              for (Rect element in controller.rectList.cast()) {
+                                Offset topLeft = element.topLeft;
+                                Offset bottomRight = element.bottomRight;
+                                double minX = topLeft.dx / renderSize.width;
+                                double minY = topLeft.dy / renderSize.height;
+                                double maxX = bottomRight.dx / renderSize.width;
+                                double maxY = bottomRight.dy / renderSize.height;
+                                Frame tempFrame = Frame(page: pageIdx, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
+                                frameList.add(tempFrame);
+                                debugPrint("pageIdx: $pageIdx, minX: $minX, minY: $minY, maxX: $maxX, maxY: $maxY");
+                              }
+                            }
+                            await controller.sendFirstFrameInfo(frameList);
 
-                      final DefaultTabBodyController defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
-                      defaultTabBodyController.saveThisWorkingSpace();
-                      defaultTabBodyController.changeWorkingSpace(
-                        PdfSaveScreen(controller.pickedFile!, frameList),
-                      );
-                    }
-                  },
-                )
+                            renderSize = _getSize();
+
+                            for (var element in controller.secondFrameList) {
+                              double dx = element.minX;
+                              double dy = element.minY;
+                              double width = element.maxX - element.minX;
+                              double height = element.maxY - element.minY;
+                              Rect tRect = Offset(renderSize.width * dx, renderSize.height * dy) & Size(renderSize.width * width, renderSize.height * height);
+                              controller.pageRectList[element.page].add(tRect);
+                            }
+
+                            controller.rectList = <Rect>[].obs;
+                            for (var element in controller.pageRectList[controller.pageIndex.value]) {
+                              controller.rectList.add(element);
+                            }
+
+                            firstFrameFinished = true;
+                            setState(() {});
+                          }
+                        },
+                      )
+                    : Button(
+                        child: Text("DB 저장"),
+                        onPressed: () {
+                          setState(() {
+                            renderSize = _getSize();
+                          });
+                          if (controller.secondFrameList.isEmpty) {
+                            showEmptyDialog(context);
+                            setState(() {});
+                          } else {
+                            var toRemove = [];
+                            for (var element in controller.secondFrameList) {
+                              if (controller.pageIndex.value == element.page) {
+                                toRemove.add(element);
+                              }
+                            }
+                            controller.secondFrameList.removeWhere((e) => toRemove.contains(e));
+                            for (var element in controller.pageRectList[controller.pageIndex.value]) {
+                              Offset topLeft = element.topLeft;
+                              Offset bottomRight = element.bottomRight;
+                              double minX = topLeft.dx / renderSize.width;
+                              double minY = topLeft.dy / renderSize.height;
+                              double maxX = bottomRight.dx / renderSize.width;
+                              double maxY = bottomRight.dy / renderSize.height;
+                              Frame tempFrame = Frame(page: controller.pageIndex.value, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
+                              controller.secondFrameList.add(tempFrame);
+                            }
+
+                            final DefaultTabBodyController defaultTabBodyController =
+                                Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
+                            defaultTabBodyController.saveThisWorkingSpace();
+                            defaultTabBodyController.changeWorkingSpace(
+                              PdfSaveScreen(controller.pickedFile!, controller.secondFrameList),
+                            );
+                          }
+                        },
+                      ),
               ],
             ),
           ),

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
 import 'package:front_end/Component/Default/http_config.dart';
+import 'package:front_end/Component/frame.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:file_picker/file_picker.dart';
 import 'package:front_end/Component/Default/config.dart';
@@ -34,11 +38,12 @@ class PdfViewerScreenController extends GetxController {
 
   RxInt tempInt = 0.obs;
   int pageNum = 0;
-  RxList transformableBoxList = <Widget>[].obs;
   RxList rectList = <Rect>[].obs;
+  List<List<Rect>> pageRectList = [];
   var ctrlList = <TransformationController>[];
   int boxIndex = 0;
   RxInt pageIndex = 1.obs;
+  var secondFrameList = <Frame>[];
 
   ///Upload file into Application using FIlePicker.
   ///
@@ -184,7 +189,7 @@ class PdfViewerScreenController extends GetxController {
     final folderController = Get.find<UserDataController>();
 
     if (checkPdfCondition()) {
-      final url = Uri.parse('https://$HOST/api/data/create_problem');
+      final url = Uri.parse('https://$HOST/api/data/수정');
       var request = http.MultipartRequest('POST', url);
 
       request.files.add(http.MultipartFile('pdf_file', pickedFile!.openRead(), pickedFileSize.value, filename: pickedFileName.value));
@@ -259,63 +264,63 @@ class PdfViewerScreenController extends GetxController {
     Rect tRect = Offset(renderSize.width * 0.2, renderSize.height * 0.2) & Size(renderSize.width * 0.4, renderSize.height * 0.4);
     rectList.add(tRect);
     boxIndex++;
-
-    TransformableBox tempBox = TransformableBox(
-      contentBuilder: (content, rect, flip) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: Colors.red,
-            ),
-            color: Colors.red.withOpacity(0.5),
-          ),
-        );
-      },
-      rect: tRect,
-      onChanged: (result, event) {
-        tRect = result.rect;
-        rectList.refresh();
-        tempInt.value++;
-      },
-    );
-    transformableBoxList.add(tempBox);
-    transformableBoxList.refresh();
   }
 
-  void deleteBox() {
-    transformableBoxList = [].obs;
-    transformableBoxList.refresh();
-    boxIndex = 0;
-    rectList = [].obs;
+  void deleteBox(int index) {
+    rectList.removeAt(index);
     rectList.refresh();
   }
 
-  void sendFrame() async {
-    final url = Uri.parse('https://$HOST/api/data/create_problem');
+  Future<int> sendFirstFrameInfo(List<Frame> frameList) async {
+    List<int> pdfBytes = await pickedFile!.readAsBytes();
 
-    for (Rect element in rectList) {
-      Offset topLeft = element.topLeft;
-      Offset bottomRight = element.bottomRight;
-    }
-
-    /*
-    var bytePdf = await pickedFile?.readAsBytes();
+    // final url = Uri.parse('https://uwkedrf.request.dreamhack.games');
+    final url = Uri.parse('https://$HOST/api/data/parse_pdf');
     var request = http.MultipartRequest('POST', url);
-    var formDataProblem = http.MultipartFile.fromBytes(
+    var multipartFileProblem = http.MultipartFile.fromBytes(
       'source_document',
-      bytePdf!,
-      filename: capturedFileNameProblem,
+      pdfBytes,
+      filename: "first_frame",
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
 
-    final Map<String, dynamic> requestField = {
-      "problem_name": problemNameController.text,
-      "parent_database": selectedDirectoryID,
-      "tag": selectedTags.toString(),
-      "level": difficultySliderValue.round(),
-      "frame_list": 
+    var temp = [];
+    for (int i = 0; i < frameList.length; i++) {
+      final Map<String, dynamic> tmp = {
+        "page": frameList[i].page,
+        "minX": double.parse(frameList[i].minX.toStringAsFixed(8)),
+        "minY": double.parse(frameList[i].minY.toStringAsFixed(8)),
+        "maxX": double.parse(frameList[i].maxX.toStringAsFixed(8)),
+        "maxY": double.parse(frameList[i].maxY.toStringAsFixed(8)),
+      };
+      temp.add(tmp);
+    }
+
+    final Map<String, String> requestField = {
+      "frame_list": jsonEncode(temp),
     };
-    */
+    debugPrint(jsonEncode(temp));
+
+    request.files.add(multipartFileProblem);
+    request.fields.addAll(requestField);
+
+    request.headers.addAll(await defaultHeader(httpContentType.multipart));
+    final response = await request.send();
+    debugPrint("${response.statusCode}");
+
+    var responseBody = await response.stream.bytesToString();
+
+    var decodedBody = jsonDecode(responseBody);
+
+    pageRectList = List.generate(pageNum, (index) => <Rect>[]);
+
+    for (var element in decodedBody) {
+      Frame tempFrame = Frame(page: element["page"], minX: element["minX"], minY: element["minY"], maxX: element["maxX"], maxY: element["maxY"]);
+      debugPrint("pageIdx: ${tempFrame.page}, minX: ${tempFrame.minX}, minY: ${tempFrame.minY}, maxX: ${tempFrame.maxX}, maxY: ${tempFrame.maxY}");
+
+      secondFrameList.add(tempFrame);
+    }
+
+    return response.statusCode;
   }
 }

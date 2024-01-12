@@ -13,7 +13,7 @@ Future<Map<String, String>> defaultHeader(httpContentType type) async {
   if (type == httpContentType.json) {
     header.addAll({"Content-type": "application/json"});
   } else if (type == httpContentType.multipart) {
-    header.addAll({"Content-type": "multipart/form-data"});
+    // header.addAll({"Content-type": "multipart/form-data"});
   }
   return header;
 }

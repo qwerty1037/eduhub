@@ -495,6 +495,19 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               Frame tempFrame = Frame(page: controller.pageIndex.value, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
                               controller.secondFrameList.add(tempFrame);
                             }
+                            for (int i = 0; i < controller.secondFrameList.length; i++) {
+                              for (int j = 0; j < controller.secondFrameList.length - 1; j++) {
+                                if (controller.secondFrameList[j].page > controller.secondFrameList[j + 1].page) {
+                                  final temp = controller.secondFrameList[j];
+                                  controller.secondFrameList[j] = controller.secondFrameList[j + 1];
+                                  controller.secondFrameList[j + 1] = temp;
+                                }
+                              }
+                            }
+                            for (var element in controller.secondFrameList) {
+                              debugPrint(
+                                  "pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");
+                            }
 
                             final DefaultTabBodyController defaultTabBodyController =
                                 Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());

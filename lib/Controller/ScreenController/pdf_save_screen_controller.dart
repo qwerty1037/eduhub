@@ -58,7 +58,7 @@ class PdfSaveController extends GetxController {
     var multipartFileProblem = http.MultipartFile.fromBytes(
       'source_document',
       pdfBytes,
-      filename: "pdf_file",
+      filename: '${problemNameController.text}_problem.pdf',
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
 
@@ -75,10 +75,10 @@ class PdfSaveController extends GetxController {
     }
 
     final Map<String, String> requestField = {
-      "problem_name": problemNameController.text,
-      "parent_database_id": selectedDirectoryID.toString(),
-      "tag_id_list": jsonEncode(selectedTags),
       "frame_list": jsonEncode(temp),
+      "parent_database_id": jsonEncode(selectedDirectoryID),
+      "tag_id_list": jsonEncode(selectedTags),
+      "problem_name": problemNameController.text,
     };
 
     request.files.add(multipartFileProblem);

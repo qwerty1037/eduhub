@@ -1,16 +1,16 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Controller/ScreenController/pdf_save_screen_controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/Default/default_text_field.dart';
 import 'package:front_end/Component/Default/default_title.dart';
-import 'package:front_end/Controller/Tab_Controller.dart' as t;
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 
 class DBEditScreen extends StatelessWidget {
-  final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<t.TabController>().getTabKey());
-  final controller = Get.put(PdfSaveController(), tag: Get.find<t.TabController>().getTabKey());
+  final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
+  final controller = Get.put(PdfSaveController(), tag: Get.find<FluentTabController>().getTabKey());
   final UserDataController folderController = Get.find<UserDataController>();
   late Uint8List problemImage;
   late Uint8List answerImage;

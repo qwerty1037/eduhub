@@ -1,14 +1,14 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/config.dart';
-import 'package:front_end/Component/Search_Bar_Overlay.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Search_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Component/search_bar_overlay.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
+import 'package:front_end/Controller/search_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
-import 'package:front_end/Screen/Exam.dart';
-import 'package:front_end/Screen/Group_Waiting_Screen.dart';
-import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
-import 'package:front_end/Screen/Tag_Management_Screen.dart';
+import 'package:front_end/Screen/exam.dart';
+import 'package:front_end/Screen/group_waiting_screen.dart';
+import 'package:front_end/Screen/pdf_viewer_screen.dart';
+import 'package:front_end/Screen/tag_management_screen.dart';
 import 'package:get/get.dart';
 
 ///새로운 탭이 만들어질때 제작되는 틀. workingSpace 부분에 위젯을 넣음으로써 작업창 부분 초기화가 가능하다.
@@ -23,7 +23,7 @@ class DefaultTabBody extends StatelessWidget {
   }
   final DashBoardType dashBoardType;
   final Widget? workingSpace;
-  final TabController tabController = Get.find<TabController>();
+  final FluentTabController tabController = Get.find<FluentTabController>();
 
   late final String tagName;
 

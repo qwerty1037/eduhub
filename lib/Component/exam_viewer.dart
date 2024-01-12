@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart' as t;
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:get/get.dart';
 
 class ExamViewer extends StatelessWidget {
@@ -8,9 +8,7 @@ class ExamViewer extends StatelessWidget {
     super.key,
     required this.examPdfFile,
   });
-  final DefaultTabBodyController _defaultTabBodyController =
-      Get.find<DefaultTabBodyController>(
-          tag: Get.find<t.TabController>().getTabKey());
+  final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
 
   final examPdfFile;
 
@@ -27,14 +25,14 @@ class ExamViewer extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Row(
+              const Row(
                 children: [
-                  const Icon(FluentIcons.pdf),
+                  Icon(FluentIcons.pdf),
                   FittedBox(
                     fit: BoxFit.fitHeight,
                     child: Text(
                       "pdf name",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -48,8 +46,7 @@ class ExamViewer extends StatelessWidget {
                     FluentIcons.chrome_close,
                   ),
                   onPressed: () {
-                    _defaultTabBodyController.changeWorkingSpace(
-                        _defaultTabBodyController.savedWorkingSpace!);
+                    _defaultTabBodyController.changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
                   },
                 ),
               ),
@@ -57,7 +54,7 @@ class ExamViewer extends StatelessWidget {
           ),
         ),
         Container(
-          child: Text("examPdf"),
+          child: const Text("examPdf"),
         ),
       ],
       //SfPdfViewer.file(examPdfFile),

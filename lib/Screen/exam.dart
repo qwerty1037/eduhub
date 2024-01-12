@@ -7,7 +7,7 @@ import 'package:front_end/Controller/ScreenController/home_screen_controller.dar
 import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/Controller/exam_controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 
 import 'package:get/get.dart';
 import 'package:front_end/Component/Class/folder_data.dart';
@@ -15,8 +15,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ExamScreen extends StatelessWidget {
   ExamScreen({super.key});
-  final examController = Get.put(ExamController(Get.find<TabController>().getTabKey()), tag: Get.find<TabController>().getTabKey());
-  String tagName = Get.find<TabController>().getTabKey();
+  final examController = Get.put(ExamController(Get.find<FluentTabController>().getTabKey()), tag: Get.find<FluentTabController>().getTabKey());
+  String tagName = Get.find<FluentTabController>().getTabKey();
   @override
   Widget build(BuildContext context) {
     return GetX<ExamController>(

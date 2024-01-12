@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-import 'package:front_end/Component/New_Folder_Button.dart';
+import 'package:front_end/Component/new_folder_button.dart';
 import 'package:front_end/Component/folder_treeview_menuflyout.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:get/get.dart';
 
 ///각 탭의 대시보드에서 폴더 리스트를 보여주는 위젯
@@ -59,10 +59,10 @@ class FolderTreeViewExplore extends StatelessWidget {
                             controller.rootProblemFolders.refresh();
                             await controller.getPath();
 
-                            if (Get.find<TabController>().currentTabIndex.value == 0) {
+                            if (Get.find<FluentTabController>().currentTabIndex.value == 0) {
                               controller.makeProblemListInNewTab(item);
                             } else {
-                              final tabController = Get.find<TabController>();
+                              final tabController = Get.find<FluentTabController>();
                               Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
                               tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
                               await controller.makeProblemListInCurrentTab(item, tagName!);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/Component/Default/default_title.dart';
 import 'package:front_end/Component/Default/default_text_box.dart';
-import 'package:front_end/Controller/Tag_Controller.dart';
-import 'package:front_end/Test/Temp_Tag.dart';
+import 'package:front_end/Controller/tag_controller.dart';
+import 'package:front_end/Test/temp_tag.dart';
 import 'package:get/get.dart';
 
 class TagManagementScreen extends StatelessWidget {

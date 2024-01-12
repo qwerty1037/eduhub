@@ -3,15 +3,15 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Component/Default/default_tab_body.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
-import 'package:front_end/Screen/Home_Screen.dart';
-import 'package:front_end/Screen/Search_Screen.dart';
+import 'package:front_end/Screen/home_screen.dart';
+import 'package:front_end/Screen/search_screen.dart';
 import 'package:get/get.dart';
 
 ///앱 전체적으로 사용되는 탭들을 관리하는 컨트롤러
-class TabController extends GetxController {
+class FluentTabController extends GetxController {
   RxInt currentTabIndex = (0).obs;
   RxList<Tab> tabs = <Tab>[].obs;
   List<DefaultTabBody> tabInfo = <DefaultTabBody>[];
@@ -20,7 +20,7 @@ class TabController extends GetxController {
   bool isNewTab = true;
   UserDesktopController allController = Get.find<UserDesktopController>();
 
-  TabController() {
+  FluentTabController() {
     tabs.add(
       Tab(
         icon: const Icon(FluentIcons.home),
@@ -34,6 +34,7 @@ class TabController extends GetxController {
       ),
     );
   }
+
   @override
   void onInit() async {
     super.onInit();

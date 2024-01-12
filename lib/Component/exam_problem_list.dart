@@ -5,7 +5,7 @@ import 'package:flutter/material.dart' as flutter_material;
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Controller/problem_list_controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -17,7 +17,7 @@ class ExamProblemList extends StatelessWidget {
   TreeViewItem targetFolder;
   List<dynamic> problems;
 
-  final tag = Get.find<TabController>().getTabKey();
+  final tag = Get.find<FluentTabController>().getTabKey();
   ProblemListController problemListController;
   final List<int> pdfHeader = [37, 80, 68, 70]; // PDF 파일 헤더
   final List<int> jpegHeader = [255, 216]; // JPEG 파일 헤더

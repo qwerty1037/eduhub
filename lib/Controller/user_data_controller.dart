@@ -7,7 +7,7 @@ import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/problem_list.dart';
 import 'package:front_end/Controller/problem_list_controller.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 
 import 'package:front_end/Component/Default/default_tab_body.dart';
 import 'package:front_end/Component/Default/http_config.dart';
@@ -281,10 +281,10 @@ class UserDataController extends GetxController {
 
       final problems = jsonResponse['problem_list'];
 
-      TabController tabController = Get.find<TabController>();
+      FluentTabController tabController = Get.find<FluentTabController>();
       tabController.isNewTab = true;
 
-      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: Get.find<TabController>().getTabKey());
+      ProblemListController problemListController = Get.put(ProblemListController(problems), tag: Get.find<FluentTabController>().getTabKey());
       DefaultTabBody generatedTab = DefaultTabBody(
         key: GlobalObjectKey(tabController.tagNumber.toString()),
         dashBoardType: DashBoardType.explore,

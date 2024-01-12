@@ -1,12 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/default_text_box.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Test/Temp_File_Class.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
+import 'package:front_end/Test/temp_file_class.dart';
 import 'package:get/get.dart';
-import 'package:front_end/Controller/Search_Controller.dart';
+import 'package:front_end/Controller/search_controller.dart';
 
 class SearchScreen extends StatelessWidget {
-  final controller = Get.put(SearchScreenController(), tag: Get.find<TabController>().getTabKey());
+  final controller = Get.put(SearchScreenController(), tag: Get.find<FluentTabController>().getTabKey());
   final TempFileClass _tempFileClass = TempFileClass();
 
   SearchScreen({super.key, String? text, int? difficulty, String? content}) {

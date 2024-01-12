@@ -6,7 +6,7 @@ import 'package:front_end/Component/Default/default_title.dart';
 import 'package:front_end/Component/Default/default_text_box.dart';
 
 import 'package:front_end/Component/Default/http_config.dart';
-import 'package:front_end/Controller/Feedback_Controller.dart';
+import 'package:front_end/Controller/feedback_controller.dart';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

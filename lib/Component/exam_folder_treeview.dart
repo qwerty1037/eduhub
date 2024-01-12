@@ -1,11 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/config.dart';
-import 'package:front_end/Component/Exam_MenuFlyout.dart';
+import 'package:front_end/Component/exam_menuflyout.dart';
 import 'package:front_end/Component/New_Folder_Button.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
+import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Controller/exam_controller.dart';
 import 'package:get/get.dart';
 
@@ -58,13 +58,13 @@ class ExamFolderTreeView extends StatelessWidget {
                           if (reason == TreeViewItemInvokeReason.pressed) {
                             controller.selectedExamDirectoryID.value = item.value["id"];
                             controller.rootExamFolders.refresh();
-                            if (Get.find<TabController>().currentTabIndex.value == 0) {
+                            if (Get.find<FluentTabController>().currentTabIndex.value == 0) {
                               controller.examViewerInNewTab(item, context);
                             } else if (tagName != null && Get.find<DefaultTabBodyController>(tag: tagName).dashBoardType == DashBoardType.exam) {
                               Get.find<ExamController>(tag: tagName).selectedFolder = item.value["id"];
                             } else {
                               //학생 창에서 시험지 폴더 클릭할 경우 폴더 클릭시 필요한 작업 TODO: 필요없을시 삭제 예정
-                              // final tabController = Get.find<TabController>();
+                              // final tabController = Get.find<FluentTabController>();
                               // Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
                               // tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.text_document));
                               // await controller.makeExamViewerInCurrentTab(item, tagName!);

@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/group_treeview_menuflyout.dart';
 import 'package:front_end/Controller/group_treeview_controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:get/get.dart';
 
 ///각 탭의 대시보드에서 Group 리스트를 보여주는 위젯
@@ -50,7 +50,7 @@ class Group extends StatelessWidget {
                     controller.selectedGroupID.value = item.value["id"];
                     controller.totalGroups.refresh();
 
-                    final tabController = Get.find<TabController>();
+                    final tabController = Get.find<FluentTabController>();
                     Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
                     tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
                     await controller.makeGroupListInCurrentTab(item, tagName!);

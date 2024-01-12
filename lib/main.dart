@@ -3,13 +3,13 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:front_end/Component/event_listener.dart';
 import 'package:front_end/Controller/group_treeview_controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
-import 'package:front_end/Controller/Tag_Controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
+import 'package:front_end/Controller/tag_controller.dart';
 
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:front_end/Screen/home_tabview.dart';
-import 'package:front_end/Screen/Login_Screen.dart';
+import 'package:front_end/Screen/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget with WindowListener {
         if (controller.isLogin) {
           //로직상 한번만 호출되서 괜찮음
           Get.put(TagController());
-          Get.put(TabController());
+          Get.put(FluentTabController());
           return FluentApp(
             themeMode: controller.isDark.value ? ThemeMode.dark : ThemeMode.light,
             theme: FluentThemeData(

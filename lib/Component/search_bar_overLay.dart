@@ -1,15 +1,15 @@
 import 'package:flutter/services.dart';
 import 'package:front_end/Component/Default/default_text_box.dart';
-import 'package:front_end/Controller/Search_Controller.dart';
+import 'package:front_end/Controller/search_controller.dart';
 import 'dart:ui';
-import 'package:front_end/Controller/Tab_Controller.dart' as t;
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 /// Create Overlay of SearchBar
 void createHighlightOverlay({
   required BuildContext context,
   required SearchScreenController controller,
-  required t.TabController tabController,
+  required FluentTabController tabController,
 }) {
   OverlayState? overlayState = Overlay.of(context);
   OverlayEntry? overlayEntry;

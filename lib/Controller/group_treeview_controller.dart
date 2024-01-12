@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:front_end/Component/Default/config.dart';
 
 import 'package:front_end/Controller/group_controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
-import 'package:front_end/Screen/Group_Management.dart';
+import 'package:front_end/Screen/group_management.dart';
 import 'package:front_end/Test/temporary_group_database.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

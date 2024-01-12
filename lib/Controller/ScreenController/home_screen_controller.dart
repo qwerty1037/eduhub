@@ -6,9 +6,9 @@ import 'package:front_end/Screen/problem_list.dart';
 import 'package:front_end/Component/Class/calendar_event.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/group_treeview_controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Search_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
+import 'package:front_end/Controller/search_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Component/Default/default_tab_body.dart';
 import 'package:get/get.dart';
 import 'package:localstorage/localstorage.dart';
@@ -76,7 +76,7 @@ class HomeScreenController extends GetxController {
     storage.write(key: 'saved_uid', value: await storage.read(key: 'uid'));
     await storage.delete(key: 'saved_tabs');
     List<String> tabToSave = [];
-    List<DefaultTabBody> bodyList = Get.find<TabController>().tabInfo;
+    List<DefaultTabBody> bodyList = Get.find<FluentTabController>().tabInfo;
     for (int i = 0; i < bodyList.length; i++) {
       DefaultTabBodyController tabBodyController = Get.find<DefaultTabBodyController>(tag: bodyList[i].tagName);
       DashBoardType tabType = tabBodyController.dashBoardType;

@@ -8,7 +8,7 @@ import 'package:front_end/Component/exam_folder_treeview.dart';
 import 'package:front_end/Component/Class/tag_model.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
-import 'package:front_end/Controller/Tag_Controller.dart';
+import 'package:front_end/Controller/tag_controller.dart';
 import 'package:get/get.dart';
 import 'package:korea_regexp/korea_regexp.dart';
 import 'package:http/http.dart' as http;
@@ -168,10 +168,7 @@ class ExamController extends GetxController {
       final key = item["id"];
       if (!uniqueKeys.contains(key)) {
         var level = item["level"];
-        if ((minlevelController.text.isNotEmpty &&
-                maxlevelController.text.isNotEmpty &&
-                int.parse(minlevelController.text) <= level &&
-                int.parse(maxlevelController.text) >= level) ||
+        if ((minlevelController.text.isNotEmpty && maxlevelController.text.isNotEmpty && int.parse(minlevelController.text) <= level && int.parse(maxlevelController.text) >= level) ||
             minlevelController.text.isEmpty) {
           bool? alltagsContained = targetTags.every((element) => item["tags"].contains(element));
           if (targetTags.isEmpty || alltagsContained) {

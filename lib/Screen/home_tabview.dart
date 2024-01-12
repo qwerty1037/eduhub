@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:get/get.dart';
 
 class HomeTabView extends StatelessWidget {
@@ -9,7 +9,7 @@ class HomeTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldPage(
       padding: EdgeInsets.zero,
-      content: GetX<TabController>(
+      content: GetX<FluentTabController>(
         builder: (controller) {
           return TabView(
             minTabWidth: 0,

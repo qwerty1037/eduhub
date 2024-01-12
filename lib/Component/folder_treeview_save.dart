@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:front_end/Component/New_Folder_Button.dart';
+import 'package:front_end/Component/new_folder_button.dart';
 import 'package:front_end/Component/folder_treeview_menuflyout.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
+import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
 import 'package:get/get.dart';
 
 ///각 탭의 대시보드에서 폴더 리스트를 보여주는 위젯

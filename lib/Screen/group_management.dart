@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/exam_viewer.dart';
 import 'package:front_end/Controller/group_controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +10,7 @@ class GroupManagementScreen extends StatelessWidget {
   GroupManagementScreen({super.key, required this.item, required this.controller});
   final TreeViewItem item;
   final GroupController controller;
-  String tagName = Get.find<TabController>().getTabKey();
+  String tagName = Get.find<FluentTabController>().getTabKey();
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -5,7 +5,7 @@ import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Component/exam_problem_list.dart';
 import 'package:front_end/Controller/problem_list_controller.dart';
 
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Screen/problem_list.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -26,9 +26,9 @@ class ChooseExam extends StatelessWidget {
           children: exams.map((element) {
             return Button(
               onPressed: () async {
-                TabController tabController = Get.find<TabController>();
+                FluentTabController tabController = Get.find<FluentTabController>();
                 tabController.isNewTab = true;
-                ProblemListController controller = Get.put(ProblemListController(element["problems"]), tag: Get.find<TabController>().getTabKey());
+                ProblemListController controller = Get.put(ProblemListController(element["problems"]), tag: Get.find<FluentTabController>().getTabKey());
                 DefaultTabBody generatedTab = DefaultTabBody(
                   key: GlobalObjectKey(tabController.tagNumber.toString()),
                   dashBoardType: DashBoardType.examExplore,

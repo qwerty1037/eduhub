@@ -7,7 +7,7 @@ import 'package:front_end/Controller/user_desktop_controller.dart';
 import 'package:get/get.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:front_end/Controller/Tab_Controller.dart' as t;
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PdfViewerScreen extends StatefulWidget {
@@ -19,9 +19,9 @@ class PdfViewerScreen extends StatefulWidget {
 
 class _PdfScreenState extends State<PdfViewerScreen> {
   final controllerProblem = Get.put(PdfViewerScreenController(),
-      //     tag: "Problem${Get.find<t.TabController>().getTabKey()}");
+      //     tag: "Problem${Get.find<t.FluentTabController>().getTabKey()}");
       // final controllerAnswer = Get.put(PdfViewerScreenController(),
-      tag: "Answer${Get.find<t.TabController>().getTabKey()}");
+      tag: "Answer${Get.find<FluentTabController>().getTabKey()}");
   final userDataController = Get.find<UserDataController>();
   @override
   Widget build(BuildContext context) {

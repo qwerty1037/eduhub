@@ -7,23 +7,23 @@ import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Component/exam_folder_treeview.dart';
 import 'package:front_end/Component/feedback_overlay.dart';
 import 'package:front_end/Component/folder_treeview_explore.dart';
-import 'package:front_end/Component/Search_Bar_Overlay.dart';
+import 'package:front_end/Component/search_bar_Overlay.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
-import 'package:front_end/Controller/Search_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
+import 'package:front_end/Controller/search_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Component/Default/default_tab_body.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
-import 'package:front_end/Screen/Exam.dart';
+import 'package:front_end/Screen/exam.dart';
 import 'package:front_end/Screen/group_waiting_screen.dart';
-import 'package:front_end/Screen/Pdf_Viewer_Screen.dart';
-import 'package:front_end/Screen/Tag_Management_Screen.dart';
+import 'package:front_end/Screen/pdf_viewer_screen.dart';
+import 'package:front_end/Screen/tag_management_screen.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatelessWidget {
   final FlyoutController _flyoutController = FlyoutController();
-  final TabController tabController;
+  final FluentTabController tabController;
   HomeScreenController homeScreenController = Get.put(HomeScreenController());
   UserDataController folderController = Get.find<UserDataController>();
 

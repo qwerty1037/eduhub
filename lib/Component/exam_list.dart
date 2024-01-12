@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as flutter_material;
-import 'package:front_end/Component/Exam_Viewer.dart';
+import 'package:front_end/Component/exam_viewer.dart';
 import 'package:front_end/Controller/problem_list_controller.dart';
-import 'package:front_end/Controller/ScreenController/Default_Tab_Body_Controller.dart';
-import 'package:front_end/Controller/Tab_Controller.dart';
+import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
+import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:get/get.dart';
 
 ///폴더에 속하는 문제 리스트를 보여주며 직속문제/아래모든문제를 볼 수 있다. 클릭시 오른쪽에 이미지가 뜨며 버튼 부분은 수정이 필요하다
@@ -13,7 +13,7 @@ class ExamList extends StatelessWidget {
   TreeViewItem targetFolder;
   List<dynamic> problems;
 
-  final tag = Get.find<TabController>().getTabKey();
+  final tag = Get.find<FluentTabController>().getTabKey();
   ProblemListController problemListController;
 
   @override

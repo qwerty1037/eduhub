@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:front_end/Component/Class/calendar_event.dart';
 import 'package:front_end/Component/Default/default_text_box.dart';
 
-import 'package:front_end/Controller/ScreenController/Home_Screen_Controller.dart';
+import 'package:front_end/Controller/ScreenController/home_screen_controller.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 

@@ -19,9 +19,9 @@ class ProblemList extends StatelessWidget {
 
   final tag = Get.find<FluentTabController>().getTabKey();
   ProblemListController problemListController;
-  final List<int> pdfHeader = [37, 80, 68, 70]; // PDF 파일 헤더
-  final List<int> jpegHeader = [255, 216]; // JPEG 파일 헤더
-  final List<int> pngHeader = [137, 80, 78, 71, 13, 10, 26, 10]; // PNG 파일 헤더
+  // final List<int> pdfHeader = [37, 80, 68, 70]; // PDF 파일 헤더
+  // final List<int> jpegHeader = [255, 216]; // JPEG 파일 헤더
+  // final List<int> pngHeader = [137, 80, 78, 71, 13, 10, 26, 10]; // PNG 파일 헤더
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +91,19 @@ class ProblemList extends StatelessWidget {
                   debugPrint(response.bodyBytes.toString());
                   controller.bytes.value = response.bodyBytes;
 
-                  if (controller.bytes.length >= 4 && List<int>.from(controller.bytes.take(4)) == pdfHeader) {
+                  if (controller.bytes.length >= 4 && controller.bytes[0] == 37 && controller.bytes[1] == 80 && controller.bytes[2] == 68 && controller.bytes[3] == 70) {
                     controller.problemFileType.value = fileType.pdf;
-                  } else if (controller.bytes.length >= 2 && List<int>.from(controller.bytes.take(2)) == jpegHeader) {
+                  } else if (controller.bytes.length >= 2 && controller.bytes[0] == 255 && controller.bytes[1] == 216) {
                     controller.problemFileType.value = fileType.jpg;
-                  } else if (controller.bytes.length >= 8 && List<int>.from(controller.bytes.take(8)) == pngHeader) {
+                  } else if (controller.bytes.length >= 8 &&
+                      controller.bytes[0] == 137 &&
+                      controller.bytes[1] == 80 &&
+                      controller.bytes[2] == 78 &&
+                      controller.bytes[3] == 71 &&
+                      controller.bytes[4] == 13 &&
+                      controller.bytes[5] == 10 &&
+                      controller.bytes[6] == 26 &&
+                      controller.bytes[7] == 10) {
                     controller.problemFileType.value = fileType.png;
                   } else {
                     debugPrint("pdf, jpg, png 형태의 파일이 아닙니다 (problem list)");
@@ -104,7 +112,7 @@ class ProblemList extends StatelessWidget {
                 } else {
                   controller.problemFileType.value = fileType.empty;
                   debugPrint(response.statusCode.toString());
-                  debugPrint("문제 이미지 불러오기 오류 발생");
+                  debugPrint("문제 이미지 불러오기 오류 발생(problem list)");
                 }
               },
               child: SizedBox(
@@ -130,17 +138,19 @@ class ProblemViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: controller.isOneColumn.value ? 5 : 2,
-      child: Column(
-        children: [
-          controller.problemFileType.value == fileType.empty
-              ? const Expanded(
-                  child: Center(
-                  child: Text("왼쪽에서 문제를 클릭해주세요"),
-                ))
-              : controller.problemFileType.value == fileType.pdf
-                  ? Expanded(child: SfPdfViewer.memory(Uint8List.fromList(controller.bytes)))
-                  : Expanded(child: Image.memory(Uint8List.fromList(controller.bytes)))
-        ],
+      child: Obx(
+        () => Column(
+          children: [
+            controller.problemFileType.value == fileType.empty
+                ? const Expanded(
+                    child: Center(
+                    child: Text("왼쪽에서 문제를 클릭해주세요"),
+                  ))
+                : controller.problemFileType.value == fileType.pdf
+                    ? Expanded(child: SfPdfViewer.memory(Uint8List.fromList(controller.bytes)))
+                    : Expanded(child: Image.memory(Uint8List.fromList(controller.bytes)))
+          ],
+        ),
       ),
     );
   }

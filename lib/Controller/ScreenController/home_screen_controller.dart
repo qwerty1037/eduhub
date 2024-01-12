@@ -82,12 +82,10 @@ class HomeScreenController extends GetxController {
       DashBoardType tabType = tabBodyController.dashBoardType;
 
       if (tabType == DashBoardType.explore) {
-        debugPrint("explore");
         Container workingSpace = tabBodyController.realWorkingSpaceWidget as Container;
         ProblemList folder = workingSpace.child as ProblemList;
         var folderId = folder.targetFolder.value["id"];
         tabToSave.add('{"type": "explore", "id": $folderId }');
-        debugPrint("folderId");
       } else if (tabType == DashBoardType.search) {
         String searchText = Get.find<SearchScreenController>(tag: bodyList[i].tagName).searchBarController.text;
         String searchDifficulty = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getDifficulty().toString();

@@ -2,7 +2,7 @@
 //import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
-import 'package:front_end/Component/frame.dart';
+import 'package:front_end/Component/Class/frame.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Controller/ScreenController/pdf_viewer_screen_controller.dart';
 import 'package:front_end/Controller/user_desktop_controller.dart';
@@ -42,9 +42,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
               Row(
                 children: [
                   Obx(() {
-                    return controllerProblem.isPdfInputed.value
-                        ? pdfViewerContainer(controllerProblem, constraints)
-                        : selectPdfContainer(controllerProblem, constraints);
+                    return controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints);
                   }),
                 ],
               ),
@@ -304,7 +302,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
             height: constraints.maxHeight,
             child: Column(
               children: [
-                firstFrameFinished ? Text("페이지별 문제 박스를 확인해주세요") : Text("문제의 열에 맞게 프레임을 설정해주세요"),
+                firstFrameFinished ? const Text("페이지별 문제 박스를 확인해주세요") : const Text("문제의 열에 맞게 프레임을 설정해주세요"),
                 Row(
                   children: [
                     Button(
@@ -422,7 +420,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                 ),
                 !firstFrameFinished
                     ? Button(
-                        child: Text("1차 프레임 저장"),
+                        child: const Text("1차 프레임 저장"),
                         onPressed: () async {
                           setState(() {
                             renderSize = _getSize();
@@ -469,7 +467,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         },
                       )
                     : Button(
-                        child: Text("DB 저장"),
+                        child: const Text("DB 저장"),
                         onPressed: () {
                           setState(() {
                             renderSize = _getSize();
@@ -505,12 +503,10 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               }
                             }
                             for (var element in controller.secondFrameList) {
-                              debugPrint(
-                                  "pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");
+                              debugPrint("pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");
                             }
 
-                            final DefaultTabBodyController defaultTabBodyController =
-                                Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
+                            final DefaultTabBodyController defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
                             defaultTabBodyController.saveThisWorkingSpace();
                             defaultTabBodyController.changeWorkingSpace(
                               PdfSaveScreen(controller.pickedFile!, controller.secondFrameList),

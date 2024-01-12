@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:front_end/Component/frame.dart';
+import 'package:front_end/Component/Class/frame.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Controller/ScreenController/pdf_save_screen_controller.dart';

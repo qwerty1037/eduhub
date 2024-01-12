@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:front_end/Component/Class/frame.dart';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
-import 'package:front_end/Component/frame.dart';
-
 import 'package:front_end/Controller/tag_controller.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:front_end/Component/Class/tag_model.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:korea_regexp/korea_regexp.dart';
 import 'package:http/http.dart' as http;
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 /// Pdf 저장 스크린을 컨트롤하는 Controller
 class PdfSaveController extends GetxController {

@@ -217,7 +217,6 @@ class ProblemListController extends GetxController {
       final problemList = jsonResponse['problem_detail'];
       currentPageProblems.value = problemList;
       currentPageProblems.refresh();
-      debugPrint(problemList.toString());
     } else {
       debugPrint(response.statusCode.toString());
       debugPrint("현재 페이지 문제 받아오기 오류 발생");

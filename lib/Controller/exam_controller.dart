@@ -257,16 +257,12 @@ class ExamController extends GetxController {
                         "level": 3,
                       };
 
-                      debugPrint(requestBody.toString());
                       final response = await http.post(
                         url,
                         headers: await defaultHeader(httpContentType.json),
                         body: jsonEncode(requestBody),
                       );
                       if (isHttpRequestSuccess(response)) {
-                        final jsonResponse = jsonDecode(response.body);
-
-                        debugPrint(jsonResponse.toString());
                         problemToMakeExam.clear();
                         Navigator.pop(context);
                         displayInfoBar(context, builder: (context, close) {

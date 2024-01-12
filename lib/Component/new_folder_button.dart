@@ -138,9 +138,8 @@ Button newExamFolderButton(BuildContext context) {
                         headers: await defaultHeader(httpContentType.json),
                         body: jsonEncode(requestBody),
                       );
-                      if (response.statusCode ~/ 100 == 2) {
+                      if (isHttpRequestSuccess(response)) {
                         final jsonResponse = jsonDecode(response.body);
-                        debugPrint(jsonResponse.toString());
                         final int newFolderId = jsonResponse['inserted_database'][0]["id"];
                         TreeViewItem newFolder = userDesktopController.makeExamFolderItem(textcontroller.text, newFolderId, null);
                         userDesktopController.allExamFolders.add(newFolder);

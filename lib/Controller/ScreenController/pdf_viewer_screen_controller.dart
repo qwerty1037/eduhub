@@ -128,6 +128,17 @@ class PdfViewerScreenController extends GetxController {
   }
 
   void exitPdf() {
+    pickedFile = null;
+    pickedFileName.value = "";
+    pickedFileSize = 0.obs;
+    pickedPdfImageList = <Uint8List>[];
+    tempInt = 0.obs;
+    pageNum = 0;
+    rectList = <Rect>[].obs;
+    pageRectList = [];
+    boxIndex = 0;
+    pageIndex = 0.obs;
+    secondFrameList = <Frame>[];
     isPdfInputed.value = false;
   }
 

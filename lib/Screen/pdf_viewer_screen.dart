@@ -206,28 +206,28 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       Row(
                         children: [
                           const Icon(FluentIcons.quick_note),
-                          FittedBox(
-                            fit: BoxFit.fitHeight,
+                          Expanded(
                             child: Text(
                               "File name: ${controller.getFileName()}",
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            controller.exitPdf();
-                          },
-                          child: const Icon(
-                            FluentIcons.chrome_close,
-                            //color: Colors.white,
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                controller.exitPdf();
+                              },
+                              child: const Icon(
+                                FluentIcons.chrome_close,
+                                //color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),

@@ -206,25 +206,36 @@ class ProblemListController extends GetxController {
 
   ///문제 리스트 중에 현재 페이지에 있는 리스트들의 자세한 데이터를 받아오는 함수 TODO: 업데이트 예정. id, uuid모두 보내는데 id만 필요할 예정
   Future<void> fetchPageData() async {
+    List<dynamic> test = problemList.sublist(startIndex, endIndex);
+
+    // final url = Uri.parse("https://oajtbah.request.dreamhack.games");
+
     final url =
-        Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data');
-    final Map<String, dynamic> requestBody = {
-      "problem_list": problemList.sublist(startIndex, endIndex),
-    };
+        Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data}');
+    List<Map<String, int>> requestList = [];
+
+    for (int i = 0; i < test.length; i++) {
+      requestList.add({"id": test[i]});
+    }
+    final Map<String, dynamic> requestBody = {"problem_detail": requestList};
 
     final response = await http.post(
       url,
       headers: await defaultHeader(httpContentType.json),
       body: jsonEncode(requestBody),
     );
+
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
-      final problemList = jsonResponse['problem_detail'];
-      currentPageProblems.value = problemList;
-      currentPageProblems.refresh();
+      final problemData = jsonResponse['problem_detail'];
+      debugPrint(problemData.toString());
+
+      currentPageProblems.value.add(problemData);
+
+      // currentPageProblems.refresh();
     } else {
       debugPrint(response.statusCode.toString());
-      debugPrint("현재 페이지 문제 받아오기 오류 발생");
+      debugPrint("fetchPageData(problem_list_controller)");
     }
   }
 }

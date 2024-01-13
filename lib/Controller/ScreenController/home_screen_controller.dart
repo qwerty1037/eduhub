@@ -19,7 +19,8 @@ class HomeScreenController extends GetxController {
   bool isExamFolderEmpty = false;
   var storage = const FlutterSecureStorage();
   late LocalStorage localStorage;
-  RxMap<DateTime, List<CalendarEvent>> events = <DateTime, List<CalendarEvent>>{}.obs;
+  RxMap<DateTime, List<CalendarEvent>> events =
+      <DateTime, List<CalendarEvent>>{}.obs;
 
   RxBool temp_variable = true.obs;
 
@@ -37,16 +38,19 @@ class HomeScreenController extends GetxController {
     String? id = await storage.read(key: "id");
     if (id != null) {
       localStorage = LocalStorage(id);
+
       bool ready = await localStorage.ready;
 
       if (ready && localStorage.getItem('calendarEvents') != null) {
-        Map<String, dynamic> savedEvents = localStorage.getItem('calendarEvents');
+        Map<String, dynamic> savedEvents =
+            localStorage.getItem('calendarEvents');
         var savedkeys = savedEvents.keys.toList();
         var savedCalendarEvents = savedEvents.values.toList();
         for (int i = 0; i < savedkeys.length; i++) {
           DateTime targetDate = DateTime.parse(savedkeys.elementAt(i));
           List<dynamic> targetEvents = savedCalendarEvents.elementAt(i);
-          List<CalendarEvent> jsonToEvents = targetEvents.map((e) => CalendarEvent.fromJson(e)).toList();
+          List<CalendarEvent> jsonToEvents =
+              targetEvents.map((e) => CalendarEvent.fromJson(e)).toList();
           events.addAll({targetDate: jsonToEvents});
         }
       }
@@ -59,10 +63,11 @@ class HomeScreenController extends GetxController {
       for (int i = 0; i < keys.length; i++) {
         DateTime targetDate = keys.elementAt(i);
         List<CalendarEvent> targetEvents = calendarEvents.elementAt(i);
-        List<Map<String, dynamic>> eventsToJson = targetEvents.map((e) => e.toJson()).toList();
+        List<Map<String, dynamic>> eventsToJson =
+            targetEvents.map((e) => e.toJson()).toList();
         data.addAll({targetDate.toString(): eventsToJson});
       }
-
+      debugPrint(data.toString());
       await localStorage.setItem("calendarEvents", data);
     });
 
@@ -78,20 +83,31 @@ class HomeScreenController extends GetxController {
     List<String> tabToSave = [];
     List<DefaultTabBody> bodyList = Get.find<FluentTabController>().tabInfo;
     for (int i = 0; i < bodyList.length; i++) {
-      DefaultTabBodyController tabBodyController = Get.find<DefaultTabBodyController>(tag: bodyList[i].tagName);
+      DefaultTabBodyController tabBodyController =
+          Get.find<DefaultTabBodyController>(tag: bodyList[i].tagName);
       DashBoardType tabType = tabBodyController.dashBoardType;
 
       if (tabType == DashBoardType.explore) {
-        Container workingSpace = tabBodyController.realWorkingSpaceWidget as Container;
+        Container workingSpace =
+            tabBodyController.realWorkingSpaceWidget as Container;
         ProblemList folder = workingSpace.child as ProblemList;
         var folderId = folder.targetFolder.value["id"];
         tabToSave.add('{"type": "explore", "id": $folderId }');
       } else if (tabType == DashBoardType.search) {
-        String searchText = Get.find<SearchScreenController>(tag: bodyList[i].tagName).searchBarController.text;
-        String searchDifficulty = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getDifficulty().toString();
-        String searchContent = Get.find<SearchScreenController>(tag: bodyList[i].tagName).getContent();
+        String searchText =
+            Get.find<SearchScreenController>(tag: bodyList[i].tagName)
+                .searchBarController
+                .text;
+        String searchDifficulty =
+            Get.find<SearchScreenController>(tag: bodyList[i].tagName)
+                .getDifficulty()
+                .toString();
+        String searchContent =
+            Get.find<SearchScreenController>(tag: bodyList[i].tagName)
+                .getContent();
 
-        tabToSave.add('{"type": "search", "text": "$searchText" , "difficulty" : "$searchDifficulty", "content" : "$searchContent"}');
+        tabToSave.add(
+            '{"type": "search", "text": "$searchText" , "difficulty" : "$searchDifficulty", "content" : "$searchContent"}');
       }
     }
     storage.write(key: 'saved_tabs', value: tabToSave.toString());
@@ -99,7 +115,8 @@ class HomeScreenController extends GetxController {
     await storage.delete(key: "uid");
     await storage.delete(key: "access_token");
     await storage.delete(key: "refresh_token");
-    final UserDesktopController previousUserDesktopController = Get.find<UserDesktopController>();
+    final UserDesktopController previousUserDesktopController =
+        Get.find<UserDesktopController>();
     previousUserDesktopController.isLogin = false;
     Get.deleteAll();
     Get.put(UserDataController());

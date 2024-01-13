@@ -303,25 +303,25 @@ class UserDataController extends GetxController {
 
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
-      List<dynamic> problems = [];
+      // List<dynamic> problems = [];
       final List<dynamic> problemData = jsonResponse['problem_list'];
-      for (int i = 0; i < problemData.length; i++) {
-        problems.add(problemData[i]["id"]);
-      }
+      // for (int i = 0; i < problemData.length; i++) {
+      //   problems.add(problemData[i]["id"]);
+      // }
 
       FluentTabController tabController = Get.find<FluentTabController>();
       tabController.isNewTab = true;
 
-      ProblemListController problemListController = Get.put(
-          ProblemListController(problems),
-          tag: Get.find<FluentTabController>().getTabKey());
+      ProblemListController problemListController =
+          Get.put(ProblemListController(problemData), // 업데이트시 수정
+              tag: Get.find<FluentTabController>().getTabKey());
       DefaultTabBody generatedTab = DefaultTabBody(
         key: GlobalObjectKey(tabController.tagNumber.toString()),
         dashBoardType: DashBoardType.explore,
         workingSpace: ProblemList(
           targetFolder: item,
           folderName: item.value["name"],
-          problems: problems,
+          problems: problemData,
           problemListController: problemListController,
         ),
       );
@@ -350,18 +350,18 @@ class UserDataController extends GetxController {
       final jsonResponse = jsonDecode(response.body);
       final List<dynamic> exams = jsonResponse['exam_list'];
       List<dynamic> specificExamData = [];
-      debugPrint(jsonResponse.toString());
 
       if (exams.isNotEmpty) {
         for (int i = 0; i < exams.length; i++) {
           final examInfoUrl =
               Uri.parse('https://$HOST/api/data/exam/detail/${exams[i]}');
           final examInfoResponse = await http.get(
-            examUrl,
+            examInfoUrl,
             headers: await defaultHeader(httpContentType.json),
           );
           if (isHttpRequestSuccess(examInfoResponse)) {
-            specificExamData.add(jsonDecode(examInfoResponse.body));
+            var examData = jsonDecode(examInfoResponse.body);
+            specificExamData.add(examData["exam"]);
           } else {
             debugPrint("오류2(user_data_controller)");
           }

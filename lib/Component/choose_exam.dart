@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/default_tab_body.dart';
@@ -23,11 +25,12 @@ class ChooseExam extends StatelessWidget {
         children: exams.map((element) {
           return Button(
             onPressed: () async {
+              Navigator.pop(context);
               FluentTabController tabController =
                   Get.find<FluentTabController>();
               tabController.isNewTab = true;
               ProblemListController controller = Get.put(
-                  ProblemListController(element["problems"]),
+                  ProblemListController(element["problemIdList"]),
                   tag: Get.find<FluentTabController>().getTabKey());
               DefaultTabBody generatedTab = DefaultTabBody(
                 key: GlobalObjectKey(tabController.tagNumber.toString()),
@@ -55,7 +58,55 @@ class ChooseExam extends StatelessWidget {
                   children: [
                     Text(element["name"]),
                     Text("난이도: ${element["level"]}"),
-                    Text("문제수 : ${element["problemIdList"].length}개")
+                    Text("문제수 : ${element["problemIdList"].length}개"),
+                    Button(
+                        child: Icon(FluentIcons.delete),
+                        onPressed: () async {
+                          // final url = Uri.parse(
+                          //     "https://dyfmgpp.request.dreamhack.games");
+                          final url =
+                              Uri.parse('https://$HOST/api/data/delete_exam');
+                          final Map<String, dynamic> requestBody = {
+                            "exam_id": element["id"],
+                          };
+
+                          final response = await http.post(
+                            url,
+                            headers: await defaultHeader(httpContentType.json),
+                            body: jsonEncode(requestBody),
+                          );
+                          if (isHttpRequestSuccess(response)) {
+                            displayInfoBar(
+                              context,
+                              builder: (context, close) {
+                                return InfoBar(
+                                  severity: InfoBarSeverity.success,
+                                  title: const Text('시험지 삭제 성공'),
+                                  action: IconButton(
+                                    icon: const Icon(FluentIcons.clear),
+                                    onPressed: close,
+                                  ),
+                                );
+                              },
+                            );
+                            Navigator.pop(context);
+                          } else {
+                            debugPrint(response.statusCode.toString());
+                            displayInfoBar(
+                              context,
+                              builder: (context, close) {
+                                return InfoBar(
+                                  severity: InfoBarSeverity.error,
+                                  title: const Text('시험지 삭제 실패'),
+                                  action: IconButton(
+                                    icon: const Icon(FluentIcons.clear),
+                                    onPressed: close,
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        })
                   ],
                 ),
               ),

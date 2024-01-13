@@ -54,18 +54,28 @@ class FolderTreeViewExplore extends StatelessWidget {
                         },
                         onItemInvoked: (item, reason) async {
                           if (reason == TreeViewItemInvokeReason.pressed) {
-                            controller.selectedProblemDirectoryId.value = item.value["id"];
+                            controller.selectedProblemDirectoryId.value =
+                                item.value["id"];
 
                             controller.rootProblemFolders.refresh();
                             await controller.getPath();
 
-                            if (Get.find<FluentTabController>().currentTabIndex.value == 0) {
-                              controller.makeProblemListInNewTab(item);
+                            if (Get.find<FluentTabController>()
+                                    .currentTabIndex
+                                    .value ==
+                                0) {
+                              await controller.makeProblemListInNewTab(item);
                             } else {
-                              final tabController = Get.find<FluentTabController>();
-                              Tab currentTab = tabController.tabs[tabController.currentTabIndex.value];
-                              tabController.renameTab(currentTab, item.value["name"], const Icon(FluentIcons.fabric_folder));
-                              await controller.makeProblemListInCurrentTab(item, tagName!);
+                              final tabController =
+                                  Get.find<FluentTabController>();
+                              Tab currentTab = tabController
+                                  .tabs[tabController.currentTabIndex.value];
+                              tabController.renameTab(
+                                  currentTab,
+                                  item.value["name"],
+                                  const Icon(FluentIcons.fabric_folder));
+                              await controller.makeProblemListInCurrentTab(
+                                  item, tagName!);
                             }
                           }
                         },

@@ -225,8 +225,6 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                           homeScreenController.events
                                               .remove(selectedDay);
                                         }
-
-                                        homeScreenController.events.refresh();
                                       },
                                     ),
                                   ))

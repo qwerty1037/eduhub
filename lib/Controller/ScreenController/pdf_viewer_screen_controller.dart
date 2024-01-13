@@ -41,7 +41,7 @@ class PdfViewerScreenController extends GetxController {
   List<List<Rect>> pageRectList = [];
   var ctrlList = <TransformationController>[];
   int boxIndex = 0;
-  RxInt pageIndex = 1.obs;
+  RxInt pageIndex = 0.obs;
   var secondFrameList = <Frame>[];
 
   ///Upload file into Application using FIlePicker.

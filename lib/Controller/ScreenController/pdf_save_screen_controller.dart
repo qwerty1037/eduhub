@@ -57,7 +57,6 @@ class PdfSaveController extends GetxController {
       filename: 'file',
       contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
     );
-    debugPrint("$pdfBytes");
 
     var temp = [];
     for (int i = 0; i < frameList.length; i++) {

@@ -474,36 +474,36 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                           setState(() {
                             renderSize = _getSize();
                           });
+                          var toRemove = [];
+                          for (var element in controller.secondFrameList) {
+                            if (controller.pageIndex.value == element.page) {
+                              toRemove.add(element);
+                            }
+                          }
+                          controller.secondFrameList.removeWhere((e) => toRemove.contains(e));
+                          for (var element in controller.pageRectList[controller.pageIndex.value]) {
+                            Offset topLeft = element.topLeft;
+                            Offset bottomRight = element.bottomRight;
+                            double minX = topLeft.dx / renderSize.width;
+                            double minY = topLeft.dy / renderSize.height;
+                            double maxX = bottomRight.dx / renderSize.width;
+                            double maxY = bottomRight.dy / renderSize.height;
+                            Frame tempFrame = Frame(page: controller.pageIndex.value, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
+                            controller.secondFrameList.add(tempFrame);
+                          }
+                          for (int i = 0; i < controller.secondFrameList.length; i++) {
+                            for (int j = 0; j < controller.secondFrameList.length - 1; j++) {
+                              if (controller.secondFrameList[j].page > controller.secondFrameList[j + 1].page) {
+                                final temp = controller.secondFrameList[j];
+                                controller.secondFrameList[j] = controller.secondFrameList[j + 1];
+                                controller.secondFrameList[j + 1] = temp;
+                              }
+                            }
+                          }
                           if (controller.secondFrameList.isEmpty) {
                             showEmptyDialog(context);
                             setState(() {});
                           } else {
-                            var toRemove = [];
-                            for (var element in controller.secondFrameList) {
-                              if (controller.pageIndex.value == element.page) {
-                                toRemove.add(element);
-                              }
-                            }
-                            controller.secondFrameList.removeWhere((e) => toRemove.contains(e));
-                            for (var element in controller.pageRectList[controller.pageIndex.value]) {
-                              Offset topLeft = element.topLeft;
-                              Offset bottomRight = element.bottomRight;
-                              double minX = topLeft.dx / renderSize.width;
-                              double minY = topLeft.dy / renderSize.height;
-                              double maxX = bottomRight.dx / renderSize.width;
-                              double maxY = bottomRight.dy / renderSize.height;
-                              Frame tempFrame = Frame(page: controller.pageIndex.value, minX: minX, minY: minY, maxX: maxX, maxY: maxY);
-                              controller.secondFrameList.add(tempFrame);
-                            }
-                            for (int i = 0; i < controller.secondFrameList.length; i++) {
-                              for (int j = 0; j < controller.secondFrameList.length - 1; j++) {
-                                if (controller.secondFrameList[j].page > controller.secondFrameList[j + 1].page) {
-                                  final temp = controller.secondFrameList[j];
-                                  controller.secondFrameList[j] = controller.secondFrameList[j + 1];
-                                  controller.secondFrameList[j + 1] = temp;
-                                }
-                              }
-                            }
                             for (var element in controller.secondFrameList) {
                               debugPrint(
                                   "pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");

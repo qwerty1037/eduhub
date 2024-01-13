@@ -129,17 +129,18 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                   ),
                                 ),
                                 actions: [
-                                  f.Button(
+                                  f.FilledButton(
                                     child: const Text('추가'),
                                     onPressed: () {
                                       if (titleController.text != "") {
                                         setState(() {
                                           if (homeScreenController.events[selectedDay] != null) {
-                                            homeScreenController.events[selectedDay]!
-                                                .add(CalendarEvent(text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text)));
+                                            homeScreenController.events[selectedDay]!.add(CalendarEvent(
+                                                text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text)));
                                           } else {
                                             homeScreenController.events[selectedDay] = [
-                                              CalendarEvent(text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text))
+                                              CalendarEvent(
+                                                  text: titleController.text, hour: int.parse(hourController.text), minute: int.parse(minuteController.text))
                                             ];
                                           }
                                         });
@@ -161,7 +162,7 @@ class _HomeCalendarState extends State<HomeCalendar> {
                                       }
                                     },
                                   ),
-                                  f.FilledButton(
+                                  f.Button(
                                     child: const Text('취소'),
                                     onPressed: () {
                                       Navigator.pop(context);

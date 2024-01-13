@@ -33,9 +33,9 @@ class ChooseExam extends StatelessWidget {
                 key: GlobalObjectKey(tabController.tagNumber.toString()),
                 dashBoardType: DashBoardType.examExplore,
                 workingSpace: ExamProblemList(
-                  targetFolder: item,
-                  folderName: item.value["name"],
-                  problems: exams,
+                  targetFolder: item, //시험지 폴더
+                  folderName: item.value["name"], //시험지 이름
+                  problems: exams, //문제 id 리스트
                   problemListController: controller,
                 ),
               );
@@ -54,7 +54,8 @@ class ChooseExam extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(element["name"]),
-                    Text("문제수 : ${element["count"]}")
+                    Text("난이도: ${element["level"]}"),
+                    Text("문제수 : ${element["problemIdList"].length}개")
                   ],
                 ),
               ),

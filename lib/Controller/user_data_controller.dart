@@ -300,11 +300,12 @@ class UserDataController extends GetxController {
       problemUrl,
       headers: await defaultHeader(httpContentType.json),
     );
+
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
 
       final problems = jsonResponse['problem_list'];
-
+      debugPrint(problems.toString());
       FluentTabController tabController = Get.find<FluentTabController>();
       tabController.isNewTab = true;
 
@@ -344,25 +345,56 @@ class UserDataController extends GetxController {
     );
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
-      final exams = jsonResponse['exam_list'];
+      final List<int> exams = jsonResponse['exam_list'];
+      List<dynamic> specificExamData = [];
       debugPrint(jsonResponse.toString());
 
-      await showDialog(
-          context: context,
-          builder: (context) {
-            return ContentDialog(
-              title: const Text("시험지를 선택해주세요"),
-              content: ChooseExam(exams: exams, item: item),
-              actions: [
-                Button(
-                  child: const Text("취소"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+      if (exams.isNotEmpty) {
+        for (int i = 0; i < exams.length; i++) {
+          final examInfoUrl =
+              Uri.parse('https://$HOST/api/data/exam/detail/${exams[i]}');
+          final examInfoResponse = await http.get(
+            examUrl,
+            headers: await defaultHeader(httpContentType.json),
+          );
+          if (isHttpRequestSuccess(examInfoResponse)) {
+            specificExamData.add(jsonDecode(examInfoResponse.body));
+          } else {
+            debugPrint("오류2(user_data_controller)");
+          }
+        }
+
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return ContentDialog(
+                title: const Text("시험지를 선택해주세요"),
+                content: ChooseExam(exams: specificExamData, item: item),
+                actions: [
+                  Button(
+                    child: const Text("취소"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            });
+      } else {
+        displayInfoBar(
+          context,
+          builder: (context, close) {
+            return InfoBar(
+              severity: InfoBarSeverity.warning,
+              title: const Text('폴더에 속한 시험지가 없습니다'),
+              action: IconButton(
+                icon: const Icon(FluentIcons.clear),
+                onPressed: close,
+              ),
             );
-          });
+          },
+        );
+      }
     } else {
       debugPrint(response.statusCode.toString());
       debugPrint("examViewerInNewTab 오류 발생(user data controller)");
@@ -386,6 +418,7 @@ class UserDataController extends GetxController {
       await workingSpaceController.deleteWorkingSpaceController();
       final jsonResponse = jsonDecode(response.body);
       final problems = jsonResponse['problem_list'];
+      debugPrint(problems.toString());
       ProblemListController problemListController =
           Get.put(ProblemListController(problems), tag: tagName);
       workingSpaceController.changeWorkingSpace(ProblemList(

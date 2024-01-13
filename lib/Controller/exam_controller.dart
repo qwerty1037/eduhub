@@ -213,7 +213,7 @@ class ExamController extends GetxController {
       uniqueProblemsDetail.refresh();
     } else {
       debugPrint(response.statusCode.toString());
-      debugPrint("현재 페이지 문제 받아오기 오류 발생");
+      debugPrint("fetchProblemDetail(exam_controller)");
     }
   }
 
@@ -265,13 +265,15 @@ class ExamController extends GetxController {
                       for (int i = 0; i < problemToMakeExam.length; i++) {
                         problemIdToMakeExam.add(problemToMakeExam[i]["id"]);
                       }
-                      debugPrint(problemIdToMakeExam.toString());
+
                       final Map<String, dynamic> requestBody = {
                         "exam_name": examNameController.text,
                         "exam_level": 3,
                         "exam_parent_database_id": selectedFolder,
                         "exam_problems": problemIdToMakeExam,
                       };
+
+                      debugPrint(requestBody.toString());
 
                       final response = await http.post(
                         url,
@@ -306,7 +308,7 @@ class ExamController extends GetxController {
                           Get.find<UserDataController>()
                               .folderUpdateFromJson(examDatabaseFolder, true);
                         } else {
-                          debugPrint("시험지 폴더 리스트 받기 오류 발생");
+                          debugPrint("만들기 버튼 오류(exam_controller)");
                         }
                       } else {
                         displayInfoBar(context, builder: (context, close) {
@@ -322,7 +324,7 @@ class ExamController extends GetxController {
                           );
                         });
                         debugPrint(response.statusCode.toString());
-                        debugPrint("현재 페이지 문제 받아오기 오류 발생");
+                        debugPrint("exam_controller 오류 1");
                       }
                     } else {
                       displayInfoBar(context, builder: (context, close) {

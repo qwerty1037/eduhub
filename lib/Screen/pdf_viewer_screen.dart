@@ -182,7 +182,6 @@ class _PdfScreenState extends State<PdfViewerScreen> {
 
   final GlobalKey _containerKey = GlobalKey();
   int selectedBoxIndex = 99999;
-  bool firstFrameFinished = false;
 
   Widget pdfViewerContainer(PdfViewerScreenController controller, constraints) {
     return SizedBox(
@@ -279,7 +278,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                                     setState(() {
                                       controller.rectList[idx] = result.rect;
                                       controller.rectList.refresh();
-                                      if (firstFrameFinished) {
+                                      if (controller.firstFrameFinished) {
                                         controller.pageRectList[controller.pageIndex.value] = <Rect>[];
                                         for (var element in controller.rectList) {
                                           controller.pageRectList[controller.pageIndex.value].add(element);
@@ -304,7 +303,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
             height: constraints.maxHeight,
             child: Column(
               children: [
-                firstFrameFinished ? const Text("페이지별 문제 박스를 확인해주세요") : const Text("문제의 열에 맞게 프레임을 설정해주세요"),
+                controller.firstFrameFinished ? const Text("페이지별 문제 박스를 확인해주세요") : const Text("문제의 열에 맞게 프레임을 설정해주세요"),
                 Row(
                   children: [
                     Button(
@@ -337,7 +336,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         if (controller.pageIndex.value == 0) {
                           //TODO: 첫 페이지 알림
                         } else {
-                          if (firstFrameFinished) {
+                          if (controller.firstFrameFinished) {
                             var toRemove = [];
                             for (var element in controller.secondFrameList) {
                               if (controller.pageIndex.value == element.page) {
@@ -358,7 +357,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             }
                           }
                           controller.pageIndex.value--;
-                          if (firstFrameFinished) {
+                          if (controller.firstFrameFinished) {
                             controller.rectList = <Rect>[].obs;
                             for (var element in controller.secondFrameList) {
                               if (controller.pageIndex.value == element.page) {
@@ -381,7 +380,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         if (controller.pageIndex.value == controller.pageNum - 1) {
                           //TODO: 마지막 페이지 알림
                         } else {
-                          if (firstFrameFinished) {
+                          if (controller.firstFrameFinished) {
                             var toRemove = [];
                             for (var element in controller.secondFrameList) {
                               if (controller.pageIndex.value == element.page) {
@@ -401,7 +400,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             }
                           }
                           controller.pageIndex.value++;
-                          if (firstFrameFinished) {
+                          if (controller.firstFrameFinished) {
                             controller.rectList = <Rect>[].obs;
                             for (var element in controller.secondFrameList) {
                               if (controller.pageIndex.value == element.page) {
@@ -420,7 +419,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     ),
                   ],
                 ),
-                !firstFrameFinished
+                !controller.firstFrameFinished
                     ? Button(
                         child: const Text("1차 프레임 저장"),
                         onPressed: () async {
@@ -463,7 +462,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               controller.rectList.add(element);
                             }
 
-                            firstFrameFinished = true;
+                            controller.firstFrameFinished = true;
                             setState(() {});
                           }
                         },

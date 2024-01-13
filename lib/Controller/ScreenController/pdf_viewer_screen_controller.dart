@@ -43,6 +43,7 @@ class PdfViewerScreenController extends GetxController {
   int boxIndex = 0;
   RxInt pageIndex = 0.obs;
   var secondFrameList = <Frame>[];
+  bool firstFrameFinished = false;
 
   ///Upload file into Application using FIlePicker.
   ///
@@ -139,6 +140,7 @@ class PdfViewerScreenController extends GetxController {
     boxIndex = 0;
     pageIndex = 0.obs;
     secondFrameList = <Frame>[];
+    firstFrameFinished = false;
     isPdfInputed.value = false;
   }
 

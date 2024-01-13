@@ -43,12 +43,8 @@ class PdfSaveScreen extends StatelessWidget {
                   directroyInputField(),
                   const SizedBox(height: 30),
                   tagsInputField(),
-                  const SizedBox(height: 30),
-                  difficultyInputField(),
-                  const SizedBox(height: 30),
-                  imagePreviewField(),
                   const SizedBox(height: 40),
-                  saveButtonField(),
+                  saveButtonField(context),
                 ],
               ),
             ),
@@ -142,122 +138,14 @@ class PdfSaveScreen extends StatelessWidget {
     );
   }
 
-  Widget difficultyInputField() {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            const DefaultTitle(text: "난이도"),
-            Align(
-              alignment: Alignment.center,
-              child: Obx(
-                () => Text(
-                  "[${controller.difficultySliderValue.value.round()}]",
-                  style: const TextStyle(
-                    fontSize: 35,
-                    color: Colors.blueAccent,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Obx(() {
-          return Slider(
-            max: 5,
-            min: 0,
-            divisions: 5,
-            value: controller.difficultySliderValue.value,
-            label: controller.difficultySliderValue.value.round().toString(),
-            onChanged: (double value) {
-              controller.difficultySliderValue.value = value;
-            },
-          );
-        }),
-      ],
-    );
-  }
-
-  Widget imagePreviewField() {
-    return Obx(() {
-      return Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              ),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: '캡처된 이미지 ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: controller.imagePreviewButtonText(),
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onPressed: () {
-                controller.whenImagePreviewButtonTapped();
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-          Visibility(
-            visible: controller.isImagePreviewButtonTapped.value,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      width: constraints.maxWidth / 2.2,
-                      height: constraints.maxWidth / 1.6,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1),
-                      ),
-                      child: Image.memory(controller.capturedImageProblem),
-                    ),
-                    const Expanded(child: SizedBox()),
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      width: constraints.maxWidth / 2.2,
-                      height: constraints.maxWidth / 1.6,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1),
-                      ),
-                      child: Image.memory(controller.capturedImageAnswer),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      );
-    });
-  }
-
-  Widget saveButtonField() {
+  Widget saveButtonField(BuildContext context) {
     return TextButton(
       onPressed: () {
-        controller.sendProblemInfo(userDataController.selectedProblemDirectoryId.value);
+        if (controller.validCheck(userDataController.selectedProblemDirectoryId.value)) {
+          controller.sendProblemInfo(userDataController.selectedProblemDirectoryId.value);
+        } else {
+          showValidCheckDialog(context);
+        }
       },
       child: Container(
         height: 50,
@@ -290,4 +178,25 @@ class PdfSaveScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void showValidCheckDialog(BuildContext context) async {
+  final result = await showDialog<String>(
+    context: context,
+    barrierColor: Color(0x00ffffff), //this works
+
+    builder: (context) => AlertDialog(
+      backgroundColor: Colors.white,
+      title: const Text('입력하지 않은 칸이 존재하거나 저장할 경로를 지정하지 않았습니다.'),
+      content: const Text(
+        '입력을 확인해 주세요.',
+      ),
+      actions: [
+        FilledButton(
+          child: const Text('확인'),
+          onPressed: () => Navigator.pop(context, 'User canceled dialog'),
+        ),
+      ],
+    ),
+  );
 }

@@ -303,9 +303,12 @@ class UserDataController extends GetxController {
 
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
+      List<dynamic> problems = [];
+      final List<dynamic> problemData = jsonResponse['problem_list'];
+      for (int i = 0; i < problemData.length; i++) {
+        problems.add(problemData[i]["id"]);
+      }
 
-      final problems = jsonResponse['problem_list'];
-      debugPrint(problems.toString());
       FluentTabController tabController = Get.find<FluentTabController>();
       tabController.isNewTab = true;
 
@@ -345,7 +348,7 @@ class UserDataController extends GetxController {
     );
     if (isHttpRequestSuccess(response)) {
       final jsonResponse = jsonDecode(response.body);
-      final List<int> exams = jsonResponse['exam_list'];
+      final List<dynamic> exams = jsonResponse['exam_list'];
       List<dynamic> specificExamData = [];
       debugPrint(jsonResponse.toString());
 

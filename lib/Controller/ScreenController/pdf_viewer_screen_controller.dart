@@ -60,6 +60,20 @@ class PdfViewerScreenController extends GetxController {
       debugPrint(result.files.first.path!);
       pickedFileName.value = fileName;
       pickedFileSize.value = await pickedFile!.length();
+
+      final pdf = await PdfDocument.openFile(result.files.first.path!);
+      // final size = await pdf.getPage(1).;
+      pageNum = pdf.pagesCount;
+      for (int i = 1; i <= pageNum; i++) {
+        PdfPage page = await pdf.getPage(i);
+        PdfPageImage? pageImage = await page.render(
+          width: page.width,
+          height: page.height,
+        );
+        Uint8List rawImage = pageImage!.bytes;
+        pickedPdfImageList.add(rawImage);
+      }
+
       isPdfInputed.value = true;
     } else {
       print("Upload Failed");

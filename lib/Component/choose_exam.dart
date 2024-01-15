@@ -26,12 +26,9 @@ class ChooseExam extends StatelessWidget {
           return Button(
             onPressed: () async {
               Navigator.pop(context);
-              FluentTabController tabController =
-                  Get.find<FluentTabController>();
+              FluentTabController tabController = Get.find<FluentTabController>();
               tabController.isNewTab = true;
-              ProblemListController controller = Get.put(
-                  ProblemListController(element["problemIdList"]),
-                  tag: Get.find<FluentTabController>().getTabKey());
+              ProblemListController controller = Get.put(ProblemListController(element["problemIdList"], true), tag: Get.find<FluentTabController>().getTabKey());
               DefaultTabBody generatedTab = DefaultTabBody(
                 key: GlobalObjectKey(tabController.tagNumber.toString()),
                 dashBoardType: DashBoardType.examExplore,
@@ -43,11 +40,9 @@ class ChooseExam extends StatelessWidget {
                 ),
               );
 
-              Tab newTab = tabController.addTab(generatedTab,
-                  item.value["name"], const Icon(FluentIcons.text_document));
+              Tab newTab = tabController.addTab(generatedTab, item.value["name"], const Icon(FluentIcons.text_document));
               tabController.tabs.add(newTab);
-              tabController.currentTabIndex.value =
-                  tabController.tabs.length - 1;
+              tabController.currentTabIndex.value = tabController.tabs.length - 1;
               tabController.isNewTab = false;
             },
             child: SizedBox(
@@ -57,15 +52,12 @@ class ChooseExam extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(element["name"]),
-                    Text("난이도: ${element["level"]}"),
+                    Text("난이도 : ${element["level"]}"),
                     Text("문제수 : ${element["problemIdList"].length}개"),
                     Button(
-                        child: Icon(FluentIcons.delete),
+                        child: const Icon(FluentIcons.delete),
                         onPressed: () async {
-                          // final url = Uri.parse(
-                          //     "https://dyfmgpp.request.dreamhack.games");
-                          final url =
-                              Uri.parse('https://$HOST/api/data/delete_exam');
+                          final url = Uri.parse('https://$HOST/api/data/exam/delete_exam');
                           final Map<String, dynamic> requestBody = {
                             "exam_id": element["id"],
                           };

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 ///ProblemList의 로직을 담당하는 컨트롤러
 class ProblemListController extends GetxController {
   Rx<fileType> problemFileType = fileType.empty.obs;
+  bool isExam = false;
   List<dynamic> problemList = [];
   RxList<dynamic> currentPageProblems = [].obs;
   Rx<Widget> problemImageViewer = Container(
@@ -33,7 +34,8 @@ class ProblemListController extends GetxController {
   RxBool isOneColumn = false.obs;
   RxList<int> bytes = <int>[].obs;
 
-  ProblemListController(List<dynamic> data) {
+  ProblemListController(List<dynamic> data, bool isExam) {
+    isExam = isExam;
     problemList = data.toList();
     startIndex = currentPage * itemsPerPage;
     endIndex = currentPage * itemsPerPage + itemsPerPage;
@@ -69,15 +71,13 @@ class ProblemListController extends GetxController {
   }
 
   ///폴더 직속문제 보기 / 폴더 아래 모든 문제 보기 버튼을 클릭했을때 내부 데이터를 새로 초기화하는 함수
-  Future<void> resetVariable(
-      TreeViewItem targetFolder, List<dynamic> problems) async {
+  Future<void> resetVariable(TreeViewItem targetFolder, List<dynamic> problems) async {
     problemList.clear();
     pageButton.clear();
     currentPageProblems.clear();
 
     if (!isAllProblems.value) {
-      final problemUrl = Uri.parse(
-          'https://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
+      final problemUrl = Uri.parse('https://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
 
       final response = await http.get(
         problemUrl,
@@ -170,9 +170,7 @@ class ProblemListController extends GetxController {
       Button newButton = Button(
         child: Text(
           i.toString(),
-          style: TextStyle(
-              fontWeight:
-                  currentPage == i ? FontWeight.bold : FontWeight.normal),
+          style: TextStyle(fontWeight: currentPage == i ? FontWeight.bold : FontWeight.normal),
         ),
         onPressed: () async {
           changePage(i);
@@ -208,35 +206,30 @@ class ProblemListController extends GetxController {
   Future<void> fetchPageData() async {
     List<dynamic> test = problemList.sublist(startIndex, endIndex);
 
-    // final url = Uri.parse("https://oajtbah.request.dreamhack.games");
-
-    final url =
-        Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data}');
-    List<Map<String, int>> requestList = [];
-
     for (int i = 0; i < test.length; i++) {
-      requestList.add({"id": test[i]});
+      final int id;
+      if (isExam) {
+        id = test[i]["problemId"]; //TODO 체크
+      } else {
+        id = test[i];
+      }
+      final url = Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data/$id');
+      final response = await http.get(
+        url,
+        headers: await defaultHeader(httpContentType.json),
+      );
+
+      if (isHttpRequestSuccess(response)) {
+        final jsonResponse = jsonDecode(response.body);
+        final problemData = jsonResponse['problem_detail'];
+
+        currentPageProblems.value.add(problemData);
+      } else {
+        debugPrint(response.statusCode.toString());
+        debugPrint("fetchPageData(problem_list_controller)");
+      }
     }
-    final Map<String, dynamic> requestBody = {"problem_detail": requestList};
-
-    final response = await http.post(
-      url,
-      headers: await defaultHeader(httpContentType.json),
-      body: jsonEncode(requestBody),
-    );
-
-    if (isHttpRequestSuccess(response)) {
-      final jsonResponse = jsonDecode(response.body);
-      final problemData = jsonResponse['problem_detail'];
-      debugPrint(problemData.toString());
-
-      currentPageProblems.value.add(problemData);
-
-      // currentPageProblems.refresh();
-    } else {
-      debugPrint(response.statusCode.toString());
-      debugPrint("fetchPageData(problem_list_controller)");
-    }
+    currentPageProblems.refresh();
   }
 }
 

@@ -26,12 +26,8 @@ class ProblemViewer extends StatelessWidget {
                     child: Text("왼쪽에서 문제를 클릭해주세요"),
                   ))
                 : controller.problemFileType.value == fileType.pdf
-                    ? Expanded(
-                        child: SfPdfViewer.memory(
-                            Uint8List.fromList(controller.bytes)))
-                    : Expanded(
-                        child:
-                            Image.memory(Uint8List.fromList(controller.bytes)))
+                    ? Expanded(child: SfPdfViewer.memory(Uint8List.fromList(controller.bytes)))
+                    : Expanded(child: Image.memory(Uint8List.fromList(controller.bytes)))
           ],
         ),
       ),
@@ -47,24 +43,17 @@ Widget columnProblemList(ProblemListController controller) {
         children: controller.currentPageProblems.map((element) {
           return Button(
             onPressed: () async {
-              final url = Uri.parse(
-                  'https://$HOST/api/data/problem-pdf/${element["problem_string"].toString().substring(2, element["problem_string"].length - 1)}');
-
+              // ${element["problem_string"].toString().substring(4, element["problem_string"].length - 1)}
+              final url = Uri.parse('https://$HOST/api/data/problem-pdf/${element["problem_string"]}');
               final response = await http.get(
                 url,
                 headers: await defaultHeader(httpContentType.json),
               );
               if (isHttpRequestSuccess(response)) {
                 controller.bytes.value = response.bodyBytes;
-                if (controller.bytes.length >= 4 &&
-                    controller.bytes[0] == 37 &&
-                    controller.bytes[1] == 80 &&
-                    controller.bytes[2] == 68 &&
-                    controller.bytes[3] == 70) {
+                if (controller.bytes.length >= 4 && controller.bytes[0] == 37 && controller.bytes[1] == 80 && controller.bytes[2] == 68 && controller.bytes[3] == 70) {
                   controller.problemFileType.value = fileType.pdf;
-                } else if (controller.bytes.length >= 2 &&
-                    controller.bytes[0] == 255 &&
-                    controller.bytes[1] == 216) {
+                } else if (controller.bytes.length >= 2 && controller.bytes[0] == 255 && controller.bytes[1] == 216) {
                   controller.problemFileType.value = fileType.jpg;
                 } else if (controller.bytes.length >= 8 &&
                     controller.bytes[0] == 137 &&
@@ -91,10 +80,7 @@ Widget columnProblemList(ProblemListController controller) {
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(element["name"]),
-                    Text("난이도 : ${element["level"]}")
-                  ],
+                  children: [Text(element["name"]), Text("난이도 : ${element["level"]}")],
                 ),
               ),
             ),

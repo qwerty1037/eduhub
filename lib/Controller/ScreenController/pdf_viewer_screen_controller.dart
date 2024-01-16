@@ -315,9 +315,9 @@ class PdfViewerScreenController extends GetxController {
       final Map<String, dynamic> tmp = {
         "page": frameList[i].page,
         "minX": double.parse(frameList[i].minX.toStringAsFixed(8)),
-        "minY": double.parse(frameList[i].minY.toStringAsFixed(8)),
+        "minY": 1.0 - double.parse(frameList[i].maxY.toStringAsFixed(8)), //double.parse(frameList[i].minY.toStringAsFixed(8)),
         "maxX": double.parse(frameList[i].maxX.toStringAsFixed(8)),
-        "maxY": double.parse(frameList[i].maxY.toStringAsFixed(8)),
+        "maxY": 1.0 - double.parse(frameList[i].minY.toStringAsFixed(8)), //double.parse(frameList[i].maxY.toStringAsFixed(8)),
       };
       temp.add(tmp);
     }
@@ -341,7 +341,13 @@ class PdfViewerScreenController extends GetxController {
     pageRectList = List.generate(pageNum, (index) => <Rect>[]);
 
     for (var element in decodedBody) {
-      Frame tempFrame = Frame(page: element["page"], minX: element["minX"], minY: element["minY"], maxX: element["maxX"], maxY: element["maxY"]);
+      Frame tempFrame = Frame(
+        page: element["page"],
+        minX: element["minX"],
+        minY: 1.0 - element["maxY"],
+        maxX: element["maxX"],
+        maxY: 1.0 - element["minY"],
+      ); //Frame(page: element["page"], minX: element["minX"], minY: element["minY"], maxX: element["maxX"], maxY: element["maxY"]);
       debugPrint("pageIdx: ${tempFrame.page}, minX: ${tempFrame.minX}, minY: ${tempFrame.minY}, maxX: ${tempFrame.maxX}, maxY: ${tempFrame.maxY}");
 
       secondFrameList.add(tempFrame);

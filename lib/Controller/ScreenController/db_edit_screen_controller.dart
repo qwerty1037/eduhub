@@ -20,6 +20,8 @@ class DBEditScreenController extends GetxController {
   RxString tagTextFieldValue = "".obs;
   TextEditingController problemNameController = TextEditingController();
 
+  RxBool isEdit = false.obs;
+
   @override
   DBEditScreenController() {
     final tagController = Get.find<TagController>();

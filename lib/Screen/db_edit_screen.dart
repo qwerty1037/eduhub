@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:front_end/Controller/ScreenController/db_edit_screen_controller.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
-import 'package:front_end/Controller/ScreenController/pdf_save_screen_controller.dart';
 import 'package:get/get.dart';
 import 'package:front_end/Component/Default/default_text_field.dart';
 import 'package:front_end/Component/Default/default_title.dart';
@@ -10,12 +10,26 @@ import 'package:front_end/Controller/fluent_tab_controller.dart';
 
 class DBEditScreen extends StatelessWidget {
   final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
-  final controller = Get.put(PdfSaveController(), tag: Get.find<FluentTabController>().getTabKey());
+  final controller = Get.put(DBEditScreenController(), tag: Get.find<FluentTabController>().getTabKey());
   final UserDataController folderController = Get.find<UserDataController>();
+
   final Uint8List bytePdf;
+  final String problemName;
+  final double? difficulty;
+  final List<int> tagsList;
 
   @override
-  DBEditScreen({super.key, required this.bytePdf}) {}
+  DBEditScreen({super.key, required this.bytePdf, required this.problemName, this.difficulty, required this.tagsList}) {
+    controller.problemNameController.text = problemName;
+    controller.difficultySliderValue.value = difficulty ?? 0.0;
+    for (var inputTagID in tagsList) {
+      for (var element in controller.tagsList) {
+        if (element.ID == inputTagID) {
+          element.isSelected = true;
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +49,15 @@ class DBEditScreen extends StatelessWidget {
                 children: [
                   problemNameInputField(),
                   const SizedBox(height: 30),
-                  directroyInputField(),
-                  const SizedBox(height: 30),
                   tagsInputField(),
                   const SizedBox(height: 30),
                   difficultyInputField(),
-                  const SizedBox(height: 30),
-                  imagePreviewField(),
                   const SizedBox(height: 40),
                   saveButtonField(),
                 ],
               ),
             ),
           ),
-          backButton(),
         ],
       ),
     );
@@ -176,79 +185,6 @@ class DBEditScreen extends StatelessWidget {
     );
   }
 
-  Widget imagePreviewField() {
-    return Obx(() {
-      return Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              ),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: '캡처된 이미지 ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: controller.imagePreviewButtonText(),
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onPressed: () {
-                controller.whenImagePreviewButtonTapped();
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-          Visibility(
-            visible: controller.isImagePreviewButtonTapped.value,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      width: constraints.maxWidth / 2.2,
-                      height: constraints.maxWidth / 1.6,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1),
-                      ),
-                      child: Image.memory(controller.capturedImageProblem),
-                    ),
-                    const Expanded(child: SizedBox()),
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      width: constraints.maxWidth / 2.2,
-                      height: constraints.maxWidth / 1.6,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1),
-                      ),
-                      child: Image.memory(controller.capturedImageAnswer),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      );
-    });
-  }
-
   Widget saveButtonField() {
     return TextButton(
       onPressed: () {
@@ -270,18 +206,6 @@ class DBEditScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget backButton() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: ElevatedButton(
-        child: const Text('Back'),
-        onPressed: () {
-          _defaultTabBodyController.changeWorkingSpace(_defaultTabBodyController.savedWorkingSpace!);
-        },
       ),
     );
   }

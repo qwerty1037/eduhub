@@ -1,4 +1,3 @@
-/*
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:front_end/Controller/user_data_controller.dart';
@@ -13,15 +12,10 @@ class DBEditScreen extends StatelessWidget {
   final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
   final controller = Get.put(PdfSaveController(), tag: Get.find<FluentTabController>().getTabKey());
   final UserDataController folderController = Get.find<UserDataController>();
-  late Uint8List problemImage;
-  late Uint8List answerImage;
+  final Uint8List bytePdf;
 
   @override
-  DBEditScreen(Uint8List image1, Uint8List image2, {super.key}) {
-    problemImage = image1;
-    answerImage = image2;
-    controller.getImage(image1, image2);
-  }
+  DBEditScreen({super.key, required this.bytePdf}) {}
 
   @override
   Widget build(BuildContext context) {
@@ -292,5 +286,3 @@ class DBEditScreen extends StatelessWidget {
     );
   }
 }
-
-*/

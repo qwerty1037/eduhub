@@ -2,6 +2,7 @@
 //import 'package:flutter/material.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_box_transform/flutter_box_transform.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:front_end/Component/Class/frame.dart';
 import 'package:front_end/Controller/ScreenController/default_tab_body_controller.dart';
 import 'package:front_end/Controller/ScreenController/pdf_viewer_screen_controller.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:front_end/Controller/fluent_tab_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PdfViewerScreen extends StatefulWidget {
   const PdfViewerScreen({super.key});
@@ -42,9 +44,13 @@ class _PdfScreenState extends State<PdfViewerScreen> {
               Row(
                 children: [
                   Obx(() {
-                    return controllerProblem.isPdfInputed.value
-                        ? pdfViewerContainer(controllerProblem, constraints)
-                        : selectPdfContainer(controllerProblem, constraints);
+                    return controllerProblem.showProcess.value
+                        ? SpinKitWave(
+                            duration: const Duration(seconds: 40),
+                          )
+                        : (controllerProblem.isPdfInputed.value
+                            ? pdfViewerContainer(controllerProblem, constraints)
+                            : selectPdfContainer(controllerProblem, constraints));
                   }),
                 ],
               ),
@@ -303,6 +309,10 @@ class _PdfScreenState extends State<PdfViewerScreen> {
             child: Column(
               children: [
                 controller.firstFrameFinished ? const Text("페이지별 문제 박스를 확인해주세요") : const Text("문제의 열에 맞게 프레임을 설정해주세요"),
+                Text("현재 파일 용량:  ${controllerProblem.pickedFileSize.value} bytes"),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   children: [
                     Button(
@@ -326,6 +336,9 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       },
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Row(
                   children: [
@@ -418,6 +431,19 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
+                Button(
+                    child: const Text("PDF 압축하기"),
+                    onPressed: () async {
+                      final Uri url = Uri.parse('https://www.adobe.com/kr/acrobat/online/compress-pdf.html');
+                      if (!await launchUrl(
+                        url,
+                        mode: LaunchMode.externalApplication,
+                      )) {
+                        throw Exception('Could not launch $url');
+                      }
+                    }),
+                const SizedBox(height: 10),
                 !controller.firstFrameFinished
                     ? Button(
                         child: const Text("1차 프레임 저장"),

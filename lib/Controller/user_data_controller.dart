@@ -393,13 +393,18 @@ class UserDataController extends GetxController {
     if (isHttpRequestSuccess(response)) {
       await workingSpaceController.deleteWorkingSpaceController();
       final jsonResponse = jsonDecode(response.body);
-      final problems = jsonResponse['problem_list'];
+      List<dynamic> problems = [];
+
+      final List<dynamic> problemData = jsonResponse['problem_list'];
+      for (int i = 0; i < problemData.length; i++) {
+        problems.add(problemData[i]["id"]);
+      }
 
       ProblemListController problemListController = Get.put(ProblemListController(problems, false), tag: tagName);
       workingSpaceController.changeWorkingSpace(ProblemList(
         targetFolder: item,
         folderName: item.value["name"],
-        problems: problems,
+        problems: problemData,
         problemListController: problemListController,
       ));
       workingSpaceController.dashBoard.value = workingSpaceController.makeDashBoard(DashBoardType.explore);

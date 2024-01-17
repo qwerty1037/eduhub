@@ -8,6 +8,11 @@ import 'package:front_end/Component/Default/default_text_field.dart';
 import 'package:front_end/Component/Default/default_title.dart';
 import 'package:front_end/Controller/fluent_tab_controller.dart';
 
+/// DBEditScreen
+///
+/// 인자로 문제 제목, 난이도, 태그 리스트, pdf의 byteFile을 전달하면 됨.
+///
+///
 class DBEditScreen extends StatelessWidget {
   final DefaultTabBodyController _defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
   final controller = Get.put(DBEditScreenController(), tag: Get.find<FluentTabController>().getTabKey());

@@ -275,16 +275,15 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                                   },
                                   rect: controller.rectList[idx],
                                   onChanged: (result, event) {
-                                    setState(() {
-                                      controller.rectList[idx] = result.rect;
-                                      controller.rectList.refresh();
-                                      if (controller.firstFrameFinished) {
-                                        controller.pageRectList[controller.pageIndex.value] = <Rect>[];
-                                        for (var element in controller.rectList) {
-                                          controller.pageRectList[controller.pageIndex.value].add(element);
-                                        }
+                                    controller.rectList[idx] = result.rect;
+                                    controller.rectList.refresh();
+                                    if (controller.firstFrameFinished) {
+                                      controller.pageRectList[controller.pageIndex.value] = <Rect>[];
+                                      for (var element in controller.rectList) {
+                                        controller.pageRectList[controller.pageIndex.value].add(element);
                                       }
-                                    });
+                                    }
+                                    setState(() {});
                                   },
                                 ),
                               ]

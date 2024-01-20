@@ -50,6 +50,7 @@ Widget columnProblemList(ProblemListController controller) {
                 headers: await defaultHeader(httpContentType.json),
               );
               if (isHttpRequestSuccess(response)) {
+                debugPrint("문제 클릭");
                 controller.bytes.value = response.bodyBytes;
                 if (controller.bytes.length >= 4 && controller.bytes[0] == 37 && controller.bytes[1] == 80 && controller.bytes[2] == 68 && controller.bytes[3] == 70) {
                   controller.problemFileType.value = fileType.pdf;

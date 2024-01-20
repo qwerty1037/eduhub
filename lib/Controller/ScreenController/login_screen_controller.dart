@@ -35,37 +35,13 @@ class loginScreenController extends GetxController {
       String? accessToken = extractCookieValue(cookieList, "access_token");
       String? refreshToken = extractCookieValue(cookieList, "refresh_token");
       if (uid == null || accessToken == null || refreshToken == null) {
-        displayInfoBar(
-          context,
-          builder: (context, close) {
-            return InfoBar(
-              severity: InfoBarSeverity.error,
-              title: const Text('서버 상태가 불안정합니다. 홈페이지에 문의 부탁드립니다.'),
-              action: IconButton(
-                icon: const Icon(FluentIcons.clear),
-                onPressed: close,
-              ),
-            );
-          },
-        );
+        debugPrint("logInRequest 오류(login screen controller)");
       } else {
         await saveCookieToSecureStorage(uid, accessToken, refreshToken);
         loginSuccess();
       }
     } else {
-      displayInfoBar(
-        context,
-        builder: (context, close) {
-          return InfoBar(
-            severity: InfoBarSeverity.error,
-            title: const Text('등록되지 않은 아이디입니다'),
-            action: IconButton(
-              icon: const Icon(FluentIcons.clear),
-              onPressed: close,
-            ),
-          );
-        },
-      );
+      debugPrint("등록되지 않은 아이디입니다.");
     }
   }
 

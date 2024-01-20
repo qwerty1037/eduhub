@@ -160,7 +160,7 @@ class LoginScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "초중고 선생님을 위한\n최고의 툴\n바-선생",
+          "초중고 선생님을 위한\n최고의 툴\n에듀허브",
           style: GoogleFonts.poppins(
             color: Colors.white,
             fontSize: 48.0,

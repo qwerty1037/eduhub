@@ -26,7 +26,8 @@ class PdfSaveController extends GetxController {
   PdfSaveController() {
     final tagController = Get.find<TagController>();
     for (int i = 0; i < tagController.totalTagList.length; i++) {
-      tagsList.add(TagModel(tagController.totalTagList[i].name, tagController.totalTagList[i].id!, false));
+      tagsList.add(TagModel(tagController.totalTagList[i].name,
+          tagController.totalTagList[i].id!, false));
     }
   }
 
@@ -68,9 +69,9 @@ class PdfSaveController extends GetxController {
       final Map<String, dynamic> tmp = {
         "page": frameList[i].page,
         "minX": double.parse(frameList[i].minX.toStringAsFixed(8)),
-        "minY": double.parse(frameList[i].minY.toStringAsFixed(8)),
+        "minY": 1.0 - double.parse(frameList[i].minY.toStringAsFixed(8)),
         "maxX": double.parse(frameList[i].maxX.toStringAsFixed(8)),
-        "maxY": double.parse(frameList[i].maxY.toStringAsFixed(8)),
+        "maxY": 1.0 - double.parse(frameList[i].maxY.toStringAsFixed(8)),
       };
       temp.add(tmp);
     }

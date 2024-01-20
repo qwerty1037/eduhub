@@ -72,13 +72,15 @@ class ProblemListController extends GetxController {
   }
 
   ///폴더 직속문제 보기 / 폴더 아래 모든 문제 보기 버튼을 클릭했을때 내부 데이터를 새로 초기화하는 함수
-  Future<void> resetVariable(TreeViewItem targetFolder, List<dynamic> problems) async {
+  Future<void> resetVariable(
+      TreeViewItem targetFolder, List<dynamic> problems) async {
     problemList.clear();
     pageButton.clear();
     currentPageProblems.clear();
 
     if (!isAllProblems.value) {
-      final problemUrl = Uri.parse('https://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
+      final problemUrl = Uri.parse(
+          'https://$HOST/api/data/problem/database_all/${targetFolder.value["id"]}');
 
       final response = await http.get(
         problemUrl,
@@ -87,7 +89,11 @@ class ProblemListController extends GetxController {
       if (isHttpRequestSuccess(response)) {
         final jsonResponse = jsonDecode(response.body);
         final totalProblems = jsonResponse['problem_list'];
-        problemList.addAll(totalProblems);
+        List<dynamic> problemIds = [];
+        for (int i = 0; i < totalProblems.length; i++) {
+          problemIds.add(totalProblems[i]["id"]);
+        }
+        problemList.addAll(problemIds);
         lastButton = (totalProblems.length - 1) ~/ itemsPerPage + 1;
         currentPage = 0;
         startIndex = 0;
@@ -116,6 +122,9 @@ class ProblemListController extends GetxController {
         debugPrint("폴더 전체 문제 받기 오류 발생");
       }
     } else {
+      for (int i = 0; i < problems.length; i++) {
+        problemList.add(problems[i]["id"]);
+      }
       problemList.addAll(problems);
       lastButton = (problems.length - 1) ~/ itemsPerPage + 1;
       currentPage = 0;
@@ -171,7 +180,9 @@ class ProblemListController extends GetxController {
       Button newButton = Button(
         child: Text(
           i.toString(),
-          style: TextStyle(fontWeight: currentPage == i ? FontWeight.bold : FontWeight.normal),
+          style: TextStyle(
+              fontWeight:
+                  currentPage == i ? FontWeight.bold : FontWeight.normal),
         ),
         onPressed: () async {
           changePage(i);
@@ -206,7 +217,6 @@ class ProblemListController extends GetxController {
   ///문제 리스트 중에 현재 페이지에 있는 리스트들의 자세한 데이터를 받아오는 함수 TODO: 업데이트 예정. id, uuid모두 보내는데 id만 필요할 예정
   Future<void> fetchPageData() async {
     List<dynamic> test = problemList.sublist(startIndex, endIndex);
-
     for (int i = 0; i < test.length; i++) {
       final int id;
       if (isExam) {
@@ -214,7 +224,8 @@ class ProblemListController extends GetxController {
       } else {
         id = test[i];
       }
-      final url = Uri.parse('https://$HOST/api/data/problem/get_detail_problem_data/$id');
+      final url = Uri.parse(
+          'https://$HOST/api/data/problem/get_detail_problem_data/$id');
       final response = await http.get(
         url,
         headers: await defaultHeader(httpContentType.json),
@@ -223,8 +234,8 @@ class ProblemListController extends GetxController {
       if (isHttpRequestSuccess(response)) {
         final jsonResponse = jsonDecode(response.body);
         final problemData = jsonResponse['problem_detail'];
-        currentPageProblems = [].obs;
-        currentPageProblems.add(problemData);
+
+        currentPageProblems.value.add(problemData);
       } else {
         debugPrint(response.statusCode.toString());
         debugPrint("fetchPageData(problem_list_controller)");

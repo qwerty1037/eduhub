@@ -11,6 +11,7 @@ class ProblemListController extends GetxController {
   Rx<fileType> problemFileType = fileType.empty.obs;
   bool isExam = false;
   List<dynamic> problemList = [];
+  RxInt selectedIndex = 99.obs;
   RxList<dynamic> currentPageProblems = [].obs;
   Rx<Widget> problemImageViewer = Container(
     decoration: const BoxDecoration(
@@ -222,8 +223,8 @@ class ProblemListController extends GetxController {
       if (isHttpRequestSuccess(response)) {
         final jsonResponse = jsonDecode(response.body);
         final problemData = jsonResponse['problem_detail'];
-
-        currentPageProblems.value.add(problemData);
+        currentPageProblems = [].obs;
+        currentPageProblems.add(problemData);
       } else {
         debugPrint(response.statusCode.toString());
         debugPrint("fetchPageData(problem_list_controller)");

@@ -54,8 +54,8 @@ class DBEditScreen extends StatelessWidget {
                 children: [
                   problemNameInputField(),
                   const SizedBox(height: 30),
-                  tagsInputField(),
-                  const SizedBox(height: 30),
+                  // tagsInputField(),
+                  // const SizedBox(height: 30),
                   difficultyInputField(),
                   const SizedBox(height: 40),
                   saveButtonField(),

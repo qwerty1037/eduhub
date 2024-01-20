@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:front_end/Component/Default/config.dart';
 import 'package:front_end/Component/Default/http_config.dart';
 import 'package:front_end/Controller/problem_list_controller.dart';
+import 'package:front_end/Screen/db_edit_screen.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:http/http.dart' as http;
@@ -25,9 +26,33 @@ class ProblemViewer extends StatelessWidget {
                     child: Center(
                     child: Text("왼쪽에서 문제를 클릭해주세요"),
                   ))
-                : controller.problemFileType.value == fileType.pdf
-                    ? Expanded(child: SfPdfViewer.memory(Uint8List.fromList(controller.bytes)))
-                    : Expanded(child: Image.memory(Uint8List.fromList(controller.bytes)))
+                : Expanded(
+                    child: Column(
+                      children: [
+                        controller.problemFileType.value == fileType.pdf
+                            ? Expanded(child: SfPdfViewer.memory(Uint8List.fromList(controller.bytes)))
+                            : Expanded(child: Image.memory(Uint8List.fromList(controller.bytes))),
+                        Button(
+                          onPressed: () {
+                            displayInfoBar(
+                              context,
+                              builder: (context, close) {
+                                return const InfoBar(
+                                  title: Text('수정하기:'),
+                                  content: Text(
+                                    '현재 준비 중인 기능입니다',
+                                  ),
+                                  severity: InfoBarSeverity.info,
+                                );
+                              },
+                            );
+                            //TODO : Redirect to DBEditScreen
+                          },
+                          child: const Text("수정하기"),
+                        ),
+                      ],
+                    ),
+                  )
           ],
         ),
       ),
@@ -52,7 +77,11 @@ Widget columnProblemList(ProblemListController controller) {
               if (isHttpRequestSuccess(response)) {
                 debugPrint("문제 클릭");
                 controller.bytes.value = response.bodyBytes;
-                if (controller.bytes.length >= 4 && controller.bytes[0] == 37 && controller.bytes[1] == 80 && controller.bytes[2] == 68 && controller.bytes[3] == 70) {
+                if (controller.bytes.length >= 4 &&
+                    controller.bytes[0] == 37 &&
+                    controller.bytes[1] == 80 &&
+                    controller.bytes[2] == 68 &&
+                    controller.bytes[3] == 70) {
                   controller.problemFileType.value = fileType.pdf;
                 } else if (controller.bytes.length >= 2 && controller.bytes[0] == 255 && controller.bytes[1] == 216) {
                   controller.problemFileType.value = fileType.jpg;

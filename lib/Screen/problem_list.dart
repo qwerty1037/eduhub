@@ -7,12 +7,7 @@ import 'package:get/get.dart';
 
 ///폴더에 속하는 문제 리스트를 보여주며 직속문제/아래모든문제를 볼 수 있다. 클릭시 오른쪽에 이미지가 뜨며 버튼 부분은 수정이 필요하다
 class ProblemList extends StatelessWidget {
-  ProblemList(
-      {super.key,
-      required this.targetFolder,
-      required this.folderName,
-      required this.problems,
-      required this.problemListController});
+  ProblemList({super.key, required this.targetFolder, required this.folderName, required this.problems, required this.problemListController});
   String folderName;
   TreeViewItem targetFolder;
   List<dynamic> problems;
@@ -25,16 +20,10 @@ class ProblemList extends StatelessWidget {
     return FutureBuilder(
         future: Future.delayed(Duration.zero),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.none &&
-              snapshot.connectionState != ConnectionState.waiting) {
+          if (snapshot.connectionState != ConnectionState.none && snapshot.connectionState != ConnectionState.waiting) {
             return Column(
               children: [
-                TopBar(
-                    folderName: folderName,
-                    tag: tag,
-                    targetFolder: targetFolder,
-                    problems: problems,
-                    problemListController: problemListController),
+                TopBar(folderName: folderName, tag: tag, targetFolder: targetFolder, problems: problems, problemListController: problemListController),
                 Expanded(
                   flex: 9,
                   child: Padding(
@@ -49,15 +38,13 @@ class ProblemList extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(0),
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: columnProblemList(controller),
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: controller.pageButton,
                                       )
                                     ],
@@ -135,31 +122,11 @@ class TopBar extends StatelessWidget {
                           ? problemListController.isOneColumn.value = false
                           : problemListController.isOneColumn.value = true;
                     },
-                    child: Text(problemListController.isOneColumn.value
-                        ? "간략히 보기"
-                        : "자세히 보기"),
+                    child: Text(problemListController.isOneColumn.value ? "간략히 보기" : "자세히 보기"),
                   ),
                 ),
                 const SizedBox(
                   width: 30,
-                ),
-                Button(
-                  onPressed: () {
-                    displayInfoBar(
-                      context,
-                      builder: (context, close) {
-                        return const InfoBar(
-                          title: Text('수정하기:'),
-                          content: Text(
-                            '현재 준비 중인 기능입니다',
-                          ),
-                          severity: InfoBarSeverity.info,
-                        );
-                      },
-                    );
-                    //TODO : Redirect to DBEditScreen
-                  },
-                  child: const Text("수정하기"),
                 ),
               ],
             ),

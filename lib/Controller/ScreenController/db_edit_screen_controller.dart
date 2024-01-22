@@ -44,50 +44,22 @@ class DBEditScreenController extends GetxController {
   /// Send information of problem to backend
   ///
   /// 백엔드에 문제 정보를 보내는 메서드
-  Future<int> sendProblemInfo(int selectedDirectoryID) async {
-    List<int> selectedTags = <int>[];
-    for (int i = 0; i < tagsList.length; i++) {
-      if (tagsList[i].isSelected == true) {
-        selectedTags.add(tagsList[i].ID);
-      }
-    }
+  Future<int> sendProblemInfo(int problemId, String problemName) async {
     List<int> pdfBytes = pdfFile;
 
     // final url = Uri.parse('https://xloeuur.request.dreamhack.games');
-    final url = Uri.parse('https://$HOST/api/data/split_pdf');
-    var request = http.MultipartRequest('POST', url);
-    var multipartFileProblem = http.MultipartFile.fromBytes(
-      'source_document',
-      pdfBytes,
-      filename: 'file',
-      contentType: MediaType('application', 'pdf'), // pdf의 MIME타입
-    );
-
-    var temp = [];
-    for (int i = 0; i < frameList.length; i++) {
-      final Map<String, dynamic> tmp = {
-        "page": frameList[i].page,
-        "minX": double.parse(frameList[i].minX.toStringAsFixed(8)),
-        "minY": double.parse(frameList[i].minY.toStringAsFixed(8)),
-        "maxX": double.parse(frameList[i].maxX.toStringAsFixed(8)),
-        "maxY": double.parse(frameList[i].maxY.toStringAsFixed(8)),
-      };
-      temp.add(tmp);
-    }
-
-    final Map<String, String> requestField = {
-      "frame_list": jsonEncode(temp),
-      "parent_database_id": jsonEncode(selectedDirectoryID),
-      "tag_id_list": jsonEncode(selectedTags),
-      "problem_name": problemNameController.text,
+    final url = Uri.parse('https://$HOST/api/data/problem/edit_problem');
+    final Map<String, dynamic> requestBody = {
+      "id": problemId,
+      "name": problemName,
+      "level": difficultySliderValue.value.round(),
     };
 
-    request.files.add(multipartFileProblem);
-    request.fields.addAll(requestField);
-
-    debugPrint("http Ready");
-    request.headers.addAll(await defaultHeader(httpContentType.multipart));
-    final response = await request.send();
+    final response = await http.post(
+      url,
+      headers: await defaultHeader(httpContentType.json),
+      body: jsonEncode(requestBody),
+    );
     debugPrint("${response.statusCode}");
     return response.statusCode;
   }

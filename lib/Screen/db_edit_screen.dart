@@ -21,12 +21,19 @@ class DBEditScreen extends StatelessWidget {
   final Uint8List bytePdf;
   final String problemName;
   final double? difficulty;
-  final List<int> tagsList;
+  final int problemId;
 
   @override
-  DBEditScreen({super.key, required this.bytePdf, required this.problemName, this.difficulty, required this.tagsList}) {
+  DBEditScreen({
+    super.key,
+    required this.bytePdf,
+    required this.problemName,
+    this.difficulty,
+    required this.problemId,
+  }) {
     controller.problemNameController.text = problemName;
     controller.difficultySliderValue.value = difficulty ?? 0.0;
+    /*
     for (var inputTagID in tagsList) {
       for (var element in controller.tagsList) {
         if (element.ID == inputTagID) {
@@ -34,6 +41,7 @@ class DBEditScreen extends StatelessWidget {
         }
       }
     }
+    */
   }
 
   @override
@@ -193,7 +201,7 @@ class DBEditScreen extends StatelessWidget {
   Widget saveButtonField() {
     return TextButton(
       onPressed: () {
-        controller.sendProblemInfo(folderController.selectedProblemDirectoryId.value);
+        controller.sendProblemInfo(problemId, problemName);
       },
       child: Container(
         height: 50,

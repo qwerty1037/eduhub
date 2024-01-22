@@ -31,6 +31,7 @@ class ProblemListController extends GetxController {
   late int endIndex;
   int lastButton = 1;
   List<Widget> pageButton = <Widget>[];
+  int currentIndex = 999; //1~16;
 
   RxBool isOneColumn = false.obs;
   RxList<int> bytes = <int>[].obs;

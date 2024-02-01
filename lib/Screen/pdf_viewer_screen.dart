@@ -48,9 +48,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                         ? SpinKitWave(
                             duration: const Duration(seconds: 40),
                           )
-                        : (controllerProblem.isPdfInputed.value
-                            ? pdfViewerContainer(controllerProblem, constraints)
-                            : selectPdfContainer(controllerProblem, constraints));
+                        : (controllerProblem.isPdfInputed.value ? pdfViewerContainer(controllerProblem, constraints) : selectPdfContainer(controllerProblem, constraints));
                   }),
                 ],
               ),
@@ -326,13 +324,13 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                     Button(
                       child: const Text("박스 삭제"),
                       onPressed: () {
-                        if (selectedBoxIndex == 99999) {
-                        } else {
-                          controller.deleteBox(selectedBoxIndex);
-                          selectedBoxIndex = 99999;
-                        }
-
-                        setState(() {});
+                        setState(() {
+                          if (selectedBoxIndex == 99999) {
+                          } else {
+                            controller.deleteBox(selectedBoxIndex);
+                            selectedBoxIndex = 99999;
+                          }
+                        });
                       },
                     ),
                   ],
@@ -346,7 +344,19 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       child: const Text("이전 페이지"),
                       onPressed: () {
                         if (controller.pageIndex.value == 0) {
-                          //TODO: 첫 페이지 알림
+                          displayInfoBar(
+                            context,
+                            builder: (context, close) {
+                              return InfoBar(
+                                severity: InfoBarSeverity.warning,
+                                title: const Text('첫 페이지입니다'),
+                                action: IconButton(
+                                  icon: const Icon(FluentIcons.clear),
+                                  onPressed: close,
+                                ),
+                              );
+                            },
+                          );
                         } else {
                           if (controller.firstFrameFinished) {
                             var toRemove = [];
@@ -390,7 +400,19 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                       child: const Text("다음 페이지"),
                       onPressed: () {
                         if (controller.pageIndex.value == controller.pageNum - 1) {
-                          //TODO: 마지막 페이지 알림
+                          displayInfoBar(
+                            context,
+                            builder: (context, close) {
+                              return InfoBar(
+                                severity: InfoBarSeverity.warning,
+                                title: const Text('마지막 페이지입니다'),
+                                action: IconButton(
+                                  icon: const Icon(FluentIcons.clear),
+                                  onPressed: close,
+                                ),
+                              );
+                            },
+                          );
                         } else {
                           if (controller.firstFrameFinished) {
                             var toRemove = [];
@@ -457,7 +479,7 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                           } else {
                             List<Frame> frameList = [];
                             for (int pageIdx = 0; pageIdx < controller.pageNum; pageIdx++) {
-                              for (Rect element in controller.rectList.cast()) {
+                              for (Rect element in controller.rectList) {
                                 Offset topLeft = element.topLeft;
                                 Offset bottomRight = element.bottomRight;
                                 double minX = topLeft.dx / renderSize.width;
@@ -482,13 +504,14 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                               controller.pageRectList[element.page].add(tRect);
                             }
 
-                            controller.rectList = <Rect>[].obs;
-                            for (var element in controller.pageRectList[controller.pageIndex.value]) {
-                              controller.rectList.add(element);
-                            }
+                            setState(() {
+                              controller.rectList = <Rect>[].obs;
+                              for (var element in controller.pageRectList[controller.pageIndex.value]) {
+                                controller.rectList.add(element);
+                              }
 
-                            controller.firstFrameFinished = true;
-                            setState(() {});
+                              controller.firstFrameFinished = true;
+                            });
                           }
                         },
                       )
@@ -529,13 +552,11 @@ class _PdfScreenState extends State<PdfViewerScreen> {
                             setState(() {});
                           } else {
                             for (var element in controller.secondFrameList) {
-                              debugPrint(
-                                  "pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");
+                              debugPrint("pageIdx: ${element.page}, minX: ${element.minX}, minY: ${element.minY}, maxX: ${element.maxX}, maxY: ${element.maxY}");
                             }
                             List<int> byte = await controller.pickedFile!.readAsBytes();
 
-                            final DefaultTabBodyController defaultTabBodyController =
-                                Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
+                            final DefaultTabBodyController defaultTabBodyController = Get.find<DefaultTabBodyController>(tag: Get.find<FluentTabController>().getTabKey());
                             defaultTabBodyController.saveThisWorkingSpace();
                             defaultTabBodyController.changeWorkingSpace(
                               PdfSaveScreen(byte, controller.secondFrameList),

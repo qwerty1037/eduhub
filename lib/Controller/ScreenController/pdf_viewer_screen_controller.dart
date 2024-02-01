@@ -37,8 +37,8 @@ class PdfViewerScreenController extends GetxController {
 
   RxInt tempInt = 0.obs;
   int pageNum = 0;
-  RxList rectList = <Rect>[].obs;
-  List<List<Rect>> pageRectList = [];
+  RxList<Rect> rectList = <Rect>[].obs;
+  RxList<List<Rect>> pageRectList = <List<Rect>>[].obs;
   var ctrlList = <TransformationController>[];
   int boxIndex = 0;
   RxInt pageIndex = 0.obs;
@@ -136,7 +136,7 @@ class PdfViewerScreenController extends GetxController {
     tempInt = 0.obs;
     pageNum = 0;
     rectList = <Rect>[].obs;
-    pageRectList = [];
+    pageRectList = <List<Rect>>[].obs;
     boxIndex = 0;
     pageIndex = 0.obs;
     secondFrameList = <Frame>[];
@@ -293,7 +293,11 @@ class PdfViewerScreenController extends GetxController {
   }
 
   void deleteBox(int index) {
+    debugPrint(rectList.last.hashCode.toString());
+    debugPrint(pageRectList.last.last.hashCode.toString());
+    pageRectList[pageIndex.value].remove(rectList[index]);
     rectList.removeAt(index);
+    pageRectList.refresh();
     rectList.refresh();
   }
 
@@ -338,7 +342,7 @@ class PdfViewerScreenController extends GetxController {
 
     var decodedBody = jsonDecode(responseBody);
 
-    pageRectList = List.generate(pageNum, (index) => <Rect>[]);
+    pageRectList = List.generate(pageNum, (index) => <Rect>[]).obs;
 
     for (var element in decodedBody) {
       Frame tempFrame = Frame(

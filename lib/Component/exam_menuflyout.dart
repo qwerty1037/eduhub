@@ -8,7 +8,7 @@ import 'package:front_end/Controller/ScreenController/home_screen_controller.dar
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-///폴더 삭제, 새폴더 만들기, 폴더 이름 바꾸기의 기능을 지원하는 위젯이다. FlyoutTarget내부의 하위 컴포넌트로 사용되어야 한다.
+///시험지 폴더 삭제, 새폴더 만들기, 폴더 이름 바꾸기의 기능을 지원하는 위젯이다. FlyoutTarget내부의 하위 컴포넌트로 사용되어야 한다.
 class ExamFolderMenuFlyout extends StatelessWidget {
   const ExamFolderMenuFlyout({
     super.key,

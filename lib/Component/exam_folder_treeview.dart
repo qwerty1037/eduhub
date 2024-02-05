@@ -9,7 +9,7 @@ import 'package:front_end/Controller/fluent_tab_controller.dart';
 import 'package:front_end/Controller/exam_controller.dart';
 import 'package:get/get.dart';
 
-///각 탭의 대시보드에서 폴더 리스트를 보여주는 위젯
+///각 탭의 대시보드에서 시험지 폴더 리스트를 보여주는 위젯
 class ExamFolderTreeView extends StatelessWidget {
   ExamFolderTreeView({
     this.tagName,

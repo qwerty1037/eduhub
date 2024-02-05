@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// TODO 다크모드에서 글자색 바뀌는지 확인
+// 공통적으로 사용한 title 양식
 class DefaultTitle extends StatelessWidget {
   final String text;
   const DefaultTitle({

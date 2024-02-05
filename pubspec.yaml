@@ -70,8 +70,6 @@ dependencies:
       url: 'https://github.com/ScerIO/packages.flutter'
       ref: '4be9de9ffed5398fd7d5f44bbb07dcd3d3f1711b'
       path: packages/pdfx
-  syncfusion_flutter_pdfviewer: ^24.1.45
-  syncfusion_flutter_pdf: ^24.1.45
 
 dev_dependencies:
   flutter_test:

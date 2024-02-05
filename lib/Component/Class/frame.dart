@@ -1,3 +1,5 @@
+///pdf에서 문제를 저장할 때 직사각형 프레임 클래스
+
 class Frame {
   final double minX;
   final double minY;

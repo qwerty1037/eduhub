@@ -1,5 +1,7 @@
 import 'package:front_end/Component/cookie.dart';
 
+///http 처리 관련 설정
+
 enum httpContentType {
   json,
   multipart,

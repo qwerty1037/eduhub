@@ -12,6 +12,7 @@ import 'package:front_end/Screen/problem_list.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+///시험지폴더를 클릭했을 때 폴더 내의 시험지를 선택하는 부분
 class ChooseExam extends StatelessWidget {
   ChooseExam({super.key, required this.exams, required this.item});
   List<dynamic> exams;

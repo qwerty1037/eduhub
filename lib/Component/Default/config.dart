@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+///잡다한 default 설정과 왼쪽 대시보드 타입 관련 데이터
+
 const DEFAULT_DARK_COLOR = Color(0xFF000000);
 const DEFAULT_TAB_COLOR = Colors.grey;
 const DEFAULT_LIGHT_COLOR = Color(0xFFFFFFFF);

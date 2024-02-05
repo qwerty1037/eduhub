@@ -1,3 +1,5 @@
+///달력 일정 클래스로 local storage에 저장했다 불러오는 것을 위해 json 형태로 변환기능 지원
+
 class CalendarEvent {
   String text;
   int? hour;

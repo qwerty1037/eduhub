@@ -9,6 +9,7 @@ import 'package:front_end/Controller/ScreenController/home_screen_controller.dar
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+///새폴더 만들기 위젯
 Button newFolderButton(BuildContext context) {
   final userDesktopController = Get.find<UserDataController>();
   final homeScreenController = Get.find<HomeScreenController>();

@@ -1,3 +1,8 @@
+## License
+This project is licensed under the GNU General Public License v3.0 - see the LICENSE file for details.
+
+
+
 ##
 업데이트가 필요한 docs, 주석으로 처리된 부분을 통해 기능 파악 추천
 
